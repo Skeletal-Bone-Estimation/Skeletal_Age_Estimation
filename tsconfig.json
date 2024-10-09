@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "target": "ES6",
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "moduleDetection": "force",
+        "isolatedModules": true,
+        // Enable strict type checking to catch bugs early
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        // Transpile TypeScript code to JavaScript
+        "module": "NodeNext",
+        "outDir": "dist",
+        // DOM types
+        "lib": [
+            "ES6",
+            "dom",
+            "dom.iterable"
+        ],
+        "types": ["node", "electron"]
+    },
+    // Necessary files for the project
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
