@@ -1,0 +1,19 @@
+{
+  "name": "sbaes",
+  "version": "0.0.1",
+  "description": "Team 3 2024-2025 Senior Design project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Majorsaturn/Skeletal_Age_Estimation.git"
+  },
+  "author": "Cassidy Marquis, Matthew Hardenburg, Matthew Szmarch, Nicholas Novak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Majorsaturn/Skeletal_Age_Estimation/issues"
+  },
+  "homepage": "https://github.com/Majorsaturn/Skeletal_Age_Estimation#readme"
+}
