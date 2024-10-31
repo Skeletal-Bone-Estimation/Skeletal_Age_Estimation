@@ -1,18 +1,26 @@
 /* Main.css */
 :root{
-  --primary-color: #ff9900;
-  --secondary-color: rgba(219, 131, 0, 0.74);
-  --background-color: #5e5e5e;
+  --on-dark: #ffffff;
+  --on-light: rgb(9, 60, 113);
+  --hover-on-dark: rgb(173, 206, 101);
+  --hover-on-light: rgb(7, 40, 77);
+  --background-color: rgb(241, 241, 241);
+  --div-color-1: rgb(17, 82, 73);
 }
 
-#rootDiv{
+body{
   background-color: var(--background-color)
 }
 
-.button-test {
-    background-color: var(--primary-color);
+#rootDiv{
+  background-color: var(--div-color-1);
+  padding: 15px 64px;
+}
+
+.button-light {
+    background-color: var(--on-light);
     border: none;
-    color: black;
+    color: var(--on-dark); /* text color: always inverse of backgroud-color*/
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -20,6 +28,6 @@
     font-size: 16px;
   }
 
-.button-test:hover {
-  background-color: var(--secondary-color)
+.button-light:hover {
+  background-color: var(--hover-on-light)
 }
