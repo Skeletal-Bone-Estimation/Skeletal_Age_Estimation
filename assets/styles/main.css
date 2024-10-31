@@ -1,1 +1,25 @@
 /* Main.css */
+:root{
+  --primary-color: #ff9900;
+  --secondary-color: rgba(219, 131, 0, 0.74);
+  --background-color: #5e5e5e;
+}
+
+#rootDiv{
+  background-color: var(--background-color)
+}
+
+.button-test {
+    background-color: var(--primary-color);
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+.button-test:hover {
+  background-color: var(--secondary-color)
+}
