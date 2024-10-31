@@ -1,6 +1,6 @@
 /* Main.css */
 :root{
-  --on-dark: #ffffff;
+  --on-dark: rgb(255,255,255);
   --on-light: rgb(9, 60, 113);
   --hover-on-dark: rgb(173, 206, 101);
   --hover-on-light: rgb(7, 40, 77);
@@ -17,10 +17,11 @@ body{
   padding: 15px 64px;
 }
 
+/* button for dark backgrounds */
 .button-light {
-    background-color: var(--on-light);
+    background-color: var(--on-dark);
     border: none;
-    color: var(--on-dark); /* text color: always inverse of backgroud-color*/
+    color: var(--on-light); /* text color: always inverse of backgroud-color*/
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -29,5 +30,5 @@ body{
   }
 
 .button-light:hover {
-  background-color: var(--hover-on-light)
+  background-color: var(--hover-on-dark)
 }
