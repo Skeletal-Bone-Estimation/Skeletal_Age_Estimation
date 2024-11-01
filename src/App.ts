@@ -1,6 +1,21 @@
 //App.ts
 import {app, BrowserWindow} from 'electron';
-import {createWindow} from './views/HomePageView'
+import {loadHomePage} from './views/HomePageView'
+
+const DEFAULT_WIDTH: number = 1200;
+const DEFAULT_HEIGHT: number = 760;
+
+function createWindow() {
+    const mainWindow = new BrowserWindow({
+        width: DEFAULT_WIDTH,
+        height: DEFAULT_HEIGHT,
+        webPreferences: {
+            nodeIntegration: true,
+        }
+    });
+
+    loadHomePage(mainWindow);
+}
 
 app.on('ready', createWindow);
 
