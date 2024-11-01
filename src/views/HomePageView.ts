@@ -1,13 +1,13 @@
 //HomePageView.ts
-import {BrowserWindow} from 'electron';
-import * as path from 'path';
+import { AbstractView } from "./AbstractView";
+export class HomePageView extends AbstractView {
 
-const indexHTML = path.join(__dirname, '../../templates/index.html')
+    constructor(content : string, path : string, document : Document){
+        super(content, path, document);
+    }
 
+    override render(): void {
+        if (this.rootDiv) this.rootDiv.innerHTML = this.content;
+    }
 
-function loadHomePage(mainWindow: BrowserWindow){
-    mainWindow.loadFile(indexHTML);
-}
-export{
-    loadHomePage
 }

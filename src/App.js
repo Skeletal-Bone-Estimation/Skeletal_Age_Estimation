@@ -1,20 +1,26 @@
 //App.ts
 import {app, BrowserWindow} from 'electron';
-import {loadHomePage} from './views/HomePageView'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const DEFAULT_WIDTH: number = 1200;
-const DEFAULT_HEIGHT: number = 760;
+//import {loadHomePage} from './views/HomePageView'
+
+const DEFAULT_WIDTH = 1200;
+const DEFAULT_HEIGHT = 760;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
         webPreferences: {
-            nodeIntegration: true,
+            preload: path.join(__dirname, 'Preload.js') 
         }
     });
 
-    loadHomePage(mainWindow);
+    mainWindow.loadFile(path.join('./', 'templates', 'index.html'));
 }
 
 app.on('ready', createWindow);

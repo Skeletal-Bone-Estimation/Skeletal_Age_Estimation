@@ -2,9 +2,9 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "target": "ES6",
+        "target": "ESNext",
         "allowJs": true,
-        "resolveJsonModule": true,
+        //"resolveJsonModule": true,
         "moduleDetection": "force",
         "isolatedModules": true,
         // Enable strict type checking to catch bugs early
@@ -12,7 +12,7 @@
         "noUncheckedIndexedAccess": true,
         "noImplicitOverride": true,
         // Transpile TypeScript code to JavaScript
-        "module": "NodeNext",
+        "module": "ESNext",
         "outDir": "dist",
         // DOM types
         "lib": [
@@ -25,8 +25,8 @@
     // Necessary files for the project
     "include": [
         "src/**/*.ts",
-        "src/**/*.tsx"
-    ],
+        "src/**/*.tsx",
+        "src/Renderer.js", "src/Preload.js", "src/App.js"  ],
     "exclude": [
         "node_modules"
     ]
