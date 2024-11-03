@@ -30,8 +30,8 @@ const mouseMoveHandler = (e: MouseEvent) => {
     // Calculate new width based on mouse movement
     const newWidth = startWidth + (e.clientX - startX);
     
-    // Set the new width of the sidebar, ensuring it doesn't go below 50px
-    sidebar.style.width = `${Math.max(50, newWidth)}px`;
+    // Set the new width of the sidebar, ensuring it doesn't go below 100px
+    sidebar.style.width = `${newWidth}px`;
 };
 
 // Mouse up event handler for stopping the resizing

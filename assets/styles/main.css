@@ -8,7 +8,12 @@
   --div-color-1: rgb(17, 82, 73);
   --div-color-2: rgb(0, 133, 78);
   --resizer-color: rgb(102, 102, 102);
-  --sidebar-header-color: rgb(5, 53, 46);
+}
+
+#rootDiv {
+  background-color: var(--div-color-1);
+  height: 97vh;
+  flex-grow: 1;
 }
 
 body{
@@ -19,34 +24,29 @@ body{
   display: flex;
 }
 
-#rootDiv {
-  background-color: var(--div-color-1);
-  height: 97vh;
-  flex-grow: 1;
-}
-
 .sideBar {
   background-color: var(--div-color-2);
   width: 10vw;
   height: 97vh;
-  min-width: 50px;
-  max-width: 300px;
+  min-width: 10vw;
+  max-width: 20vw;
   position: relative;
   transition: width 0.3s ease;
 }
 
 .resizer {
-  width: 4px;
+  width: 1px;
   right: 0;
   height:100%;
   cursor: col-resize;
   position: absolute;
   background-color: var(--resizer-color);
+  opacity: 100%;
 }
 
 .sideBarHeader {
-  padding: 25px 25px;
-  background-color: var(--sidebar-header-color);
+  padding: 0px 10px;
+  background-color: var(--div-color-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
