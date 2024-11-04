@@ -5,9 +5,9 @@
   --hover-on-dark: rgb(173, 206, 101);
   --hover-on-light: rgb(7, 40, 77);
   --background-color: rgb(241, 241, 241);
-  --div-color-1: rgb(17, 82, 73);
-  --div-color-2: rgb(0, 133, 78);
-  --resizer-color: rgb(102, 102, 102);
+  --div-color-1: rgb(241, 241, 241);
+  --div-color-2: rgb(15, 89, 78);
+  --resizer-color: rgb(7, 46, 40);
 }
 
 #rootDiv {
@@ -31,7 +31,6 @@ body{
   min-width: 10vw;
   max-width: 20vw;
   position: relative;
-  transition: width 0.3s ease;
 }
 
 .resizer {
@@ -45,17 +44,18 @@ body{
 }
 
 .sideBarHeader {
-  padding: 0px 10px;
+  padding: 0px 25px;
   background-color: var(--div-color-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
 }
 
 .sideBarHeader h2 { 
   color: white;
 }
-
 
 /* button for dark backgrounds */
 .button-light {
