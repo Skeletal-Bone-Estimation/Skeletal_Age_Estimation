@@ -5,30 +5,89 @@
   --hover-on-dark: rgb(173, 206, 101);
   --hover-on-light: rgb(7, 40, 77);
   --background-color: rgb(241, 241, 241);
-  --div-color-1: rgb(17, 82, 73);
+  --div-color-1: rgb(241, 241, 241);
+  --div-color-2: rgb(15, 89, 78);
+  --resizer-color: rgb(7, 46, 40);
+}
+
+#rootDiv {
+  background-color: var(--div-color-1);
+  height: 97vh;
+  flex-grow: 1;
 }
 
 body{
   background-color: var(--background-color)
 }
 
-#rootDiv{
-  background-color: var(--div-color-1);
-  padding: 15px 64px;
+.wrapper {
+  display: flex;
+}
+
+.sideBar {
+  background-color: var(--div-color-2);
+  width: 10vw;
+  height: 97vh;
+  min-width: 10vw;
+  max-width: 20vw;
+  position: relative;
+}
+
+.resizer {
+  width: 1px;
+  right: 0;
+  height:100%;
+  cursor: col-resize;
+  position: absolute;
+  background-color: var(--resizer-color);
+  opacity: 100%;
+}
+
+.sideBarHeader {
+  padding: 0px 25px;
+  background-color: var(--div-color-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+}
+
+.sideBarHeader h2 { 
+  color: white;
 }
 
 /* button for dark backgrounds */
 .button-light {
-    background-color: var(--on-dark);
-    border: none;
-    color: var(--on-light); /* text color: always inverse of backgroud-color*/
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-  }
+  background-color: var(--on-dark);
+  border: none;
+  color: var(--on-light); /* text color: always inverse of backgroud-color*/
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  transition: 0.5s;
+}
 
 .button-light:hover {
-  background-color: var(--hover-on-dark)
+  background-color: var(--hover-on-dark);
+  transition: 0.5s;
+}
+
+.button-dark {
+  background-color: var(--on-light);
+  border: none;
+  color: var(--on-dark); /* text color: always inverse of backgroud-color*/
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  transition: 0.5s;
+}
+
+.button-dark:hover {
+  background-color: var(--hover-on-light);
+  transition: 0.5s;
 }

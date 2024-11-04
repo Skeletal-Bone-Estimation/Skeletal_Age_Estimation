@@ -3,14 +3,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SBAES Home</title>
+    <script>var exports = {};</script>
+    <script src="../dist/index.js" defer></script>
+    <script src="../dist/utils/resizer.js" defer></script>
     <link rel="stylesheet" href="../assets/styles/main.css">
 </head>
 <body>
-    <button class="button-light" id="homeBtn">Home</button>
-    <button class="button-light" id="createBtn">Create Case</button>
-    <br>
-    <div id="rootDiv">
-        <!--Content goes here-->
+    <div class = "wrapper">
+        <div class = "sideBar">
+            <div class="resizer"></div>
+            <div class="sideBarHeader">
+                <h2>Cases</h2>
+            </div>
+        </div>
+        <div id="rootDiv">
+            <button class="button-dark">basic button test</button>
+            <button class="button-light">basic button test</button>
+        </div>
     </div>
     <script>var exports = {};</script>
     <script src="../dist/renderer.js" defer></script>
