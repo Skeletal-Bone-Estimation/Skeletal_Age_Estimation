@@ -1,21 +1,25 @@
 //App.ts
 import {app, BrowserWindow} from 'electron';
-import {loadHomePage} from './views/HomePageView'
 
 const DEFAULT_WIDTH: number = 1200;
 const DEFAULT_HEIGHT: number = 760;
 
-function createWindow() {
+function createWindow(): void {
     const mainWindow = new BrowserWindow({
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
         webPreferences: {
+            preload: __dirname + '\\preload.js',
             nodeIntegration: true,
+            contextIsolation: false
         }
     });
 
-    loadHomePage(mainWindow);
-}
+    mainWindow.loadFile('./templates/index.html');
+    mainWindow.on('ready-to-show', () => mainWindow.show());
+
+    mainWindow.webContents.openDevTools();
+};
 
 app.on('ready', createWindow);
 
@@ -27,4 +31,4 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     //opens a window on Mac if process is running but no windows are open
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
-})
+});
