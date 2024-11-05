@@ -38,7 +38,11 @@ body {
 .homeButtons {
   padding-bottom: 5vh;
   display: grid;
-  row-gap: 5em;
+  row-gap: 7vh;
+}
+
+.homeTitle{
+  overflow: clip;
 }
 
 .wrapper {
@@ -47,11 +51,12 @@ body {
 
 .sideBar {
   background-color: var(--div-color-2);
-  width: 10vw;
+  width: 12vw;
   height: 98vh;
-  min-width: 10vw;
+  min-width: 125px;
   max-width: 20vw;
-  position: relative;
+  position: sticky;
+  top: 0;
 }
 
 .sideBarHeader {
@@ -76,7 +81,7 @@ body {
 }
 
 .resizer {
-  width: 1px;
+  width: 2px;
   right: 0;
   height:100%;
   cursor: col-resize;
@@ -95,13 +100,13 @@ body {
   text-decoration: none;
   display: block;
   font-size: 16px;
-  transition: 0.5s;
   height: 76px;
+  width: 10vw;
 }
 
 .button-light:hover {
   background-color: var(--hover-on-dark);
-  transition: 0.5s;
+  transition: 0.2s;
 }
 
 .button-dark {
@@ -113,15 +118,17 @@ body {
   text-decoration: none;
   display: block;
   font-size: 16px;
-  transition: 0.5s;
   height: 76px;
+  width: 20vw;
+  overflow: hidden;
 }
 
 .button-dark:hover {
   background-color: var(--hover-on-light);
-  transition: 0.5s;
+  transition: 0.2s;
 }
 
+
 .mercyImg {
-  height: 200px;
+  height: 20vh;
 }
