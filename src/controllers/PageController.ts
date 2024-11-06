@@ -40,6 +40,9 @@ export class PageController {
     private initEventListeners(): void {
         document.getElementById('homeBtn')!.addEventListener('click', () => this.navigateTo(Pages.Home));
         document.getElementById('createBtn')!.addEventListener('click', () => this.navigateTo(Pages.Create));
+        
+        //document.getElementById('createBtn2')!.addEventListener('click', () => this.navigateTo(Pages.Create));
+
         document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.loadPage(Pages.dataEntry));
     }
 
