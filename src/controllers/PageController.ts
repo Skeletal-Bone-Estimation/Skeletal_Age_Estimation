@@ -13,6 +13,7 @@ export class PageController {
     private initEventListeners(): void {
         document.getElementById('homeBtn')!.addEventListener('click', () => this.loadPage('home'));
         document.getElementById('createBtn')!.addEventListener('click', () => this.loadPage('create'));
+        document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.loadPage('dataEntry'));
     }
 
     private async loadPageContent(page: string): Promise<string> {
