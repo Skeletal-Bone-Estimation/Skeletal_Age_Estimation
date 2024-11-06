@@ -4,11 +4,13 @@ import * as path from 'path';
 import { AbstractView } from '../views/AbstractView';
 import { HomePageView } from '../views/HomePageView';
 import { CreateCaseView } from '../views/CreateCaseView';
+import { DataEntryView } from '../views/DataEntryView';
 
-//add file namess here
+//add file names here
 export enum Pages {
     Home = 'home',
-    Create = 'create'
+    Create = 'create',
+    dataEntry = 'dataEntry'
 }
 
 export class PageController {
@@ -21,6 +23,7 @@ export class PageController {
         this.views = {
            home: new HomePageView(document),
            create: new CreateCaseView(document),
+           dataEntry: new DataEntryView(document)
            //add additional views here
         }
         this.currentView = this.views[Pages.Home];
@@ -33,10 +36,14 @@ export class PageController {
         this.loadPage(page)
     }
 
-    //assigns event listeners to objects within the document (can only be called while in the rendere.ts file)
+    //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
     private initEventListeners(): void {
         document.getElementById('homeBtn')!.addEventListener('click', () => this.navigateTo(Pages.Home));
         document.getElementById('createBtn')!.addEventListener('click', () => this.navigateTo(Pages.Create));
+        
+        //document.getElementById('createBtn2')!.addEventListener('click', () => this.navigateTo(Pages.Create));
+
+        document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.loadPage(Pages.dataEntry));
     }
 
     // asynchronous function that will retreive the html content included in the desired file

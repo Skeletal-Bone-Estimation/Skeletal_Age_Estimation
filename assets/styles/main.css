@@ -41,8 +41,32 @@ body {
   row-gap: 7vh;
 }
 
-.homeTitle{
+.homeTitle {
   overflow: clip;
+}
+
+#dataDiv {
+  padding-top: 1vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+.dataEntry { 
+  border: 2px solid var(--border-color-on-light);
+  border-radius: 5px;
+  background-color: var(--background-color);
+  margin: 5px;
+  position: relative;
+  padding: 10px;
+}
+
+.dataEntryLabel{
+  position: absolute;
+  top: -12px;
+  left: 2px;
+  background-color: var(--background-color);
 }
 
 .wrapper {
@@ -78,6 +102,7 @@ body {
   top: 0;
   display: flex;
   height: 76px;
+  z-index: 1;
 }
 
 .resizer {
