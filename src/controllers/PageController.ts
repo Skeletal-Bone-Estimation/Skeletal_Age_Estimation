@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { AbstractView } from '../views/AbstractView';
 import { HomePageView } from '../views/HomePageView';
+import { CreateCaseView } from '../views/CreateCaseView';
 
 //add file namess here
 export enum Pages {
@@ -18,7 +19,8 @@ export class PageController {
     constructor() {
         this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
         this.views = {
-           home: new HomePageView(document)
+           home: new HomePageView(document),
+           create: new CreateCaseView(document),
            //add additional views here
         }
         this.currentView = this.views[Pages.Home];
