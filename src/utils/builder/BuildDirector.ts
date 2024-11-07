@@ -1,5 +1,5 @@
-import { AbstractModel, CaseModel } from "../models/CaseModel";
-import { ReportModel } from "../models/ReportModel";
+import { AbstractModel, CaseModel } from "../../models/CaseModel";
+import { ReportModel } from "../../models/ReportModel";
 import { AbstractBuilder } from "./AbstractBuilder";
 import { CaseBuilder } from "./CaseBuilder";
 
@@ -7,11 +7,12 @@ export enum ReportType {
     Case,
     Report
 }
+
 export class BuildDirector {
     private caseBuilder : AbstractBuilder;
     //private reportBuilder : AbstractBuilder
 
-    constructor(builder : AbstractBuilder) {
+    constructor() {
         this.caseBuilder = new CaseBuilder();
         //this.reportBuilder = new this.reportBuilder();
     }
