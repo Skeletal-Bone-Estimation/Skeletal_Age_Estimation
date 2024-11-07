@@ -23,7 +23,7 @@ export class CaseModel {
     private _pubicSymphysis: { [key: string]: number; } = {};
     private _auricularEdge: { [key: string]: number; } = {};
     private _fourthRib: { [key: string]: number; } = {};
-    private _generatedReports: ReportModel[] = [];
+    private _generatedReports: {[id : number] : ReportModel} = {};
 
     constructor() {}
 
@@ -71,7 +71,7 @@ export class CaseModel {
         return this._fourthRib;
     }
 
-    public get generatedReports(): ReportModel[] {
+    public get generatedReports(): { [id: number]: ReportModel } {
         return this._generatedReports;
     }
 
@@ -84,12 +84,10 @@ export class CaseModel {
     }
 
     public addReport(report : ReportModel) : void {
-        this.generatedReports.push(report);
+        this._generatedReports[report.id] = report;
     }
 
-    public removeReport(report : ReportModel) : boolean {
-        const index = this.generatedReports.indexOf(report)
-        if (index !== -1) this.generatedReports.splice(index, 1);
-        return this.generatedReports.indexOf(report) == -1;
+    public removeReport(report : ReportModel) : void {
+        delete this._generatedReports[report.id];
     }
 }

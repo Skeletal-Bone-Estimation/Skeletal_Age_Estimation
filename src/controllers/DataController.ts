@@ -31,10 +31,10 @@ export class DataController {
     }
 
     public getReport(id : number) : ReportModel {
-        throw new Error('Get report not yet implemented');
+        return this.openCase.generatedReports[id]
     }
 
-    private getReports() : ReportModel[] {
+    private getReports(): { [id: number]: ReportModel } {
         return this._openCase.generatedReports;
     }
 

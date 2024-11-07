@@ -17,17 +17,17 @@ export class XML_Controller {
         return this.instance;
     }
 
-    // load single file
+    // TODO: load single file
     public parseSingleFile(path : string) : CaseModel {
         throw new Error('Parse single file not yet implemented');
     }
 
-    // load collection of files
+    // TODO: load collection of files
     public parseCollection(path : string) : CaseModel[] {
         throw new Error('Parse collection not yet implemented');
     }
 
-    // save file
+    // TODO: save file
     public saveAsFile(filename : string) : boolean {
         throw new Error('Save as file not yet implemented')
     }
