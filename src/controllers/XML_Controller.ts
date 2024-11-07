@@ -28,7 +28,7 @@ export class XML_Controller {
     }
 
     // TODO: save file
-    public saveAsFile(filename : string) : boolean {
+    public saveAsFile(_case : CaseModel, filename : string) : boolean {
         throw new Error('Save as file not yet implemented')
     }
 }

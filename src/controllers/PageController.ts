@@ -5,6 +5,8 @@ import { AbstractView } from '../views/AbstractView';
 import { HomePageView } from '../views/HomePageView';
 import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
+import { XML_Controller } from './XML_Controller';
+import { DataController } from './DataController';
 
 //add file names here
 export enum Pages {
@@ -36,14 +38,16 @@ export class PageController {
         this.loadPage(page)
     }
 
+    public foo() {
+
+    }
+
     //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
     private initEventListeners(): void {
         document.getElementById('homeBtn')!.addEventListener('click', () => this.navigateTo(Pages.Home));
         document.getElementById('createBtn')!.addEventListener('click', () => this.navigateTo(Pages.Create));
-        
-        //document.getElementById('createBtn2')!.addEventListener('click', () => this.navigateTo(Pages.Create));
-
         document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.navigateTo(Pages.dataEntry));
+        document.getElementById('saveBtn')!.addEventListener('click', () => XML_Controller.getInstance().saveAsFile(DataController.getInstance().openCase, 'data.xml'));
     }
 
     // asynchronous function that will retreive the html content included in the desired file
