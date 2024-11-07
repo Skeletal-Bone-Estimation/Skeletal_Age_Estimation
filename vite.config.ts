@@ -5,7 +5,7 @@ export default defineConfig({
     plugins: [
         electron([
             {
-                entry: 'src/App.ts',
+                entry: 'src/app.ts',
                 onstart: (options) => {
                     options.startup();
                 },
