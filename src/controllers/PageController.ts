@@ -12,7 +12,7 @@ import { DataController } from './DataController';
 export enum Pages {
     Home = 'home',
     Create = 'create',
-    dataEntry = 'dataEntry'
+    DataEntry = 'dataEntry'
 }
 
 export class PageController {
@@ -46,8 +46,15 @@ export class PageController {
     private initEventListeners(): void {
         document.getElementById('homeBtn')!.addEventListener('click', () => this.navigateTo(Pages.Home));
         document.getElementById('createBtn')!.addEventListener('click', () => this.navigateTo(Pages.Create));
-        document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.navigateTo(Pages.dataEntry));
-        document.getElementById('saveBtn')!.addEventListener('click', () => XML_Controller.getInstance().saveAsFile(DataController.getInstance().openCase, `save_data/${DataController.getInstance().openCase.caseID}.xml`));
+        document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.navigateTo(Pages.DataEntry));
+        document.getElementById('saveBtn')!.addEventListener('click', () => {
+            XML_Controller.getInstance().saveAsFile(DataController.getInstance().openCase, `save_data/${DataController.getInstance().openCase.caseID}.xml`)
+        });
+        document.getElementById('loadCase')!.addEventListener('change', (event) => { 
+            DataController.getInstance().loadCase(event)
+            this.navigateTo(Pages.DataEntry);
+        });
+        document.getElementById('loadBtn')!.addEventListener('click', () => document.getElementById('loadCase')!.click());
     }
 
     // asynchronous function that will retreive the html content included in the desired file

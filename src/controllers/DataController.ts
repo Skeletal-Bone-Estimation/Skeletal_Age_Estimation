@@ -46,14 +46,16 @@ export class DataController {
         this._loadedCases.splice(index, 1);
     }
 
-    public loadCase(path : string) : void {
-        const loadedCase : CaseModel = this.xmlController.parseSingleFile(path);
-        this.addCase(loadedCase);
-        this._openCase = loadedCase;
+    public loadCase(event : Event) : void {
+        this.xmlController.loadFile(event)
+        //const loadedCase : CaseModel = this.xmlController.parseSingleFile();
+        //this.addCase(loadedCase);
+        //this._openCase = loadedCase;
     }
 
-    public loadCollection(path : string) : void {
-        const loadedCases : CaseModel[] = this.xmlController.parseCollection(path);
+    public loadCollection(event : Event) : void {
+        this.xmlController.loadCollection(event);
+        const loadedCases : CaseModel[] = this.xmlController.parseCollection();
         this._loadedCases = loadedCases;
     }
 }
