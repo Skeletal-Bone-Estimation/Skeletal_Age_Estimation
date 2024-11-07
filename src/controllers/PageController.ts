@@ -43,7 +43,7 @@ export class PageController {
         
         //document.getElementById('createBtn2')!.addEventListener('click', () => this.navigateTo(Pages.Create));
 
-        document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.loadPage(Pages.dataEntry));
+        document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.navigateTo(Pages.dataEntry));
     }
 
     // asynchronous function that will retreive the html content included in the desired file
