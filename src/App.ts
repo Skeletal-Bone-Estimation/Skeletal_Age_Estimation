@@ -1,6 +1,8 @@
 //App.ts
 import {app, BrowserWindow} from 'electron';
 
+const DEV : boolean = true;
+
 const DEFAULT_WIDTH: number = 1200;
 const DEFAULT_HEIGHT: number = 760;
 
@@ -15,10 +17,13 @@ function createWindow(): void {
         }
     });
 
-    mainWindow.loadFile('./templates/index.html');
-    mainWindow.on('ready-to-show', () => mainWindow.show());
+    if (DEV)  { 
+        mainWindow.loadURL('http://localhost:5173');
+        mainWindow.webContents.openDevTools();
+    }
+    else mainWindow.loadFile('./templates/index.html');
 
-    mainWindow.webContents.openDevTools();
+    mainWindow.on('ready-to-show', () => mainWindow.show());
 };
 
 app.on('ready', createWindow);
