@@ -7,12 +7,11 @@ import { XML_Controller } from "./XML_Controller";
 
 export class DataController {
     private static instance : DataController;
-    private xmlController : XML_Controller;
+    private xmlController : XML_Controller = XML_Controller.getInstance();
     private _loadedCases: CaseModel[];
     private _openCase: CaseModel;
 
     private constructor() {
-        this.xmlController = XML_Controller.getInstance();
         this._loadedCases = [];
         this._openCase = new NullCaseModel()
     }

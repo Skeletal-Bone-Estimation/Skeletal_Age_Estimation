@@ -47,7 +47,7 @@ export class PageController {
         document.getElementById('homeBtn')!.addEventListener('click', () => this.navigateTo(Pages.Home));
         document.getElementById('createBtn')!.addEventListener('click', () => this.navigateTo(Pages.Create));
         document.getElementById('dataEntryBtn')!.addEventListener('click', () => this.navigateTo(Pages.dataEntry));
-        document.getElementById('saveBtn')!.addEventListener('click', () => XML_Controller.getInstance().saveAsFile(DataController.getInstance().openCase, 'data.xml'));
+        document.getElementById('saveBtn')!.addEventListener('click', () => XML_Controller.getInstance().saveAsFile(DataController.getInstance().openCase, `save_data/${DataController.getInstance().openCase.caseID}.xml`));
     }
 
     // asynchronous function that will retreive the html content included in the desired file

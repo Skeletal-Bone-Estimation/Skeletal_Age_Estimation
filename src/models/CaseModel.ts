@@ -16,14 +16,14 @@ export enum ThirdMolar {
 export class AbstractModel {}
 
 export class CaseModel {
-    private _caseID: string = '';
-    private _populationAffinity: Affinity = Affinity.Unknown;
-    private _sex: Sex = Sex.Unknown;
-    private _thirdMolar: ThirdMolar = ThirdMolar.Unknown;
-    private _pubicSymphysis: { [key: string]: number; } = {};
-    private _auricularEdge: { [key: string]: number; } = {};
-    private _fourthRib: { [key: string]: number; } = {};
-    private _generatedReports: {[id : number] : ReportModel} = {};
+    protected _caseID: string = '';
+    protected _populationAffinity: Affinity = Affinity.Unknown;
+    protected _sex: Sex = Sex.Unknown;
+    protected _thirdMolar: ThirdMolar = ThirdMolar.Unknown;
+    protected _pubicSymphysis: { [key: string]: number; } = {};
+    protected _auricularEdge: { [key: string]: number; } = {};
+    protected _fourthRib: { [key: string]: number; } = {};
+    protected _generatedReports: {[id : number] : ReportModel} = {};
 
     constructor() {}
 

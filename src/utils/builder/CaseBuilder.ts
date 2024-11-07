@@ -1,8 +1,7 @@
 import { Affinity, CaseModel, Sex, ThirdMolar } from "../../models/CaseModel";
 import { ReportModel } from "../../models/ReportModel";
-import { AbstractBuilder } from "./AbstractBuilder";
 
-export class CaseBuilder extends AbstractBuilder {
+export class CaseBuilder {
     private caseModel : CaseModel = new CaseModel;
     private _caseID : string = '';
     private _populationAffinity : Affinity = Affinity.Unknown;
@@ -14,7 +13,6 @@ export class CaseBuilder extends AbstractBuilder {
     private _generatedReports : ReportModel[] = [];
 
     constructor() {
-        super();
         this.reset()
     }
 

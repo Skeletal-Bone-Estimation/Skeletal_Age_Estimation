@@ -26,6 +26,7 @@
     "vite-plugin-electron": "^0.28.8"
   },
   "dependencies": {
+    "@types/xml2js": "^0.4.14",
     "concurrently": "^9.1.0",
     "docx": "^8.6.0",
     "electron": "^33.0.2",

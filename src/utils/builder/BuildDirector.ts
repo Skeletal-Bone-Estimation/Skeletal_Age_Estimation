@@ -1,6 +1,4 @@
-import { AbstractModel, CaseModel } from "../../models/CaseModel";
-import { ReportModel } from "../../models/ReportModel";
-import { AbstractBuilder } from "./AbstractBuilder";
+import { AbstractModel } from "../../models/CaseModel";
 import { CaseBuilder } from "./CaseBuilder";
 
 export enum ReportType {
@@ -9,7 +7,7 @@ export enum ReportType {
 }
 
 export class BuildDirector {
-    private caseBuilder : AbstractBuilder;
+    public caseBuilder : CaseBuilder;
     //private reportBuilder : AbstractBuilder
 
     constructor() {
