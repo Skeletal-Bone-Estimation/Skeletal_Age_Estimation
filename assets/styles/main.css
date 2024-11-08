@@ -97,6 +97,11 @@ body {
   color: white;
 }
 
+#cases {
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+}
+
 .topBar {
   position: sticky;
   top: 0;
@@ -156,6 +161,18 @@ body {
 
 .mercyImg {
   height: 30vh;
+}
+
+#createDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  gap: 4px;
+  min-height: 75vh;
+  margin: 0;          
+  padding: 0;        
+  box-sizing: border-box; 
 }
 
 .mercyImgSide {
