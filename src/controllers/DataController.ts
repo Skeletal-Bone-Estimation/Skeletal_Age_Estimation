@@ -1,5 +1,6 @@
 //DataController.ts
 
+import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
@@ -9,7 +10,7 @@ export class DataController {
     private static instance: DataController;
     private xmlController: XML_Controller = XML_Controller.getInstance();
     private _loadedCases: CaseModel[];
-    private _openCase: CaseModel;
+    private _openCase: AbstractCaseModel;
 
     private constructor() {
         this._loadedCases = [];
@@ -25,16 +26,16 @@ export class DataController {
         return this._loadedCases;
     }
 
-    public get openCase(): CaseModel {
+    public get openCase(): AbstractCaseModel {
         return this._openCase;
     }
 
     public getReport(id: number): ReportModel {
-        return this.openCase.generatedReports[id];
+        return (this.openCase as CaseModel).generatedReports[id];
     }
 
     private getReports(): { [id: number]: ReportModel } {
-        return this._openCase.generatedReports;
+        return (this._openCase as CaseModel).generatedReports;
     }
 
     public addCase(newCase: CaseModel): void {
@@ -48,8 +49,9 @@ export class DataController {
 
     public loadCase(event: Event): void {
         this.xmlController.loadFile(event, () => {
-            const loadedCase: CaseModel = this.xmlController.parseSingleFile();
-            this.addCase(loadedCase);
+            const loadedCase: AbstractCaseModel =
+                this.xmlController.parseSingleFile();
+            this.addCase(loadedCase as CaseModel);
             this._openCase = loadedCase;
         });
     }

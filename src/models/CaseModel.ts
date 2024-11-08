@@ -1,3 +1,6 @@
+import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
+import { ObserverIF } from '../utils/observer/ObserverIF';
+import { AbstractCaseModel } from './AbstractCaseModel';
 import { ReportModel } from './ReportModel';
 
 //CaseModel.ts
@@ -27,7 +30,7 @@ export enum ThirdMolar {
     Error = -1,
 }
 
-export class CaseModel {
+export class CaseModel extends AbstractCaseModel {
     protected _caseID: string;
     protected _populationAffinity: Affinity;
     protected _sex: Sex;
@@ -36,6 +39,7 @@ export class CaseModel {
     protected _auricularEdge: { [key: string]: number };
     protected _fourthRib: { [key: string]: number };
     protected _generatedReports: { [id: number]: ReportModel };
+    protected observers: ObserverIF[];
 
     constructor(
         caseID: string,
@@ -47,6 +51,7 @@ export class CaseModel {
         fourthRib: { [key: string]: number },
         generatedReports: { [key: number]: ReportModel },
     ) {
+        super();
         this._caseID = caseID;
         this._populationAffinity = populationAffinity;
         this._sex = sex;
@@ -55,6 +60,8 @@ export class CaseModel {
         this._auricularEdge = auricularEdge;
         this._fourthRib = fourthRib;
         this._generatedReports = generatedReports;
+        this.observers = [];
+        this.attach(new AutosaveObserver());
     }
 
     public get caseID(): string {

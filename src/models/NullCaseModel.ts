@@ -1,16 +1,8 @@
+import { AbstractCaseModel } from './AbstractCaseModel';
 import { Affinity, CaseModel, Sex, ThirdMolar } from './CaseModel';
 
-export class NullCaseModel extends CaseModel {
+export class NullCaseModel extends AbstractCaseModel {
     constructor() {
-        super(
-            'NullCase',
-            Affinity.Unknown,
-            Sex.Unknown,
-            ThirdMolar.Unknown,
-            {},
-            {},
-            {},
-            {},
-        );
+        super();
     }
 }

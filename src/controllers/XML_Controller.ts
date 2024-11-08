@@ -4,6 +4,7 @@ import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
+import { AbstractCaseModel } from '../models/AbstractCaseModel';
 
 //XML_Controller.ts
 export class XML_Controller {
@@ -22,7 +23,7 @@ export class XML_Controller {
     }
 
     // TODO: load single file
-    public parseSingleFile(): CaseModel {
+    public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
             console.log('Current doc error');
             return new NullCaseModel();
