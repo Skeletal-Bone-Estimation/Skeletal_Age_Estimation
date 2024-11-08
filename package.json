@@ -2,10 +2,10 @@
   "name": "sbaes",
   "version": "0.0.1",
   "description": "Team 3 2024-2025 Senior Design project",
-  "main": "./dist/app.js",
+  "main": "./dist-electron/app.js",
   "scripts": {
     "build": "tsc",
-    "dev": "npm run build && electron .",
+    "dev": "npm run build && vite",
     "prod": "echo \"Production command not yet created\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,9 +22,12 @@
   "devDependencies": {
     "@types/electron": "^1.4.38",
     "@types/node": "^22.7.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "vite": "^5.4.10",
+    "vite-plugin-electron": "^0.28.8"
   },
   "dependencies": {
+    "concurrently": "^9.1.0",
     "docx": "^8.6.0",
     "electron": "^33.0.2",
     "typescript": "^5.6.3",

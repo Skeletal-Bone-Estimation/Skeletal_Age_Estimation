@@ -1,4 +1,4 @@
-const { PageController } = require('../dist/controllers/PageController');
+const { PageController } = require('./dist/controllers/PageController');
 
 console.log('renderer loaded');
 
