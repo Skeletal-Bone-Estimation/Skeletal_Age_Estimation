@@ -11,13 +11,13 @@ import { DataController } from './DataController';
 //add file names here
 export enum Pages {
     Home = 'home',
-    Create = 'create'
-    dataEntry = 'dataEntry',
+    Create = 'create',
+    DataEntry = 'dataEntry',
 }
 
-export enum SideBar{
+export enum SideBar {
     dataBar = 'dataEntrySide',
-    homeBar = 'homeSide'
+    homeBar = 'homeSide',
 }
 
 export class PageController {
@@ -49,23 +49,19 @@ export class PageController {
 
     //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
     private initEventListeners(): void {
-
-    // asynchronous function that will retreive the html content included in the desired file
-    private async loadPageContent(page : Pages | SideBar): Promise<string> {
-        document
-            .getElementById('homeBtn')!
-            .addEventListener('click', () => { 
-                this.navigateTo(Pages.Home);
-                this.loadSideBarContent(SideBar.homeBar);
-            });
+        document.getElementById('homeBtn')!.addEventListener('click', () => {
+            this.navigateTo(Pages.Home);
+            this.loadSideBarContent(SideBar.homeBar);
+        });
         document
             .getElementById('createBtn')!
             .addEventListener('click', () => this.navigateTo(Pages.Create));
         document
             .getElementById('dataEntryBtn')!
-            .addEventListener('click', () => { 
-                this.navigateTo(Pages.DataEntry)
-                this.loadSideBarContent(SideBar.dataBar););
+            .addEventListener('click', () => {
+                this.navigateTo(Pages.DataEntry);
+                this.loadSideBarContent(SideBar.dataBar);
+            });
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
                 DataController.getInstance().openCase,
@@ -86,7 +82,7 @@ export class PageController {
     }
 
     // asynchronous function that will retreive the html content included in the desired file
-    private async loadPageContent(page: Pages): Promise<string> {
+    private async loadPageContent(page: Pages | SideBar): Promise<string> {
         return new Promise((resolve, reject) => {
             const filePath = path.join(
                 __dirname,
@@ -113,7 +109,7 @@ export class PageController {
         }
     }
 
-    private async loadSideBarContent(page : SideBar): Promise<void> {
+    private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
             const content = await this.loadPageContent(page);
             this.rootBarDiv.innerHTML = content;
