@@ -1,7 +1,7 @@
 export abstract class AbstractView {
     protected contentDiv: HTMLElement; //reference to content field of the rootDiv
 
-    constructor(document : Document) {
+    constructor(document: Document) {
         this.contentDiv = document.getElementById('rootDiv')!;
     }
 

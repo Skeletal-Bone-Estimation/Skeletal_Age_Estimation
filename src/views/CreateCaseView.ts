@@ -1,8 +1,7 @@
-import { AbstractView } from "./AbstractView";
+import { AbstractView } from './AbstractView';
 
 export class CreateCaseView extends AbstractView {
-    constructor(document : Document)
-    {
+    constructor(document: Document) {
         super(document);
     }
 

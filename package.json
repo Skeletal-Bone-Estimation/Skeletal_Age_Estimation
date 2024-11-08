@@ -4,8 +4,9 @@
   "description": "Team 3 2024-2025 Senior Design project",
   "main": "./dist-electron/app.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "npm run build && vite",
+    "build": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\" && tsc --build",
+    "watch": "tsc --watch",
+    "dev": "npm run build && concurrently \"npm run build\" \"vite\"",
     "prod": "echo \"Production command not yet created\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,11 +23,14 @@
   "devDependencies": {
     "@types/electron": "^1.4.38",
     "@types/node": "^22.7.5",
+    "globals": "^15.12.0",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "vite": "^5.4.10",
     "vite-plugin-electron": "^0.28.8"
   },
   "dependencies": {
+    "@types/xml2js": "^0.4.14",
     "concurrently": "^9.1.0",
     "docx": "^8.6.0",
     "electron": "^33.0.2",
