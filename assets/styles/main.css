@@ -97,6 +97,11 @@ body {
   color: white;
 }
 
+#cases {
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+}
+
 .topBar {
   position: sticky;
   top: 0;
