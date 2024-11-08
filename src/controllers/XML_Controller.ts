@@ -2,9 +2,8 @@ import { CaseModel } from '../models/CaseModel';
 import { BuildDirector, ReportType } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
-import { DataController } from './DataController';
-import { ReportModel } from '../models/ReportModel';
 import { NullCaseModel } from '../models/NullCaseModel';
+import { ReportModel } from '../models/ReportModel';
 
 //XML_Controller.ts
 export class XML_Controller {
@@ -24,67 +23,71 @@ export class XML_Controller {
 
     // TODO: load single file
     public parseSingleFile(): CaseModel {
-        // Using getElementsByTagName instead of querySelector
         if (!this.currentDoc) {
-            console.log('current doc error');
+            console.log('Current doc error');
             return new NullCaseModel();
         }
 
-        // Debugging caseID
         const caseID =
             this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
-        console.log('caseID:', caseID); // Log the value of caseID
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
 
-        // Debugging populationAffinity
         const populationAffinity = this.currentDoc?.getElementsByTagName(
             '_populationAffinity',
         )[0]?.textContent;
-        console.log('populationAffinity:', populationAffinity); // Log the value of populationAffinity
         this.director.caseBuilder.setPopulationAffinity(
             populationAffinity ? Number(populationAffinity) : -1,
         );
 
-        // Debugging sex
         const sex =
             this.currentDoc?.getElementsByTagName('_sex')[0]?.textContent;
-        console.log('sex:', sex); // Log the value of sex
         this.director.caseBuilder.setSex(sex ? Number(sex) : -1);
 
-        // Debugging thirdMolar
         const thirdMolar =
             this.currentDoc?.getElementsByTagName('_thirdMolar')[0]
                 ?.textContent;
-        console.log('thirdMolar:', thirdMolar); // Log the value of thirdMolar
         this.director.caseBuilder.setThirdMolar(
             thirdMolar ? Number(thirdMolar) : -1,
         );
 
-        // Debugging pubicSymphysis
         const pubicSymphysis = this.extractDict('_pubicSymphysis');
-        console.log('pubicSymphysis:', pubicSymphysis); // Log the value of pubicSymphysis
         this.director.caseBuilder.setPubicSymphysis(pubicSymphysis);
 
-        // Debugging auricularEdge
         const auricularEdge = this.extractDict('_auricularEdge');
-        console.log('auricularEdge:', auricularEdge); // Log the value of auricularEdge
         this.director.caseBuilder.setAuricularEdge(auricularEdge);
 
-        // Debugging fourthRib
         const fourthRib = this.extractDict('_fourthRib');
-        console.log('fourthRib:', fourthRib); // Log the value of fourthRib
         this.director.caseBuilder.setFourthRib(fourthRib);
 
-        return this.director.make(ReportType.Case);
+        const generatedReports = this.extractReports('_generatedReports');
+        this.director.caseBuilder.setReportsGenerated(generatedReports);
+
+        return this.director.makeCase();
+    }
+
+    private extractReports(tag: string): { [id: number]: ReportModel } {
+        const dict: { [id: number]: ReportModel } = {};
+
+        const element = this.currentDoc?.getElementsByTagName(tag)[0];
+        if (element) {
+            element.childNodes.forEach((node) => {
+                if (node.nodeName !== '#text') {
+                    const key: number = Number(node.nodeName);
+                    const value: ReportModel =
+                        this.director.reportBuilder.buildFrom(node.textContent);
+                }
+            });
+        }
+
+        return dict;
     }
 
     private extractDict(id: string): { [key: string]: number } {
         const dict: { [key: string]: number } = {};
-        const element = this.currentDoc?.querySelector(id);
+        const element = this.currentDoc?.getElementsByTagName(id)[0];
         if (element) {
             element.childNodes.forEach((node) => {
                 if (node.nodeName !== '#text') {
-                    // Skip any text nodes (whitespace, newlines, etc.)
                     const key: string = node.nodeName;
                     const value: number = Number(node.textContent) || -1;
                     dict[key] = value;
@@ -112,7 +115,6 @@ export class XML_Controller {
                         fileContent,
                         'application/xml',
                     );
-                    console.log('Loaded XML Document:', this.currentDoc); // Debugging: Log the document to check if it's loaded correctly
                     callback();
                 }
             };

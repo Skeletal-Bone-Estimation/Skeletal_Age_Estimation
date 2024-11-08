@@ -1,27 +1,29 @@
 import { CaseModel } from '../../models/CaseModel';
 import { NullCaseModel } from '../../models/NullCaseModel';
+import { ReportModel } from '../../models/ReportModel';
 import { CaseBuilder } from './CaseBuilder';
+import { ReportBuilder } from './ReportBuilder';
 
 export enum ReportType {
     Case,
     Report,
 }
 
+//TODO: abstract so that the instance variables can be private and this class has a purpose
 export class BuildDirector {
     public caseBuilder: CaseBuilder;
-    //private reportBuilder : AbstractBuilder
+    public reportBuilder: ReportBuilder;
 
     constructor() {
         this.caseBuilder = new CaseBuilder();
-        //this.reportBuilder = new this.reportBuilder();
+        this.reportBuilder = new ReportBuilder();
     }
 
-    public make(type: ReportType): CaseModel | NullCaseModel {
-        if (type == ReportType.Case) return this.caseBuilder.build();
-        //else if (type == ReportType.Report) return this.reportBuilder.build();
-        else {
-            console.error(`Error building ${type}`);
-            return new NullCaseModel();
-        }
+    public makeCase(): CaseModel {
+        return this.caseBuilder.build();
+    }
+
+    public makeReportFrom(content: string): ReportModel {
+        return this.reportBuilder.buildFrom(content);
     }
 }
