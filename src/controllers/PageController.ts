@@ -7,6 +7,7 @@ import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
+import { CaseModel } from '../models/CaseModel';
 
 //add file names here
 export enum Pages {
@@ -64,8 +65,8 @@ export class PageController {
             });
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
-                DataController.getInstance().openCase,
-                `save_data/${DataController.getInstance().openCase.caseID}.xml`,
+                DataController.getInstance().openCase as CaseModel,
+                `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
             );
         });
         document
