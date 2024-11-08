@@ -14,8 +14,8 @@ export default defineConfig({
                 entry: 'src/preload.ts',
             },
             {
-                entry: 'src/renderer.ts'
-            }
+                entry: 'src/renderer.ts',
+            },
         ]),
     ],
     build: {
@@ -24,5 +24,5 @@ export default defineConfig({
                 main: 'src/renderer.ts',
             },
         },
-    }
+    },
 });

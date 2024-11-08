@@ -1,13 +1,14 @@
-import { AbstractModel } from "../../models/CaseModel";
-import { CaseBuilder } from "./CaseBuilder";
+import { CaseModel } from '../../models/CaseModel';
+import { NullCaseModel } from '../../models/NullCaseModel';
+import { CaseBuilder } from './CaseBuilder';
 
 export enum ReportType {
     Case,
-    Report
+    Report,
 }
 
 export class BuildDirector {
-    public caseBuilder : CaseBuilder;
+    public caseBuilder: CaseBuilder;
     //private reportBuilder : AbstractBuilder
 
     constructor() {
@@ -15,13 +16,12 @@ export class BuildDirector {
         //this.reportBuilder = new this.reportBuilder();
     }
 
-    public make(type : ReportType) : AbstractModel | null {
-        if (type == ReportType.Case) return this.caseBuilder.make();
-        //else if (type == ReportType.Report) return this.reportBuilder.make();
-        else 
-        {
+    public make(type: ReportType): CaseModel | NullCaseModel {
+        if (type == ReportType.Case) return this.caseBuilder.build();
+        //else if (type == ReportType.Report) return this.reportBuilder.build();
+        else {
             console.error(`Error building ${type}`);
-            return null;
+            return new NullCaseModel();
         }
     }
 }

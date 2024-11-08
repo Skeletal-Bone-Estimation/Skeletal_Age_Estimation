@@ -1,10 +1,9 @@
 // DataEntryView.ts
 
-import { AbstractView } from "./AbstractView";
+import { AbstractView } from './AbstractView';
 
 export class DataEntryView extends AbstractView {
-    constructor(document : Document)
-    {
+    constructor(document: Document) {
         super(document);
     }
 

@@ -1,10 +1,9 @@
 //HomePageView.ts
 
-import { AbstractView } from "./AbstractView";
+import { AbstractView } from './AbstractView';
 
 export class HomePageView extends AbstractView {
-    constructor(document : Document)
-    {
+    constructor(document: Document) {
         super(document);
     }
 

@@ -1,31 +1,61 @@
-import { ReportModel } from "./ReportModel";
+import { ReportModel } from './ReportModel';
 
 //CaseModel.ts
 export enum Affinity {
-    White, Black, Unknown
+    White = 0,
+    Black = 1,
+    Unknown = 2,
+    Error = -1,
 }
 
 export enum Sex {
-    Male, Female, Unknown
+    Male = 0,
+    Female = 1,
+    Unknown = 2,
+    Error = -1,
 }
 
 export enum ThirdMolar {
-    A, B, C, D, E, F, G, Unknown
+    A = 0,
+    B = 1,
+    C = 2,
+    D = 3,
+    E = 4,
+    F = 5,
+    G = 6,
+    Unknown = 7,
+    Error = -1,
 }
 
-export class AbstractModel {}
-
 export class CaseModel {
-    protected _caseID: string = '';
-    protected _populationAffinity: Affinity = Affinity.Unknown;
-    protected _sex: Sex = Sex.Unknown;
-    protected _thirdMolar: ThirdMolar = ThirdMolar.Unknown;
-    protected _pubicSymphysis: { [key: string]: number; } = {};
-    protected _auricularEdge: { [key: string]: number; } = {};
-    protected _fourthRib: { [key: string]: number; } = {};
-    protected _generatedReports: {[id : number] : ReportModel} = {};
+    protected _caseID: string;
+    protected _populationAffinity: Affinity;
+    protected _sex: Sex;
+    protected _thirdMolar: ThirdMolar;
+    protected _pubicSymphysis: { [key: string]: number };
+    protected _auricularEdge: { [key: string]: number };
+    protected _fourthRib: { [key: string]: number };
+    protected _generatedReports: { [id: number]: ReportModel };
 
-    constructor() {}
+    constructor(
+        caseID: string,
+        populationAffinity: Affinity,
+        sex: Sex,
+        thirdMolar: ThirdMolar,
+        pubicSymphysis: { [key: string]: number },
+        auricularEdge: { [key: string]: number },
+        fourthRib: { [key: string]: number },
+        generatedReports: { [key: number]: ReportModel },
+    ) {
+        this._caseID = caseID;
+        this._populationAffinity = populationAffinity;
+        this._sex = sex;
+        this._thirdMolar = thirdMolar;
+        this._pubicSymphysis = pubicSymphysis;
+        this._auricularEdge = auricularEdge;
+        this._fourthRib = fourthRib;
+        this._generatedReports = generatedReports;
+    }
 
     public get caseID(): string {
         return this._caseID;
@@ -59,15 +89,15 @@ export class CaseModel {
         this._thirdMolar = value;
     }
 
-    public get pubicSymphysis(): { [key: string]: number; } {
+    public get pubicSymphysis(): { [key: string]: number } {
         return this._pubicSymphysis;
     }
 
-    public get auricularEdge(): { [key: string]: number; } {
+    public get auricularEdge(): { [key: string]: number } {
         return this._auricularEdge;
     }
 
-    public get fourthRib(): { [key: string]: number; } {
+    public get fourthRib(): { [key: string]: number } {
         return this._fourthRib;
     }
 
@@ -79,15 +109,19 @@ export class CaseModel {
         this._generatedReports = value;
     }
 
-    public updateDictEntry(dict : {[key : string] : number}, field : string, value : number) : void {
+    public updateDictEntry(
+        dict: { [key: string]: number },
+        field: string,
+        value: number,
+    ): void {
         dict[field] = value;
     }
 
-    public addReport(report : ReportModel) : void {
+    public addReport(report: ReportModel): void {
         this._generatedReports[report.id] = report;
     }
 
-    public removeReport(report : ReportModel) : void {
+    public removeReport(report: ReportModel): void {
         delete this._generatedReports[report.id];
     }
 }

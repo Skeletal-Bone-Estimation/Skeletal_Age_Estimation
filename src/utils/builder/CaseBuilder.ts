@@ -1,70 +1,82 @@
-import { Affinity, CaseModel, Sex, ThirdMolar } from "../../models/CaseModel";
-import { ReportModel } from "../../models/ReportModel";
+import { CaseModel } from '../../models/CaseModel';
+import { ReportModel } from '../../models/ReportModel';
+import { CaseBuilderIF } from './CaseBuilderIF';
 
-export class CaseBuilder {
-    private caseModel : CaseModel = new CaseModel;
-    private _caseID : string = '';
-    private _populationAffinity : Affinity = Affinity.Unknown;
-    private _sex : Sex = Sex.Unknown;
-    private _thirdMolar : ThirdMolar = ThirdMolar.Unknown;
-    private _pubicSymphysis : { [key : string] : number; } = {};
-    private _auricularEdge : { [key : string] : number; } = {};
-    private _fourthRib : { [key : string] : number; } = {};
-    private _generatedReports : ReportModel[] = [];
+// Concrete builder for CaseModel
+export class CaseBuilder implements CaseBuilderIF {
+    private _caseID: string;
+    private _populationAffinity: number;
+    private _sex: number;
+    private _thirdMolar: number;
+    private _pubicSymphysis: { [key: string]: number };
+    private _auricularEdge: { [key: string]: number };
+    private _fourthRib: { [key: string]: number };
+    private _generatedReports: { [key: number]: ReportModel };
 
     constructor() {
-        this.reset()
+        this._caseID = '';
+        this._populationAffinity = 0;
+        this._sex = 0;
+        this._thirdMolar = 0;
+        this._pubicSymphysis = {};
+        this._auricularEdge = {};
+        this._fourthRib = {};
+        this._generatedReports = {};
     }
 
-    private reset() {
-        this.caseModel = new CaseModel()
+    public setCaseID(caseID: string): CaseBuilderIF {
+        this._caseID = caseID;
+        return this;
     }
 
-    //pulled from id input
-    public set caseID(value: string) {
-        this._caseID = value;
+    public setPopulationAffinity(populationAffinity: number): CaseBuilderIF {
+        this._populationAffinity = populationAffinity;
+        return this;
     }
 
-    //pulled from population affinity selector
-    public set populationAffinity(value: Affinity) {
-        this._populationAffinity = value;
+    public setSex(sex: number): CaseBuilderIF {
+        this._sex = sex;
+        return this;
     }
 
-    //pulled from sex selector
-    public set sex(value: Sex) {
-        this._sex = value;
+    public setThirdMolar(thirdMolar: number): CaseBuilderIF {
+        this._thirdMolar = thirdMolar;
+        return this;
     }
 
-    //pulled from third molar entry field
-    public set thirdMolar(value: ThirdMolar) {
-        this._thirdMolar = value;
+    public setPubicSymphysis(pubicSymphysis: {
+        [key: string]: number;
+    }): CaseBuilderIF {
+        this._pubicSymphysis = pubicSymphysis;
+        return this;
+    }
+    public setAuricularEdge(auricularEdge: {
+        [key: string]: number;
+    }): CaseBuilderIF {
+        this._auricularEdge = auricularEdge;
+        return this;
+    }
+    public setFourthRib(fourthRib: { [key: string]: number }): CaseBuilderIF {
+        this._fourthRib = fourthRib;
+        return this;
+    }
+    public setReportsGenerated(generatedReports: {
+        [key: number]: ReportModel;
+    }): CaseBuilderIF {
+        this._generatedReports = generatedReports;
+        return this;
     }
 
-    public get pubicSymphysis(): { [key: string]: number; } {
-        return this._pubicSymphysis;
+    public build(): CaseModel {
+        return new CaseModel(
+            this._caseID,
+            this._populationAffinity,
+            this._sex,
+            this._thirdMolar,
+            this._pubicSymphysis,
+            this._auricularEdge,
+            this._fourthRib,
+            this._generatedReports,
+        );
     }
-
-    public get auricularEdge(): { [key: string]: number; } {
-        return this._auricularEdge;
-    }
-
-    public get fourthRib(): { [key: string]: number; } {
-        return this._fourthRib;
-    }
-
-    public set generatedReports(value: ReportModel[]) {
-        this._generatedReports = value;
-    }
-
-    //called to insert the data fopr each bone mrker into the case
-    public setDict(store : { [key : string] : number}, newDict : { [key : string] : number; }) {
-        Object.entries(newDict).forEach(([key, value]) => {
-            store[key] = value;
-        });
-    }
-
-    public make() : CaseModel {
-        return this.caseModel
-    }
-
 }
