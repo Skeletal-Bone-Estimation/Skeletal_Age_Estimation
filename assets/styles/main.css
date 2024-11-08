@@ -3,32 +3,210 @@
   --on-dark: rgb(255,255,255);
   --on-light: rgb(9, 60, 113);
   --hover-on-dark: rgb(173, 206, 101);
-  --hover-on-light: rgb(7, 40, 77);
+  --hover-on-light: rgb(6, 31, 61);
   --background-color: rgb(241, 241, 241);
-  --div-color-1: rgb(17, 82, 73);
+  --div-color-1: rgb(241, 241, 241);
+  --div-color-2: rgb(15, 89, 78);
+  --resizer-color: rgb(7, 46, 40);
+  --border-color-on-light: rgba(7, 46, 40, .7);
+  --border-color-on-dark: rgba(255,255,255);
 }
 
-body{
-  background-color: var(--background-color)
+body {
+  background-color: var(--background-color);
 }
 
-#rootDiv{
+#rootDiv {
   background-color: var(--div-color-1);
-  padding: 15px 64px;
+  flex-grow: 1;
+}
+
+.mainScreen {
+  width: 100vw;
+  display: flex;
+  flex-direction:column;
+}
+
+#homeDiv {
+  padding-top: 5vh;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+.homeButtons {
+  padding-bottom: 5vh;
+  display: grid;
+  row-gap: 7vh;
+}
+
+.homeTitle {
+  overflow: clip;
+}
+
+#dataDiv {
+  padding-top: 1vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+.dataEntry { 
+  border: 2px solid var(--border-color-on-light);
+  border-radius: 5px;
+  background-color: var(--background-color);
+  margin: 5px;
+  position: relative;
+  padding: 10px;
+}
+
+.dataEntryLabel{
+  position: absolute;
+  top: -12px;
+  left: 2px;
+  background-color: var(--background-color);
+}
+
+.wrapper {
+  display: flex;
+}
+
+.sideBar {
+  background-color: var(--div-color-2);
+  width: 12vw;
+  height: 98vh;
+  min-width: 125px;
+  max-width: 20vw;
+  position: sticky;
+  top: 0;
+}
+
+.sideBarHeader {
+  padding: 0px 25px;
+  background-color: var(--div-color-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+}
+
+.sideBarHeader h2 { 
+  color: white;
+}
+
+#cases {
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+}
+
+.topBar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  width: 100;
+  height: 76px;
+  z-index: 1;
+}
+
+.resizer {
+  width: 2px;
+  right: 0;
+  height:100%;
+  cursor: col-resize;
+  position: absolute;
+  background-color: var(--resizer-color);
+  opacity: 100%;
 }
 
 /* button for dark backgrounds */
 .button-light {
-    background-color: var(--on-dark);
-    border: none;
-    color: var(--on-light); /* text color: always inverse of backgroud-color*/
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-  }
+  background-color: var(--on-dark);
+  border: 3mm ridge var(--border-color-on-light);
+  color: var(--on-light); /* text color: always inverse of backgroud-color*/
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  height: 76px;
+  width: 10vw;
+}
 
 .button-light:hover {
-  background-color: var(--hover-on-dark)
+  background-color: var(--hover-on-dark);
+  transition: 0.2s;
+}
+
+.button-dark {
+  background-color: var(--on-light);
+  border: 3mm ridge var(--border-color-on-dark);
+  color: var(--on-dark); /* text color: always inverse of backgroud-color*/
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  height: 76px;
+  width: auto;
+  overflow: hidden;
+}
+
+.button-dark:hover {
+  background-color: var(--hover-on-light);
+  transition: 0.2s;
+}
+
+
+.mercyImg {
+  height: 30vh;
+}
+
+#createDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  gap: 4px;
+  min-height: 75vh;
+  margin: 0;          
+  padding: 0;        
+  box-sizing: border-box; 
+}
+
+.mercyImgSide {
+  top: 20px;
+  right: 0.5vw;
+  position: relative;
+  width: 10vw;
+}
+
+.cases{
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+  max-height: 50vh;
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: white var(--div-color-2);
+}
+
+.homeSide{
+  opacity: 0;
+}
+
+.sideBarData {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  gap: 4px;
+  min-height: 10vh;
+  margin: 0;          
+  padding: 0;        
+  box-sizing: border-box; 
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: white var(--div-color-2);
 }
