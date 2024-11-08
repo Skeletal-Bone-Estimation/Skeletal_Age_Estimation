@@ -157,3 +157,23 @@ body {
 .mercyImg {
   height: 30vh;
 }
+
+.mercyImgSide {
+  top: 20px;
+  right: 0.5vw;
+  position: relative;
+  width: 10vw;
+}
+
+.cases{
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+  max-height: 50vh;
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: white var(--div-color-2);
+}
+
+.homeSide{
+  opacity: 0;
+}
