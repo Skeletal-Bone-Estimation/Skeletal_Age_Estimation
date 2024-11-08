@@ -97,6 +97,11 @@ body {
   color: white;
 }
 
+#cases {
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+}
+
 .topBar {
   position: sticky;
   top: 0;
@@ -157,4 +162,51 @@ body {
 
 .mercyImg {
   height: 30vh;
+}
+
+#createDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  gap: 4px;
+  min-height: 75vh;
+  margin: 0;          
+  padding: 0;        
+  box-sizing: border-box; 
+}
+
+.mercyImgSide {
+  top: 20px;
+  right: 0.5vw;
+  position: relative;
+  width: 10vw;
+}
+
+.cases{
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
+  max-height: 50vh;
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: white var(--div-color-2);
+}
+
+.homeSide{
+  opacity: 0;
+}
+
+.sideBarData {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  gap: 4px;
+  min-height: 10vh;
+  margin: 0;          
+  padding: 0;        
+  box-sizing: border-box; 
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: white var(--div-color-2);
 }

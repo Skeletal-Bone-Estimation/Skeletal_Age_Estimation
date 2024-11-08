@@ -11,17 +11,24 @@ import { DataController } from './DataController';
 //add file names here
 export enum Pages {
     Home = 'home',
-    Create = 'create',
-    DataEntry = 'dataEntry',
+    Create = 'create'
+    dataEntry = 'dataEntry',
+}
+
+export enum SideBar{
+    dataBar = 'dataEntrySide',
+    homeBar = 'homeSide'
 }
 
 export class PageController {
     private contentDiv: HTMLElement;
+    private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private currentView: AbstractView;
 
     constructor() {
         this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
+        this.rootBarDiv = document.getElementById('rootBar')!;
         this.views = {
             home: new HomePageView(document),
             create: new CreateCaseView(document),
@@ -29,6 +36,8 @@ export class PageController {
             //add additional views here
         };
         this.currentView = this.views[Pages.Home];
+        //automatically loads in the homeBar when first opened
+        this.loadSideBarContent(SideBar.homeBar);
         this.initEventListeners();
     }
 
@@ -40,15 +49,23 @@ export class PageController {
 
     //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
     private initEventListeners(): void {
+
+    // asynchronous function that will retreive the html content included in the desired file
+    private async loadPageContent(page : Pages | SideBar): Promise<string> {
         document
             .getElementById('homeBtn')!
-            .addEventListener('click', () => this.navigateTo(Pages.Home));
+            .addEventListener('click', () => { 
+                this.navigateTo(Pages.Home);
+                this.loadSideBarContent(SideBar.homeBar);
+            });
         document
             .getElementById('createBtn')!
             .addEventListener('click', () => this.navigateTo(Pages.Create));
         document
             .getElementById('dataEntryBtn')!
-            .addEventListener('click', () => this.navigateTo(Pages.DataEntry));
+            .addEventListener('click', () => { 
+                this.navigateTo(Pages.DataEntry)
+                this.loadSideBarContent(SideBar.dataBar););
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
                 DataController.getInstance().openCase,
@@ -91,6 +108,15 @@ export class PageController {
         try {
             const content = await this.loadPageContent(page);
             this.currentView.render(content);
+        } catch (error) {
+            console.error('Error loading page:', error);
+        }
+    }
+
+    private async loadSideBarContent(page : SideBar): Promise<void> {
+        try {
+            const content = await this.loadPageContent(page);
+            this.rootBarDiv.innerHTML = content;
         } catch (error) {
             console.error('Error loading page:', error);
         }
