@@ -1,7 +1,7 @@
 //DataController.ts
 
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
-import { CaseModel } from '../models/CaseModel';
+import { Affinity, CaseModel, Sex, ThirdMolar } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
 import { XML_Controller } from './XML_Controller';
@@ -60,5 +60,53 @@ export class DataController {
         this.xmlController.loadCollection(event);
         const loadedCases: CaseModel[] = this.xmlController.parseCollection();
         this._loadedCases = loadedCases;
+    }
+
+    public editCaseID(newID: string): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).caseID = newID;
+        this.openCase.notify(); //autosave
+    }
+
+    public editSex(newSex: Sex): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).sex = newSex;
+        this.openCase.notify(); //autosave
+    }
+
+    public editPopulationAffinity(newAffinity: Affinity): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).populationAffinity = newAffinity;
+        this.openCase.notify(); //autosave
+    }
+
+    public editThirdMolar(newPhase: ThirdMolar): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).thirdMolar = newPhase;
+        this.openCase.notify(); //autosave
+    }
+
+    public editPubicSymphysis(data: { [key: string]: number }): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).pubicSymphysis = data;
+        this.openCase.notify(); //autosave
+    }
+
+    public editAuricularEdge(data: { [key: string]: number }): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).auricularEdge = data;
+        this.openCase.notify(); //autosave
+    }
+
+    public editFourthRib(data: { [key: string]: number }): void {
+        if (this._openCase instanceof CaseModel) return;
+        (this._openCase as CaseModel).fourthRib = data;
+        this.openCase.notify(); //autosave
+    }
+
+    public extractData(id: string): { [key: string]: number } {
+        throw new Error(
+            'temporary method to stand in for pulling data from the GUI until the function is complete',
+        );
     }
 }

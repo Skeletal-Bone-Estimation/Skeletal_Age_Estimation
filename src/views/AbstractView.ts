@@ -10,4 +10,6 @@ export abstract class AbstractView {
         console.log('loaded from AbstractView');
         this.contentDiv.innerHTML = htmlContent;
     }
+
+    public setSidebarListeners(): void {}
 }

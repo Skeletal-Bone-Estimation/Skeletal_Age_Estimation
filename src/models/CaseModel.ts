@@ -100,12 +100,24 @@ export class CaseModel extends AbstractCaseModel {
         return this._pubicSymphysis;
     }
 
+    public set pubicSymphysis(data: { [key: string]: number }) {
+        this._pubicSymphysis = data;
+    }
+
     public get auricularEdge(): { [key: string]: number } {
         return this._auricularEdge;
     }
 
+    public set auricularEdge(data: { [key: string]: number }) {
+        this.auricularEdge = data;
+    }
+
     public get fourthRib(): { [key: string]: number } {
         return this._fourthRib;
+    }
+
+    public set fourthRib(data: { [key: string]: number }) {
+        this.fourthRib = data;
     }
 
     public get generatedReports(): { [id: number]: ReportModel } {
