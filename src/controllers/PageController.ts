@@ -19,6 +19,7 @@ export enum Pages {
 export enum SideBar {
     dataBar = 'dataEntrySide',
     homeBar = 'homeSide',
+    createBar = 'createSide',
 }
 
 export class PageController {
@@ -54,9 +55,10 @@ export class PageController {
             this.navigateTo(Pages.Home);
             this.loadSideBarContent(SideBar.homeBar);
         });
-        document
-            .getElementById('createBtn')!
-            .addEventListener('click', () => this.navigateTo(Pages.Create));
+        document.getElementById('createBtn')!.addEventListener('click', () => {
+            this.navigateTo(Pages.Create);
+            this.loadSideBarContent(SideBar.createBar);
+        });
         document
             .getElementById('dataEntryBtn')!
             .addEventListener('click', () => {
@@ -74,6 +76,7 @@ export class PageController {
             .addEventListener('change', (event) => {
                 DataController.getInstance().loadCase(event);
                 this.navigateTo(Pages.DataEntry);
+                this.loadSideBarContent(SideBar.dataBar);
             });
         document
             .getElementById('loadBtn')!
