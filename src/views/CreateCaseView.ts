@@ -15,6 +15,6 @@ export class CreateCaseView extends AbstractView {
         document.getElementById('create')!.addEventListener('click', () => {
             PageController.getInstance().createCase(); //pass parameters to give to data controller
             PageController.getInstance().navigateTo(Pages.DataEntry);
-        })
+        });
     }
 }

@@ -64,7 +64,15 @@ export class DataController {
         this._loadedCases = loadedCases;
     }
 
-    public createCase(caseID : string, sex : Sex, affinity : Affinity, thirdMolar : ThirdMolar, pubic : {[key: string] : number}, auricular: {[key: string] : number}, fourthRib: {[key: string] : number}) {
+    public createCase(
+        caseID: string,
+        sex: Sex,
+        affinity: Affinity,
+        thirdMolar: ThirdMolar,
+        pubic: { [key: string]: number },
+        auricular: { [key: string]: number },
+        fourthRib: { [key: string]: number },
+    ) {
         var director = new BuildDirector();
 
         director.caseBuilder.setCaseID(caseID);
