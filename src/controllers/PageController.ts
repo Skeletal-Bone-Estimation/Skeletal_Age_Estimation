@@ -127,7 +127,9 @@ export class PageController {
         try {
             const content = await this.loadPageContent(page);
             this.currentView.render(content);
-        } catch (error) { console.error('Error loading page:', error); }
+        } catch (error) {
+            console.error('Error loading page:', error);
+        }
     }
 
     //asynchronously loads sidebar content from html files
@@ -139,7 +141,9 @@ export class PageController {
             this.rootBarDiv.innerHTML = content;
             //console.log('Sidebar content loaded into rootBarDiv');
             this.currentView.setSidebarListeners(); // Reinitialize listeners after loading sidebar
-        } catch (error) { console.error('Error loading sidebar content:', error); }
+        } catch (error) {
+            console.error('Error loading sidebar content:', error);
+        }
     }
 
     //delegates to XML_Controller.editCase with parameters based on the id enumeration

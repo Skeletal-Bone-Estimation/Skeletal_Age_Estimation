@@ -1,4 +1,5 @@
 //DataController.ts
+import { existsSync, rmSync } from 'fs';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
@@ -82,39 +83,36 @@ export class DataController {
             | ThirdMolar
             | { [key: string]: number },
     ): void {
-        var obj: CaseModel;
         if (!(this._openCase instanceof CaseModel)) return;
-        else var obj = this.openCase as CaseModel;
+
+        var obj: CaseModel = this.openCase as CaseModel;
+        var oldName = obj.caseID;
 
         switch (element) {
             case CaseElement.caseID:
-                const oldName = obj.caseID;
-                (this._openCase as CaseModel).caseID = content as string;
-                this.updateSaveFile(oldName); //deletes the file under the old case id
+                obj.caseID = content as string;
                 break;
             case CaseElement.sex:
-                (this._openCase as CaseModel).sex = content as Sex;
+                obj.sex = content as Sex;
                 break;
             case CaseElement.affinity:
-                (this._openCase as CaseModel).populationAffinity =
-                    content as Affinity;
+                obj.populationAffinity = content as Affinity;
                 break;
             case CaseElement.thirdMolar:
-                (this._openCase as CaseModel).thirdMolar =
-                    content as ThirdMolar;
+                obj.thirdMolar = content as ThirdMolar;
                 break;
             case CaseElement.pubicSymphysis:
-                (this._openCase as CaseModel).pubicSymphysis = content as {
+                obj.pubicSymphysis = content as {
                     [key: string]: number;
                 };
                 break;
             case CaseElement.auricularEdge:
-                (this._openCase as CaseModel).auricularEdge = content as {
+                obj.auricularEdge = content as {
                     [key: string]: number;
                 };
                 break;
             case CaseElement.fourthRib:
-                (this._openCase as CaseModel).fourthRib = content as {
+                obj.fourthRib = content as {
                     [key: string]: number;
                 };
                 break;
@@ -125,10 +123,7 @@ export class DataController {
         }
 
         this.openCase.notify(); //autosave
-    }
-
-    public updateSaveFile(oldName: string) {
-        //TODO: delete save file with name matching oldName
+        if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`);; //deletes the file under the old case id
     }
 
     //TODO: pull data from data entry screen into case model

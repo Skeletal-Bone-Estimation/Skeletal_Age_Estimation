@@ -11,9 +11,9 @@ export class DataEntryView extends AbstractView {
 
     //specialized method to load content with specific data entry page requirements
     public override render(htmlContent: string): void {
-        console.log('Rendering content in DataEntryView');
+        //console.log('Rendering content in DataEntryView');
         this.contentDiv.innerHTML = htmlContent;
-        console.log('HTML content loaded:', this.contentDiv.innerHTML); // Check the content
+        //console.log('HTML content loaded:', this.contentDiv.innerHTML); // Check the content
     }
 
     //specialized method to connect listeners for data entry sidebar content
@@ -45,10 +45,11 @@ export class DataEntryView extends AbstractView {
         if (caseInput && sexSelector && affinitySelector) {
             caseInput.addEventListener('input', (event) => {
                 const target = event.target as HTMLInputElement;
-                if (!(target.value === '')) PageController.getInstance().editCase(
-                    UI_Elements.dataSideCaseID,
-                    target.value as string,
-                );
+                if (!(target.value === ''))
+                    PageController.getInstance().editCase(
+                        UI_Elements.dataSideCaseID,
+                        target.value as string,
+                    );
             });
 
             sexSelector.addEventListener('input', (event) => {
