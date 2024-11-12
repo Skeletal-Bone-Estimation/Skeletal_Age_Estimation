@@ -1,34 +1,10 @@
+import { Affinity, Sex, ThirdMolar } from '../utils/enums';
 import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
 import { ObserverIF } from '../utils/observer/ObserverIF';
 import { AbstractCaseModel } from './AbstractCaseModel';
 import { ReportModel } from './ReportModel';
 
 //CaseModel.ts
-export enum Affinity {
-    White = 0,
-    Black = 1,
-    Unknown = 2,
-    Error = -1,
-}
-
-export enum Sex {
-    Male = 0,
-    Female = 1,
-    Unknown = 2,
-    Error = -1,
-}
-
-export enum ThirdMolar {
-    A = 0,
-    B = 1,
-    C = 2,
-    D = 3,
-    E = 4,
-    F = 5,
-    G = 6,
-    Unknown = 7,
-    Error = -1,
-}
 
 export class CaseModel extends AbstractCaseModel {
     protected _caseID: string;

@@ -1,7 +1,7 @@
 // DataEntryView.ts
 
-import { PageController, UI_Elements } from '../controllers/PageController';
-import { Affinity, Sex } from '../models/CaseModel';
+import { PageController } from '../controllers/PageController';
+import { UI_Elements, Affinity, Sex } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class DataEntryView extends AbstractView {

@@ -1,6 +1,7 @@
 //HomePageView.ts
 
-import { PageController, Pages } from '../controllers/PageController';
+import { PageController } from '../controllers/PageController';
+import { Pages } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class HomePageView extends AbstractView {

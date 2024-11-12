@@ -7,39 +7,23 @@ import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
-import { Affinity, CaseModel, Sex, ThirdMolar } from '../models/CaseModel';
-
-//add file names here
-export enum Pages {
-    Home = 'home',
-    Create = 'create',
-    DataEntry = 'dataEntry',
-}
-
-export enum SideBar {
-    dataBar = 'dataEntrySide',
-    homeBar = 'homeSide',
-}
-
-export enum UI_Elements {
-    caseID = 'case',
-    sex = 'sex',
-    affinity = 'race',
-    thirdMolar = 'thirdMolar',
-    pubicSymphysis = 'pubicSymphysis',
-    auricularEdge = 'auricularEdge',
-    fourthRib = 'fourthRib',
-}
+import { CaseModel } from '../models/CaseModel';
+import {
+    Pages,
+    SideBar,
+    UI_Elements,
+    Affinity,
+    Sex,
+    ThirdMolar,
+} from '../utils/enums';
 
 export class PageController {
-    private static instance: PageController;
     private static instance: PageController;
     private contentDiv: HTMLElement;
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private currentView: AbstractView;
 
-    private constructor() {
     private constructor() {
         this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
         this.rootBarDiv = document.getElementById('rootBar')!;
@@ -53,11 +37,6 @@ export class PageController {
         //automatically loads in the homeBar when first opened
         this.loadSideBarContent(SideBar.homeBar);
         this.initEventListeners();
-    }
-
-    public static getInstance(): PageController {
-        if (!this.instance) PageController.instance = new PageController();
-        return this.instance;
     }
 
     public static getInstance(): PageController {
@@ -80,13 +59,12 @@ export class PageController {
                 await this.navigateTo(Pages.Home);
                 await this.loadSideBarContent(SideBar.homeBar);
             });
-        document.getElementById('createBtn')!.addEventListener(
-                'click',
-                async () => await {
-            this.navigateTo(Pages.Create);
-            this.loadSideBarContent(SideBar.createBar);
-        },
-            );
+        document
+            .getElementById('createBtn')!
+            .addEventListener('click', async () => {
+                await this.navigateTo(Pages.Create);
+                this.loadSideBarContent(SideBar.createBar);
+            });
         document
             .getElementById('dataEntryBtn')!
             .addEventListener('click', async () => {

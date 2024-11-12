@@ -1,9 +1,9 @@
 //DataController.ts
-
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
-import { Affinity, CaseModel, Sex, ThirdMolar } from '../models/CaseModel';
+import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
+import { Sex, Affinity, ThirdMolar } from '../utils/enums';
 import { XML_Controller } from './XML_Controller';
 
 export class DataController {
