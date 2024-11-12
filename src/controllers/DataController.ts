@@ -1,9 +1,11 @@
 //DataController.ts
 
+import { dir } from 'console';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
-import { CaseModel } from '../models/CaseModel';
+import { Affinity, CaseModel, Sex, ThirdMolar } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
+import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 
 export class DataController {
@@ -60,5 +62,19 @@ export class DataController {
         this.xmlController.loadCollection(event);
         const loadedCases: CaseModel[] = this.xmlController.parseCollection();
         this._loadedCases = loadedCases;
+    }
+
+    public createCase(caseID : string, sex : Sex, affinity : Affinity, thirdMolar : ThirdMolar, pubic : {[key: string] : number}, auricular: {[key: string] : number}, fourthRib: {[key: string] : number}) {
+        var director = new BuildDirector();
+
+        director.caseBuilder.setCaseID(caseID);
+        director.caseBuilder.setSex(sex);
+        director.caseBuilder.setPopulationAffinity(affinity);
+        director.caseBuilder.setThirdMolar(thirdMolar);
+        director.caseBuilder.setPubicSymphysis(pubic);
+        director.caseBuilder.setAuricularEdge(auricular);
+        director.caseBuilder.setFourthRib(fourthRib);
+
+        this._openCase = director.makeCase();
     }
 }

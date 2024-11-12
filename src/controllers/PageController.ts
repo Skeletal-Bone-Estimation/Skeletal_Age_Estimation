@@ -49,6 +49,11 @@ export class PageController {
         return PageController.instance;
     }
 
+    // READ FROM GUI
+    public createCase() {
+        //DataController.getInstance().createCase(); //pass parameters to this function
+    }
+
     //public function to dynamically swap requested content into the index html file
     public navigateTo(page: Pages) {
         this.currentView = this.views[page];
