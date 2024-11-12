@@ -123,7 +123,7 @@ export class DataController {
         }
 
         this.openCase.notify(); //autosave
-        if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`);; //deletes the file under the old case id
+        if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
     }
 
     //TODO: pull data from data entry screen into case model

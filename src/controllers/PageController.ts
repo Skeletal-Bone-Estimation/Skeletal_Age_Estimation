@@ -111,7 +111,7 @@ export class PageController {
             '../../templates/',
             `${page}.html`,
         );
-        console.log('Loading HTML content from:', filePath);
+        //console.log('Loading HTML content from:', filePath);
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, 'utf-8', (err, data) => {
                 if (err) {

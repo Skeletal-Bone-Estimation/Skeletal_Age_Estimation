@@ -21,7 +21,7 @@ export class DataEntryView extends AbstractView {
         const caseInput = document.getElementById(
             UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
-        console.log('caseInput:', caseInput);
+        //console.log('caseInput:', caseInput);
         if (!caseInput) {
             console.error('caseInput not found!');
         }
@@ -29,7 +29,7 @@ export class DataEntryView extends AbstractView {
         const sexSelector = document.getElementById(
             UI_Elements.dataSideSex,
         ) as HTMLSelectElement;
-        console.log('sexSelector:', sexSelector);
+        //console.log('sexSelector:', sexSelector);
         if (!sexSelector) {
             console.error('sexSelector not found!');
         }
@@ -37,7 +37,7 @@ export class DataEntryView extends AbstractView {
         const affinitySelector = document.getElementById(
             UI_Elements.dataSideAffinity,
         ) as HTMLSelectElement;
-        console.log('affinitySelector:', affinitySelector);
+        //console.log('affinitySelector:', affinitySelector);
         if (!affinitySelector) {
             console.error('affinitySelector not found!');
         }
