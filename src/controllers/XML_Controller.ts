@@ -22,11 +22,11 @@ export class XML_Controller {
         return this.instance;
     }
 
-    // TODO: load single file
+    //loads a single xml file into a CaseModel object
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
-            console.log('Current doc error');
-            return new NullCaseModel();
+            console.error('Current doc error');
+            return new NullCaseModel(); //error model
         }
 
         const caseID =
@@ -132,7 +132,7 @@ export class XML_Controller {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({ object: _case });
         writeFileSync(filename, xmlString, 'utf-8');
-        console.log(`File saved to ${filename}`);
+        //console.log(`File saved to ${filename}`);
     }
 
     // TODO: load collection of cases as folder selected by user

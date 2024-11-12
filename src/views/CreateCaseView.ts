@@ -7,7 +7,7 @@ export class CreateCaseView extends AbstractView {
 
     //specialized method to load content with specific create case page requirements
     public override render(htmlContent: string): void {
-        console.log('loaded from CaseCreationView');
+        //console.log('loaded from CaseCreationView');
         this.contentDiv.innerHTML = htmlContent;
     }
 }

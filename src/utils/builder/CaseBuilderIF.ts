@@ -1,5 +1,5 @@
-import { Affinity, Sex, ThirdMolar } from '../../models/CaseModel';
 import { ReportModel } from '../../models/ReportModel';
+import { Affinity, Sex, ThirdMolar } from '../enums';
 
 export interface CaseBuilderIF {
     setCaseID(caseID: string): CaseBuilderIF;
