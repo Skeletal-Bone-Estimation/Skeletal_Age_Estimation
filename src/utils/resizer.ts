@@ -1,5 +1,5 @@
 // resizer.ts
-console.log('Resizer script loaded');
+//console.log('Resizer script loaded');
 // Select the resizer and sidebar elements
 const resizer = document.querySelector('.resizer') as HTMLElement;
 const sidebar = document.querySelector('.sideBar') as HTMLElement;

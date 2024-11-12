@@ -7,7 +7,9 @@ export abstract class AbstractView {
 
     //default method to load content into the rootDiv
     public render(htmlContent: string): void {
-        console.log('loaded from AbstractView');
+        //console.log('loaded from AbstractView');
         this.contentDiv.innerHTML = htmlContent;
     }
+
+    public setSidebarListeners(): void {}
 }
