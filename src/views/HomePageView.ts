@@ -1,5 +1,6 @@
 //HomePageView.ts
 
+import { PageController, Pages } from '../controllers/PageController';
 import { AbstractView } from './AbstractView';
 
 export class HomePageView extends AbstractView {
@@ -11,5 +12,17 @@ export class HomePageView extends AbstractView {
     public override render(htmlContent: string): void {
         console.log('loaded from HomePageView');
         this.contentDiv.innerHTML = htmlContent;
+
+        document
+            .getElementById('homeCreate')!
+            .addEventListener('click', () =>
+                PageController.getInstance().navigateTo(Pages.Create),
+            );
+
+        document
+            .getElementById('homeLoad')!
+            .addEventListener('click', () =>
+                document.getElementById('loadCase')!.click(),
+            );
     }
 }

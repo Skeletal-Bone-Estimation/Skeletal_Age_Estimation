@@ -22,12 +22,13 @@ export enum SideBar {
 }
 
 export class PageController {
+    private static instance: PageController;
     private contentDiv: HTMLElement;
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private currentView: AbstractView;
 
-    constructor() {
+    private constructor() {
         this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
         this.rootBarDiv = document.getElementById('rootBar')!;
         this.views = {
@@ -40,6 +41,12 @@ export class PageController {
         //automatically loads in the homeBar when first opened
         this.loadSideBarContent(SideBar.homeBar);
         this.initEventListeners();
+    }
+
+    public static getInstance(): PageController {
+        if (!PageController.instance)
+            PageController.instance = new PageController();
+        return PageController.instance;
     }
 
     //public function to dynamically swap requested content into the index html file
