@@ -16,9 +16,10 @@ export class DataEntryView extends AbstractView {
         console.log('HTML content loaded:', this.contentDiv.innerHTML); // Check the content
     }
 
+    //specialized method to connect listeners for data entry sidebar content
     public override setSidebarListeners() {
         const caseInput = document.getElementById(
-            UI_Elements.caseID,
+            UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
         console.log('caseInput:', caseInput);
         if (!caseInput) {
@@ -26,7 +27,7 @@ export class DataEntryView extends AbstractView {
         }
 
         const sexSelector = document.getElementById(
-            UI_Elements.sex,
+            UI_Elements.dataSideSex,
         ) as HTMLSelectElement;
         console.log('sexSelector:', sexSelector);
         if (!sexSelector) {
@@ -34,7 +35,7 @@ export class DataEntryView extends AbstractView {
         }
 
         const affinitySelector = document.getElementById(
-            UI_Elements.affinity,
+            UI_Elements.dataSideAffinity,
         ) as HTMLSelectElement;
         console.log('affinitySelector:', affinitySelector);
         if (!affinitySelector) {
@@ -44,8 +45,8 @@ export class DataEntryView extends AbstractView {
         if (caseInput && sexSelector && affinitySelector) {
             caseInput.addEventListener('input', (event) => {
                 const target = event.target as HTMLInputElement;
-                PageController.getInstance().editCase(
-                    UI_Elements.caseID,
+                if (!(target.value === '')) PageController.getInstance().editCase(
+                    UI_Elements.dataSideCaseID,
                     target.value as string,
                 );
             });
@@ -53,14 +54,17 @@ export class DataEntryView extends AbstractView {
             sexSelector.addEventListener('input', (event) => {
                 const target = event.target as HTMLSelectElement;
                 const value = this.parseSex(target.value);
-                PageController.getInstance().editCase(UI_Elements.sex, value);
+                PageController.getInstance().editCase(
+                    UI_Elements.dataSideSex,
+                    value,
+                );
             });
 
             affinitySelector.addEventListener('input', (event) => {
                 const target = event.target as HTMLSelectElement;
                 const value = this.parseAffinity(target.value);
                 PageController.getInstance().editCase(
-                    UI_Elements.affinity,
+                    UI_Elements.dataSideAffinity,
                     value,
                 );
             });

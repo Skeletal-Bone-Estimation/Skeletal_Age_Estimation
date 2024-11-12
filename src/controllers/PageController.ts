@@ -15,6 +15,7 @@ import {
     Affinity,
     Sex,
     ThirdMolar,
+    CaseElement,
 } from '../utils/enums';
 
 export class PageController {
@@ -53,38 +54,49 @@ export class PageController {
 
     //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
     private initEventListeners(): void {
+        //home button
         document
             .getElementById('homeBtn')!
             .addEventListener('click', async () => {
                 await this.navigateTo(Pages.Home);
                 await this.loadSideBarContent(SideBar.homeBar);
             });
+
+        //create button
         document
             .getElementById('createBtn')!
             .addEventListener('click', async () => {
                 await this.navigateTo(Pages.Create);
                 this.loadSideBarContent(SideBar.createBar);
             });
+
+        //data entry button
         document
             .getElementById('dataEntryBtn')!
             .addEventListener('click', async () => {
                 await this.navigateTo(Pages.DataEntry);
                 await this.loadSideBarContent(SideBar.dataBar);
             });
+
+        //save case button
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
                 DataController.getInstance().openCase as CaseModel,
                 `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
             );
         });
+
+        //hidden file load element
         document
             .getElementById('loadCase')!
             .addEventListener('change', async (event) => {
-                DataController.getInstance().loadCase(event);
+                DataController.getInstance().loadCaseFromFile(event);
                 await this.navigateTo(Pages.DataEntry);
                 this.navigateTo(Pages.DataEntry);
                 this.loadSideBarContent(SideBar.dataBar);
             });
+
+        //load case button
         document
             .getElementById('loadBtn')!
             .addEventListener('click', () =>
@@ -105,9 +117,7 @@ export class PageController {
                 if (err) {
                     console.error('Error reading file:', err);
                     reject(err);
-                } else {
-                    resolve(data);
-                }
+                } else resolve(data);
             });
         });
     }
@@ -117,24 +127,22 @@ export class PageController {
         try {
             const content = await this.loadPageContent(page);
             this.currentView.render(content);
-        } catch (error) {
-            console.error('Error loading page:', error);
-        }
+        } catch (error) { console.error('Error loading page:', error); }
     }
 
+    //asynchronously loads sidebar content from html files
     private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
-            console.log(`Loading sidebar content for: ${page}`);
+            //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);
-            console.log('Sidebar content:', content);
+            //console.log('Sidebar content:', content);
             this.rootBarDiv.innerHTML = content;
-            console.log('Sidebar content loaded into rootBarDiv');
+            //console.log('Sidebar content loaded into rootBarDiv');
             this.currentView.setSidebarListeners(); // Reinitialize listeners after loading sidebar
-        } catch (error) {
-            console.error('Error loading sidebar content:', error);
-        }
+        } catch (error) { console.error('Error loading sidebar content:', error); }
     }
 
+    //delegates to XML_Controller.editCase with parameters based on the id enumeration
     public editCase(
         id: UI_Elements,
         content:
@@ -145,34 +153,45 @@ export class PageController {
             | { [key: string]: number },
     ): void {
         switch (id) {
-            case UI_Elements.caseID:
-                DataController.getInstance().editCaseID(content as string);
+            case UI_Elements.dataSideCaseID:
+                DataController.getInstance().editCase(
+                    CaseElement.caseID,
+                    content as string,
+                );
                 break;
-            case UI_Elements.sex:
-                DataController.getInstance().editSex(content as Sex);
+            case UI_Elements.dataSideSex:
+                DataController.getInstance().editCase(
+                    CaseElement.sex,
+                    content as Sex,
+                );
                 break;
-            case UI_Elements.affinity:
-                DataController.getInstance().editPopulationAffinity(
+            case UI_Elements.dataSideAffinity:
+                DataController.getInstance().editCase(
+                    CaseElement.affinity,
                     content as Affinity,
                 );
                 break;
             case UI_Elements.thirdMolar:
-                DataController.getInstance().editThirdMolar(
+                DataController.getInstance().editCase(
+                    CaseElement.thirdMolar,
                     content as ThirdMolar,
                 );
                 break;
             case UI_Elements.pubicSymphysis:
-                DataController.getInstance().editPubicSymphysis(
+                DataController.getInstance().editCase(
+                    CaseElement.pubicSymphysis,
                     content as { [key: string]: number },
                 );
                 break;
             case UI_Elements.auricularEdge:
-                DataController.getInstance().editAuricularEdge(
+                DataController.getInstance().editCase(
+                    CaseElement.auricularEdge,
                     content as { [key: string]: number },
                 );
                 break;
             case UI_Elements.fourthRib:
-                DataController.getInstance().editFourthRib(
+                DataController.getInstance().editCase(
+                    CaseElement.fourthRib,
                     content as { [key: string]: number },
                 );
                 break;
