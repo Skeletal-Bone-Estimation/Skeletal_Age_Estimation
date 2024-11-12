@@ -33,11 +33,13 @@ export enum UI_Elements {
 
 export class PageController {
     private static instance: PageController;
+    private static instance: PageController;
     private contentDiv: HTMLElement;
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private currentView: AbstractView;
 
+    private constructor() {
     private constructor() {
         this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
         this.rootBarDiv = document.getElementById('rootBar')!;
@@ -58,6 +60,12 @@ export class PageController {
         return this.instance;
     }
 
+    public static getInstance(): PageController {
+        if (!PageController.instance)
+            PageController.instance = new PageController();
+        return PageController.instance;
+    }
+
     //public function to dynamically swap requested content into the index html file
     public async navigateTo(page: Pages) {
         this.currentView = this.views[page];
@@ -72,11 +80,12 @@ export class PageController {
                 await this.navigateTo(Pages.Home);
                 await this.loadSideBarContent(SideBar.homeBar);
             });
-        document
-            .getElementById('createBtn')!
-            .addEventListener(
+        document.getElementById('createBtn')!.addEventListener(
                 'click',
-                async () => await this.navigateTo(Pages.Create),
+                async () => await {
+            this.navigateTo(Pages.Create);
+            this.loadSideBarContent(SideBar.createBar);
+        },
             );
         document
             .getElementById('dataEntryBtn')!
@@ -95,6 +104,8 @@ export class PageController {
             .addEventListener('change', async (event) => {
                 DataController.getInstance().loadCase(event);
                 await this.navigateTo(Pages.DataEntry);
+                this.navigateTo(Pages.DataEntry);
+                this.loadSideBarContent(SideBar.dataBar);
             });
         document
             .getElementById('loadBtn')!

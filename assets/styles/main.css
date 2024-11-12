@@ -210,3 +210,34 @@ body {
   scrollbar-width: thin;
   scrollbar-color: white var(--div-color-2);
 }
+
+#dataEntrySideText {
+  width: 70%;
+}
+
+#notes {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+
+.notesEntry {
+  border: 2px solid var(--border-color-on-light);
+  border-radius: 5px;
+  background-color: var(--background-color);
+  margin: 5px;
+  position: relative;
+  padding: 10px;
+  height: 50vh;
+  width: 25vw;
+  display: flex;
+  justify-content:center;
+  align-items: center; 
+}
+
+.notesEntryLabel{
+  position: absolute;
+  top: -12px;
+  left: 11.5vw;
+  background-color: var(--background-color);
+}
