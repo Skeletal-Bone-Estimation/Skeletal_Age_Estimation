@@ -1,10 +1,20 @@
 //DataController.ts
 import { existsSync, rmSync } from 'fs';
+import { dir } from 'console';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Sex, Affinity, ThirdMolar, CaseElement } from '../utils/enums';
+import {
+    Sex,
+    Affinity,
+    ThirdMolar,
+    CaseElement,
+    PubicSymphysis,
+    SternalEnd,
+    AuricularArea,
+} from '../utils/enums';
+import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 
 export class DataController {
@@ -81,6 +91,9 @@ export class DataController {
             | Affinity
             | Sex
             | ThirdMolar
+            | PubicSymphysis
+            | SternalEnd
+            | AuricularArea
             | { [key: string]: number },
     ): void {
         if (!(this._openCase instanceof CaseModel)) return;
@@ -98,23 +111,35 @@ export class DataController {
             case CaseElement.affinity:
                 obj.populationAffinity = content as Affinity;
                 break;
-            case CaseElement.thirdMolar:
-                obj.thirdMolar = content as ThirdMolar;
+            case CaseElement.thirdMolarTL:
+                obj.thirdMolarTL = content as ThirdMolar;
                 break;
-            case CaseElement.pubicSymphysis:
-                obj.pubicSymphysis = content as {
-                    [key: string]: number;
-                };
+            case CaseElement.thirdMolarTR:
+                obj.thirdMolarTR = content as ThirdMolar;
                 break;
-            case CaseElement.auricularEdge:
-                obj.auricularEdge = content as {
-                    [key: string]: number;
-                };
+            case CaseElement.thirdMolarBL:
+                obj.thirdMolarBL = content as ThirdMolar;
                 break;
-            case CaseElement.fourthRib:
-                obj.fourthRib = content as {
-                    [key: string]: number;
-                };
+            case CaseElement.thirdMolarBR:
+                obj.thirdMolarBR = content as ThirdMolar;
+                break;
+            case CaseElement.pubicSymphysisL:
+                obj.pubicSymphysisL = content as PubicSymphysis;
+                break;
+            case CaseElement.pubicSymphysisR:
+                obj.pubicSymphysisR = content as PubicSymphysis;
+                break;
+            case CaseElement.auricularAreaL:
+                obj.auricularAreaL = content as AuricularArea;
+                break;
+            case CaseElement.auricularAreaR:
+                obj.auricularAreaR = content as AuricularArea;
+                break;
+            case CaseElement.fourthRibL:
+                obj.fourthRibL = content as SternalEnd;
+                break;
+            case CaseElement.fourthRibR:
+                obj.fourthRibR = content as SternalEnd;
                 break;
             default:
                 throw new Error(
@@ -127,9 +152,44 @@ export class DataController {
     }
 
     //TODO: pull data from data entry screen into case model
+    //not currently used
     public extractData(id: string): { [key: string]: number } {
         throw new Error(
             'temporary method to stand in for pulling data from the GUI until the function is complete',
         );
+    }
+
+    public createCase(
+        caseID: string,
+        sex: Sex,
+        affinity: Affinity,
+        thirdMolarTL: ThirdMolar,
+        thirdMolarTR: ThirdMolar,
+        thirdMolarBL: ThirdMolar,
+        thirdMolarBR: ThirdMolar,
+        pubicSymphysisL: PubicSymphysis,
+        pubicSymphysisR: PubicSymphysis,
+        auricularAreaL: AuricularArea,
+        auricularAreaR: AuricularArea,
+        fourthRibL: SternalEnd,
+        fourthRibR: SternalEnd,
+    ) {
+        var director = new BuildDirector();
+
+        director.caseBuilder.setCaseID(caseID);
+        director.caseBuilder.setSex(sex);
+        director.caseBuilder.setPopulationAffinity(affinity);
+        director.caseBuilder.setThirdMolarTL(thirdMolarTL);
+        director.caseBuilder.setThirdMolarTR(thirdMolarTR);
+        director.caseBuilder.setThirdMolarBL(thirdMolarBL);
+        director.caseBuilder.setThirdMolarBR(thirdMolarBR);
+        director.caseBuilder.setPubicSymphysisL(pubicSymphysisL);
+        director.caseBuilder.setPubicSymphysisR(pubicSymphysisR);
+        director.caseBuilder.setAuricularAreaL(auricularAreaL);
+        director.caseBuilder.setAuricularAreaR(auricularAreaR);
+        director.caseBuilder.setFourthRibL(fourthRibL);
+        director.caseBuilder.setFourthRibR(fourthRibR);
+
+        this._openCase = director.makeCase();
     }
 }

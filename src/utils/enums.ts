@@ -23,7 +23,46 @@ export enum ThirdMolar {
     E = 4,
     F = 5,
     G = 6,
+    H = 7,
+    Unknown = 8,
+    Error = -1,
+}
+
+//Phase of the AuricularArea
+export enum AuricularArea {
+    One = 1,
+    Two = 2,
+    Three = 3,
+    Four = 4,
+    Five = 5,
+    Six = 6,
     Unknown = 7,
+    Error = -1,
+}
+
+//Phase of the SternalEnd
+export enum SternalEnd {
+    One = 1,
+    Two = 2,
+    Three = 3,
+    Four = 4,
+    Five = 5,
+    Six = 6,
+    Seven = 7,
+    Unknown = 8,
+    Error = -1,
+}
+
+//Phase of the PubicSymphysis
+export enum PubicSymphysis {
+    One = 1,
+    Two = 2,
+    Three = 3,
+    Four = 4,
+    Five = 5,
+    Six = 6,
+    Seven = 7,
+    Unknown = 8,
     Error = -1,
 }
 
@@ -46,10 +85,16 @@ export enum UI_Elements {
     dataSideCaseID = 'dataEntrySideCaseID',
     dataSideSex = 'dataEntrySideSex',
     dataSideAffinity = 'dataEntrySideAffinity',
-    thirdMolar = 'thirdMolar',
-    pubicSymphysis = 'pubicSymphysis',
-    auricularEdge = 'auricularEdge',
-    fourthRib = 'fourthRib',
+    thirdMolarTL = 'thirdMolarTL',
+    thirdMolarTR = 'thirdMolarTR',
+    thirdMolarBL = 'thirdMolarBL',
+    thirdMolarBR = 'thirdMolarBR',
+    pubicSymphysisL = 'pubicSymphysisL',
+    pubicSymphysisR = 'pubicSymphysisR',
+    auricularAreaL = 'auricularAreaL',
+    auricularAreaR = 'auricularAreaR',
+    fourthRibL = 'fourthRibL',
+    fourthRibR = 'fourthRibR',
 }
 
 //Number enumeration of CaseModel attributes
@@ -57,8 +102,14 @@ export enum CaseElement {
     caseID = 0,
     sex = 1,
     affinity = 2,
-    thirdMolar = 3,
-    pubicSymphysis = 4,
-    auricularEdge = 5,
-    fourthRib = 6,
+    thirdMolarTL = 3,
+    thirdMolarTR = 4,
+    thirdMolarBL = 5,
+    thirdMolarBR = 6,
+    pubicSymphysisL = 7,
+    pubicSymphysisR = 8,
+    auricularAreaL = 9,
+    auricularAreaR = 10,
+    fourthRibL = 11,
+    fourthRibR = 12,
 }

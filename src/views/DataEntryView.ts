@@ -1,7 +1,15 @@
 // DataEntryView.ts
 
 import { PageController } from '../controllers/PageController';
-import { UI_Elements, Affinity, Sex } from '../utils/enums';
+import {
+    UI_Elements,
+    Affinity,
+    Sex,
+    ThirdMolar,
+    AuricularArea,
+    PubicSymphysis,
+    SternalEnd,
+} from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class DataEntryView extends AbstractView {
@@ -14,6 +22,191 @@ export class DataEntryView extends AbstractView {
         //console.log('Rendering content in DataEntryView');
         this.contentDiv.innerHTML = htmlContent;
         //console.log('HTML content loaded:', this.contentDiv.innerHTML); // Check the content
+
+        const auricularAreaL = document.getElementById(
+            UI_Elements.auricularAreaL,
+        ) as HTMLInputElement;
+
+        if (!auricularAreaL) {
+            console.error('caseInput not found!');
+        }
+
+        const auricularAreaR = document.getElementById(
+            UI_Elements.auricularAreaR,
+        ) as HTMLInputElement;
+
+        if (!auricularAreaR) {
+            console.error('caseInput not found!');
+        }
+
+        const pubicSymphysisL = document.getElementById(
+            UI_Elements.pubicSymphysisL,
+        ) as HTMLInputElement;
+
+        if (!pubicSymphysisL) {
+            console.error('caseInput not found!');
+        }
+
+        const pubicSymphysisR = document.getElementById(
+            UI_Elements.pubicSymphysisR,
+        ) as HTMLInputElement;
+
+        if (!pubicSymphysisR) {
+            console.error('caseInput not found!');
+        }
+
+        const fourthRibL = document.getElementById(
+            UI_Elements.fourthRibL,
+        ) as HTMLInputElement;
+
+        if (!fourthRibL) {
+            console.error('caseInput not found!');
+        }
+
+        const fourthRibR = document.getElementById(
+            UI_Elements.fourthRibR,
+        ) as HTMLInputElement;
+
+        if (!fourthRibR) {
+            console.error('caseInput not found!');
+        }
+
+        const thirdMolarTL = document.getElementById(
+            UI_Elements.thirdMolarTL,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarTL) {
+            console.error('thirdMolarTL not found!');
+        }
+
+        const thirdMolarTR = document.getElementById(
+            UI_Elements.thirdMolarTR,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarTR) {
+            console.error('thirdMolarTR not found!');
+        }
+
+        const thirdMolarBL = document.getElementById(
+            UI_Elements.thirdMolarBL,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarBL) {
+            console.error('thirdMolarBL not found!');
+        }
+
+        const thirdMolarBR = document.getElementById(
+            UI_Elements.thirdMolarBR,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarBR) {
+            console.error('thirdMolarBR not found!');
+        }
+
+        if (
+            auricularAreaL &&
+            auricularAreaR &&
+            pubicSymphysisL &&
+            pubicSymphysisR &&
+            fourthRibL &&
+            fourthRibR &&
+            thirdMolarTL &&
+            thirdMolarTR &&
+            thirdMolarBL &&
+            thirdMolarBR
+        ) {
+            console.log('elements present');
+
+            auricularAreaL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseAuricularArea(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.auricularAreaL,
+                    value,
+                );
+            });
+
+            auricularAreaR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseAuricularArea(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.auricularAreaR,
+                    value,
+                );
+            });
+
+            pubicSymphysisL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parsePubicSymphysis(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.pubicSymphysisL,
+                    value,
+                );
+            });
+
+            pubicSymphysisR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parsePubicSymphysis(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.pubicSymphysisR,
+                    value,
+                );
+            });
+
+            fourthRibL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseFourthRib(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.fourthRibL,
+                    value,
+                );
+            });
+
+            fourthRibR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseFourthRib(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.fourthRibR,
+                    value,
+                );
+            });
+
+            thirdMolarTL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarTL,
+                    value,
+                );
+            });
+
+            thirdMolarTR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarTR,
+                    value,
+                );
+            });
+
+            thirdMolarBL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarBL,
+                    value,
+                );
+            });
+
+            thirdMolarBR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarBR,
+                    value,
+                );
+            });
+        }
     }
 
     //specialized method to connect listeners for data entry sidebar content
@@ -93,6 +286,98 @@ export class DataEntryView extends AbstractView {
                 return 1;
             case 'unknown':
                 return 2;
+            default:
+                return -1;
+        }
+    }
+
+    private parseThirdMolar(value: string): ThirdMolar {
+        switch (value.toLowerCase()) {
+            case 'a':
+                return 0;
+            case 'b':
+                return 1;
+            case 'c':
+                return 2;
+            case 'd':
+                return 3;
+            case 'e':
+                return 4;
+            case 'f':
+                return 5;
+            case 'g':
+                return 6;
+            case 'h':
+                return 7;
+            case 'unknown':
+                return 8;
+            default:
+                return -1;
+        }
+    }
+
+    private parseAuricularArea(value: string): AuricularArea {
+        switch (value.toLowerCase()) {
+            case 'one':
+                return 1;
+            case 'two':
+                return 2;
+            case 'three':
+                return 3;
+            case 'four':
+                return 4;
+            case 'five':
+                return 5;
+            case 'six':
+                return 6;
+            case 'unknown':
+                return 7;
+            default:
+                return -1;
+        }
+    }
+
+    private parsePubicSymphysis(value: string): PubicSymphysis {
+        switch (value.toLowerCase()) {
+            case 'one':
+                return 1;
+            case 'two':
+                return 2;
+            case 'three':
+                return 3;
+            case 'four':
+                return 4;
+            case 'five':
+                return 5;
+            case 'six':
+                return 6;
+            case 'seven':
+                return 7;
+            case 'unknown':
+                return 8;
+            default:
+                return -1;
+        }
+    }
+
+    private parseFourthRib(value: string): SternalEnd {
+        switch (value.toLowerCase()) {
+            case 'one':
+                return 1;
+            case 'two':
+                return 2;
+            case 'three':
+                return 3;
+            case 'four':
+                return 4;
+            case 'five':
+                return 5;
+            case 'six':
+                return 6;
+            case 'seven':
+                return 7;
+            case 'unknown':
+                return 8;
             default:
                 return -1;
         }
