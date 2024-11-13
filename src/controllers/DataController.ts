@@ -5,7 +5,15 @@ import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Sex, Affinity, ThirdMolar, CaseElement } from '../utils/enums';
+import {
+    Sex,
+    Affinity,
+    ThirdMolar,
+    CaseElement,
+    PubicSymphysis,
+    SternalEnd,
+    AuricularArea,
+} from '../utils/enums';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 
@@ -83,6 +91,9 @@ export class DataController {
             | Affinity
             | Sex
             | ThirdMolar
+            | PubicSymphysis
+            | SternalEnd
+            | AuricularArea
             | { [key: string]: number },
     ): void {
         if (!(this._openCase instanceof CaseModel)) return;
@@ -112,20 +123,23 @@ export class DataController {
             case CaseElement.thirdMolarBR:
                 obj.thirdMolarBR = content as ThirdMolar;
                 break;
-            case CaseElement.pubicSymphysis:
-                obj.pubicSymphysis = content as {
-                    [key: string]: number;
-                };
+            case CaseElement.pubicSymphysisL:
+                obj.pubicSymphysisL = content as PubicSymphysis;
                 break;
-            case CaseElement.auricularEdge:
-                obj.auricularEdge = content as {
-                    [key: string]: number;
-                };
+            case CaseElement.pubicSymphysisR:
+                obj.pubicSymphysisR = content as PubicSymphysis;
                 break;
-            case CaseElement.fourthRib:
-                obj.fourthRib = content as {
-                    [key: string]: number;
-                };
+            case CaseElement.auricularAreaL:
+                obj.auricularAreaL = content as AuricularArea;
+                break;
+            case CaseElement.auricularAreaR:
+                obj.auricularAreaR = content as AuricularArea;
+                break;
+            case CaseElement.fourthRibL:
+                obj.fourthRibL = content as SternalEnd;
+                break;
+            case CaseElement.fourthRibR:
+                obj.fourthRibR = content as SternalEnd;
                 break;
             default:
                 throw new Error(
@@ -152,9 +166,12 @@ export class DataController {
         thirdMolarTR: ThirdMolar,
         thirdMolarBL: ThirdMolar,
         thirdMolarBR: ThirdMolar,
-        pubic: { [key: string]: number },
-        auricular: { [key: string]: number },
-        fourthRib: { [key: string]: number },
+        pubicSymphysisL: PubicSymphysis,
+        pubicSymphysisR: PubicSymphysis,
+        auricularAreaL: AuricularArea,
+        auricularAreaR: AuricularArea,
+        fourthRibL: SternalEnd,
+        fourthRibR: SternalEnd,
     ) {
         var director = new BuildDirector();
 
@@ -165,9 +182,12 @@ export class DataController {
         director.caseBuilder.setThirdMolarTR(thirdMolarTR);
         director.caseBuilder.setThirdMolarBL(thirdMolarBL);
         director.caseBuilder.setThirdMolarBR(thirdMolarBR);
-        director.caseBuilder.setPubicSymphysis(pubic);
-        director.caseBuilder.setAuricularEdge(auricular);
-        director.caseBuilder.setFourthRib(fourthRib);
+        director.caseBuilder.setPubicSymphysisL(pubicSymphysisL);
+        director.caseBuilder.setPubicSymphysisR(pubicSymphysisR);
+        director.caseBuilder.setAuricularAreaL(auricularAreaL);
+        director.caseBuilder.setAuricularAreaR(auricularAreaR);
+        director.caseBuilder.setFourthRibL(fourthRibL);
+        director.caseBuilder.setFourthRibR(fourthRibR);
 
         this._openCase = director.makeCase();
     }

@@ -72,14 +72,47 @@ export class XML_Controller {
             thirdMolarBL ? Number(thirdMolarBL) : -1,
         );
 
-        const pubicSymphysis = this.extractDict('_pubicSymphysis');
-        this.director.caseBuilder.setPubicSymphysis(pubicSymphysis);
+        const pubicSymphysisL =
+            this.currentDoc?.getElementsByTagName('_pubicSymphysisL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setPubicSymphysisL(
+            pubicSymphysisL ? Number(pubicSymphysisL) : -1,
+        );
 
-        const auricularEdge = this.extractDict('_auricularEdge');
-        this.director.caseBuilder.setAuricularEdge(auricularEdge);
+        const pubicSymphysisR =
+            this.currentDoc?.getElementsByTagName('_pubicSymphysisR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setPubicSymphysisR(
+            pubicSymphysisR ? Number(pubicSymphysisR) : -1,
+        );
 
-        const fourthRib = this.extractDict('_fourthRib');
-        this.director.caseBuilder.setFourthRib(fourthRib);
+        const auricularAreaL =
+            this.currentDoc?.getElementsByTagName('_auricularAreaL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setAuricularAreaL(
+            auricularAreaL ? Number(auricularAreaL) : -1,
+        );
+
+        const auricularAreaR =
+            this.currentDoc?.getElementsByTagName('_auricularAreaR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setAuricularAreaR(
+            auricularAreaR ? Number(auricularAreaR) : -1,
+        );
+
+        const fourthRibL =
+            this.currentDoc?.getElementsByTagName('_fourthRibL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setFourthRibL(
+            fourthRibL ? Number(fourthRibL) : -1,
+        );
+
+        const fourthRibR =
+            this.currentDoc?.getElementsByTagName('_fourthRibR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setFourthRibR(
+            fourthRibR ? Number(fourthRibR) : -1,
+        );
 
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);

@@ -16,6 +16,9 @@ import {
     Sex,
     ThirdMolar,
     CaseElement,
+    AuricularArea,
+    SternalEnd,
+    PubicSymphysis,
 } from '../utils/enums';
 
 export class PageController {
@@ -159,6 +162,9 @@ export class PageController {
             | Affinity
             | Sex
             | ThirdMolar
+            | PubicSymphysis
+            | AuricularArea
+            | SternalEnd
             | { [key: string]: number },
     ): void {
         switch (id) {
@@ -204,22 +210,40 @@ export class PageController {
                     content as ThirdMolar,
                 );
                 break;
-            case UI_Elements.pubicSymphysis:
+            case UI_Elements.pubicSymphysisL:
                 DataController.getInstance().editCase(
-                    CaseElement.pubicSymphysis,
-                    content as { [key: string]: number },
+                    CaseElement.pubicSymphysisL,
+                    content as PubicSymphysis,
                 );
                 break;
-            case UI_Elements.auricularEdge:
+            case UI_Elements.pubicSymphysisR:
                 DataController.getInstance().editCase(
-                    CaseElement.auricularEdge,
-                    content as { [key: string]: number },
+                    CaseElement.pubicSymphysisR,
+                    content as PubicSymphysis,
                 );
                 break;
-            case UI_Elements.fourthRib:
+            case UI_Elements.auricularAreaL:
                 DataController.getInstance().editCase(
-                    CaseElement.fourthRib,
-                    content as { [key: string]: number },
+                    CaseElement.auricularAreaL,
+                    content as AuricularArea,
+                );
+                break;
+            case UI_Elements.auricularAreaR:
+                DataController.getInstance().editCase(
+                    CaseElement.auricularAreaR,
+                    content as AuricularArea,
+                );
+                break;
+            case UI_Elements.fourthRibL:
+                DataController.getInstance().editCase(
+                    CaseElement.fourthRibL,
+                    content as SternalEnd,
+                );
+                break;
+            case UI_Elements.fourthRibR:
+                DataController.getInstance().editCase(
+                    CaseElement.fourthRibR,
+                    content as SternalEnd,
                 );
                 break;
             default:

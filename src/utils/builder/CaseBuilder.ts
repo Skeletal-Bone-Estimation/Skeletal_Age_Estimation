@@ -1,5 +1,6 @@
 import { CaseModel } from '../../models/CaseModel';
 import { ReportModel } from '../../models/ReportModel';
+import { AuricularArea, PubicSymphysis, SternalEnd } from '../enums';
 import { CaseBuilderIF } from './CaseBuilderIF';
 
 // Concrete builder for CaseModel
@@ -11,9 +12,12 @@ export class CaseBuilder implements CaseBuilderIF {
     private _thirdMolarTR: number;
     private _thirdMolarBL: number;
     private _thirdMolarBR: number;
-    private _pubicSymphysis: { [key: string]: number };
-    private _auricularEdge: { [key: string]: number };
-    private _fourthRib: { [key: string]: number };
+    private _pubicSymphysisL: number;
+    private _pubicSymphysisR: number;
+    private _auricularAreaL: number;
+    private _auricularAreaR: number;
+    private _fourthRibL: number;
+    private _fourthRibR: number;
     private _generatedReports: { [key: number]: ReportModel };
 
     constructor() {
@@ -24,9 +28,12 @@ export class CaseBuilder implements CaseBuilderIF {
         this._thirdMolarTR = 0;
         this._thirdMolarBL = 0;
         this._thirdMolarBR = 0;
-        this._pubicSymphysis = {};
-        this._auricularEdge = {};
-        this._fourthRib = {};
+        this._pubicSymphysisL = 1;
+        this._pubicSymphysisR = 1;
+        this._auricularAreaL = 1;
+        this._auricularAreaR = 1;
+        this._fourthRibL = 1;
+        this._fourthRibR = 1;
         this._generatedReports = {};
     }
 
@@ -65,22 +72,36 @@ export class CaseBuilder implements CaseBuilderIF {
         return this;
     }
 
-    public setPubicSymphysis(pubicSymphysis: {
-        [key: string]: number;
-    }): CaseBuilderIF {
-        this._pubicSymphysis = pubicSymphysis;
+    public setPubicSymphysisL(pubicSymphysisL: number): CaseBuilderIF {
+        this._pubicSymphysisL = pubicSymphysisL;
         return this;
     }
-    public setAuricularEdge(auricularEdge: {
-        [key: string]: number;
-    }): CaseBuilderIF {
-        this._auricularEdge = auricularEdge;
+
+    public setPubicSymphysisR(pubicSymphysisR: number): CaseBuilderIF {
+        this._pubicSymphysisR = pubicSymphysisR;
         return this;
     }
-    public setFourthRib(fourthRib: { [key: string]: number }): CaseBuilderIF {
-        this._fourthRib = fourthRib;
+
+    public setAuricularAreaL(auricularAreaL: number): CaseBuilderIF {
+        this._auricularAreaL = auricularAreaL;
         return this;
     }
+
+    public setAuricularAreaR(auricularAreaR: number): CaseBuilderIF {
+        this._auricularAreaR = auricularAreaR;
+        return this;
+    }
+
+    public setFourthRibL(fourthRibL: number): CaseBuilderIF {
+        this._fourthRibL = fourthRibL;
+        return this;
+    }
+
+    public setFourthRibR(fourthRibR: number): CaseBuilderIF {
+        this._fourthRibR = fourthRibR;
+        return this;
+    }
+
     public setReportsGenerated(generatedReports: {
         [key: number]: ReportModel;
     }): CaseBuilderIF {
@@ -97,9 +118,12 @@ export class CaseBuilder implements CaseBuilderIF {
             this._thirdMolarTR,
             this._thirdMolarBL,
             this._thirdMolarBR,
-            this._pubicSymphysis,
-            this._auricularEdge,
-            this._fourthRib,
+            this._pubicSymphysisL,
+            this._pubicSymphysisR,
+            this._auricularAreaL,
+            this._auricularAreaR,
+            this._fourthRibL,
+            this._fourthRibR,
             this._generatedReports,
         );
     }
