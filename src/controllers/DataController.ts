@@ -152,6 +152,7 @@ export class DataController {
     }
 
     //TODO: pull data from data entry screen into case model
+    //not currently used
     public extractData(id: string): { [key: string]: number } {
         throw new Error(
             'temporary method to stand in for pulling data from the GUI until the function is complete',
