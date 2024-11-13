@@ -180,9 +180,27 @@ export class PageController {
                     content as Affinity,
                 );
                 break;
-            case UI_Elements.thirdMolar:
+            case UI_Elements.thirdMolarTL:
                 DataController.getInstance().editCase(
-                    CaseElement.thirdMolar,
+                    CaseElement.thirdMolarTL,
+                    content as ThirdMolar,
+                );
+                break;
+            case UI_Elements.thirdMolarTR:
+                DataController.getInstance().editCase(
+                    CaseElement.thirdMolarTR,
+                    content as ThirdMolar,
+                );
+                break;
+            case UI_Elements.thirdMolarBL:
+                DataController.getInstance().editCase(
+                    CaseElement.thirdMolarBL,
+                    content as ThirdMolar,
+                );
+                break;
+            case UI_Elements.thirdMolarBR:
+                DataController.getInstance().editCase(
+                    CaseElement.thirdMolarBR,
                     content as ThirdMolar,
                 );
                 break;

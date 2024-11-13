@@ -10,7 +10,10 @@ export class CaseModel extends AbstractCaseModel {
     protected _caseID: string;
     protected _populationAffinity: Affinity;
     protected _sex: Sex;
-    protected _thirdMolar: ThirdMolar;
+    protected _thirdMolarTL: ThirdMolar;
+    protected _thirdMolarTR: ThirdMolar;
+    protected _thirdMolarBL: ThirdMolar;
+    protected _thirdMolarBR: ThirdMolar;
     protected _pubicSymphysis: { [key: string]: number };
     protected _auricularEdge: { [key: string]: number };
     protected _fourthRib: { [key: string]: number };
@@ -21,7 +24,10 @@ export class CaseModel extends AbstractCaseModel {
         caseID: string,
         populationAffinity: Affinity,
         sex: Sex,
-        thirdMolar: ThirdMolar,
+        thirdMolarTL: ThirdMolar,
+        thirdMolarTR: ThirdMolar,
+        thirdMolarBL: ThirdMolar,
+        thirdMolarBR: ThirdMolar,
         pubicSymphysis: { [key: string]: number },
         auricularEdge: { [key: string]: number },
         fourthRib: { [key: string]: number },
@@ -31,7 +37,10 @@ export class CaseModel extends AbstractCaseModel {
         this._caseID = caseID;
         this._populationAffinity = populationAffinity;
         this._sex = sex;
-        this._thirdMolar = thirdMolar;
+        this._thirdMolarTL = thirdMolarTL;
+        this._thirdMolarTR = thirdMolarTR;
+        this._thirdMolarBL = thirdMolarBL;
+        this._thirdMolarBR = thirdMolarBR;
         this._pubicSymphysis = pubicSymphysis;
         this._auricularEdge = auricularEdge;
         this._fourthRib = fourthRib;
@@ -64,12 +73,36 @@ export class CaseModel extends AbstractCaseModel {
         this._sex = value;
     }
 
-    public get thirdMolar(): ThirdMolar {
-        return this._thirdMolar;
+    public get thirdMolarTL(): ThirdMolar {
+        return this._thirdMolarTL;
     }
 
-    public set thirdMolar(value: ThirdMolar) {
-        this._thirdMolar = value;
+    public get thirdMolarTR(): ThirdMolar {
+        return this._thirdMolarTR;
+    }
+
+    public get thirdMolarBL(): ThirdMolar {
+        return this._thirdMolarBL;
+    }
+
+    public get thirdMolarBR(): ThirdMolar {
+        return this._thirdMolarBR;
+    }
+
+    public set thirdMolarTL(value: ThirdMolar) {
+        this._thirdMolarTL = value;
+    }
+
+    public set thirdMolarTR(value: ThirdMolar) {
+        this._thirdMolarTR = value;
+    }
+
+    public set thirdMolarBL(value: ThirdMolar) {
+        this._thirdMolarBL = value;
+    }
+
+    public set thirdMolarBR(value: ThirdMolar) {
+        this._thirdMolarBR = value;
     }
 
     public get pubicSymphysis(): { [key: string]: number } {

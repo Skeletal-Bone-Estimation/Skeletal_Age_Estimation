@@ -100,8 +100,17 @@ export class DataController {
             case CaseElement.affinity:
                 obj.populationAffinity = content as Affinity;
                 break;
-            case CaseElement.thirdMolar:
-                obj.thirdMolar = content as ThirdMolar;
+            case CaseElement.thirdMolarTL:
+                obj.thirdMolarTL = content as ThirdMolar;
+                break;
+            case CaseElement.thirdMolarTR:
+                obj.thirdMolarTR = content as ThirdMolar;
+                break;
+            case CaseElement.thirdMolarBL:
+                obj.thirdMolarBL = content as ThirdMolar;
+                break;
+            case CaseElement.thirdMolarBR:
+                obj.thirdMolarBR = content as ThirdMolar;
                 break;
             case CaseElement.pubicSymphysis:
                 obj.pubicSymphysis = content as {
@@ -139,7 +148,10 @@ export class DataController {
         caseID: string,
         sex: Sex,
         affinity: Affinity,
-        thirdMolar: ThirdMolar,
+        thirdMolarTL: ThirdMolar,
+        thirdMolarTR: ThirdMolar,
+        thirdMolarBL: ThirdMolar,
+        thirdMolarBR: ThirdMolar,
         pubic: { [key: string]: number },
         auricular: { [key: string]: number },
         fourthRib: { [key: string]: number },
@@ -149,7 +161,10 @@ export class DataController {
         director.caseBuilder.setCaseID(caseID);
         director.caseBuilder.setSex(sex);
         director.caseBuilder.setPopulationAffinity(affinity);
-        director.caseBuilder.setThirdMolar(thirdMolar);
+        director.caseBuilder.setThirdMolarTL(thirdMolarTL);
+        director.caseBuilder.setThirdMolarTR(thirdMolarTR);
+        director.caseBuilder.setThirdMolarBL(thirdMolarBL);
+        director.caseBuilder.setThirdMolarBR(thirdMolarBR);
         director.caseBuilder.setPubicSymphysis(pubic);
         director.caseBuilder.setAuricularEdge(auricular);
         director.caseBuilder.setFourthRib(fourthRib);

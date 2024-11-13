@@ -5,7 +5,10 @@ export interface CaseBuilderIF {
     setCaseID(caseID: string): CaseBuilderIF;
     setPopulationAffinity(populationAffinity: Affinity): CaseBuilderIF;
     setSex(sex: Sex): CaseBuilderIF;
-    setThirdMolar(thirdMolar: ThirdMolar): CaseBuilderIF;
+    setThirdMolarTL(thirdMolarTL: ThirdMolar): CaseBuilderIF;
+    setThirdMolarTR(thirdMolarTR: ThirdMolar): CaseBuilderIF;
+    setThirdMolarBL(thirdMolarBL: ThirdMolar): CaseBuilderIF;
+    setThirdMolarBR(thirdMolarBR: ThirdMolar): CaseBuilderIF;
     setPubicSymphysis(pubicSymphysis: { [key: string]: number }): CaseBuilderIF;
     setAuricularEdge(auricularEdge: { [key: string]: number }): CaseBuilderIF;
     setFourthRib(fourthEdge: { [key: string]: number }): CaseBuilderIF;

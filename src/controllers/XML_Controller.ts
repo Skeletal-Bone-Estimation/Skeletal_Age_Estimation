@@ -44,11 +44,32 @@ export class XML_Controller {
             this.currentDoc?.getElementsByTagName('_sex')[0]?.textContent;
         this.director.caseBuilder.setSex(sex ? Number(sex) : -1);
 
-        const thirdMolar =
-            this.currentDoc?.getElementsByTagName('_thirdMolar')[0]
+        const thirdMolarTL =
+            this.currentDoc?.getElementsByTagName('_thirdMolarTL')[0]
                 ?.textContent;
-        this.director.caseBuilder.setThirdMolar(
-            thirdMolar ? Number(thirdMolar) : -1,
+        this.director.caseBuilder.setThirdMolarTL(
+            thirdMolarTL ? Number(thirdMolarTL) : -1,
+        );
+
+        const thirdMolarTR =
+            this.currentDoc?.getElementsByTagName('_thirdMolarTR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarTR(
+            thirdMolarTR ? Number(thirdMolarTR) : -1,
+        );
+
+        const thirdMolarBR =
+            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarBL(
+            thirdMolarBR ? Number(thirdMolarBR) : -1,
+        );
+
+        const thirdMolarBL =
+            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarBR(
+            thirdMolarBL ? Number(thirdMolarBL) : -1,
         );
 
         const pubicSymphysis = this.extractDict('_pubicSymphysis');

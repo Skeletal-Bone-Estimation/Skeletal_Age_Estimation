@@ -1,7 +1,7 @@
 // DataEntryView.ts
 
 import { PageController } from '../controllers/PageController';
-import { UI_Elements, Affinity, Sex } from '../utils/enums';
+import { UI_Elements, Affinity, Sex, ThirdMolar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class DataEntryView extends AbstractView {
@@ -14,6 +14,76 @@ export class DataEntryView extends AbstractView {
         //console.log('Rendering content in DataEntryView');
         this.contentDiv.innerHTML = htmlContent;
         //console.log('HTML content loaded:', this.contentDiv.innerHTML); // Check the content
+        const thirdMolarTL = document.getElementById(
+            UI_Elements.thirdMolarTL,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarTL) {
+            console.error('thirdMolarTL not found!');
+        }
+
+        const thirdMolarTR = document.getElementById(
+            UI_Elements.thirdMolarTR,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarTR) {
+            console.error('thirdMolarTR not found!');
+        }
+
+        const thirdMolarBL = document.getElementById(
+            UI_Elements.thirdMolarBL,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarBL) {
+            console.error('thirdMolarBL not found!');
+        }
+
+        const thirdMolarBR = document.getElementById(
+            UI_Elements.thirdMolarBR,
+        ) as HTMLInputElement;
+
+        if (!thirdMolarBR) {
+            console.error('thirdMolarBR not found!');
+        }
+
+        if (thirdMolarTL && thirdMolarTR && thirdMolarBL && thirdMolarBR) {
+            console.log('elements present');
+            thirdMolarTL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarTL,
+                    value,
+                );
+            });
+
+            thirdMolarTR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarTR,
+                    value,
+                );
+            });
+
+            thirdMolarBL.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarBL,
+                    value,
+                );
+            });
+
+            thirdMolarBR.addEventListener('input', (event) => {
+                const target = event.target as HTMLSelectElement;
+                const value = this.parseThirdMolar(target.value);
+                PageController.getInstance().editCase(
+                    UI_Elements.thirdMolarBR,
+                    value,
+                );
+            });
+        }
     }
 
     //specialized method to connect listeners for data entry sidebar content
@@ -93,6 +163,31 @@ export class DataEntryView extends AbstractView {
                 return 1;
             case 'unknown':
                 return 2;
+            default:
+                return -1;
+        }
+    }
+
+    private parseThirdMolar(value: string): ThirdMolar {
+        switch (value.toLowerCase()) {
+            case 'a':
+                return 0;
+            case 'b':
+                return 1;
+            case 'c':
+                return 2;
+            case 'd':
+                return 3;
+            case 'e':
+                return 4;
+            case 'f':
+                return 5;
+            case 'g':
+                return 6;
+            case 'h':
+                return 7;
+            case 'unknown':
+                return 8;
             default:
                 return -1;
         }

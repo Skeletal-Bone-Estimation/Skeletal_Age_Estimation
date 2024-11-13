@@ -7,7 +7,10 @@ export class CaseBuilder implements CaseBuilderIF {
     private _caseID: string;
     private _populationAffinity: number;
     private _sex: number;
-    private _thirdMolar: number;
+    private _thirdMolarTL: number;
+    private _thirdMolarTR: number;
+    private _thirdMolarBL: number;
+    private _thirdMolarBR: number;
     private _pubicSymphysis: { [key: string]: number };
     private _auricularEdge: { [key: string]: number };
     private _fourthRib: { [key: string]: number };
@@ -17,7 +20,10 @@ export class CaseBuilder implements CaseBuilderIF {
         this._caseID = '';
         this._populationAffinity = 0;
         this._sex = 0;
-        this._thirdMolar = 0;
+        this._thirdMolarTL = 0;
+        this._thirdMolarTR = 0;
+        this._thirdMolarBL = 0;
+        this._thirdMolarBR = 0;
         this._pubicSymphysis = {};
         this._auricularEdge = {};
         this._fourthRib = {};
@@ -39,8 +45,23 @@ export class CaseBuilder implements CaseBuilderIF {
         return this;
     }
 
-    public setThirdMolar(thirdMolar: number): CaseBuilderIF {
-        this._thirdMolar = thirdMolar;
+    public setThirdMolarTL(thirdMolarTL: number): CaseBuilderIF {
+        this._thirdMolarTL = thirdMolarTL;
+        return this;
+    }
+
+    public setThirdMolarTR(thirdMolarTR: number): CaseBuilderIF {
+        this._thirdMolarTR = thirdMolarTR;
+        return this;
+    }
+
+    public setThirdMolarBL(thirdMolarBL: number): CaseBuilderIF {
+        this._thirdMolarBL = thirdMolarBL;
+        return this;
+    }
+
+    public setThirdMolarBR(thirdMolarBR: number): CaseBuilderIF {
+        this._thirdMolarBR = thirdMolarBR;
         return this;
     }
 
@@ -72,7 +93,10 @@ export class CaseBuilder implements CaseBuilderIF {
             this._caseID,
             this._populationAffinity,
             this._sex,
-            this._thirdMolar,
+            this._thirdMolarTL,
+            this._thirdMolarTR,
+            this._thirdMolarBL,
+            this._thirdMolarBR,
             this._pubicSymphysis,
             this._auricularEdge,
             this._fourthRib,
