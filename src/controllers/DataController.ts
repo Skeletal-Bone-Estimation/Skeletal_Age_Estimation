@@ -141,6 +141,9 @@ export class DataController {
             case CaseElement.fourthRibR:
                 obj.fourthRibR = content as SternalEnd;
                 break;
+            case CaseElement.notes:
+                obj.notes = content as string;
+                break;
             default:
                 throw new Error(
                     'Invalid CaseElement passed to DataController.editCase(...)',
@@ -173,6 +176,7 @@ export class DataController {
         auricularAreaR: AuricularArea = AuricularArea.Unknown,
         fourthRibL: SternalEnd = SternalEnd.Unknown,
         fourthRibR: SternalEnd = SternalEnd.Unknown,
+        notes: string
     ) {
         var director = new BuildDirector();
 
@@ -189,6 +193,7 @@ export class DataController {
         director.caseBuilder.setAuricularAreaR(auricularAreaR);
         director.caseBuilder.setFourthRibL(fourthRibL);
         director.caseBuilder.setFourthRibR(fourthRibR);
+        director.caseBuilder.setNotes(notes);
 
         this._openCase = director.makeCase();
     }
