@@ -82,6 +82,7 @@ export enum SideBar {
 
 //References to the id of the corresponding element
 export enum UI_Elements {
+    createStartCase = 'createStart',
     dataSideCaseID = 'dataEntrySideCaseID',
     dataSideSex = 'dataEntrySideSex',
     dataSideAffinity = 'dataEntrySideAffinity',

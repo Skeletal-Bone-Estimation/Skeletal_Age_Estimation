@@ -50,8 +50,8 @@ export class PageController {
     }
 
     // READ FROM GUI
-    public createCase() {
-        //DataController.getInstance().createCase(); //pass parameters to this function
+    public createCase(id: string, sex: number, pop: number) {
+        DataController.getInstance().createCase(id, sex, pop); //pass parameters to this function
     }
 
     //public function to dynamically swap requested content into the index html file
