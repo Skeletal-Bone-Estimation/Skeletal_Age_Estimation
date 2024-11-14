@@ -1,5 +1,5 @@
 import { PageController } from '../controllers/PageController';
-import { UI_Elements } from '../utils/enums';
+import { Pages, UI_Elements } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class CreateCaseView extends AbstractView {
@@ -35,6 +35,8 @@ export class CreateCaseView extends AbstractView {
                     sex,
                     populationAffinity,
                 );
+
+                PageController.getInstance().navigateTo(Pages.DataEntry);
             });
     }
 }
