@@ -50,8 +50,8 @@ export class PageController {
     }
 
     // READ FROM GUI
-    public createCase() {
-        //DataController.getInstance().createCase(); //pass parameters to this function
+    public createCase(id: string, sex: number, pop: number) {
+        DataController.getInstance().createCase(id, sex, pop); //pass parameters to this function
     }
 
     //public function to dynamically swap requested content into the index html file
@@ -141,7 +141,7 @@ export class PageController {
     }
 
     //asynchronously loads sidebar content from html files
-    private async loadSideBarContent(page: SideBar): Promise<void> {
+    public async loadSideBarContent(page: SideBar): Promise<void> {
         try {
             //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);
