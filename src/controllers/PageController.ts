@@ -141,7 +141,7 @@ export class PageController {
     }
 
     //asynchronously loads sidebar content from html files
-    private async loadSideBarContent(page: SideBar): Promise<void> {
+    public async loadSideBarContent(page: SideBar): Promise<void> {
         try {
             //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);

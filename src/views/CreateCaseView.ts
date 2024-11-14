@@ -1,6 +1,9 @@
 import { PageController } from '../controllers/PageController';
-import { Pages, UI_Elements } from '../utils/enums';
+import { Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractView } from './AbstractView';
+import { XML_Controller } from '../controllers/XML_Controller';
+import { CaseModel } from '../models/CaseModel';
+import { DataController } from '../controllers/DataController';
 
 export class CreateCaseView extends AbstractView {
     constructor(document: Document) {
@@ -36,7 +39,15 @@ export class CreateCaseView extends AbstractView {
                     populationAffinity,
                 );
 
+                XML_Controller.getInstance().saveAsFile(
+                    DataController.getInstance().openCase as CaseModel,
+                    `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
+                );
+
                 PageController.getInstance().navigateTo(Pages.DataEntry);
+                PageController.getInstance().loadSideBarContent(
+                    SideBar.dataBar,
+                );
             });
     }
 }
