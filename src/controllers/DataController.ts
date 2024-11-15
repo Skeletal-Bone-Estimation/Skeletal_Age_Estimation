@@ -176,7 +176,7 @@ export class DataController {
         auricularAreaR: AuricularArea = AuricularArea.Unknown,
         fourthRibL: SternalEnd = SternalEnd.Unknown,
         fourthRibR: SternalEnd = SternalEnd.Unknown,
-        notes: string
+        notes: string = '',
     ) {
         var director = new BuildDirector();
 
