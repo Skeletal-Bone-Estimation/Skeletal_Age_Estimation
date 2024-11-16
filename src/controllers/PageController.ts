@@ -246,6 +246,12 @@ export class PageController {
                     content as SternalEnd,
                 );
                 break;
+            case UI_Elements.notes:
+                DataController.getInstance().editCase(
+                    CaseElement.notes,
+                    content as string,
+                );
+                break;
             default:
                 throw new Error(
                     'Invalid ui element passed to PageController.editcase()',
