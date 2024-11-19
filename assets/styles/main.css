@@ -1,16 +1,16 @@
 /* Main.css */
 :root{
   --on-dark: rgb(255,255,255);
-  --on-light: rgb(9, 60, 113);
+  --on-light: rgb(11, 65, 56);
   --hover-on-dark: rgb(173, 206, 101);
-  --hover-on-light: rgb(6, 31, 61);
+  --hover-on-light: rgb(7, 46, 40);
   --background-color: rgb(241, 241, 241);
   --div-color-1: rgb(241, 241, 241);
   --div-color-2: rgb(15, 89, 78);
-  --div-color-3: rgb(7, 46, 40);
+  --div-color-3: rgb(11, 65, 56);
   --resizer-color: rgb(7, 46, 40);
-  --border-color-on-light: rgba(7, 46, 40, .7);
-  --border-color-on-dark: rgba(255,255,255);
+  --border-color-on-light: rgb(10, 133, 36);
+  --border-color-on-dark: rgb(255, 255, 255);
 }
 
 body {
@@ -109,6 +109,10 @@ body {
   position: sticky;
   top: 0;
   display: flex;
+  justify-content: center;
+  align-items: center; 
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
   width: 100;
   height: 76px;
   z-index: 1;
@@ -165,7 +169,7 @@ body {
 
 
 .mercyImg {
-  height: 30vh;
+  height: 15vh;
 }
 
 #createDiv {
@@ -253,4 +257,16 @@ body {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   gap: 20px;
+}
+
+.ellipse {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border: 10px solid;
+  border-color: var(--border-color-on-light);
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
