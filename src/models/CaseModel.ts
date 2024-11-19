@@ -27,6 +27,7 @@ export class CaseModel extends AbstractCaseModel {
     protected _auricularAreaR: AuricularArea;
     protected _fourthRibL: SternalEnd;
     protected _fourthRibR: SternalEnd;
+    protected _notes: string;
     protected _generatedReports: { [id: number]: ReportModel };
     protected observers: ObserverIF[];
 
@@ -44,6 +45,7 @@ export class CaseModel extends AbstractCaseModel {
         auricularAreaR: AuricularArea,
         fourthRibL: SternalEnd,
         fourthRibR: SternalEnd,
+        notes: string,
         generatedReports: { [key: number]: ReportModel },
     ) {
         super();
@@ -61,6 +63,7 @@ export class CaseModel extends AbstractCaseModel {
         this._fourthRibL = fourthRibL;
         this._fourthRibR = fourthRibR;
         this._generatedReports = generatedReports;
+        this._notes = notes;
         this.observers = [];
         this.attach(new AutosaveObserver());
     }
@@ -167,6 +170,14 @@ export class CaseModel extends AbstractCaseModel {
 
     public set fourthRibR(value: SternalEnd) {
         this._fourthRibR = value;
+    }
+
+    public get notes() {
+        return this._notes;
+    }
+
+    public set notes(value: string) {
+        this._notes = value;
     }
 
     public get generatedReports(): { [id: number]: ReportModel } {

@@ -86,6 +86,7 @@ export enum UI_Elements {
     dataSideCaseID = 'dataEntrySideCaseID',
     dataSideSex = 'dataEntrySideSex',
     dataSideAffinity = 'dataEntrySideAffinity',
+    notes = 'notes',
     thirdMolarTL = 'thirdMolarTL',
     thirdMolarTR = 'thirdMolarTR',
     thirdMolarBL = 'thirdMolarBL',
@@ -113,4 +114,5 @@ export enum CaseElement {
     auricularAreaR = 10,
     fourthRibL = 11,
     fourthRibR = 12,
+    notes = 13,
 }

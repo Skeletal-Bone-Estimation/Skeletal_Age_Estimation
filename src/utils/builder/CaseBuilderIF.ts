@@ -22,5 +22,6 @@ export interface CaseBuilderIF {
     setAuricularAreaR(auricularAreaR: AuricularArea): CaseBuilderIF;
     setFourthRibL(fourthRibL: SternalEnd): CaseBuilderIF;
     setFourthRibR(fourthRibR: SternalEnd): CaseBuilderIF;
+    setNotes(notes: string): CaseBuilderIF;
     setReportsGenerated(reports: { [id: number]: ReportModel }): CaseBuilderIF;
 }
