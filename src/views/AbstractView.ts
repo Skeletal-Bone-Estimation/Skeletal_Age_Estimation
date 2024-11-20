@@ -5,11 +5,18 @@ export abstract class AbstractView {
         this.contentDiv = document.getElementById('rootDiv')!;
     }
 
-    //default method to load content into the rootDiv
+    // Default method to load content into the rootDiv
     public render(htmlContent: string): void {
         //console.log('loaded from AbstractView');
         this.contentDiv.innerHTML = htmlContent;
     }
 
     public setSidebarListeners(): void {}
+}
+
+// Create a concrete subclass for testing purposes
+class ConcreteView extends AbstractView {
+    constructor(document: Document) {
+        super(document); // Call the parent constructor
+    }
 }
