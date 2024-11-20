@@ -103,6 +103,14 @@ export class DataEntryView extends AbstractView {
             console.error('thirdMolarBR not found!');
         }
 
+        const notes = document.getElementById(
+            UI_Elements.notes,
+        ) as HTMLInputElement;
+
+        if (!notes) {
+            console.error('notes not found!');
+        }
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -113,7 +121,8 @@ export class DataEntryView extends AbstractView {
             thirdMolarTL &&
             thirdMolarTR &&
             thirdMolarBL &&
-            thirdMolarBR
+            thirdMolarBR &&
+            notes
         ) {
             console.log('elements present');
 
@@ -205,6 +214,15 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.thirdMolarBR,
                     value,
                 );
+            });
+
+            notes.addEventListener('input', (event) => {
+                const target = event.target as HTMLInputElement;
+                if (!(target.value === ''))
+                    PageController.getInstance().editCase(
+                        UI_Elements.notes,
+                        target.value as string,
+                    );
             });
         }
     }

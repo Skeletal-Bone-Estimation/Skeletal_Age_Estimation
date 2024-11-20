@@ -118,6 +118,10 @@ export class XML_Controller {
             fourthRibR ? Number(fourthRibR) : -1,
         );
 
+        const notes =
+            this.currentDoc?.getElementsByTagName('_notes')[0]?.textContent;
+        this.director.caseBuilder.setNotes(notes ? notes : 'NOTES ERROR');
+
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 

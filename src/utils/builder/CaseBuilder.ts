@@ -17,6 +17,7 @@ export class CaseBuilder implements CaseBuilderIF {
     private _auricularAreaR: number;
     private _fourthRibL: number;
     private _fourthRibR: number;
+    private _notes: string;
     private _generatedReports: { [key: number]: ReportModel };
 
     constructor() {
@@ -33,6 +34,7 @@ export class CaseBuilder implements CaseBuilderIF {
         this._auricularAreaR = 1;
         this._fourthRibL = 1;
         this._fourthRibR = 1;
+        this._notes = '';
         this._generatedReports = {};
     }
 
@@ -101,6 +103,11 @@ export class CaseBuilder implements CaseBuilderIF {
         return this;
     }
 
+    public setNotes(notes: string): CaseBuilderIF {
+        this._notes = notes;
+        return this;
+    }
+
     public setReportsGenerated(generatedReports: {
         [key: number]: ReportModel;
     }): CaseBuilderIF {
@@ -123,6 +130,7 @@ export class CaseBuilder implements CaseBuilderIF {
             this._auricularAreaR,
             this._fourthRibL,
             this._fourthRibR,
+            this._notes,
             this._generatedReports,
         );
     }
