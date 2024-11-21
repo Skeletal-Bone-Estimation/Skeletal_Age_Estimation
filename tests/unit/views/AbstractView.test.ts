@@ -15,7 +15,7 @@ describe('AbstractView (via ConcreteView)', () => {
         mockRootDiv = document.createElement('div');
         mockRootDiv.id = 'rootDiv';
         document.body.appendChild(mockRootDiv); // Append to the document body
-        
+
         // Create an instance of ConcreteView with the real document
         concreteView = new ConcreteView(document);
     });
@@ -28,10 +28,10 @@ describe('AbstractView (via ConcreteView)', () => {
     it('should update the innerHTML of the rootDiv when render is called', () => {
         // Define the HTML content to render
         const htmlContent = '<p>Hello, World!</p>';
-        
+
         // Call the render method
         concreteView.render(htmlContent);
-        
+
         // Assert that the innerHTML of rootDiv is updated
         expect(mockRootDiv.innerHTML).toBe(htmlContent);
     });
