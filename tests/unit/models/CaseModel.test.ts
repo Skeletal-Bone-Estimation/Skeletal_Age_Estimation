@@ -1,7 +1,14 @@
 //CaseModel.test.ts
 import { CaseModel } from '../../../src/models/CaseModel';
 import { AutosaveObserver } from '../../../src/utils/observer/AutosaveObserver';
-import { Affinity, Sex, ThirdMolar, PubicSymphysis, AuricularArea, SternalEnd } from '../../../src/utils/enums';
+import {
+    Affinity,
+    Sex,
+    ThirdMolar,
+    PubicSymphysis,
+    AuricularArea,
+    SternalEnd,
+} from '../../../src/utils/enums';
 import { ReportModel } from '../../../src/models/ReportModel';
 
 // Mock the ReportModel
@@ -12,8 +19,6 @@ jest.mock('../../../src/models/ReportModel', () => {
         })),
     };
 });
-
-
 
 describe('CaseModel', () => {
     let caseModel: CaseModel;
@@ -35,7 +40,7 @@ describe('CaseModel', () => {
             SternalEnd.Unknown,
             SternalEnd.Unknown,
             'Test notes',
-            {}
+            {},
         );
     });
 
@@ -103,7 +108,7 @@ describe('CaseModel', () => {
             SternalEnd.Unknown,
             SternalEnd.Unknown,
             'Test notes',
-            {}
+            {},
         );
         expect(newCaseModel.generatedReports).toEqual({});
     });
@@ -115,5 +120,4 @@ describe('CaseModel', () => {
         // Verify it's an instance of AutosaveObserver
         expect(observer).toBeInstanceOf(AutosaveObserver);
     });
-
 });
