@@ -20,8 +20,13 @@ export class HomePageView extends AbstractView {
     protected override initEventListeners(): void {
         document
             .getElementById('homeCreate')!
-            .addEventListener('click', () =>
-                PageController.getInstance().navigateTo(Pages.Create, SideBar.createBar),
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().navigateTo(
+                        Pages.Create,
+                        SideBar.createBar,
+                    ),
             );
 
         document

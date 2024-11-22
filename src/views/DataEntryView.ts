@@ -23,15 +23,11 @@ export class DataEntryView extends AbstractView {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
-
-        // right here
-
         this.autoLoadCaseData();
-        
     }
 
     public autoLoadCaseData() {
-        var _case : CaseModel = PageController.getInstance().getOpenCase();
+        var _case: CaseModel = PageController.getInstance().getOpenCase();
         const caseID = document.getElementById(
             UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
@@ -49,7 +45,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!auricularAreaL) {
-            console.error('caseInput not found!');
+            console.error('auricularAreaL not found!');
         }
 
         const auricularAreaR = document.getElementById(
@@ -57,7 +53,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!auricularAreaR) {
-            console.error('caseInput not found!');
+            console.error('auricularAreaR not found!');
         }
 
         const pubicSymphysisL = document.getElementById(
@@ -65,7 +61,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!pubicSymphysisL) {
-            console.error('caseInput not found!');
+            console.error('publicSymphysisL not found!');
         }
 
         const pubicSymphysisR = document.getElementById(
@@ -73,7 +69,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!pubicSymphysisR) {
-            console.error('caseInput not found!');
+            console.error('publicSymphysisR not found!');
         }
 
         const fourthRibL = document.getElementById(
@@ -81,7 +77,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!fourthRibL) {
-            console.error('caseInput not found!');
+            console.error('fourthRibL not found!');
         }
 
         const fourthRibR = document.getElementById(
@@ -89,7 +85,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!fourthRibR) {
-            console.error('caseInput not found!');
+            console.error('fourthRibR not found!');
         }
 
         const thirdMolarTL = document.getElementById(
@@ -135,10 +131,18 @@ export class DataEntryView extends AbstractView {
         caseID.value = _case.caseID;
         sex.value = this.parseSexToString(_case.sex);
         affinity.value = this.parseAffinitytoString(_case.populationAffinity);
-        auricularAreaL.value = this.parseAuricularAreaToString(_case.auricularAreaL);
-        auricularAreaR.value = this.parseAuricularAreaToString(_case.auricularAreaR);
-        pubicSymphysisL.value = this.parsePublicSymphysisToString(_case.pubicSymphysisL);
-        pubicSymphysisR.value = this.parsePublicSymphysisToString(_case.pubicSymphysisR);
+        auricularAreaL.value = this.parseAuricularAreaToString(
+            _case.auricularAreaL,
+        );
+        auricularAreaR.value = this.parseAuricularAreaToString(
+            _case.auricularAreaR,
+        );
+        pubicSymphysisL.value = this.parsePublicSymphysisToString(
+            _case.pubicSymphysisL,
+        );
+        pubicSymphysisR.value = this.parsePublicSymphysisToString(
+            _case.pubicSymphysisR,
+        );
         fourthRibL.value = this.parseFourthRibToString(_case.fourthRibL);
         fourthRibR.value = this.parseFourthRibToString(_case.fourthRibR);
         thirdMolarTL.value = this.parseThirdMolarToString(_case.thirdMolarTL);
@@ -154,7 +158,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!auricularAreaL) {
-            console.error('caseInput not found!');
+            console.error('auricularAreaL not found!');
         }
 
         const auricularAreaR = document.getElementById(
@@ -162,7 +166,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!auricularAreaR) {
-            console.error('caseInput not found!');
+            console.error('auricularAreaR not found!');
         }
 
         const pubicSymphysisL = document.getElementById(
@@ -170,7 +174,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!pubicSymphysisL) {
-            console.error('caseInput not found!');
+            console.error('publicSymphysisL not found!');
         }
 
         const pubicSymphysisR = document.getElementById(
@@ -178,7 +182,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!pubicSymphysisR) {
-            console.error('caseInput not found!');
+            console.error('pubicSymphysisR not found!');
         }
 
         const fourthRibL = document.getElementById(
@@ -186,7 +190,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!fourthRibL) {
-            console.error('caseInput not found!');
+            console.error('fourthRibL not found!');
         }
 
         const fourthRibR = document.getElementById(
@@ -194,7 +198,7 @@ export class DataEntryView extends AbstractView {
         ) as HTMLInputElement;
 
         if (!fourthRibR) {
-            console.error('caseInput not found!');
+            console.error('fourthRibR not found!');
         }
 
         const thirdMolarTL = document.getElementById(
@@ -448,7 +452,7 @@ export class DataEntryView extends AbstractView {
         }
     }
 
-    private parseSexToString(value: Sex): string  {
+    private parseSexToString(value: Sex): string {
         switch (value) {
             case 0:
                 return 'male';
@@ -593,7 +597,7 @@ export class DataEntryView extends AbstractView {
             case 7:
                 return 'seven';
             case 8:
-                return 'unknown'
+                return 'unknown';
             default:
                 return 'error';
         }
@@ -639,7 +643,7 @@ export class DataEntryView extends AbstractView {
             case 7:
                 return 'seven';
             case 8:
-                return 'unknown'
+                return 'unknown';
             default:
                 return 'error';
         }

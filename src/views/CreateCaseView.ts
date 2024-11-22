@@ -49,7 +49,10 @@ export class CreateCaseView extends AbstractView {
                     `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
                 );
 
-                PageController.getInstance().navigateTo(Pages.DataEntry, SideBar.dataBar);
+                PageController.getInstance().navigateTo(
+                    Pages.DataEntry,
+                    SideBar.dataBar,
+                );
             });
     }
 }
