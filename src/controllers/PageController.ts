@@ -258,4 +258,8 @@ export class PageController {
                 );
         }
     }
+
+    public getOpenCase() : CaseModel {
+        return DataController.getInstance().openCase as CaseModel; 
+    }
 }
