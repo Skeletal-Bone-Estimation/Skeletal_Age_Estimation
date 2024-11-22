@@ -11,5 +11,6 @@ export abstract class AbstractView {
         this.contentDiv.innerHTML = htmlContent;
     }
 
-    public setSidebarListeners(): void {}
+    protected initEventListeners(): void {}
+    protected setSidebarListeners(): void {}
 }

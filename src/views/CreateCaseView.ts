@@ -14,6 +14,11 @@ export class CreateCaseView extends AbstractView {
     public override render(htmlContent: string): void {
         //console.log('loaded from CaseCreationView');
         this.contentDiv.innerHTML = htmlContent;
+        this.initEventListeners();
+        this.setSidebarListeners();
+    }
+
+    protected override initEventListeners(): void {
         document
             .getElementById(UI_Elements.createStartCase)!
             .addEventListener('click', () => {
@@ -44,10 +49,7 @@ export class CreateCaseView extends AbstractView {
                     `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
                 );
 
-                PageController.getInstance().navigateTo(Pages.DataEntry);
-                PageController.getInstance().loadSideBarContent(
-                    SideBar.dataBar,
-                );
+                PageController.getInstance().navigateTo(Pages.DataEntry, SideBar.dataBar);
             });
     }
 }

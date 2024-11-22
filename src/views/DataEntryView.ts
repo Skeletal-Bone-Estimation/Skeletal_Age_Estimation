@@ -22,6 +22,7 @@ export class DataEntryView extends AbstractView {
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
+        this.setSidebarListeners();
 
         // right here
 
@@ -147,7 +148,7 @@ export class DataEntryView extends AbstractView {
         notes.value = _case.notes;
     }
 
-    public initEventListeners() {
+    protected override initEventListeners() {
         const auricularAreaL = document.getElementById(
             UI_Elements.auricularAreaL,
         ) as HTMLInputElement;
