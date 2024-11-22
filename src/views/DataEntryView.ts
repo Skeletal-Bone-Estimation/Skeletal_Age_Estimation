@@ -21,10 +21,9 @@ export class DataEntryView extends AbstractView {
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
-        
     }
 
-    public initEventListeners() {
+    protected override initEventListeners() {
         const auricularAreaL = document.getElementById(
             UI_Elements.auricularAreaL,
         ) as HTMLInputElement;

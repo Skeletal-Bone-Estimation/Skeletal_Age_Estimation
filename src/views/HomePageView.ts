@@ -13,7 +13,10 @@ export class HomePageView extends AbstractView {
     public override render(htmlContent: string): void {
         //console.log('loaded from HomePageView');
         this.contentDiv.innerHTML = htmlContent;
+        this.initEventListeners();
+    }
 
+    protected override initEventListeners(): void {
         document
             .getElementById('homeCreate')!
             .addEventListener('click', () =>

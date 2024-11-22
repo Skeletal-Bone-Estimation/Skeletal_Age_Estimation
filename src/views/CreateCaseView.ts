@@ -14,6 +14,10 @@ export class CreateCaseView extends AbstractView {
     public override render(htmlContent: string): void {
         //console.log('loaded from CaseCreationView');
         this.contentDiv.innerHTML = htmlContent;
+        this.initEventListeners();
+    }
+
+    protected override initEventListeners(): void {
         document
             .getElementById(UI_Elements.createStartCase)!
             .addEventListener('click', () => {
