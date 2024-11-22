@@ -19,10 +19,12 @@ export class DataEntryView extends AbstractView {
 
     //specialized method to load content with specific data entry page requirements
     public override render(htmlContent: string): void {
-        //console.log('Rendering content in DataEntryView');
         this.contentDiv.innerHTML = htmlContent;
-        //console.log('HTML content loaded:', this.contentDiv.innerHTML); // Check the content
+        this.initEventListeners();
+        
+    }
 
+    public initEventListeners() {
         const auricularAreaL = document.getElementById(
             UI_Elements.auricularAreaL,
         ) as HTMLInputElement;
