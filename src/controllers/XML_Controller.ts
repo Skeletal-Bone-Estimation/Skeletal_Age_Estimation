@@ -22,11 +22,11 @@ export class XML_Controller {
         return this.instance;
     }
 
-    // TODO: load single file
+    //loads a single xml file into a CaseModel object
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
-            console.log('Current doc error');
-            return new NullCaseModel();
+            console.error('Current doc error');
+            return new NullCaseModel(); //error model
         }
 
         const caseID =
@@ -44,21 +44,79 @@ export class XML_Controller {
             this.currentDoc?.getElementsByTagName('_sex')[0]?.textContent;
         this.director.caseBuilder.setSex(sex ? Number(sex) : -1);
 
-        const thirdMolar =
-            this.currentDoc?.getElementsByTagName('_thirdMolar')[0]
+        const thirdMolarTL =
+            this.currentDoc?.getElementsByTagName('_thirdMolarTL')[0]
                 ?.textContent;
-        this.director.caseBuilder.setThirdMolar(
-            thirdMolar ? Number(thirdMolar) : -1,
+        this.director.caseBuilder.setThirdMolarTL(
+            thirdMolarTL ? Number(thirdMolarTL) : -1,
         );
 
-        const pubicSymphysis = this.extractDict('_pubicSymphysis');
-        this.director.caseBuilder.setPubicSymphysis(pubicSymphysis);
+        const thirdMolarTR =
+            this.currentDoc?.getElementsByTagName('_thirdMolarTR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarTR(
+            thirdMolarTR ? Number(thirdMolarTR) : -1,
+        );
 
-        const auricularEdge = this.extractDict('_auricularEdge');
-        this.director.caseBuilder.setAuricularEdge(auricularEdge);
+        const thirdMolarBR =
+            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarBL(
+            thirdMolarBR ? Number(thirdMolarBR) : -1,
+        );
 
-        const fourthRib = this.extractDict('_fourthRib');
-        this.director.caseBuilder.setFourthRib(fourthRib);
+        const thirdMolarBL =
+            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarBR(
+            thirdMolarBL ? Number(thirdMolarBL) : -1,
+        );
+
+        const pubicSymphysisL =
+            this.currentDoc?.getElementsByTagName('_pubicSymphysisL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setPubicSymphysisL(
+            pubicSymphysisL ? Number(pubicSymphysisL) : -1,
+        );
+
+        const pubicSymphysisR =
+            this.currentDoc?.getElementsByTagName('_pubicSymphysisR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setPubicSymphysisR(
+            pubicSymphysisR ? Number(pubicSymphysisR) : -1,
+        );
+
+        const auricularAreaL =
+            this.currentDoc?.getElementsByTagName('_auricularAreaL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setAuricularAreaL(
+            auricularAreaL ? Number(auricularAreaL) : -1,
+        );
+
+        const auricularAreaR =
+            this.currentDoc?.getElementsByTagName('_auricularAreaR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setAuricularAreaR(
+            auricularAreaR ? Number(auricularAreaR) : -1,
+        );
+
+        const fourthRibL =
+            this.currentDoc?.getElementsByTagName('_fourthRibL')[0]
+                ?.textContent;
+        this.director.caseBuilder.setFourthRibL(
+            fourthRibL ? Number(fourthRibL) : -1,
+        );
+
+        const fourthRibR =
+            this.currentDoc?.getElementsByTagName('_fourthRibR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setFourthRibR(
+            fourthRibR ? Number(fourthRibR) : -1,
+        );
+
+        const notes =
+            this.currentDoc?.getElementsByTagName('_notes')[0]?.textContent;
+        this.director.caseBuilder.setNotes(notes ? notes : 'NOTES ERROR');
 
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
@@ -132,7 +190,7 @@ export class XML_Controller {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({ object: _case });
         writeFileSync(filename, xmlString, 'utf-8');
-        console.log(`File saved to ${filename}`);
+        //console.log(`File saved to ${filename}`);
     }
 
     // TODO: load collection of cases as folder selected by user

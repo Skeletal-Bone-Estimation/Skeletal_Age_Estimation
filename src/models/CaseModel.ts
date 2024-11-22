@@ -1,43 +1,33 @@
+import {
+    Affinity,
+    AuricularArea,
+    PubicSymphysis,
+    Sex,
+    SternalEnd,
+    ThirdMolar,
+} from '../utils/enums';
 import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
 import { ObserverIF } from '../utils/observer/ObserverIF';
 import { AbstractCaseModel } from './AbstractCaseModel';
 import { ReportModel } from './ReportModel';
 
 //CaseModel.ts
-export enum Affinity {
-    White = 0,
-    Black = 1,
-    Unknown = 2,
-    Error = -1,
-}
-
-export enum Sex {
-    Male = 0,
-    Female = 1,
-    Unknown = 2,
-    Error = -1,
-}
-
-export enum ThirdMolar {
-    A = 0,
-    B = 1,
-    C = 2,
-    D = 3,
-    E = 4,
-    F = 5,
-    G = 6,
-    Unknown = 7,
-    Error = -1,
-}
 
 export class CaseModel extends AbstractCaseModel {
     protected _caseID: string;
     protected _populationAffinity: Affinity;
     protected _sex: Sex;
-    protected _thirdMolar: ThirdMolar;
-    protected _pubicSymphysis: { [key: string]: number };
-    protected _auricularEdge: { [key: string]: number };
-    protected _fourthRib: { [key: string]: number };
+    protected _thirdMolarTL: ThirdMolar;
+    protected _thirdMolarTR: ThirdMolar;
+    protected _thirdMolarBL: ThirdMolar;
+    protected _thirdMolarBR: ThirdMolar;
+    protected _pubicSymphysisL: PubicSymphysis;
+    protected _pubicSymphysisR: PubicSymphysis;
+    protected _auricularAreaL: AuricularArea;
+    protected _auricularAreaR: AuricularArea;
+    protected _fourthRibL: SternalEnd;
+    protected _fourthRibR: SternalEnd;
+    protected _notes: string;
     protected _generatedReports: { [id: number]: ReportModel };
     protected observers: ObserverIF[];
 
@@ -45,21 +35,35 @@ export class CaseModel extends AbstractCaseModel {
         caseID: string,
         populationAffinity: Affinity,
         sex: Sex,
-        thirdMolar: ThirdMolar,
-        pubicSymphysis: { [key: string]: number },
-        auricularEdge: { [key: string]: number },
-        fourthRib: { [key: string]: number },
+        thirdMolarTL: ThirdMolar,
+        thirdMolarTR: ThirdMolar,
+        thirdMolarBL: ThirdMolar,
+        thirdMolarBR: ThirdMolar,
+        pubicSymphysisL: PubicSymphysis,
+        pubicSymphysisR: PubicSymphysis,
+        auricularAreaL: AuricularArea,
+        auricularAreaR: AuricularArea,
+        fourthRibL: SternalEnd,
+        fourthRibR: SternalEnd,
+        notes: string,
         generatedReports: { [key: number]: ReportModel },
     ) {
         super();
         this._caseID = caseID;
         this._populationAffinity = populationAffinity;
         this._sex = sex;
-        this._thirdMolar = thirdMolar;
-        this._pubicSymphysis = pubicSymphysis;
-        this._auricularEdge = auricularEdge;
-        this._fourthRib = fourthRib;
+        this._thirdMolarTL = thirdMolarTL;
+        this._thirdMolarTR = thirdMolarTR;
+        this._thirdMolarBL = thirdMolarBL;
+        this._thirdMolarBR = thirdMolarBR;
+        this._pubicSymphysisL = pubicSymphysisL;
+        this._pubicSymphysisR = pubicSymphysisR;
+        this._auricularAreaL = auricularAreaL;
+        this._auricularAreaR = auricularAreaR;
+        this._fourthRibL = fourthRibL;
+        this._fourthRibR = fourthRibR;
         this._generatedReports = generatedReports;
+        this._notes = notes;
         this.observers = [];
         this.attach(new AutosaveObserver());
     }
@@ -88,24 +92,92 @@ export class CaseModel extends AbstractCaseModel {
         this._sex = value;
     }
 
-    public get thirdMolar(): ThirdMolar {
-        return this._thirdMolar;
+    public get thirdMolarTL(): ThirdMolar {
+        return this._thirdMolarTL;
     }
 
-    public set thirdMolar(value: ThirdMolar) {
-        this._thirdMolar = value;
+    public get thirdMolarTR(): ThirdMolar {
+        return this._thirdMolarTR;
     }
 
-    public get pubicSymphysis(): { [key: string]: number } {
-        return this._pubicSymphysis;
+    public get thirdMolarBL(): ThirdMolar {
+        return this._thirdMolarBL;
     }
 
-    public get auricularEdge(): { [key: string]: number } {
-        return this._auricularEdge;
+    public get thirdMolarBR(): ThirdMolar {
+        return this._thirdMolarBR;
     }
 
-    public get fourthRib(): { [key: string]: number } {
-        return this._fourthRib;
+    public set thirdMolarTL(value: ThirdMolar) {
+        this._thirdMolarTL = value;
+    }
+
+    public set thirdMolarTR(value: ThirdMolar) {
+        this._thirdMolarTR = value;
+    }
+
+    public set thirdMolarBL(value: ThirdMolar) {
+        this._thirdMolarBL = value;
+    }
+
+    public set thirdMolarBR(value: ThirdMolar) {
+        this._thirdMolarBR = value;
+    }
+
+    public get pubicSymphysisL(): PubicSymphysis {
+        return this._pubicSymphysisL;
+    }
+
+    public get pubicSymphysisR(): PubicSymphysis {
+        return this._pubicSymphysisR;
+    }
+
+    public set pubicSymphysisL(value: PubicSymphysis) {
+        this._pubicSymphysisL = value;
+    }
+
+    public set pubicSymphysisR(value: PubicSymphysis) {
+        this._pubicSymphysisR = value;
+    }
+
+    public get auricularAreaL(): AuricularArea {
+        return this._auricularAreaL;
+    }
+
+    public get auricularAreaR(): AuricularArea {
+        return this._auricularAreaR;
+    }
+
+    public set auricularAreaL(value: AuricularArea) {
+        this._auricularAreaL = value;
+    }
+
+    public set auricularAreaR(value: AuricularArea) {
+        this._auricularAreaR = value;
+    }
+
+    public get fourthRibL(): SternalEnd {
+        return this._fourthRibL;
+    }
+
+    public get fourthRibR(): SternalEnd {
+        return this._fourthRibR;
+    }
+
+    public set fourthRibL(value: SternalEnd) {
+        this._fourthRibL = value;
+    }
+
+    public set fourthRibR(value: SternalEnd) {
+        this._fourthRibR = value;
+    }
+
+    public get notes() {
+        return this._notes;
+    }
+
+    public set notes(value: string) {
+        this._notes = value;
     }
 
     public get generatedReports(): { [id: number]: ReportModel } {

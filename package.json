@@ -8,7 +8,7 @@
         "watch": "tsc --watch",
         "dev": "npm run build && concurrently \"npm run build\" \"vite\"",
         "prod": "echo \"Production command not yet created\" && exit 1",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -22,9 +22,12 @@
     "homepage": "https://github.com/Majorsaturn/Skeletal_Age_Estimation#readme",
     "devDependencies": {
         "@types/electron": "^1.4.38",
+        "@types/jest": "^29.5.14",
         "@types/node": "^22.7.5",
         "globals": "^15.12.0",
+        "jest": "^29.7.0",
         "prettier": "^3.3.3",
+        "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
         "vite": "^5.4.10",
         "vite-plugin-electron": "^0.28.8"
