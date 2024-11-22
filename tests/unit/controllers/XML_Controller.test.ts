@@ -9,7 +9,6 @@ jest.mock('fs', () => ({
     writeFileSync: jest.fn(),
 }));
 
-
 //XML_Controller.getInstance()
 describe('XML_Controller Singleton', () => {
     //getInstance()
@@ -85,7 +84,6 @@ describe('XML_Controller parseSingleFile', () => {
             expect(builder.setFourthRibL).toHaveBeenCalledWith(8);
             expect(builder.setFourthRibR).toHaveBeenCalledWith(8);
 
-            
             expect(result).toBeInstanceOf(CaseModel);
             done();
         });
@@ -105,8 +103,6 @@ describe('XML_Controller loadFile', () => {
             'loadTest.xml',
             { type: 'text/xml' },
         );
-
-        
     });
 
     test('should load file and set currentDoc', (done) => {
@@ -139,7 +135,9 @@ describe('XML_Controller saveAsFile', () => {
         controller.saveAsFile(mockCaseModel as any, filename);
         expect(jest.fn().mock).toHaveBeenCalledWith(
             filename,
-            expect.stringContaining('<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><object><some>data</some></object>'),
+            expect.stringContaining(
+                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><object><some>data</some></object>',
+            ),
             'utf-8',
         );
     });

@@ -3,7 +3,6 @@ import { PageController } from '../../../src/controllers/PageController';
 import { XML_Controller } from '../../../src/controllers/XML_Controller';
 import { DataController } from '../../../src/controllers/DataController';
 
-
 jest.mock('../../../src/controllers/PageController');
 jest.mock('../../../src/controllers/XML_Controller');
 jest.mock('../../../src/controllers/DataController');
@@ -25,7 +24,7 @@ describe('CreateCaseView', () => {
         mockSexSelect.id = 'sex';
         mockPopulationAffinitySelect = document.createElement('select');
         mockPopulationAffinitySelect.id = 'race';
-    
+
         // Create and add options to the sex select
         const maleOption = document.createElement('option');
         maleOption.value = '0';
@@ -36,11 +35,11 @@ describe('CreateCaseView', () => {
         const unknownSexOption = document.createElement('option');
         unknownSexOption.value = '2';
         unknownSexOption.textContent = 'Unknown';
-        
+
         mockSexSelect.appendChild(maleOption);
         mockSexSelect.appendChild(femaleOption);
         mockSexSelect.appendChild(unknownSexOption);
-    
+
         // Create and add options to the population affinity select
         const blackOption = document.createElement('option');
         blackOption.value = '0';
@@ -51,46 +50,52 @@ describe('CreateCaseView', () => {
         const unknownAffinityOption = document.createElement('option');
         unknownAffinityOption.value = '2';
         unknownAffinityOption.textContent = 'Unknown';
-        
+
         mockPopulationAffinitySelect.appendChild(blackOption);
         mockPopulationAffinitySelect.appendChild(whiteOption);
         mockPopulationAffinitySelect.appendChild(unknownAffinityOption);
-    
+
         // Create a mock contentDiv
         mockContentDiv = document.createElement('div');
         mockContentDiv.id = 'contentDiv';
-    
+
         // Append elements to the document
         mockDocument.body.appendChild(mockCaseIDInput);
         mockDocument.body.appendChild(mockSexSelect);
         mockDocument.body.appendChild(mockPopulationAffinitySelect);
         mockDocument.body.appendChild(mockContentDiv);
-    
+
         // Create a new instance of CreateCaseView
         createCaseView = new CreateCaseView(mockDocument);
         // Mock contentDiv in CreateCaseView instance
         createCaseView.contentDiv = mockContentDiv;
-    
+
         // Mock the instance methods of PageController
         const mockPageController = {
             createCase: jest.fn(),
             navigateTo: jest.fn(),
-            loadSideBarContent: jest.fn()
+            loadSideBarContent: jest.fn(),
         };
-        (PageController.getInstance as jest.Mock).mockReturnValue(mockPageController);
-    
+        (PageController.getInstance as jest.Mock).mockReturnValue(
+            mockPageController,
+        );
+
         // Mock XML_Controller instance and methods
         const mockXMLController = {
-            saveAsFile: jest.fn()
+            saveAsFile: jest.fn(),
         };
-        (XML_Controller.getInstance as jest.Mock).mockReturnValue(mockXMLController);
-    
+        (XML_Controller.getInstance as jest.Mock).mockReturnValue(
+            mockXMLController,
+        );
+
         // Mock DataController instance and its openCase getter
         const mockDataController = {
-            openCase: { caseID: '123' }
+            openCase: { caseID: '123' },
         };
-        (DataController.getInstance as jest.Mock).mockReturnValue(mockDataController);
-    
+        (DataController.getInstance as jest.Mock).mockReturnValue(
+            mockDataController,
+        );
+
         // Ensure that these methods are also mocked
         XML_Controller.getInstance().saveAsFile = jest.fn();
     });
@@ -122,13 +127,14 @@ describe('CreateCaseView', () => {
         createCaseView.render(htmlContent);
 
         // Set values for the input elements before clicking
-          // Log the value of sex select
-        mockCaseIDInput.value = 'testCaseID';  // Set case ID
-        mockSexSelect.value = "1";  // Set sex to 'Female' (value = 1)
-        mockPopulationAffinitySelect.value = "2";  // Set population affinity to 'Unknown' (value = 2)
+        // Log the value of sex select
+        mockCaseIDInput.value = 'testCaseID'; // Set case ID
+        mockSexSelect.value = '1'; // Set sex to 'Female' (value = 1)
+        mockPopulationAffinitySelect.value = '2'; // Set population affinity to 'Unknown' (value = 2)
 
         // Trigger the click event on the button
-        const createStartCaseButton = mockDocument.getElementById('createStart');
+        const createStartCaseButton =
+            mockDocument.getElementById('createStart');
         if (createStartCaseButton) {
             createStartCaseButton.click();
         }
@@ -136,14 +142,18 @@ describe('CreateCaseView', () => {
         // Assertions
         expect(PageController.getInstance().createCase).toHaveBeenCalledWith(
             'testCaseID',
-            1,  // sex (Female)
-            2   // population affinity (Unknown)
+            1, // sex (Female)
+            2, // population affinity (Unknown)
         );
         expect(XML_Controller.getInstance().saveAsFile).toHaveBeenCalledWith(
             DataController.getInstance().openCase,
-            'save_data/123.xml'
+            'save_data/123.xml',
         );
-        expect(PageController.getInstance().navigateTo).toHaveBeenCalledWith('dataEntry');
-        expect(PageController.getInstance().loadSideBarContent).toHaveBeenCalledWith('dataEntrySide');
+        expect(PageController.getInstance().navigateTo).toHaveBeenCalledWith(
+            'dataEntry',
+        );
+        expect(
+            PageController.getInstance().loadSideBarContent,
+        ).toHaveBeenCalledWith('dataEntrySide');
     });
 });
