@@ -12,5 +12,5 @@ export abstract class AbstractView {
     }
 
     protected initEventListeners(): void {}
-    public setSidebarListeners(): void {}
+    protected setSidebarListeners(): void {}
 }

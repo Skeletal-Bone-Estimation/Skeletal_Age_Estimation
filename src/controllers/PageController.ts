@@ -55,8 +55,9 @@ export class PageController {
     }
 
     //public function to dynamically swap requested content into the index html file
-    public async navigateTo(page: Pages) {
+    public async navigateTo(page: Pages, sidebar : SideBar | null = null) {
         this.currentView = this.views[page];
+        if (sidebar) await this.loadSideBarContent(sidebar)
         await this.loadPage(page);
     }
 
@@ -66,24 +67,7 @@ export class PageController {
         document
             .getElementById('homeBtn')!
             .addEventListener('click', async () => {
-                await this.navigateTo(Pages.Home);
-                await this.loadSideBarContent(SideBar.homeBar);
-            });
-
-        //create button
-        document
-            .getElementById('createBtn')!
-            .addEventListener('click', async () => {
-                await this.navigateTo(Pages.Create);
-                this.loadSideBarContent(SideBar.createBar);
-            });
-
-        //data entry button
-        document
-            .getElementById('dataEntryBtn')!
-            .addEventListener('click', async () => {
-                await this.navigateTo(Pages.DataEntry);
-                await this.loadSideBarContent(SideBar.dataBar);
+                await this.navigateTo(Pages.Home, SideBar.homeBar);
             });
 
         //save case button
@@ -112,6 +96,16 @@ export class PageController {
             );
     }
 
+    //asynchronous function that will render the page using the view's specific render function
+    private async loadPage(page: Pages): Promise<void> {
+        try {
+            const content = await this.loadPageContent(page);
+            this.currentView.render(content);
+        } catch (error) {
+            console.error('Error loading page:', error);
+        }
+    }
+
     // asynchronous function that will retreive the html content included in the desired file
     private async loadPageContent(page: Pages | SideBar): Promise<string> {
         const filePath = path.join(
@@ -130,25 +124,14 @@ export class PageController {
         });
     }
 
-    //asynchronous function that will render the page using the view's specific render function
-    private async loadPage(page: Pages): Promise<void> {
-        try {
-            const content = await this.loadPageContent(page);
-            this.currentView.render(content);
-        } catch (error) {
-            console.error('Error loading page:', error);
-        }
-    }
-
     //asynchronously loads sidebar content from html files
-    public async loadSideBarContent(page: SideBar): Promise<void> {
+    private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
             //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);
             //console.log('Sidebar content:', content);
             this.rootBarDiv.innerHTML = content;
             //console.log('Sidebar content loaded into rootBarDiv');
-            this.currentView.setSidebarListeners(); // Reinitialize listeners after loading sidebar
         } catch (error) {
             console.error('Error loading sidebar content:', error);
         }

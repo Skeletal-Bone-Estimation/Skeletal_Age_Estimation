@@ -21,6 +21,7 @@ export class DataEntryView extends AbstractView {
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
+        this.setSidebarListeners();
     }
 
     protected override initEventListeners() {
@@ -229,7 +230,7 @@ export class DataEntryView extends AbstractView {
     }
 
     //specialized method to connect listeners for data entry sidebar content
-    public override setSidebarListeners() {
+    protected override setSidebarListeners() {
         const caseInput = document.getElementById(
             UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
