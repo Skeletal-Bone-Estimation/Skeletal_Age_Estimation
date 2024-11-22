@@ -493,25 +493,25 @@ export class DataEntryView extends AbstractView {
     private parseThirdMolarToString(value: ThirdMolar): string {
         switch (value) {
             case 0:
-                return 'a';
+                return 'A';
             case 1:
-                return 'b';
+                return 'B';
             case 2:
-                return 'c';
+                return 'C';
             case 3:
-                return 'd';
+                return 'D';
             case 4:
-                return 'e';
+                return 'E';
             case 5:
-                return 'f';
+                return 'F';
             case 6:
-                return 'g';
+                return 'G';
             case 7:
-                return 'h';
+                return 'H';
             case 8:
-                return 'unknown';
+                return 'Unknown';
             default:
-                return 'error';
+                return 'Error';
         }
     }
 
