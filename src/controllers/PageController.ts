@@ -55,8 +55,9 @@ export class PageController {
     }
 
     //public function to dynamically swap requested content into the index html file
-    public async navigateTo(page: Pages) {
+    public async navigateTo(page: Pages, sidebar: SideBar | null = null) {
         this.currentView = this.views[page];
+        if (sidebar) await this.loadSideBarContent(sidebar);
         await this.loadPage(page);
     }
 
@@ -69,8 +70,7 @@ export class PageController {
                 await this.navigateTo(Pages.Home);
                 await this.loadSideBarContent(SideBar.homeBar);
             });
-
-        
+      
         //save case button
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
@@ -84,9 +84,7 @@ export class PageController {
             .getElementById('loadCase')!
             .addEventListener('change', async (event) => {
                 DataController.getInstance().loadCaseFromFile(event);
-                await this.navigateTo(Pages.DataEntry);
-                this.navigateTo(Pages.DataEntry);
-                this.loadSideBarContent(SideBar.dataBar);
+                await this.navigateTo(Pages.DataEntry, SideBar.dataBar);
             });
 
         //load case button
@@ -95,6 +93,16 @@ export class PageController {
             .addEventListener('click', () =>
                 document.getElementById('loadCase')!.click(),
             );
+    }
+
+    //asynchronous function that will render the page using the view's specific render function
+    private async loadPage(page: Pages): Promise<void> {
+        try {
+            const content = await this.loadPageContent(page);
+            this.currentView.render(content);
+        } catch (error) {
+            console.error('Error loading page:', error);
+        }
     }
 
     // asynchronous function that will retreive the html content included in the desired file
@@ -115,25 +123,14 @@ export class PageController {
         });
     }
 
-    //asynchronous function that will render the page using the view's specific render function
-    private async loadPage(page: Pages): Promise<void> {
-        try {
-            const content = await this.loadPageContent(page);
-            this.currentView.render(content);
-        } catch (error) {
-            console.error('Error loading page:', error);
-        }
-    }
-
     //asynchronously loads sidebar content from html files
-    public async loadSideBarContent(page: SideBar): Promise<void> {
+    private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
-            //console.log(`Loading sidebar content for: ${page}`);
+            console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);
-            //console.log('Sidebar content:', content);
+            console.log('Sidebar content:', content);
             this.rootBarDiv.innerHTML = content;
-            //console.log('Sidebar content loaded into rootBarDiv');
-            this.currentView.setSidebarListeners(); // Reinitialize listeners after loading sidebar
+            console.log('Sidebar content loaded into rootBarDiv');
         } catch (error) {
             console.error('Error loading sidebar content:', error);
         }
@@ -242,5 +239,9 @@ export class PageController {
                     'Invalid ui element passed to PageController.editcase()',
                 );
         }
+    }
+
+    public getOpenCase(): CaseModel {
+        return DataController.getInstance().openCase as CaseModel;
     }
 }

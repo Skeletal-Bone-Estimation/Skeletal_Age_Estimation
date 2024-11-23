@@ -1,7 +1,7 @@
 //HomePageView.ts
 
 import { PageController } from '../controllers/PageController';
-import { Pages } from '../utils/enums';
+import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class HomePageView extends AbstractView {
@@ -13,11 +13,20 @@ export class HomePageView extends AbstractView {
     public override render(htmlContent: string): void {
         //console.log('loaded from HomePageView');
         this.contentDiv.innerHTML = htmlContent;
+        this.initEventListeners();
+        this.setSidebarListeners();
+    }
 
+    protected override initEventListeners(): void {
         document
             .getElementById('homeCreate')!
-            .addEventListener('click', () =>
-                PageController.getInstance().navigateTo(Pages.Create),
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().navigateTo(
+                        Pages.Create,
+                        SideBar.createBar,
+                    ),
             );
 
         document
