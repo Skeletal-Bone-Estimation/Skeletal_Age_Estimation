@@ -1,15 +1,17 @@
 /* Main.css */
 :root{
   --on-dark: rgb(255,255,255);
-  --on-light: rgb(9, 60, 113);
+  --on-light: rgb(11, 65, 56);
   --hover-on-dark: rgb(173, 206, 101);
-  --hover-on-light: rgb(6, 31, 61);
+  --hover-on-light: rgb(7, 46, 40);
   --background-color: rgb(241, 241, 241);
   --div-color-1: rgb(241, 241, 241);
   --div-color-2: rgb(15, 89, 78);
+  --div-color-3: rgb(11, 65, 56);
   --resizer-color: rgb(7, 46, 40);
-  --border-color-on-light: rgba(7, 46, 40, .7);
-  --border-color-on-dark: rgba(255,255,255);
+  --border-color-on-light: rgb(10, 133, 36);
+  --border-color-on-dark: rgb(255, 255, 255);
+  --penn-state-blue: rgb(30, 64, 124);
 }
 
 body {
@@ -85,7 +87,8 @@ body {
 
 .sideBarHeader {
   padding: 0px 25px;
-  background-color: var(--div-color-2);
+  height: 76px;
+  background-color: var(--div-color-3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -95,6 +98,7 @@ body {
 
 .sideBarHeader h2 { 
   color: white;
+  font-size: 175%;
 }
 
 #cases {
@@ -106,9 +110,14 @@ body {
   position: sticky;
   top: 0;
   display: flex;
+  justify-content: center;
+  align-items: center; 
+  border-bottom-style: solid;
+  border-bottom-color: var(--resizer-color);
   width: 100;
   height: 76px;
   z-index: 1;
+  background-color: var(--div-color-3);
 }
 
 .resizer {
@@ -159,9 +168,18 @@ body {
   transition: 0.2s;
 }
 
-
 .mercyImg {
-  height: 30vh;
+  height: 15vh;
+  transform: translate(255px);
+}
+
+.pbImg {
+  overflow:hidden;
+}
+
+.psuBehrImg {
+  height: 25vh;
+  transform: translate(200px);
 }
 
 #createDiv {
@@ -190,6 +208,7 @@ body {
   overflow: scroll;
   scrollbar-width: thin;
   scrollbar-color: white var(--div-color-2);
+  color: white;
 }
 
 .homeSide{
@@ -209,6 +228,7 @@ body {
   overflow: scroll;
   scrollbar-width: thin;
   scrollbar-color: white var(--div-color-2);
+  color: white;
 }
 
 #dataEntrySideText {
@@ -247,4 +267,54 @@ body {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   gap: 20px;
+}
+
+
+.mercyImg {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  transform: translate(-2px);
+}
+
+.pbImg {
+  overflow:hidden;
+}
+
+.psuBehrImg {
+  width: 150%;
+  height: 150%;
+  object-fit: contain;
+  transform: translate(1px);
+  margin-top: 15px;
+}
+
+.ellipse-container {
+  display: flex;
+  justify-content: center; 
+  gap: 150px;
+}
+
+.psuCircle {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border: 10px solid;
+  border-color: var(--penn-state-blue);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ellipse {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border: 10px solid;
+  border-color: var(--border-color-on-light);
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -67,9 +67,10 @@ export class PageController {
         document
             .getElementById('homeBtn')!
             .addEventListener('click', async () => {
-                await this.navigateTo(Pages.Home, SideBar.homeBar);
+                await this.navigateTo(Pages.Home);
+                await this.loadSideBarContent(SideBar.homeBar);
             });
-
+      
         //save case button
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
