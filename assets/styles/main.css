@@ -11,6 +11,7 @@
   --resizer-color: rgb(7, 46, 40);
   --border-color-on-light: rgb(10, 133, 36);
   --border-color-on-dark: rgb(255, 255, 255);
+  --penn-state-blue: rgb(30, 64, 124);
 }
 
 body {
@@ -167,9 +168,18 @@ body {
   transition: 0.2s;
 }
 
-
 .mercyImg {
   height: 15vh;
+  transform: translate(255px);
+}
+
+.pbImg {
+  overflow:hidden;
+}
+
+.psuBehrImg {
+  height: 25vh;
+  transform: translate(200px);
 }
 
 #createDiv {
@@ -259,6 +269,44 @@ body {
   gap: 20px;
 }
 
+
+.mercyImg {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  transform: translate(-2px);
+}
+
+.pbImg {
+  overflow:hidden;
+}
+
+.psuBehrImg {
+  width: 150%;
+  height: 150%;
+  object-fit: contain;
+  transform: translate(1px);
+  margin-top: 15px;
+}
+
+.ellipse-container {
+  display: flex;
+  justify-content: center; 
+  gap: 150px;
+}
+
+.psuCircle {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border: 10px solid;
+  border-color: var(--penn-state-blue);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .ellipse {
   border-radius: 50%;
   width: 200px;
@@ -269,10 +317,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.pbImg {
-  overflow:hidden;
-}
-.psuBehrImg {
-  height: 10vh;
 }

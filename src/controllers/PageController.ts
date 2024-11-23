@@ -70,22 +70,7 @@ export class PageController {
                 await this.loadSideBarContent(SideBar.homeBar);
             });
 
-        //create button
-        document
-            .getElementById('createBtn')!
-            .addEventListener('click', async () => {
-                await this.navigateTo(Pages.Create);
-                this.loadSideBarContent(SideBar.createBar);
-            });
-
-        //data entry button
-        document
-            .getElementById('dataEntryBtn')!
-            .addEventListener('click', async () => {
-                await this.navigateTo(Pages.DataEntry);
-                await this.loadSideBarContent(SideBar.dataBar);
-            });
-
+        
         //save case button
         document.getElementById('saveBtn')!.addEventListener('click', () => {
             XML_Controller.getInstance().saveAsFile(
