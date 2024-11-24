@@ -32,7 +32,7 @@ jest.mock('../../../src/controllers/PageController', () => ({
 describe('DataEntryView', () => {
     let dataEntryView: DataEntryView;
     let pageControllerMock: jest.Mocked<PageController>;
-
+    let documentMock: Document;
     beforeEach(() => {
         // Create a full mock of PageController with all methods and properties
         pageControllerMock = {
@@ -47,14 +47,30 @@ describe('DataEntryView', () => {
 
         // Initialize the DataEntryView
         dataEntryView = new DataEntryView(document);
+        
+        documentMock = document.implementation.createHTMLDocument();
+        const rootDiv = documentMock.createElement('div');
+        rootDiv.id = 'rootDiv';
+        documentMock.body.appendChild(rootDiv);
+
     });
 
     describe('render method', () => {
         it('should inject HTML content into the content div', () => {
-            const htmlContent = '<div>Test Content</div>';
-            dataEntryView.render(htmlContent);
-            expect(document.getElementById('contentDiv')?.innerHTML).toBe(htmlContent);
+            // Instantiate DataEntryView with the mock document
+            const view = new DataEntryView(documentMock);
+    
+            // Define the test HTML
+            const testHTML = '<p>Test Content</p>';
+    
+            // Render the content
+            view.render(testHTML);
+    
+            // Assert that the HTML content has been injected into rootDiv
+            const rootDiv = documentMock.getElementById('rootDiv');
+            expect(rootDiv!.innerHTML).toBe(testHTML);
         });
+        
 
         it('should add event listeners to the correct elements', () => {
             const htmlContent = '<div>Test Content</div>';
