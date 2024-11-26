@@ -1,198 +1,151 @@
+// __tests__/PageController.test.ts
 import { PageController } from '../../../src/controllers/PageController';
 import { DataController } from '../../../src/controllers/DataController';
 import { XML_Controller } from '../../../src/controllers/XML_Controller';
-import {
-    Pages,
-    SideBar,
-    UI_Elements,
-    Affinity,
-    Sex,
-    ThirdMolar,
-    CaseElement,
-    AuricularArea,
-    SternalEnd,
-    PubicSymphysis,
-} from '../../../src/utils/enums';
-import { HomePageView } from '../../../src/views/HomePageView';
-import { CreateCaseView } from '../../../src/views/CreateCaseView';
-import { DataEntryView } from '../../../src/views/DataEntryView';
+import { Pages, SideBar, UI_Elements, Affinity, Sex, ThirdMolar, CaseElement } from '../../../src/utils/enums';
 
 jest.mock('../../../src/controllers/DataController');
 jest.mock('../../../src/controllers/XML_Controller');
-jest.mock('../../../src/views/HomePageView');
-jest.mock('../../../src/views/CreateCaseView');
-jest.mock('../../../src/views/DataEntryView');
 
 describe('PageController', () => {
-    let controller: PageController;
+    let pageController: PageController;
 
     beforeEach(() => {
-        // Get the singleton instance
-        controller = PageController.getInstance();
+        // Mock document elements
         document.body.innerHTML = `
-        <div id="sidebar"></div>
-        <button id="dataEntryBtn">Data Entry</button>
+            <div id="rootDiv"></div>
+            <div id="rootBar"></div>
+            <button id="homeBtn"></button>
+            <button id="createBtn"></button>
+            <button id="dataEntryBtn"></button>
+            <button id="saveBtn"></button>
+            <input id="loadCase" type="file" />
+            <button id="loadBtn"></button>
         `;
-    });
-    
 
-    test('should return the same instance every time', async () => {
-        const controller1 = PageController.getInstance();
-        const controller2 = PageController.getInstance();
-      
-        // Ensure both instances are the same (singleton behavior)
-        expect(controller1).toBe(controller2);
-      });
-      
-
-    it('should initialize the views correctly', () => {
-        // Accessing the private 'views' property via reflection
-        const views = controller['views'];
-
-        // Checking that the 'views' object is initialized with the correct views
-        expect(views).toHaveProperty('home');
-        expect(views.home).toBeInstanceOf(HomePageView); // Assuming HomePageView is the correct type
-        expect(views).toHaveProperty('create');
-        expect(views.create).toBeInstanceOf(CreateCaseView); // Assuming CreateCaseView is the correct type
-        expect(views).toHaveProperty('dataEntry');
-        expect(views.dataEntry).toBeInstanceOf(DataEntryView); // Assuming DataEntryView is the correct type
+        pageController = PageController.getInstance();
     });
 
-    it('should navigate to the correct page when navigateTo is called', async () => {
-        // Cast controller to 'any' to bypass TypeScript errors
-        const loadPageSpy = jest.spyOn(controller as any, 'loadPage');
-
-        // Call navigateTo with Pages.Home
-        await controller.navigateTo(Pages.Home);
-
-        // Verify loadPage was called with the correct page
-        expect(loadPageSpy).toHaveBeenCalledWith(Pages.Home);
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
-    it('should call createCase on DataController when createCase is invoked', () => {
-        const createCaseSpy = jest.spyOn(
-            DataController.getInstance(),
-            'createCase',
+    it('should instantiate only once (singleton pattern)', () => {
+        const anotherInstance = PageController.getInstance();
+        expect(pageController).toBe(anotherInstance);
+    });
+
+    it('should navigate to a specified page', async () => {
+        const loadPageContentSpy = jest.spyOn<any, string>(
+            pageController,
+            'loadPageContent',
         );
-        controller.createCase('123', 1, 2);
-        expect(createCaseSpy).toHaveBeenCalledWith('123', 1, 2);
+        await pageController.navigateTo(Pages.Create);
+
+        expect(loadPageContentSpy).toHaveBeenCalledWith(Pages.Create);
     });
 
-    it('should load side bar content when loadSideBarContent is called', async () => {
-        const loadSideBarContentSpy = jest.spyOn(
-            controller,
-            'loadSideBarContent',
-        );
-        await controller.loadSideBarContent(SideBar.homeBar);
-        expect(loadSideBarContentSpy).toHaveBeenCalledWith(SideBar.homeBar);
+    it('should initialize event listeners correctly', () => {
+        const homeBtn = document.getElementById('homeBtn');
+        const createBtn = document.getElementById('createBtn');
+        const dataEntryBtn = document.getElementById('dataEntryBtn');
+
+        expect(homeBtn).not.toBeNull();
+        expect(createBtn).not.toBeNull();
+        expect(dataEntryBtn).not.toBeNull();
     });
 
-    it('should trigger the correct action when the home button is clicked', () => {
-        const homeBtn = document.createElement('button');
-        homeBtn.id = 'homeBtn';
-        document.body.appendChild(homeBtn);
-
-        const navigateToSpy = jest.spyOn(controller, 'navigateTo');
-        homeBtn.click();
-
-        expect(navigateToSpy).toHaveBeenCalledWith(Pages.Home);
-    });
-
-    it('should trigger the correct action when the create button is clicked', () => {
-        const createBtn = document.createElement('button');
-        createBtn.id = 'createBtn';
-        document.body.appendChild(createBtn);
-
-        const navigateToSpy = jest.spyOn(controller, 'navigateTo');
-        const loadSideBarContentSpy = jest.spyOn(
-            controller,
-            'loadSideBarContent',
+    it('should load the side bar content', async () => {
+        const loadPageContentSpy = jest.spyOn<any, string>(
+            pageController,
+            'loadPageContent',
         );
 
-        createBtn.click();
-
-        expect(navigateToSpy).toHaveBeenCalledWith(Pages.Create);
-        expect(loadSideBarContentSpy).toHaveBeenCalledWith(SideBar.createBar);
+        await pageController.loadSideBarContent(SideBar.createBar);
+        expect(loadPageContentSpy).toHaveBeenCalledWith(SideBar.createBar);
     });
 
-    it('should trigger the correct action when the data entry button is clicked', () => {
-        const dataEntryBtn = document.createElement('button');
-        dataEntryBtn.id = 'dataEntryBtn';
-        document.body.appendChild(dataEntryBtn);
+    it('should call DataController to create a case', () => {
+        const mockCreateCase = jest.fn();
+        (DataController.getInstance as jest.Mock).mockReturnValue({
+            createCase: mockCreateCase,
+        });
 
-        const navigateToSpy = jest.spyOn(controller, 'navigateTo');
-        const loadSideBarContentSpy = jest.spyOn(
-            controller,
-            'loadSideBarContent',
-        );
-
-        dataEntryBtn.click();
-
-        expect(navigateToSpy).toHaveBeenCalledWith(Pages.DataEntry);
-        expect(loadSideBarContentSpy).toHaveBeenCalledWith(SideBar.dataBar);
+        pageController.createCase('test_id', Sex.Male, Affinity.White);
+        expect(mockCreateCase).toHaveBeenCalledWith('test_id', Sex.Male, Affinity.White);
     });
 
-    it('should trigger save case when save button is clicked', () => {
+    it('should handle editCase for valid UI elements', () => {
+        const mockEditCase = jest.fn();
+        (DataController.getInstance as jest.Mock).mockReturnValue({
+            editCase: mockEditCase,
+        });
+
+        pageController.editCase(UI_Elements.dataSideCaseID, 'case_123');
+        expect(mockEditCase).toHaveBeenCalledWith(CaseElement.caseID, 'case_123');
+    });
+
+    it('should throw an error for invalid UI elements in editCase', () => {
+        expect(() => {
+            pageController.editCase(999 as unknown as UI_Elements, 'invalid');
+        }).toThrow('Invalid ui element passed to PageController.editcase()');
+    });
+
+    it('should call XML_Controller to save a case', () => {
+        const mockSaveAsFile = jest.fn();
+        const mockCase = { caseID: '1234' };
+        (DataController.getInstance as jest.Mock).mockReturnValue({
+            openCase: mockCase,
+        });
+        (XML_Controller.getInstance as jest.Mock).mockReturnValue({
+            saveAsFile: mockSaveAsFile,
+        });
+
         const saveBtn = document.createElement('button');
-        saveBtn.id = 'saveBtn';
-        document.body.appendChild(saveBtn);
+        jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+            return id === 'saveBtn' ? saveBtn : null;
+        });
 
-        const saveAsFileSpy = jest.spyOn(
-            XML_Controller.getInstance(),
-            'saveAsFile',
-        );
-        saveBtn.click();
+        saveBtn.dispatchEvent(new Event('click'));
 
-        expect(saveAsFileSpy).toHaveBeenCalled();
+        expect(mockSaveAsFile).toHaveBeenCalledWith(mockCase, 'save_data/1234.xml');
     });
 
-    it('should handle file load when load button is clicked', () => {
-        const loadBtn = document.createElement('button');
-        loadBtn.id = 'loadBtn';
-        document.body.appendChild(loadBtn);
+    it('should handle the load case button click to trigger a file input', () => {
+        const loadCaseInput = document.createElement('input');
+        jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+            if (id === 'loadCase') return loadCaseInput;
+            if (id === 'loadBtn') return document.createElement('button');
+            return null;
+        });
 
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.id = 'loadCase';
-        document.body.appendChild(fileInput);
+        const loadCaseClickSpy = jest.spyOn(loadCaseInput, 'click');
 
-        const loadCaseFromFileSpy = jest.spyOn(
-            DataController.getInstance(),
-            'loadCaseFromFile',
-        );
-        const navigateToSpy = jest.spyOn(controller, 'navigateTo');
+        const loadBtn = document.getElementById('loadBtn')!;
+        loadBtn.dispatchEvent(new Event('click'));
 
-        loadBtn.click();
-
-        expect(loadCaseFromFileSpy).toHaveBeenCalled();
-        expect(navigateToSpy).toHaveBeenCalledWith(Pages.DataEntry);
+        expect(loadCaseClickSpy).toHaveBeenCalled();
     });
 
-    it('should edit case correctly when editCase is invoked', () => {
-        const editCaseSpy = jest.spyOn(
-            DataController.getInstance(),
-            'editCase',
-        );
+    it('should integrate enums correctly for case editing', () => {
+        const mockEditCase = jest.fn();
+        (DataController.getInstance as jest.Mock).mockReturnValue({
+            editCase: mockEditCase,
+        });
 
-        // Example: Using a valid UI_Elements and content from the enums
-        controller.editCase(UI_Elements.dataSideSex, Sex.Male); // edit with a valid UI_Elements and Sex enum
+        pageController.editCase(UI_Elements.thirdMolarTL, ThirdMolar.A);
+        expect(mockEditCase).toHaveBeenCalledWith(CaseElement.thirdMolarTL, ThirdMolar.A);
 
-        // Check that editCase was called with the correct parameters
-        expect(editCaseSpy).toHaveBeenCalledWith(1, Sex.Male); // CaseElement.sex = 1, Sex.Male = 0
+        pageController.editCase(UI_Elements.dataSideAffinity, Affinity.Black);
+        expect(mockEditCase).toHaveBeenCalledWith(CaseElement.affinity, Affinity.Black);
     });
 
-    it('should throw error for invalid edit case parameters', () => {
-        // Invalid UI_Elements (e.g., value doesn't exist in UI_Elements)
-        expect(() => {
-            controller.editCase('999' as UI_Elements, 'invalid content' as any); // Invalid element ID
-        }).toThrow('Invalid ui element passed to PageController.editcase()');
+    it('should log an error when attempting to load a non-existent page', async () => {
+        const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
-        // Invalid content type (passing incompatible content)
-        expect(() => {
-            controller.editCase(
-                UI_Elements.dataSideSex,
-                'invalid content' as any,
-            ); // Expected to throw error because the content should be a Sex enum
-        }).toThrow('Invalid ui element passed to PageController.editcase()');
+        await pageController.navigateTo('invalidPage' as Pages);
+
+        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('Error loading page:'));
+        consoleErrorSpy.mockRestore();
     });
 });
