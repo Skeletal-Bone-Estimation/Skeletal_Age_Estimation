@@ -33,6 +33,7 @@ describe('DataEntryView', () => {
     let dataEntryView: DataEntryView;
     let pageControllerMock: jest.Mocked<PageController>;
     let documentMock: Document;
+
     beforeEach(() => {
         // Create a full mock of PageController with all methods and properties
         pageControllerMock = {
@@ -45,6 +46,29 @@ describe('DataEntryView', () => {
         // Mock the getInstance method to return the mocked instance
         (PageController.getInstance as jest.Mock).mockReturnValue(pageControllerMock);
 
+        document.body.innerHTML = `
+        <div id="contentDiv"></div>
+        <input id="${UI_Elements.auricularAreaL}" />
+        <input id="${UI_Elements.auricularAreaR}" />
+        <input id="${UI_Elements.pubicSymphysisL}" />
+        <input id="${UI_Elements.pubicSymphysisR}" />
+        <input id="${UI_Elements.fourthRibL}" />
+        <input id="${UI_Elements.fourthRibR}" />
+        <input id="${UI_Elements.thirdMolarTL}" />
+        <input id="${UI_Elements.thirdMolarTR}" />
+        <input id="${UI_Elements.thirdMolarBL}" />
+        <input id="${UI_Elements.thirdMolarBR}" />
+        <input id="${UI_Elements.notes}" />
+        <input id="${UI_Elements.dataSideCaseID}" />
+        <select id="${UI_Elements.dataSideSex}">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <select id="${UI_Elements.dataSideAffinity}">
+            <option value="white">White</option>
+            <option value="black">Black</option>
+        </select>
+            `
         // Initialize the DataEntryView
         dataEntryView = new DataEntryView(document);
         
@@ -52,6 +76,8 @@ describe('DataEntryView', () => {
         const rootDiv = documentMock.createElement('div');
         rootDiv.id = 'rootDiv';
         documentMock.body.appendChild(rootDiv);
+
+        
 
     });
 
@@ -73,17 +99,19 @@ describe('DataEntryView', () => {
         
 
         it('should add event listeners to the correct elements', () => {
-            const htmlContent = '<div>Test Content</div>';
-            dataEntryView.render(htmlContent);
+        const htmlContent = '<div><input id="auricularAreaL" type="text"></div>';
+        
+        // Render the HTML content
+        dataEntryView.render(htmlContent);
 
-            // Simulate input event
-            const auricularAreaL = document.getElementById(UI_Elements.auricularAreaL) as HTMLInputElement;
-            auricularAreaL.value = 'one';
-            auricularAreaL.dispatchEvent(new Event('input'));
+        // Simulate input event on auricularAreaL input field
+        const auricularAreaL = documentMock.getElementById(UI_Elements.auricularAreaL) as HTMLInputElement;
+        auricularAreaL.value = 'one';
+        auricularAreaL.dispatchEvent(new Event('input'));
 
-            // Verify that the editCase method was called with correct parameters
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.auricularAreaL, 1);
-        });
+        // Verify that the editCase method was called with the correct parameters
+        expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.auricularAreaL, 1);
+    });
     });
 
     describe('helper methods', () => {
@@ -132,21 +160,24 @@ describe('DataEntryView', () => {
 
     describe('setSidebarListeners method', () => {
         it('should add event listeners to sidebar elements', () => {
+            dataEntryView.setSidebarListeners();
+
             const caseInput = document.getElementById(UI_Elements.dataSideCaseID) as HTMLInputElement;
             const sexSelector = document.getElementById(UI_Elements.dataSideSex) as HTMLSelectElement;
             const affinitySelector = document.getElementById(UI_Elements.dataSideAffinity) as HTMLSelectElement;
 
-            caseInput.value = 'test-case';
-            sexSelector.value = 'male';
-            affinitySelector.value = 'white';
-
+            caseInput.value = 'caseXYZ';
             caseInput.dispatchEvent(new Event('input'));
+
+            sexSelector.value = 'female';
             sexSelector.dispatchEvent(new Event('input'));
+
+            affinitySelector.value = 'black';
             affinitySelector.dispatchEvent(new Event('input'));
 
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideCaseID, 'test-case');
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideSex, 0);
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideAffinity, 0);
+            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideCaseID, 'caseXYZ');
+            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideSex, 1);
+            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideAffinity, 1);
         });
     });
 });
