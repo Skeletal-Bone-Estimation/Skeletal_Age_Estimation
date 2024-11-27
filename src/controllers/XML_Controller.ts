@@ -22,10 +22,6 @@ export class XML_Controller {
         return this.instance;
     }
 
-    public getCurrentDoc(): Document | null {
-        return this.currentDoc;
-    }
-
     //loads a single xml file into a CaseModel object
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {

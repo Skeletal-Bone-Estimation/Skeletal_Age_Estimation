@@ -1,5 +1,6 @@
 import { CaseModel } from '../../models/CaseModel';
 import { ReportModel } from '../../models/ReportModel';
+import { AuricularArea, PubicSymphysis, SternalEnd } from '../enums';
 import { CaseBuilderIF } from './CaseBuilderIF';
 
 // Concrete builder for CaseModel
