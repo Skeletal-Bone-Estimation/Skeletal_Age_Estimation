@@ -29,7 +29,6 @@ export class CaseModel extends AbstractCaseModel {
     protected _fourthRibR: SternalEnd;
     protected _notes: string;
     protected _generatedReports: { [id: number]: ReportModel };
-    protected observers: ObserverIF[];
 
     constructor(
         caseID: string,
@@ -186,14 +185,6 @@ export class CaseModel extends AbstractCaseModel {
 
     public set generatedReports(value: ReportModel[]) {
         this._generatedReports = value;
-    }
-
-    public updateDictEntry(
-        dict: { [key: string]: number },
-        field: string,
-        value: number,
-    ): void {
-        dict[field] = value;
     }
 
     public addReport(report: ReportModel): void {
