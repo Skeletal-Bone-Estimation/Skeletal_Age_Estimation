@@ -12,7 +12,8 @@ export abstract class AbstractView {
         this.contentDiv.innerHTML = htmlContent; // Set the innerHTML of the contentDiv
     }
 
-    public setSidebarListeners(): void {
+    protected initEventListeners(): void {}
+    protected setSidebarListeners(): void {
         // Placeholder method for setting sidebar listeners, can be overridden
     }
 }
