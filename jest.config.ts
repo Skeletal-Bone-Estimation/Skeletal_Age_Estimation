@@ -2,7 +2,7 @@ import type {Config } from '@jest/types'
 
 const config: Config.InitialOptions = {
     preset: "ts-jest",
-    testEnvironment: "node",
+    testEnvironment: "jest-environment-jsdom",
     verbose: true,
     //automock: true //possibly helpful?
 }
