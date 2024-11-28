@@ -174,4 +174,32 @@ describe('DataEntryView', () => {
             expect(dataEntryView['parseFourthRib']('error')).toBe(-1);
         });
     });
+    describe('sidebar event listeners', () => {
+        it('should add event listeners to sidebar elements', () => {
+            // Arrange: Mock sidebar elements
+            const caseInput = document.getElementById(UI_Elements.dataSideCaseID) as HTMLInputElement;
+            const sexSelector = document.getElementById(UI_Elements.dataSideSex) as HTMLSelectElement;
+            const affinitySelector = document.getElementById(UI_Elements.dataSideAffinity) as HTMLSelectElement;
+    
+            // Spy on PageController's editCase method
+            const editCaseSpy = jest.spyOn(pageControllerMock, 'editCase');
+    
+            // Act: Render the view and trigger the input events
+            dataEntryView.render('<p>Test Content</p>');
+    
+            caseInput.value = 'New Case ID';
+            caseInput.dispatchEvent(new Event('input'));
+    
+            sexSelector.value = 'female';
+            sexSelector.dispatchEvent(new Event('input'));
+    
+            affinitySelector.value = 'white';
+            affinitySelector.dispatchEvent(new Event('input'));
+    
+            // Assert: Verify that event listeners trigger the expected calls
+            expect(editCaseSpy).toHaveBeenCalledWith(UI_Elements.dataSideCaseID, 'New Case ID');
+            expect(editCaseSpy).toHaveBeenCalledWith(UI_Elements.dataSideSex, 1); // 1 = female
+            expect(editCaseSpy).toHaveBeenCalledWith(UI_Elements.dataSideAffinity, 0); // 0 = white
+        });
+    });
 });
