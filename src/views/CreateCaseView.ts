@@ -8,10 +8,10 @@ import { DataController } from '../controllers/DataController';
 export class CreateCaseView extends AbstractView {
     constructor(document: Document) {
         super(document);
-        this.contentDiv = document.getElementById('content') as HTMLElement;
     }
 
     public override render(htmlContent: string): void {
+        //console.log('loaded from CaseCreationView);
         console.log('Rendering CreateCaseView'); // Debugging line
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
@@ -34,14 +34,20 @@ export class CreateCaseView extends AbstractView {
 
                 var caseID = caseIDinput.value.trim();
                 var sex = parseInt(sexSelect.value);
-                var populationAffinity = parseInt(populationAffinitySelect.value);
-    
+                var populationAffinity = parseInt(
+                    populationAffinitySelect.value,
+                );
+
                 console.log({ caseID, sex, populationAffinity }); // Debugging line
-    
-                PageController.getInstance().createCase(caseID, sex, populationAffinity);
+
+                PageController.getInstance().createCase(
+                    caseID,
+                    sex,
+                    populationAffinity,
+                );
                 XML_Controller.getInstance().saveAsFile(
                     DataController.getInstance().openCase as CaseModel,
-                    `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`
+                    `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
                 );
 
                 PageController.getInstance().navigateTo(
@@ -49,8 +55,5 @@ export class CreateCaseView extends AbstractView {
                     SideBar.dataBar,
                 );
             });
-        } else {
-            console.error('Create case button not found!');
-        }
     }
 }
