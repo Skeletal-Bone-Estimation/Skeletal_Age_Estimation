@@ -3,9 +3,11 @@ import { PageController } from '../../../src/controllers/PageController';
 import { XML_Controller } from '../../../src/controllers/XML_Controller';
 import { DataController } from '../../../src/controllers/DataController';
 
+
 jest.mock('../../../src/controllers/PageController');
 jest.mock('../../../src/controllers/XML_Controller');
 jest.mock('../../../src/controllers/DataController');
+
 
 describe('CreateCaseView', () => {
     let createCaseView: CreateCaseView;

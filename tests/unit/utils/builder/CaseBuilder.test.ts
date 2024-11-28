@@ -1,4 +1,3 @@
-//CaseBuilder.test.ts
 import { CaseBuilder } from '../../../../src/utils/builder/CaseBuilder';
 import { CaseModel } from '../../../../src/models/CaseModel';
 import { ReportModel } from '../../../../src/models/ReportModel';
@@ -82,3 +81,4 @@ describe('CaseBuilder', () => {
         expect(caseModel.sex).toBe(Sex.Male);
     });
 });
+
