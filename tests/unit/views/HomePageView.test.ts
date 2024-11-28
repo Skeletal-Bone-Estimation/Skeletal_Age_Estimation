@@ -1,73 +1,102 @@
-
 import { HomePageView } from '../../../src/views/HomePageView';
 import { PageController } from '../../../src/controllers/PageController';
-import { Pages } from '../../../src/utils/enums';
+import { Pages, SideBar } from '../../../src/utils/enums';
 
-jest.mock('../../../src/controllers/PageController', () => ({
-    PageController: {
-        getInstance: jest.fn(),
-    },
-}));
+jest.mock('../../../src/controllers/PageController');
 
 describe('HomePageView', () => {
     let homePageView: HomePageView;
-    let pageControllerMock: jest.Mocked<PageController>;
+    let mockDocument: Document;
+    let mockPageController: jest.Mocked<PageController>;
 
     beforeEach(() => {
-        // Mock the DOM with the element 'rootDiv' as expected by AbstractView
-        document.body.innerHTML = `
-            <div id="rootDiv"></div> <!-- Change to rootDiv -->
-            <button id="homeCreate"></button>
-            <button id="homeLoad"></button>
-            <input id="loadCase" type="file" style="display:none" />
-        `;
-
-        // Mock the PageController instance
-        pageControllerMock = {
+        // Clear the DOM to start fresh for each test
+        document.body.innerHTML = '';
+    
+        // Add the required rootDiv
+        const rootDiv = document.createElement('div');
+        rootDiv.id = 'rootDiv';
+        document.body.appendChild(rootDiv);
+    
+        // Add required elements for event listeners
+        const homeCreateButton = document.createElement('button');
+        homeCreateButton.id = 'homeCreate';
+        document.body.appendChild(homeCreateButton);
+    
+        const homeLoadButton = document.createElement('button');
+        homeLoadButton.id = 'homeLoad';
+        document.body.appendChild(homeLoadButton);
+    
+        const loadCaseInput = document.createElement('input');
+        loadCaseInput.id = 'loadCase';
+        document.body.appendChild(loadCaseInput);
+    
+        // Instantiate HomePageView
+        homePageView = new HomePageView(document); // Use global document
+    
+        // Mock PageController
+        mockPageController = {
             navigateTo: jest.fn(),
         } as unknown as jest.Mocked<PageController>;
-
-        // Mock the getInstance method to return the mock PageController
-        (PageController.getInstance as jest.Mock).mockReturnValue(pageControllerMock);
-
-        // Initialize the HomePageView, passing the mock document
-        homePageView = new HomePageView(document);
+    
+        (PageController.getInstance as jest.Mock).mockReturnValue(mockPageController);
     });
 
-    describe('render method', () => {
-        it('should inject HTML content into the content div', () => {
-            const htmlContent = '<div>Home Page Content</div>';
-            homePageView.render(htmlContent);
-            expect(document.getElementById('rootDiv')?.innerHTML).toBe(htmlContent); // Use rootDiv
-        });
 
-        it('should add a click listener to "homeCreate" button', () => {
-            const htmlContent = '<div>Home Page Content</div>';
+    describe('render', () => {
+        it('should render HTML content and initialize event listeners', () => {
+            const htmlContent = '<p>Test Home Page Content</p>';
+
+            // Call render method
             homePageView.render(htmlContent);
 
-            // Simulate a click event on the homeCreate button
-            const homeCreateButton = document.getElementById('homeCreate') as HTMLElement;
+            // Assert content is rendered
+            expect(homePageView.contentDiv.innerHTML).toBe(htmlContent);
+
+            // Simulate button click
+            const homeCreateButton = document.getElementById('homeCreate')!;
             homeCreateButton.click();
 
-            // Verify that navigateTo was called with the correct argument
-            expect(pageControllerMock.navigateTo).toHaveBeenCalledWith(Pages.Create);
+            // Verify the navigation function is called
+            expect(mockPageController.navigateTo).toHaveBeenCalledWith(
+                Pages.Create,
+                SideBar.createBar,
+            );
+        });
+    });
+
+    describe('initEventListeners', () => {
+        it('should initialize the homeCreate click event', () => {
+            const homeCreateButton = document.getElementById('homeCreate')!;
+
+            // Call render to attach event listeners
+            homePageView.render('');
+
+            // Simulate click event on the homeCreate button
+            homeCreateButton.click();
+
+            // Assert PageController.navigateTo was called
+            expect(mockPageController.navigateTo).toHaveBeenCalledWith(
+                Pages.Create,
+                SideBar.createBar,
+            );
         });
 
-        it('should add a click listener to "homeLoad" button that triggers a click on "loadCase"', () => {
-            const htmlContent = '<div>Home Page Content</div>';
-            homePageView.render(htmlContent);
+        it('should initialize the homeLoad click event', () => {
+            const homeLoadButton = document.getElementById('homeLoad')!;
+            const loadCaseInput = document.getElementById('loadCase')!;
 
-            // Mock the "loadCase" element
-            const loadCaseInput = document.getElementById('loadCase') as HTMLElement;
-            jest.spyOn(loadCaseInput, 'click');
+            // Spy on click method
+            const clickSpy = jest.spyOn(loadCaseInput, 'click');
 
-            // Simulate a click event on the homeLoad button
-            const homeLoadButton = document.getElementById('homeLoad') as HTMLElement;
+            // Call render to attach event listeners
+            homePageView.render('');
+
+            // Simulate click event on the homeLoad button
             homeLoadButton.click();
 
-            // Verify that the click method on "loadCase" was called
-            expect(loadCaseInput.click).toHaveBeenCalled();
+            // Assert loadCase input was triggered
+            expect(clickSpy).toHaveBeenCalled();
         });
     });
 });
-
