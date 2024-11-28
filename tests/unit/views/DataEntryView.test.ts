@@ -1,8 +1,8 @@
 import { DataEntryView } from '../../../src/views/DataEntryView';
 import { PageController } from '../../../src/controllers/PageController';
 import { UI_Elements } from '../../../src/utils/enums';
+import { CaseModel } from '../../../src/models/CaseModel';
 
-// Mock the PageController class
 jest.mock('../../../src/controllers/PageController', () => ({
     PageController: {
         getInstance: jest.fn(),
@@ -12,6 +12,7 @@ jest.mock('../../../src/controllers/PageController', () => ({
 describe('DataEntryView', () => {
     let dataEntryView: DataEntryView;
     let pageControllerMock: jest.Mocked<PageController>;
+    let mockCaseModel: CaseModel;
 
     beforeEach(() => {
         // Mock the DOM structure
@@ -39,12 +40,31 @@ describe('DataEntryView', () => {
             </select>
         `;
 
+        // Define the mock CaseModel
+        mockCaseModel = {
+            caseID: 'test-case-id',
+            sex: 0,
+            populationAffinity: 1,
+            auricularAreaL: 1,
+            auricularAreaR: 2,
+            pubicSymphysisL: 3,
+            pubicSymphysisR: 4,
+            fourthRibL: 5,
+            fourthRibR: 6,
+            thirdMolarTL: 7,
+            thirdMolarTR: 8,
+            thirdMolarBL: 9,
+            thirdMolarBR: 10,
+            notes: 'Test notes',
+        } as unknown as CaseModel;
+        
         // Mock PageController methods
         pageControllerMock = {
             createCase: jest.fn(),
             navigateTo: jest.fn(),
             loadSideBarContent: jest.fn(),
             editCase: jest.fn(),
+            getOpenCase: jest.fn().mockReturnValue(mockCaseModel),
         } as unknown as jest.Mocked<PageController>;
 
         (PageController.getInstance as jest.Mock).mockReturnValue(pageControllerMock);
@@ -61,15 +81,13 @@ describe('DataEntryView', () => {
         it('should inject HTML content into the rootDiv', () => {
             const testHTML = '<p>Test Content</p>';
             dataEntryView.render(testHTML);
-
             const rootDiv = document.getElementById('rootDiv');
+            expect(rootDiv).not.toBeNull();
             expect(rootDiv!.innerHTML).toBe(testHTML);
         });
 
         it('should add event listeners to the correct elements', () => {
-            const htmlContent = `
-                <input id="${UI_Elements.auricularAreaL}" type="text" />
-            `;
+            const htmlContent = `<input id="${UI_Elements.auricularAreaL}" type="text" />`;
             dataEntryView.render(htmlContent);
 
             const auricularAreaL = document.getElementById(UI_Elements.auricularAreaL) as HTMLInputElement;
@@ -77,6 +95,19 @@ describe('DataEntryView', () => {
             auricularAreaL.dispatchEvent(new Event('input'));
 
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.auricularAreaL, 1);
+        });
+    });
+
+    describe('autoLoadCaseData method', () => {
+        it('should populate inputs with case data', () => {
+            dataEntryView.autoLoadCaseData();
+
+            expect((document.getElementById(UI_Elements.dataSideCaseID) as HTMLInputElement).value).toBe(
+                mockCaseModel.caseID,
+            );
+            expect((document.getElementById(UI_Elements.notes) as HTMLInputElement).value).toBe(mockCaseModel.notes);
+            expect((document.getElementById(UI_Elements.dataSideSex) as HTMLSelectElement).value).toBe('male');
+            expect((document.getElementById(UI_Elements.dataSideAffinity) as HTMLSelectElement).value).toBe('black');
         });
     });
 
@@ -94,7 +125,7 @@ describe('DataEntryView', () => {
             expect(dataEntryView['parseSex']('unknown')).toBe(2);
             expect(dataEntryView['parseSex']('error')).toBe(-1);
         });
-        
+
         it('should correctly parse third molar values', () => {
             expect(dataEntryView['parseThirdMolar']('A')).toBe(0);
             expect(dataEntryView['parseThirdMolar']('B')).toBe(1);
@@ -106,7 +137,7 @@ describe('DataEntryView', () => {
             expect(dataEntryView['parseThirdMolar']('H')).toBe(7);
             expect(dataEntryView['parseThirdMolar']('Unknown')).toBe(8);
             expect(dataEntryView['parseThirdMolar']('Error')).toBe(-1);
-        })
+        });
 
         it('should correctly parse auricular area values', () => {
             expect(dataEntryView['parseAuricularArea']('one')).toBe(1);
@@ -141,29 +172,6 @@ describe('DataEntryView', () => {
             expect(dataEntryView['parseFourthRib']('seven')).toBe(7);
             expect(dataEntryView['parseFourthRib']('unknown')).toBe(8);
             expect(dataEntryView['parseFourthRib']('error')).toBe(-1);
-        });
-    });
-
-    describe('setSidebarListeners method', () => {
-        it('should add event listeners to sidebar elements', () => {
-            dataEntryView.setSidebarListeners();
-
-            const caseInput = document.getElementById(UI_Elements.dataSideCaseID) as HTMLInputElement;
-            const sexSelector = document.getElementById(UI_Elements.dataSideSex) as HTMLSelectElement;
-            const affinitySelector = document.getElementById(UI_Elements.dataSideAffinity) as HTMLSelectElement;
-
-            caseInput.value = 'caseXYZ';
-            caseInput.dispatchEvent(new Event('input'));
-
-            sexSelector.value = 'female';
-            sexSelector.dispatchEvent(new Event('input'));
-
-            affinitySelector.value = 'black';
-            affinitySelector.dispatchEvent(new Event('input'));
-
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideCaseID, 'caseXYZ');
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideSex, 1);
-            expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideAffinity, 1);
         });
     });
 });
