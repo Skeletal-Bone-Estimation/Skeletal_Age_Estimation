@@ -8,7 +8,7 @@ import { DataController } from '../controllers/DataController';
 export class CreateCaseView extends AbstractView {
     constructor(document: Document) {
         super(document);
-        this.contentDiv = document.getElementById('content') as HTMLElement;
+     
     }
 
     public override render(htmlContent: string): void {
@@ -49,8 +49,6 @@ export class CreateCaseView extends AbstractView {
                     SideBar.dataBar,
                 );
             });
-        } else {
-            console.error('Create case button not found!');
-        }
+        } 
     }
-}
+

@@ -1,4 +1,3 @@
-// __tests__/PageController.test.ts
 import { PageController } from '../../../src/controllers/PageController';
 import {
     Pages,
@@ -10,7 +9,7 @@ import {
     AuricularArea,
     SternalEnd,
     PubicSymphysis,
-    CaseElement
+    CaseElement,
 } from '../../../src/utils/enums';
 import { DataController } from '../../../src/controllers/DataController';
 import { AbstractView } from '../../../src/views/AbstractView';
@@ -34,6 +33,16 @@ document.body.innerHTML = `
 
 describe('PageController', () => {
     let pageController: PageController;
+
+    beforeAll(() => {
+        // Mock console.log to silence logs during tests
+        jest.spyOn(console, 'log').mockImplementation(() => {});
+    });
+
+    afterAll(() => {
+        // Restore console.log after tests
+        jest.restoreAllMocks();
+    });
 
     beforeEach(() => {
         (PageController as any).instance = null; // Reset singleton instance
@@ -94,51 +103,52 @@ describe('PageController', () => {
         pageController.createCase('test_id', Sex.Male, Affinity.White);
         expect(mockCreateCase).toHaveBeenCalledWith('test_id', Sex.Male, Affinity.White);
     });
+
     describe('editCase method', () => {
         it('should correctly map UI_Elements.dataSideCaseID to CaseElement.caseID and call DataController', () => {
             const editCaseMock = jest.fn();
             DataController.getInstance = jest.fn().mockReturnValue({
                 editCase: editCaseMock,
             });
-    
+
             pageController.editCase(UI_Elements.dataSideCaseID, 'testCaseID');
-    
+
             expect(editCaseMock).toHaveBeenCalledWith(CaseElement.caseID, 'testCaseID');
         });
-    
+
         it('should correctly map UI_Elements.dataSideSex to CaseElement.sex and call DataController', () => {
             const editCaseMock = jest.fn();
             DataController.getInstance = jest.fn().mockReturnValue({
                 editCase: editCaseMock,
             });
-    
+
             pageController.editCase(UI_Elements.dataSideSex, Sex.Female);
-    
+
             expect(editCaseMock).toHaveBeenCalledWith(CaseElement.sex, Sex.Female);
         });
-    
+
         it('should correctly map UI_Elements.thirdMolarTL to CaseElement.thirdMolarTL and call DataController', () => {
             const editCaseMock = jest.fn();
             DataController.getInstance = jest.fn().mockReturnValue({
                 editCase: editCaseMock,
             });
-    
+
             pageController.editCase(UI_Elements.thirdMolarTL, ThirdMolar.C);
-    
+
             expect(editCaseMock).toHaveBeenCalledWith(CaseElement.thirdMolarTL, ThirdMolar.C);
         });
-    
+
         it('should correctly map UI_Elements.notes to CaseElement.notes and call DataController', () => {
             const editCaseMock = jest.fn();
             DataController.getInstance = jest.fn().mockReturnValue({
                 editCase: editCaseMock,
             });
-    
+
             pageController.editCase(UI_Elements.notes, 'Sample notes content');
-    
+
             expect(editCaseMock).toHaveBeenCalledWith(CaseElement.notes, 'Sample notes content');
         });
-    
+
         it('should throw an error for invalid UI_Elements', () => {
             expect(() =>
                 pageController.editCase(-1 as unknown as UI_Elements, 'invalidContent'),
@@ -146,17 +156,19 @@ describe('PageController', () => {
         });
     });
 
-    it('should correctly load sidebar content', async () => {
+    it('should correctly load sidebar content using private method', async () => {
         const mockLoadPageContent = jest
             .spyOn(pageController as any, 'loadPageContent')
             .mockResolvedValue('<div>Sidebar Content</div>');
 
-        await pageController.loadSideBarContent(SideBar.homeBar);
+        await (pageController as any).loadSideBarContent(SideBar.homeBar);
 
         expect(mockLoadPageContent).toHaveBeenCalledWith(SideBar.homeBar);
         expect(document.getElementById('rootBar')!.innerHTML).toContain(
             'Sidebar Content',
         );
+
+        mockLoadPageContent.mockRestore();
     });
 
     it('should call XML_Controller to save a case', () => {
@@ -168,17 +180,15 @@ describe('PageController', () => {
         (XML_Controller.getInstance as jest.Mock).mockReturnValue({
             saveAsFile: mockSaveAsFile,
         });
-    
+
         // Reinitialize PageController to set up event listeners
         pageController = PageController.getInstance();
-    
+
         // Simulate the save button click
         const saveBtn = document.getElementById('saveBtn')!;
         saveBtn.dispatchEvent(new Event('click'));
-    
+
         // Verify that XML_Controller.saveAsFile was called with correct arguments
         expect(mockSaveAsFile).toHaveBeenCalledWith(mockCase, 'save_data/1234.xml');
     });
-    
 });
-
