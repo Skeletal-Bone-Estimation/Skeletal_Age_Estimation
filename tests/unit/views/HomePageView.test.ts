@@ -1,3 +1,4 @@
+
 import { HomePageView } from '../../../src/views/HomePageView';
 import { PageController } from '../../../src/controllers/PageController';
 import { Pages } from '../../../src/utils/enums';
@@ -69,3 +70,4 @@ describe('HomePageView', () => {
         });
     });
 });
+

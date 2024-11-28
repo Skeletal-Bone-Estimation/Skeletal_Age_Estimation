@@ -14,16 +14,24 @@ export class CreateCaseView extends AbstractView {
     public override render(htmlContent: string): void {
         console.log('Rendering CreateCaseView'); // Debugging line
         this.contentDiv.innerHTML = htmlContent;
-        const startCaseButton = document.getElementById(UI_Elements.createStartCase);
-        if (startCaseButton) {
-            console.log('Button found and event listener attached!');
-            startCaseButton.addEventListener('click', () => {
-                console.log('Button clicked!'); // Debugging line
-    
-                var caseIDinput = document.getElementById('case') as HTMLInputElement;
-                var sexSelect = document.getElementById('sex') as HTMLSelectElement;
-                var populationAffinitySelect = document.getElementById('race') as HTMLSelectElement;
-    
+        this.initEventListeners();
+        this.setSidebarListeners();
+    }
+
+    protected override initEventListeners(): void {
+        document
+            .getElementById(UI_Elements.createStartCase)!
+            .addEventListener('click', () => {
+                var caseIDinput = document.getElementById(
+                    'case',
+                ) as HTMLInputElement;
+                var sexSelect = document.getElementById(
+                    'sex',
+                ) as HTMLSelectElement;
+                var populationAffinitySelect = document.getElementById(
+                    'race',
+                ) as HTMLSelectElement;
+
                 var caseID = caseIDinput.value.trim();
                 var sex = parseInt(sexSelect.value);
                 var populationAffinity = parseInt(populationAffinitySelect.value);
@@ -35,8 +43,11 @@ export class CreateCaseView extends AbstractView {
                     DataController.getInstance().openCase as CaseModel,
                     `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`
                 );
-                PageController.getInstance().navigateTo(Pages.DataEntry);
-                PageController.getInstance().loadSideBarContent(SideBar.dataBar);
+
+                PageController.getInstance().navigateTo(
+                    Pages.DataEntry,
+                    SideBar.dataBar,
+                );
             });
         } else {
             console.error('Create case button not found!');
