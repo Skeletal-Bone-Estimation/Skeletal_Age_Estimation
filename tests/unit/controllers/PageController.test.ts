@@ -156,19 +156,28 @@ describe('PageController', () => {
         });
     });
 
-    it('should correctly load sidebar content using private method', async () => {
+    it('should correctly load sidebar content when navigating to a page', async () => {
+        // Mock loadPageContent to return the expected content
         const mockLoadPageContent = jest
             .spyOn(pageController as any, 'loadPageContent')
             .mockResolvedValue('<div>Sidebar Content</div>');
-
-        await (pageController as any).loadSideBarContent(SideBar.homeBar);
-
+    
+        // Mock the rootBarDiv element to track changes
+        const mockRootBarDiv = document.getElementById('rootBar')!;
+        mockRootBarDiv.innerHTML = ''; // Clear initial content
+    
+        // Ensure the rootBarDiv exists in the document
+        document.body.appendChild(mockRootBarDiv);
+    
+        // Trigger navigation, which will load the sidebar content
+        await pageController.navigateTo(Pages.Home);
+    
+        // Await any possible asynchronous DOM updates
+        await Promise.resolve();
+    
+        // Check that the sidebar content was loaded into rootBarDiv
+        expect(mockRootBarDiv.innerHTML).toContain('Sidebar Content');
         expect(mockLoadPageContent).toHaveBeenCalledWith(SideBar.homeBar);
-        expect(document.getElementById('rootBar')!.innerHTML).toContain(
-            'Sidebar Content',
-        );
-
-        mockLoadPageContent.mockRestore();
     });
 
     it('should call XML_Controller to save a case', () => {
