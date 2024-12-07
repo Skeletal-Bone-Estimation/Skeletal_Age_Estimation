@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 import { ObserverIF } from './ObserverIF';
 
 export interface ObservableIF {

@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 // resizer.ts
 //console.log('Resizer script loaded');
 // Select the resizer and sidebar elements

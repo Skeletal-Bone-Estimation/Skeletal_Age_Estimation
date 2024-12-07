@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 export abstract class AbstractView {
     public contentDiv: HTMLElement; // Reference to content field of the rootDiv
     // public for now for testing

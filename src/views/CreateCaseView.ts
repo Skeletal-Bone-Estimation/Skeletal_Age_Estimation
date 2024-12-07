@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 import { PageController } from '../controllers/PageController';
 import { Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractView } from './AbstractView';

@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 import { ObservableIF } from '../utils/observer/ObservableIF';
 import { ObserverIF } from '../utils/observer/ObserverIF';
 
