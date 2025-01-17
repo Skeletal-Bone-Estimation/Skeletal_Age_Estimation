@@ -8,6 +8,12 @@ export class ImageAnalyzerStrategy extends AbstractAnalyzer {
     }
 
     executeAnalysis(): void {
-        // TODO: Image analysis logic    
+        // TODO: Image analysis logic
+        // package image data    
+        // encrypt data
+        // send data to cnn model
+        // busy waiting until model returns
+        // retreive model results
+        // package into report
     }
 }

@@ -3,6 +3,7 @@ import { AnalyzerStrategyIF } from "./AnalyzerStrategyIF";
 
 export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
 
+    // store values for analysis modifications
     protected sex : Sex;
     protected affinity : Affinity;
 
@@ -11,6 +12,7 @@ export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
         this.affinity = affinity;
     }
 
+    //specialized children must implement their own analysis
     abstract executeAnalysis(): void;
 
     public modifySex(sex: Sex): void {

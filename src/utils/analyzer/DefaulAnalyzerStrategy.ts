@@ -9,6 +9,9 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
     
     executeAnalysis(): void {
         // TODO: Default analysis logic
+        // retreive data from gui
+        // calculate age for each category
+        // package into report
     }
     
 }

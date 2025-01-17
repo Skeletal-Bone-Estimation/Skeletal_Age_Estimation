@@ -4,6 +4,7 @@ import { DefaultAnalyzerStrategy } from "./DefaulAnalyzerStrategy";
 import { ImageAnalyzerStrategy } from "./ImageAnalyzerStrategy";
 import { PredictionAnalyzerStrategy } from "./PredictionAnalyzerStrategy";
 
+// singleton context object to manage different analysis strategies
 export class AnalysisContext {
 
     private static instance: AnalysisContext;
@@ -11,6 +12,7 @@ export class AnalysisContext {
     private currentStrategy: AnalyzerStrategyIF;
 
     private constructor(sex: Sex, affinity: Affinity) {
+        //initialize new strategies within this dictionary
         this.analyzers = {
             "default": new DefaultAnalyzerStrategy(sex, affinity),
             "imageAnalysis": new ImageAnalyzerStrategy(sex, affinity),
@@ -21,9 +23,7 @@ export class AnalysisContext {
     }
 
     public static getInstance(sex: Sex, affinity: Affinity): AnalysisContext {
-        if (!AnalysisContext.instance) {
-            AnalysisContext.instance = new AnalysisContext(sex, affinity);
-        }
+        if (!AnalysisContext.instance) AnalysisContext.instance = new AnalysisContext(sex, affinity);
         return AnalysisContext.instance;
     }
 
