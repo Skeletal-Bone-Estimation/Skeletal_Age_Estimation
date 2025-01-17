@@ -116,3 +116,9 @@ export enum CaseElement {
     fourthRibR = 12,
     notes = 13,
 }
+
+export enum Analyzers {
+    Default = "default",
+    Image = "imageAnalysis",
+    Prediction = "predictionAnalysis"
+}
