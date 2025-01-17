@@ -13,6 +13,7 @@ import {
     PubicSymphysis,
     SternalEnd,
 } from '../utils/enums';
+import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 
 export class DataEntryView extends AbstractView {
@@ -356,6 +357,17 @@ export class DataEntryView extends AbstractView {
                         target.value as string,
                     );
             });
+
+            document
+                .getElementById('dataEntryReport')!
+                .addEventListener(
+                    'click',
+                    async () =>
+                        await PageController.getInstance().navigateTo(
+                            Pages.Report,
+                            SideBar.createBar,
+                        ),
+                );
         }
     }
 

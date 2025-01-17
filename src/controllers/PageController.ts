@@ -7,6 +7,7 @@ import { AbstractView } from '../views/AbstractView';
 import { HomePageView } from '../views/HomePageView';
 import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
+import { ReportPageView } from '../views/ReportPageView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
@@ -37,6 +38,7 @@ export class PageController {
             home: new HomePageView(document),
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
+            report: new ReportPageView(document),
             //add additional views here
         };
         this.currentView = this.views[Pages.Home];

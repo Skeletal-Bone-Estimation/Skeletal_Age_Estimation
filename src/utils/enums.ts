@@ -73,6 +73,7 @@ export enum Pages {
     Home = 'home',
     Create = 'create',
     DataEntry = 'dataEntry',
+    Report = 'report',
 }
 
 //References to the name of the html files for their corresponding pages
