@@ -1,3 +1,4 @@
+import { CaseModel } from "../../models/CaseModel";
 import { Affinity, Sex } from "../enums";
 import { AnalyzerStrategyIF } from "./AnalyzerStrategyIF";
 
@@ -13,7 +14,7 @@ export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
     }
 
     //specialized children must implement their own analysis
-    abstract executeAnalysis(): void;
+    abstract executeAnalysis(_case: CaseModel): {};
 
     public modifySex(sex: Sex): void {
         this.sex = sex;

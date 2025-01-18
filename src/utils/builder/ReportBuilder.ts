@@ -8,7 +8,7 @@ export class ReportBuilder {
         return new ReportModel(-1);
     }
 
-    public buildFrom(content: string | null): ReportModel {
+    public buildFrom(content: {}): ReportModel {
         //parse content and build from
         return new ReportModel(-1);
     }

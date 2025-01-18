@@ -1,4 +1,7 @@
-import { Affinity, Analyzers, Sex } from "../enums";
+import { DataController } from "../../controllers/DataController";
+import { PageController } from "../../controllers/PageController";
+import { CaseModel } from "../../models/CaseModel";
+import { Affinity, Analyzers, Pages, Sex } from "../enums";
 import { AnalyzerStrategyIF } from "./AnalyzerStrategyIF";
 import { DefaultAnalyzerStrategy } from "./DefaulAnalyzerStrategy";
 import { ImageAnalyzerStrategy } from "./ImageAnalyzerStrategy";
@@ -39,10 +42,12 @@ export class AnalysisContext {
         this.currentStrategy.modifyAffinity(affinity);
     }
 
-    // return type will change once the report model generation is complete
-    // we may need an intermediary data structure to hold the results 
-    // of the data before the report is generated
-    public analyze() : void {
-        this.currentStrategy.executeAnalysis();
+    public analyze(_case: CaseModel, strategy: Analyzers) : void {
+        this.setSex(_case.sex);
+        this.setAffinity(_case.populationAffinity);
+        this.setStrategy(strategy);
+        var results: {} = this.currentStrategy.executeAnalysis(_case);
+        _case.addReport(DataController.getInstance().createReport(results))
+        //PageController.getInstance().navigateTo(Pages.Report);
     }
 }

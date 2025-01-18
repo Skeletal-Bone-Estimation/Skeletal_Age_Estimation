@@ -197,4 +197,9 @@ export class DataController {
 
         this._openCase = director.makeCase();
     }
+
+    public createReport(results: {}) : ReportModel {
+        var director = new BuildDirector();
+        return director.reportBuilder.buildFrom(results);
+    }
 }

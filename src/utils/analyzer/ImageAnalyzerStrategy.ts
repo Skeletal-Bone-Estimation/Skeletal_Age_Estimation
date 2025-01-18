@@ -1,3 +1,4 @@
+import { CaseModel } from "../../models/CaseModel";
 import { Affinity, Sex } from "../enums";
 import { AbstractAnalyzer } from "./AbstractAnalyzer";
 
@@ -7,7 +8,7 @@ export class ImageAnalyzerStrategy extends AbstractAnalyzer {
         super(sex, affinity);
     }
 
-    executeAnalysis(): void {
+    executeAnalysis(_case: CaseModel): {} {
         // TODO: Image analysis logic
         // package image data    
         // encrypt data
@@ -15,5 +16,7 @@ export class ImageAnalyzerStrategy extends AbstractAnalyzer {
         // busy waiting until model returns
         // retreive model results
         // package into report
+
+        return {};
     }
 }

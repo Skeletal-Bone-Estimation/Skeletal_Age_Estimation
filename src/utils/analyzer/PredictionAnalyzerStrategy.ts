@@ -1,8 +1,9 @@
+import { CaseModel } from "../../models/CaseModel";
 import { AbstractAnalyzer } from "./AbstractAnalyzer";
 
 export class PredictionAnalyzerStrategy extends AbstractAnalyzer {
     
-    executeAnalysis(): void {
+    executeAnalysis(_case: CaseModel): {} {
         // TODO: Prediction analysis logic
         // package input data
         // encrypt data
@@ -10,6 +11,8 @@ export class PredictionAnalyzerStrategy extends AbstractAnalyzer {
         // busy waiting until model returns
         // retreive model results
         // package into report
+
+        return {};
     }
     
 }
