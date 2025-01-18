@@ -66,6 +66,19 @@ body {
   padding: 10px;
 }
 
+/*holds the notes section and report button in data entry view*/
+.dataEntryContainer {
+  display: grid;
+  padding: 20 px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+}
+
+/*report button on data entry screen*/
+.reportButton {
+  display: relative;
+}
+
 .dataEntryLabel{
   position: absolute;
   top: -12px;
@@ -319,4 +332,23 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/*Report Page View */
+.reportDiv {
+  padding-top: 1vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+.graphPlacement {
+  width: 300px;
+  height: 350px;
+  background: white;
+  margin-left: 50px;
+  margin-top: 50px;
+  border-style: solid;
+  border-color: var(--div-color-2);
 }
