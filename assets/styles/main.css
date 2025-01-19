@@ -320,3 +320,18 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+#notesAndReports {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+}
+
+#notesDiv {
+  flex: 1; 
+  margin-right: 20px; 
+}
+
+#reportBtnDiv {
+  align-self: flex-end; 
+}
