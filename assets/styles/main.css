@@ -334,21 +334,17 @@ body {
   align-items: center;
 }
 
-/*Report Page View */
-.reportDiv {
-  padding-top: 1vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 20px;
+#notesAndReports {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
 }
 
-.graphPlacement {
-  width: 300px;
-  height: 350px;
-  background: white;
-  margin-left: 50px;
-  margin-top: 50px;
-  border-style: solid;
-  border-color: var(--div-color-2);
+#notesDiv {
+  flex: 1; 
+  margin-right: 20px; 
+}
+
+#reportBtnDiv {
+  align-self: flex-end; 
 }
