@@ -3,7 +3,7 @@ import { PageController } from "../../controllers/PageController";
 import { CaseModel } from "../../models/CaseModel";
 import { Affinity, Analyzers, Pages, Sex } from "../enums";
 import { AnalyzerStrategyIF } from "./AnalyzerStrategyIF";
-import { DefaultAnalyzerStrategy } from "./DefaulAnalyzerStrategy";
+import { DefaultAnalyzerStrategy } from "./DefaultAnalyzerStrategy";
 import { ImageAnalyzerStrategy } from "./ImageAnalyzerStrategy";
 import { PredictionAnalyzerStrategy } from "./PredictionAnalyzerStrategy";
 
@@ -46,8 +46,11 @@ export class AnalysisContext {
         this.setSex(_case.sex);
         this.setAffinity(_case.populationAffinity);
         this.setStrategy(strategy);
+
         var results: {} = this.currentStrategy.executeAnalysis(_case);
         _case.addReport(DataController.getInstance().createReport(results))
+
+        //TODO: uncomment below when Report page is finished
         //PageController.getInstance().navigateTo(Pages.Report);
     }
 }

@@ -122,3 +122,20 @@ export enum Analyzers {
     Image = "imageAnalysis",
     Prediction = "predictionAnalysis"
 }
+
+export enum Report {
+    notes = 'notes',
+    thirdMolar = 'thirdMolar',
+    pubicSymphysis = 'pubicSymphysis',
+    auricularSurface = 'auricularSurface',
+    sternalEnd = 'sternalEnd',
+}
+
+export enum Side {
+    L = 'L',
+    R = 'R',
+    TL = 'TL',
+    TR = 'TR',
+    BL = 'BL',
+    BR = 'BR'
+}

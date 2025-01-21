@@ -16,11 +16,7 @@ export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
     //specialized children must implement their own analysis
     abstract executeAnalysis(_case: CaseModel): {};
 
-    public modifySex(sex: Sex): void {
-        this.sex = sex;
-    }
+    public modifySex(sex: Sex): void { this.sex = sex; }
 
-    public modifyAffinity(affinity: Affinity): void {
-        this.affinity = affinity;
-    }
+    public modifyAffinity(affinity: Affinity): void { this.affinity = affinity; }
 }
