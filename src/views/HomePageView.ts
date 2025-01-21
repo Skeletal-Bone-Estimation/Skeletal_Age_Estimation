@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 //HomePageView.ts
 
 import { PageController } from '../controllers/PageController';

@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 import { CaseModel } from '../../models/CaseModel';
 import { NullCaseModel } from '../../models/NullCaseModel';
 import { ReportModel } from '../../models/ReportModel';

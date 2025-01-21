@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 //DataController.ts
 import { existsSync, rmSync } from 'fs';
 import { dir } from 'console';

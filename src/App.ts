@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 //App.ts
 import { app, BrowserWindow } from 'electron';
 

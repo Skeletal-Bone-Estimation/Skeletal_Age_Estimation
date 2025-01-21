@@ -1,3 +1,5 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 import { CaseModel } from '../models/CaseModel';
 import { BuildDirector, ReportType } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
