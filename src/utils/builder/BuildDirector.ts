@@ -26,6 +26,6 @@ export class BuildDirector {
     }
 
     public makeReportFrom(content: string): ReportModel {
-        return this.reportBuilder.buildFrom(content);
+        return this.reportBuilder.build(content);
     }
 }

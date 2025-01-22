@@ -136,10 +136,10 @@ export class XML_Controller {
         const element = this.currentDoc?.getElementsByTagName(tag)[0];
         if (element) {
             element.childNodes.forEach((node) => {
-                if (node.nodeName !== '#text') {
+                if (node.nodeName !== '#text' && node.textContent != null) {
                     const key: number = Number(node.nodeName);
                     const value: ReportModel =
-                        this.director.reportBuilder.buildFrom(node.textContent);
+                        this.director.reportBuilder.build(node.textContent);
                 }
             });
         }
