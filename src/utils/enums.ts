@@ -73,7 +73,6 @@ export enum Pages {
     Home = 'home',
     Create = 'create',
     DataEntry = 'dataEntry',
-    Report = 'report',
 }
 
 //References to the name of the html files for their corresponding pages
@@ -118,4 +117,27 @@ export enum CaseElement {
     fourthRibL = 11,
     fourthRibR = 12,
     notes = 13,
+}
+
+export enum Analyzers {
+    Default = "default",
+    Image = "imageAnalysis",
+    Prediction = "predictionAnalysis"
+}
+
+export enum Report {
+    notes = 'notes',
+    thirdMolar = 'thirdMolar',
+    pubicSymphysis = 'pubicSymphysis',
+    auricularSurface = 'auricularSurface',
+    sternalEnd = 'sternalEnd',
+}
+
+export enum Side {
+    L = 'L',
+    R = 'R',
+    TL = 'TL',
+    TR = 'TR',
+    BL = 'BL',
+    BR = 'BR'
 }

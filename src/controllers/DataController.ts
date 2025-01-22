@@ -51,6 +51,12 @@ export class DataController {
         return (this.openCase as CaseModel).generatedReports[id];
     }
 
+    public getNumReports(): number {
+        var sum: number = 0;
+        this._loadedCases.forEach(_case => sum += Object.entries(_case.generatedReports).length);
+        return sum;
+    }
+
     //retreives the list of ReportModels stored by the currently opened case
     private getReports(): { [id: number]: ReportModel } {
         return (this._openCase as CaseModel).generatedReports;
@@ -198,5 +204,10 @@ export class DataController {
         director.caseBuilder.setNotes(notes);
 
         this._openCase = director.makeCase();
+    }
+
+    public createReport(results: {}) : ReportModel {
+        var director = new BuildDirector();
+        return director.reportBuilder.build(results);
     }
 }
