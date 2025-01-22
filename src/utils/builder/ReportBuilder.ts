@@ -10,7 +10,7 @@ export class ReportBuilder {
         return new ReportModel(this.autonumber(), content);
     }
 
-    private autonumber() : number {
-        return DataController.getInstance().getNumReports() + 1 //TODO: setup proper noncolliding system
+    private autonumber(): number {
+        return DataController.getInstance().getNumReports() + 1; //TODO: setup proper noncolliding system
     }
 }
