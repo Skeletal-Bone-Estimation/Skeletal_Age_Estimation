@@ -350,24 +350,27 @@ body {
 }
 
 /*Report html*/
-
 .reportDiv {
-  display: flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  justify-content: center;
 }
-.graphDiv {
+
+#graphDiv {
   display: flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
+  flex-direction: column;
+  margin-top: 5px;
 }
-.graphPlacement {
-  padding: 50px;
-  width: 450px;
-  height: 300px;
+
+#graphPlacement {
+  padding: 20px;
+  width: 285px;
+  height: 275px;
   background:white;
+  border: 2px solid var(--div-color-2);
+  display: flex;
+  margin-left: 25px;
 }
 
 .reportButtons {
@@ -378,5 +381,50 @@ body {
   text-decoration: none;
   font-size: 16px;
   height: 50px;
-
+  margin: 10px;
 } 
+
+.reportRightSide {
+  display: flex;
+  flex-direction: column; 
+  gap: 20px; 
+  margin-top: 15px;
+}
+
+#reportCaseTitle {
+  width: 200px;
+  height: 50px;
+  background:white;
+  border: 2px solid var(--div-color-2);
+  align-self: center;
+}
+
+
+/*shows the overall range*/
+#summarizedRange {
+  width: auto;
+  height: 50px;
+  background-color: black;
+}
+.dataChartDiv {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: repeat(2, 1fr); 
+  gap: 5px; 
+  width: 100%;
+  height: 100%;
+}
+/* subsets that go in data chart div, shows individual ranges for specific methods*/
+#pubicData,
+#auricularData,
+#sternalData,
+#molarData {
+  width: 100%; 
+  height: 100%;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  border: 2px solid var(--div-color-2); 
+  background-color: lightgray; 
+  box-sizing: border-box; 
+}
