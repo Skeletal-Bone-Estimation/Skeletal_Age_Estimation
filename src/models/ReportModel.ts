@@ -2,11 +2,11 @@ import { Side } from '../utils/enums';
 
 //ReportModel.ts
 export class ReportModel {
-    private _id: number;
+    private _id: string;
 
     private results: { [key: string]: { [key: string]: number } };
 
-    constructor(id: number, results: {}) {
+    constructor(id: string, results: {}) {
         this._id = id;
         this.results = results;
     }

@@ -1,8 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
 //DataController.ts
-import { existsSync, rmSync } from 'fs';
-import { dir } from 'console';
+import { rmSync } from 'fs';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
@@ -60,7 +59,7 @@ export class DataController {
     }
 
     //retreives the list of ReportModels stored by the currently opened case
-    private getReports(): { [id: number]: ReportModel } {
+    public getReports(): { [id: number]: ReportModel } {
         return (this._openCase as CaseModel).generatedReports;
     }
 
@@ -164,14 +163,6 @@ export class DataController {
         if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
     }
 
-    //TODO: pull data from data entry screen into case model
-    //not currently used
-    public extractData(id: string): { [key: string]: number } {
-        throw new Error(
-            'temporary method to stand in for pulling data from the GUI until the function is complete',
-        );
-    }
-
     public createCase(
         caseID: string,
         sex: Sex,
@@ -210,6 +201,10 @@ export class DataController {
 
     public createReport(results: {}): ReportModel {
         var director = new BuildDirector();
-        return director.reportBuilder.build(results);
+        return director.makeReport(results);
+    }
+
+    public getMostRecentReport(): ReportModel | null {
+        return (this.openCase as CaseModel).mostRecentReport;
     }
 }
