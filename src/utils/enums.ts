@@ -100,6 +100,7 @@ export enum UI_Elements {
     auricularAreaR = 'auricularAreaR',
     fourthRibL = 'fourthRibL',
     fourthRibR = 'fourthRibR',
+    analyzeButton = 'dataEntryReport',
 }
 
 //Number enumeration of CaseModel attributes

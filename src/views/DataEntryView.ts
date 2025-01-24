@@ -12,9 +12,11 @@ import {
     AuricularArea,
     PubicSymphysis,
     SternalEnd,
+    Analyzers,
 } from '../utils/enums';
 import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
+import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
@@ -244,6 +246,14 @@ export class DataEntryView extends AbstractView {
             console.error('notes not found!');
         }
 
+        const analyzeButton = document.getElementById(
+            UI_Elements.analyzeButton,
+        ) as HTMLButtonElement;
+
+        if (!analyzeButton) {
+            console.error('analyzeButton not found!');
+        }
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -255,7 +265,8 @@ export class DataEntryView extends AbstractView {
             thirdMolarTR &&
             thirdMolarBL &&
             thirdMolarBR &&
-            notes
+            notes &&
+            analyzeButton
         ) {
             console.log('elements present');
 
@@ -358,16 +369,21 @@ export class DataEntryView extends AbstractView {
                     );
             });
 
-            document
-                .getElementById('dataEntryReport')!
-                .addEventListener(
-                    'click',
-                    async () =>
-                        await PageController.getInstance().navigateTo(
-                            Pages.Report,
-                            SideBar.createBar,
-                        ),
+            analyzeButton.addEventListener('click', (event) => {
+                var _case: CaseModel =
+                    PageController.getInstance().getOpenCase();
+                const target = event.target as HTMLButtonElement;
+                const sex = this.parseSex(target.value);
+                const affinity = this.parseAffinity(target.value);
+                AnalysisContext.getInstance(sex, affinity).analyze(
+                    _case,
+                    Analyzers.Default,
                 );
+                PageController.getInstance().navigateTo(
+                    Pages.Report,
+                    SideBar.createBar,
+                );
+            });
         }
     }
 
