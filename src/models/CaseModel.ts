@@ -9,7 +9,6 @@ import {
     ThirdMolar,
 } from '../utils/enums';
 import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
-import { ObserverIF } from '../utils/observer/ObserverIF';
 import { AbstractCaseModel } from './AbstractCaseModel';
 import { ReportModel } from './ReportModel';
 
@@ -30,7 +29,8 @@ export class CaseModel extends AbstractCaseModel {
     protected _fourthRibL: SternalEnd;
     protected _fourthRibR: SternalEnd;
     protected _notes: string;
-    protected _generatedReports: { [id: number]: ReportModel };
+    protected _generatedReports: { [id: string]: ReportModel };
+    private _mostRecentReport: ReportModel | null;
 
     constructor(
         caseID: string,
@@ -47,7 +47,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibL: SternalEnd,
         fourthRibR: SternalEnd,
         notes: string,
-        generatedReports: { [key: number]: ReportModel },
+        generatedReports: { [key: string]: ReportModel },
     ) {
         super();
         this._caseID = caseID;
@@ -66,7 +66,16 @@ export class CaseModel extends AbstractCaseModel {
         this._generatedReports = generatedReports;
         this._notes = notes;
         this.observers = [];
+        this._mostRecentReport = null;
         this.attach(new AutosaveObserver());
+    }
+
+    public get mostRecentReport(): ReportModel | null {
+        return this._mostRecentReport;
+    }
+
+    public set mostRecentReport(report: ReportModel) {
+        this._mostRecentReport = report;
     }
 
     public get caseID(): string {
@@ -185,7 +194,7 @@ export class CaseModel extends AbstractCaseModel {
         return this._generatedReports;
     }
 
-    public set generatedReports(value: ReportModel[]) {
+    public set generatedReports(value: { [id: string]: ReportModel }) {
         this._generatedReports = value;
     }
 

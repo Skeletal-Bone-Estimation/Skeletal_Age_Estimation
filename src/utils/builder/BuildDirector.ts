@@ -25,6 +25,10 @@ export class BuildDirector {
         return this.caseBuilder.build();
     }
 
+    public makeReport(results: {}): ReportModel {
+        return this.reportBuilder.build(results);
+    }
+
     public makeReportFrom(content: string): ReportModel {
         return this.reportBuilder.build(content);
     }

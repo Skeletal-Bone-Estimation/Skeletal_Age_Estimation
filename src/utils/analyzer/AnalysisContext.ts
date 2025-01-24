@@ -1,6 +1,7 @@
 import { DataController } from '../../controllers/DataController';
 import { PageController } from '../../controllers/PageController';
 import { CaseModel } from '../../models/CaseModel';
+import { Autonumberer } from '../Autonumberer';
 import { Affinity, Analyzers, Pages, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
 import { DefaultAnalyzerStrategy } from './DefaultAnalyzerStrategy';
@@ -48,9 +49,10 @@ export class AnalysisContext {
         this.setStrategy(strategy);
 
         var results: {} = this.currentStrategy.executeAnalysis(_case);
-        _case.addReport(DataController.getInstance().createReport(results));
-
-        //TODO: uncomment below when Report page is finished
-        //PageController.getInstance().navigateTo(Pages.Report);
+        var report = DataController.getInstance().createReport(results);
+        _case.addReport(report);
+        Autonumberer.getInstance().updateExistingValues();
+        (DataController.getInstance().openCase as CaseModel).mostRecentReport =
+            report;
     }
 }
