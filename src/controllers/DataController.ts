@@ -53,7 +53,9 @@ export class DataController {
 
     public getNumReports(): number {
         var sum: number = 0;
-        this._loadedCases.forEach(_case => sum += Object.entries(_case.generatedReports).length);
+        this._loadedCases.forEach(
+            (_case) => (sum += Object.entries(_case.generatedReports).length),
+        );
         return sum;
     }
 
@@ -206,7 +208,7 @@ export class DataController {
         this._openCase = director.makeCase();
     }
 
-    public createReport(results: {}) : ReportModel {
+    public createReport(results: {}): ReportModel {
         var director = new BuildDirector();
         return director.reportBuilder.build(results);
     }
