@@ -1,23 +1,25 @@
 <div id="reportDiv" class="reportDiv">
-    <!--Left Side Elements / Column 1-->
+    <!--left side elements / Column 1-->
     <div id="graphDiv" class="graphDiv">
         <button class="reportButtons" id="changeGraphBtn">Change Graph</button>
 
         <!--This is where the graph goes-->
         <div id="graphPlacement"></div>
         
-        <button class="reportButtons" id="downloadBtn">Download Report</button>
-        <button class="reportButtons" id="printBtn">Print Report</button>
+        <div class="reportButtonsContainer">
+            <button class="reportButtons" id="downloadBtn">Download Report</button>
+            <button class="reportButtons" id="printBtn">Print Report</button>
+        </div>
     </div>
 
-    <!--Right Side Elements / Column 2-->
+    <!--right side elements / column 2-->
     <div class="reportRightSide">
         <!--title of case-->
         <div id="reportCaseTitle"></div>
         <!--overall range summarized from all methods-->
         <div id="summarizedRange"></div>
 
-        <!--Displays numeric data/ranges for the different individual methods-->
+        <!--different ranges for indiviudal methods-->
         <div class="dataChartDiv">
             <div id="pubicData"></div>
             <div id="auricularData"></div>
