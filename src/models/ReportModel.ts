@@ -35,7 +35,12 @@ export class ReportModel {
     }
 
     public getThirdMolar(side: Side): number {
-        if (side != Side.TL && side != Side.TR && Side.BL && Side.BR)
+        if (
+            side != Side.TL &&
+            side != Side.TR &&
+            side != Side.BL &&
+            side != Side.BR
+        )
             throw new Error('Invalid side for third molar analysis');
         return this.results['thirdMolar'][side];
     }
