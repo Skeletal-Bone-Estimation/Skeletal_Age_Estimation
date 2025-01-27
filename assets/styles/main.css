@@ -66,14 +66,6 @@ body {
   padding: 10px;
 }
 
-/*holds the notes section and report button in data entry view*/
-.dataEntryContainer {
-  display: grid;
-  padding: 20 px;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-}
-
 /*report button on data entry screen*/
 .reportButton {
   display: relative;
@@ -336,17 +328,44 @@ body {
 
 #notesAndReports {
   display: flex;
-  align-items: center; 
+  align-items: flex-start;
   justify-content: space-between;
 }
 
 #notesDiv {
-  flex: 1; 
-  margin-right: 20px; 
+  flex: 1;
+  margin-right: 20px;
+}
+
+#reportAndGuideDiv {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #reportBtnDiv {
-  align-self: flex-end; 
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+#scoringGuideDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 20px;
+  margin-bottom: 175px;
+  margin-top: 50px;
+}
+
+#scoringGuide, #dataEntryReport {
+  width: 100%;
 }
 
 /*report html */
