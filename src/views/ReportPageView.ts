@@ -105,8 +105,10 @@ export class ReportPageView extends AbstractView {
 
         element.innerHTML = `
             <strong>${sectionTitle}:</strong>
-            <p>Left: ${leftValue} (95% Confidence Range: ${leftRange.min} - ${leftRange.max})</p>
-            <p>Right: ${rightValue} (95% Confidence Range: ${rightRange.min} - ${rightRange.max})</p>
+            <p>Left: ${leftValue}</p>
+            <p>95% Confidence Range: ${leftRange.min} - ${leftRange.max}</p>
+            <p>Right: ${rightValue}</p>
+            <p>95% Confidence Range: ${rightRange.min} - ${rightRange.max}</p>
         `;
     }
 
