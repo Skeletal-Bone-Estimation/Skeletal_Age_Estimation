@@ -1,10 +1,9 @@
-// Edited by: Nicholas Novak, Matthew Szarmach, Matthew Hardenburg, Cassidy Marquis
-
 import { PageController } from '../controllers/PageController';
 import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
+import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Side } from '../utils/enums';
+import { Side, Pages } from '../utils/enums';
 
 export class ReportPageView extends AbstractView {
     constructor(document: Document) {
@@ -13,6 +12,7 @@ export class ReportPageView extends AbstractView {
 
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
+        this.initEventListeners();
 
         // call load report method with the most recent report
         const report = DataController.getInstance().getMostRecentReport();
@@ -23,87 +23,117 @@ export class ReportPageView extends AbstractView {
             console.error('No report found.');
         }
     }
+    protected override initEventListeners(): void {
+        document
+            .getElementById('downloadBtn')!
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().exportReport(
+                        Pages.Report,
+                    ),
+            );
+    }
 
     public loadReport(report: ReportModel): void {
-        // populate the case title
+        // get the current case just so we can get the caseID
+        const caseModel = DataController.getInstance().openCase as CaseModel;
+
+        // Populate the case title
         const caseTitle = document.getElementById('reportCaseTitle');
-        if (!caseTitle) {
+        if (caseTitle) {
+            caseTitle.textContent = `Case ID: ${caseModel.caseID}`;
+        } else {
             console.error('ReportCaseTitle not found');
-        } else {
-            caseTitle.textContent = `Case ID: ${report.id}`;
-            console.log('Populating reportCaseTitle:', report.id);
         }
 
-        // TODO: Combine available ranges to compute an overall summarized range
+        // Summarized range placeholder
         const summarizedRange = document.getElementById('summarizedRange');
-        if (!summarizedRange) {
+        if (summarizedRange) {
+            summarizedRange.textContent = `Summarized Range: ${this.calculateSummarizedRange(report)}`;
+        } else {
             console.error('SummarizedRange not found');
-        } else {
-            summarizedRange.textContent = `Summarized Range: This is a placeholder`;
         }
 
-        // display estimated pubic symphysis range
-        const pubicData = document.getElementById('pubicData');
-        if (!pubicData) {
-            console.error('PubicData not found');
-        } else {
-            pubicData.innerHTML = `
-                <strong>Pubic Symphysis:</strong>
-                <p>Left: ${report.getPubicSymphysis(Side.L)}</p>
-                <p>Right: ${report.getPubicSymphysis(Side.R)}</p>
-            `;
-        }
+        // Display estimated pubic symphysis range
+        this.displayDataSection(
+            'pubicData',
+            'Pubic Symphysis',
+            report.getPubicSymphysis(Side.L),
+            report.getPubicSymphysis(Side.R),
+            report.getPubicSymphysisRange(Side.L),
+            report.getPubicSymphysisRange(Side.R),
+        );
 
-        // display the auricular surface range
-        const auricularData = document.getElementById('auricularData');
-        if (!auricularData) {
-            console.error('Element auricularData not found!');
-        } else {
-            auricularData.innerHTML = `
-                <strong>Auricular Surface:</strong>
-                <p>Left: ${report.getAuricularSurface(Side.L)}</p>
-                <p>Right: ${report.getAuricularSurface(Side.R)}</p>
-            `;
-        }
+        // Display the auricular surface range
+        this.displayDataSection(
+            'auricularData',
+            'Auricular Surface',
+            report.getAuricularSurface(Side.L),
+            report.getAuricularSurface(Side.R),
+            report.getAuricularSurfaceRange(Side.L),
+            report.getAuricularSurfaceRange(Side.R),
+        );
 
-        // display the sternal range
-        const sternalData = document.getElementById('sternalData');
-        if (!sternalData) {
-            console.error('Element sternalData not found!');
-        } else {
-            sternalData.innerHTML = `
-                <strong>Sternal End:</strong>
-                <p>Left: ${report.getSternalEnd(Side.L)}</p>
-                <p>Right: ${report.getSternalEnd(Side.R)}</p>
-            `;
-        }
+        // Display the sternal end range
+        this.displayDataSection(
+            'sternalData',
+            'Sternal End',
+            report.getSternalEnd(Side.L),
+            report.getSternalEnd(Side.R),
+            report.getSternalEndRange(Side.L),
+            report.getSternalEndRange(Side.R),
+        );
 
-        //Display the third molar data
+        // Display the third molar data
         const molarData = document.getElementById('molarData');
-        if (!molarData) {
-            console.error('Element molarData not found!');
-        } else {
-            console.log('populating molars');
+        if (molarData) {
             molarData.innerHTML = `
                 <strong>Third Molar:</strong>
                 <p>Top Left: ${this.formatThirdMolar(report.getThirdMolar(Side.TL))}</p>
                 <p>Top Right: ${this.formatThirdMolar(report.getThirdMolar(Side.TR))}</p>
                 <p>Bottom Left: ${this.formatThirdMolar(report.getThirdMolar(Side.BL))}</p>
                 <p>Bottom Right: ${this.formatThirdMolar(report.getThirdMolar(Side.BR))}</p>
-    `;
+            `;
+        } else {
+            console.error('Element molarData not found!');
         }
     }
 
-    //likely temp function for formatting the third molar results
+    // Helper function to display data sections with ranges
+    private displayDataSection(
+        elementId: string,
+        sectionTitle: string,
+        leftValue: number,
+        rightValue: number,
+        leftRange: { min: number; max: number },
+        rightRange: { min: number; max: number },
+    ): void {
+        const element = document.getElementById(elementId);
+        if (!element) {
+            console.error(`Element ${elementId} not found!`);
+            return;
+        }
+
+        element.innerHTML = `
+            <strong>${sectionTitle}:</strong>
+            <p>Left: ${leftValue}</p>
+            <p>95% Confidence Range: ${leftRange.min} - ${leftRange.max}</p>
+            <p>Right: ${rightValue}</p>
+            <p>95% Confidence Range: ${rightRange.min} - ${rightRange.max}</p>
+        `;
+    }
+
+    // Temporary function for formatting third molar results
     private formatThirdMolar(value: number): string {
         if (value === 0) return 'Under 18.';
         if (value === 18) return '18 or Older';
-
         return 'Unknown';
     }
 
+    // Placeholder for summarized range calculation
     private calculateSummarizedRange(report: ReportModel): string {
-        // TODO : Decide how final overall range should be calculated
-        return '0';
+        // TODO: Implement logic for computing the overall summarized range
+        return 'To Be Determined';
     }
 }

@@ -252,8 +252,16 @@ export class DataEntryView extends AbstractView {
             UI_Elements.analyzeButton,
         ) as HTMLButtonElement;
 
+        const guideButton = document.getElementById(
+            UI_Elements.guideButton,
+        ) as HTMLButtonElement;
+
         if (!analyzeButton) {
             console.error('analyzeButton not found!');
+        }
+
+        if (!guideButton) {
+            console.error('guideButton not found');
         }
 
         if (
@@ -389,6 +397,13 @@ export class DataEntryView extends AbstractView {
                 // var report =
                 //     DataController.getInstance().getMostRecentReport() as ReportModel;
                 // console.log('Generated Report: ', report);
+            });
+
+            guideButton.addEventListener('click', (event) => {
+                window.open(
+                    './assets/guidelines/Scoring Guidelines for Skeletal Bone Age Estimation.pdf',
+                    '_blank',
+                );
             });
         }
     }
