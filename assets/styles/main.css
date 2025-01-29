@@ -430,6 +430,11 @@ body {
   box-sizing: border-box;
 }
 
+.reportButtons:hover {
+  background-color: var(--hover-on-light);
+  transition: 0.2s;
+}
+
 /* right side */
 .reportRightSide {
   display: flex;
