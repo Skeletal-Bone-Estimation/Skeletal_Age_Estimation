@@ -1,14 +1,10 @@
 import { Side } from '../utils/enums';
+import { AbstractReportModel } from './AbstractReportModel';
 
 //ReportModel.ts
-export class ReportModel {
-    private _id: string;
-
-    private results: { [key: string]: { [key: string]: number } };
-
+export class ReportModel extends AbstractReportModel {
     constructor(id: string, results: {}) {
-        this._id = id;
-        this.results = results;
+        super(id, results);
     }
 
     // Read-only access to Report Data

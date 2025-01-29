@@ -1,8 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
+import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
-import { NullCaseModel } from '../../models/NullCaseModel';
-import { ReportModel } from '../../models/ReportModel';
 import { CaseBuilder } from './CaseBuilder';
 import { ReportBuilder } from './ReportBuilder';
 
@@ -25,11 +24,11 @@ export class BuildDirector {
         return this.caseBuilder.build();
     }
 
-    public makeReport(results: {}): ReportModel {
+    public makeReport(results: {}): AbstractReportModel {
         return this.reportBuilder.build(results);
     }
 
-    public makeReportFrom(content: string): ReportModel {
+    public makeReportFrom(content: string): AbstractReportModel {
         return this.reportBuilder.build(content);
     }
 }

@@ -14,7 +14,7 @@ export class CreateCaseView extends AbstractView {
 
     public override render(htmlContent: string): void {
         //console.log('loaded from CaseCreationView);
-        console.log('Rendering CreateCaseView'); // Debugging line
+        //console.log('Rendering CreateCaseView'); // Debugging line
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
@@ -40,7 +40,7 @@ export class CreateCaseView extends AbstractView {
                     populationAffinitySelect.value,
                 );
 
-                console.log({ caseID, sex, populationAffinity }); // Debugging line
+                //console.log({ caseID, sex, populationAffinity }); // Debugging line
 
                 PageController.getInstance().createCase(
                     caseID,

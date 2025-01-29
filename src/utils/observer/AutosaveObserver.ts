@@ -4,12 +4,14 @@ import { DataController } from '../../controllers/DataController';
 import { XML_Controller } from '../../controllers/XML_Controller';
 import { AbstractCaseModel } from '../../models/AbstractCaseModel';
 import { CaseModel } from '../../models/CaseModel';
+import { Observers } from '../enums';
 import { ObserverIF } from './ObserverIF';
 
 export class AutosaveObserver implements ObserverIF {
     constructor() {}
 
-    public update(): void {
+    public update(arg: Observers, data: any = null): void {
+        if (arg != Observers.autosave) return;
         this.autosave();
     }
 

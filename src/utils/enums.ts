@@ -102,6 +102,8 @@ export enum UI_Elements {
     fourthRibR = 'fourthRibR',
     analyzeButton = 'dataEntryReport',
     guideButton = 'scoringGuide',
+    changeReportButton = 'changeReportBtn',
+    backtoDataEntryButton = 'backBtn',
 }
 
 //Number enumeration of CaseModel attributes
@@ -143,4 +145,10 @@ export enum Side {
     TR = 'TR',
     BL = 'BL',
     BR = 'BR',
+}
+
+export enum Observers {
+    autosave = 0,
+    setMostRecentReport = 1,
+    setSelectedReport = 2,
 }
