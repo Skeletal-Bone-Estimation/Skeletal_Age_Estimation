@@ -1,5 +1,6 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
+import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { ReportModel } from '../../models/ReportModel';
 import {
     Affinity,
@@ -25,5 +26,7 @@ export interface CaseBuilderIF {
     setFourthRibL(fourthRibL: SternalEnd): CaseBuilderIF;
     setFourthRibR(fourthRibR: SternalEnd): CaseBuilderIF;
     setNotes(notes: string): CaseBuilderIF;
-    setReportsGenerated(reports: { [id: number]: ReportModel }): CaseBuilderIF;
+    setReportsGenerated(reports: {
+        [id: number]: AbstractReportModel;
+    }): CaseBuilderIF;
 }

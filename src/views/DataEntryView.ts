@@ -278,7 +278,7 @@ export class DataEntryView extends AbstractView {
             notes &&
             analyzeButton
         ) {
-            console.log('elements present');
+            //console.log('elements present');
 
             auricularAreaL.addEventListener('input', (event) => {
                 const target = event.target as HTMLSelectElement;

@@ -1,5 +1,6 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
+import { DataController } from '../controllers/DataController';
 import {
     Affinity,
     AuricularArea,
@@ -9,7 +10,9 @@ import {
     ThirdMolar,
 } from '../utils/enums';
 import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
+import { ReportManagerObserver } from '../utils/observer/ReportManagerOberver';
 import { AbstractCaseModel } from './AbstractCaseModel';
+import { AbstractReportModel } from './AbstractReportModel';
 import { ReportModel } from './ReportModel';
 
 //CaseModel.ts
@@ -29,8 +32,8 @@ export class CaseModel extends AbstractCaseModel {
     protected _fourthRibL: SternalEnd;
     protected _fourthRibR: SternalEnd;
     protected _notes: string;
-    protected _generatedReports: { [id: string]: ReportModel };
-    private _mostRecentReport: ReportModel | null;
+    protected _generatedReports: { [id: string]: AbstractReportModel };
+    private _mostRecentReport: AbstractReportModel;
 
     constructor(
         caseID: string,
@@ -47,7 +50,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibL: SternalEnd,
         fourthRibR: SternalEnd,
         notes: string,
-        generatedReports: { [key: string]: ReportModel },
+        generatedReports: { [key: string]: AbstractReportModel },
     ) {
         super();
         this._caseID = caseID;
@@ -66,15 +69,16 @@ export class CaseModel extends AbstractCaseModel {
         this._generatedReports = generatedReports;
         this._notes = notes;
         this.observers = [];
-        this._mostRecentReport = null;
+        this._mostRecentReport = DataController.getInstance().createReport({}); //will create a NullReportModel
         this.attach(new AutosaveObserver());
+        this.attach(new ReportManagerObserver());
     }
 
-    public get mostRecentReport(): ReportModel | null {
+    public get mostRecentReport(): AbstractReportModel {
         return this._mostRecentReport;
     }
 
-    public set mostRecentReport(report: ReportModel) {
+    public set mostRecentReport(report: AbstractReportModel) {
         this._mostRecentReport = report;
     }
 
@@ -190,7 +194,7 @@ export class CaseModel extends AbstractCaseModel {
         this._notes = value;
     }
 
-    public get generatedReports(): { [id: number]: ReportModel } {
+    public get generatedReports(): { [id: string]: AbstractReportModel } {
         return this._generatedReports;
     }
 
@@ -198,11 +202,11 @@ export class CaseModel extends AbstractCaseModel {
         this._generatedReports = value;
     }
 
-    public addReport(report: ReportModel): void {
+    public addReport(report: AbstractReportModel): void {
         this._generatedReports[report.id] = report;
     }
 
-    public removeReport(report: ReportModel): void {
+    public removeReport(report: AbstractReportModel): void {
         delete this._generatedReports[report.id];
     }
 }

@@ -131,11 +131,11 @@ export class PageController {
     //asynchronously loads sidebar content from html files
     private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
-            console.log(`Loading sidebar content for: ${page}`);
+            //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);
-            console.log('Sidebar content:', content);
+            //console.log('Sidebar content:', content);
             this.rootBarDiv.innerHTML = content;
-            console.log('Sidebar content loaded into rootBarDiv');
+            //console.log('Sidebar content loaded into rootBarDiv');
         } catch (error) {
             console.error('Error loading sidebar content:', error);
         }

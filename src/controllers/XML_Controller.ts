@@ -1,12 +1,13 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
 import { CaseModel } from '../models/CaseModel';
-import { BuildDirector, ReportType } from '../utils/builder/BuildDirector';
+import { BuildDirector } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { ReportModel } from '../models/ReportModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 
 //XML_Controller.ts
 export class XML_Controller {
@@ -130,7 +131,7 @@ export class XML_Controller {
         return this.director.makeCase();
     }
 
-    private extractReports(tag: string): { [id: number]: ReportModel } {
+    private extractReports(tag: string): { [id: number]: AbstractReportModel } {
         const dict: { [id: number]: ReportModel } = {};
 
         const element = this.currentDoc?.getElementsByTagName(tag)[0];
@@ -138,7 +139,7 @@ export class XML_Controller {
             element.childNodes.forEach((node) => {
                 if (node.nodeName !== '#text' && node.textContent != null) {
                     const key: number = Number(node.nodeName);
-                    const value: ReportModel =
+                    const value: AbstractReportModel =
                         this.director.reportBuilder.build(node.textContent);
                 }
             });

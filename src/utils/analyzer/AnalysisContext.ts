@@ -2,7 +2,7 @@ import { DataController } from '../../controllers/DataController';
 import { PageController } from '../../controllers/PageController';
 import { CaseModel } from '../../models/CaseModel';
 import { Autonumberer } from '../Autonumberer';
-import { Affinity, Analyzers, Pages, Sex } from '../enums';
+import { Affinity, Analyzers, Observers, Pages, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
 import { DefaultAnalyzerStrategy } from './DefaultAnalyzerStrategy';
 import { ImageAnalyzerStrategy } from './ImageAnalyzerStrategy';
@@ -51,8 +51,9 @@ export class AnalysisContext {
         var results: {} = this.currentStrategy.executeAnalysis(_case);
         var report = DataController.getInstance().createReport(results);
         _case.addReport(report);
+        _case.notify(Observers.setMostRecentReport, report); // set most recent report
+        _case.notify(Observers.setSelectedReport, report); // set selected report
+        _case.notify(Observers.autosave); // autosave
         Autonumberer.getInstance().updateExistingValues();
-        (DataController.getInstance().openCase as CaseModel).mostRecentReport =
-            report;
     }
 }
