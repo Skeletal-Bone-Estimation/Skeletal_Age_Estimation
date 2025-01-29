@@ -3,7 +3,7 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Side } from '../utils/enums';
+import { Side, Pages } from '../utils/enums';
 
 export class ReportPageView extends AbstractView {
     constructor(document: Document) {
@@ -12,6 +12,7 @@ export class ReportPageView extends AbstractView {
 
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
+        this.initEventListeners();
 
         // call load report method with the most recent report
         const report = DataController.getInstance().getMostRecentReport();
@@ -21,6 +22,17 @@ export class ReportPageView extends AbstractView {
         } else {
             console.error('No report found.');
         }
+    }
+    protected override initEventListeners(): void {
+        document
+            .getElementById('downloadBtn')!
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().exportReport(
+                        Pages.Report,
+                    ),
+            );
     }
 
     public loadReport(report: ReportModel): void {
