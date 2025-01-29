@@ -3,104 +3,41 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Observers, Pages, Side, SideBar, UI_Elements } from '../utils/enums';
+import { Observers, Side, SideBar, UI_Elements } from '../utils/enums';
 import { NullReportModel } from '../models/NullReportModel';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class ReportPageView extends AbstractView {
-    private elements: HTMLElement[];
-
     constructor(document: Document) {
         super(document);
-        this.elements = [];
     }
 
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
-        this.loadElements();
         this.initEventListeners();
-        const report = DataController.getInstance().openReport;
-
-        console.log(
-            (DataController.getInstance().openCase as CaseModel)
-                .generatedReports,
-        );
-        console.log(
-            (DataController.getInstance().openCase as CaseModel)
-                .mostRecentReport,
-        );
 
         // call load report method with the most recent report
-        if (report instanceof ReportModel) {
+        const report = DataController.getInstance().getMostRecentReport();
+        if (report) {
             this.loadReport(report as ReportModel);
             console.log('Report data loaded');
         } else {
             console.error('No report found.');
-
-            //TODO: display an error message popup
-
-            PageController.getInstance().navigateTo(
-                Pages.DataEntry,
-                SideBar.dataBar,
-            );
         }
     }
-
-    private loadElements(): void {
-        this.elements = [
-            document.getElementById(
-                UI_Elements.changeReportButton,
-            ) as HTMLElement,
-            document.getElementById(
-                UI_Elements.backtoDataEntryButton,
-            ) as HTMLElement,
-        ];
-    }
-
-    // TODO:
-    // Stored reports are being overwrtiten if a new report is generated (may be an issue with the autosave)
-    // Autonumberer currently breaks loading from file
-    // Change report dropdown menu to selected report id to display
-
-
-    //add event listeners here
-    public initEventListeners(): void {
-        //change report button
-        this.elements[0].addEventListener('click', () => {
-            const openCase = DataController.getInstance().openCase as CaseModel;
-            // TODO: trigger dropdown menu
-            const selectedID = 'A1'; // TODO: Replace with selected report ID from GUI
-
-            const report = openCase.generatedReports[selectedID];
-            if (report instanceof NullReportModel) {
-                console.error('Null report selected.');
-                PageController.getInstance().navigateTo(
-                    Pages.DataEntry,
-                    SideBar.dataBar,
+    protected override initEventListeners(): void {
+        const report = DataController.getInstance().getMostRecentReport();
+        if (report) {
+            document
+                .getElementById('downloadBtn')!
+                .addEventListener(
+                    'click',
+                    async () =>
+                        await PageController.getInstance().exportReport(
+                            report as ReportModel,
+                        ),
                 );
-                return;
-            }
-
-            openCase.notify(Observers.setSelectedReport, report); // TODO: Replace with enum value for report change
-            this.loadReport(report as ReportModel);
-        });
-
-        //back to data entry button
-        this.elements[1].addEventListener('click', () => {
-            PageController.getInstance().navigateTo(
-                Pages.DataEntry,
-                SideBar.dataBar,
-            );
-        });
-
-        document
-        .getElementById('downloadBtn')!
-        .addEventListener(
-            'click',
-            async () =>
-                await PageController.getInstance().exportReport(
-                    Pages.Report,
-                ),
-        );
+        }
     }
 
     public loadReport(report: ReportModel): void {
@@ -199,8 +136,12 @@ export class ReportPageView extends AbstractView {
         return 'Unknown';
     }
 
+    public accessFormatThirdMolar(value: number): string {
+        return this.formatThirdMolar(value);
+    }
+
     // Placeholder for summarized range calculation
-    private calculateSummarizedRange(report: ReportModel): string {
+    private calculateSummarizedRange(report: AbstractReportModel): string {
         // TODO: Implement logic for computing the overall summarized range
         return 'To Be Determined';
     }

@@ -12,7 +12,9 @@ import { ReportPageView } from '../views/ReportPageView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
+import { ReportModel } from '../models/ReportModel';
 import {
+    Side,
     Pages,
     SideBar,
     UI_Elements,
@@ -24,6 +26,7 @@ import {
     SternalEnd,
     PubicSymphysis,
 } from '../utils/enums';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class PageController {
     private static instance: PageController;
@@ -251,12 +254,21 @@ export class PageController {
     }
 
     public async exportReport(
-        page: Pages,
+        report: ReportModel,
         filename: string = 'default_report.docx',
     ): Promise<void> {
-        console.log('Generating report...');
+        // ${report.getPubicSymphysis(Side.L)}
+        const content = `<p>IF ADULT  
+                        Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.L).min}-${report.getPubicSymphysisRange(Side.L).max} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.L).min}-${report.getSternalEndRange(Side.L).max} years of age. 
 
-        const content = await this.loadPageContent(page);
+                        The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.L).min}-${report.getAuricularSurfaceRange(Side.L).max} years. 
+
+                        Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.TL))}. 
+                        Above or below in blank
+ 
+                        
+ 
+                        Taking into consideration all the age analysis performed, the age range for this individual is estimated at UNKNOWN years at the time of death.  </p>`;
         if (!content.trim()) {
             console.warn('Export failed: Empty content.');
             return;
