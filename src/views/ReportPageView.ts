@@ -44,6 +44,17 @@ export class ReportPageView extends AbstractView {
             );
         }
     }
+    protected override initEventListeners(): void {
+        document
+            .getElementById('downloadBtn')!
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().exportReport(
+                        Pages.Report,
+                    ),
+            );
+    }
 
     private loadElements(): void {
         this.elements = [

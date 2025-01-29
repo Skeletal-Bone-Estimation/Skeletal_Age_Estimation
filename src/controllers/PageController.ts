@@ -3,6 +3,7 @@
 // src/controllers/PageController.ts
 import * as fs from 'fs';
 import * as path from 'path';
+import generateBlob from 'html-to-docx';
 import { AbstractView } from '../views/AbstractView';
 import { HomePageView } from '../views/HomePageView';
 import { CreateCaseView } from '../views/CreateCaseView';
@@ -247,5 +248,44 @@ export class PageController {
 
     public getOpenCase(): CaseModel {
         return DataController.getInstance().openCase as CaseModel;
+    }
+
+    public async exportReport(
+        page: Pages,
+        filename: string = 'default_report.docx',
+    ): Promise<void> {
+        console.log('Generating report...');
+
+        const content = await this.loadPageContent(page);
+        if (!content.trim()) {
+            console.warn('Export failed: Empty content.');
+            return;
+        }
+
+        try {
+            // Generate Blob from content
+            const arrayBuffer = await generateBlob(content);
+            const blob = new Blob([arrayBuffer], {
+                type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            });
+
+            // Convert Blob to URL
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary download link and trigger the download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url); // Release the object URL
+
+            console.log('File download started successfully:', filename);
+        } catch (error) {
+            console.error('Error exporting to Word:', error);
+        }
     }
 }
