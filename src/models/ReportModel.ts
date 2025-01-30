@@ -3,7 +3,10 @@ import { AbstractReportModel } from './AbstractReportModel';
 
 //ReportModel.ts
 export class ReportModel extends AbstractReportModel {
-    constructor(id: string, results: {}) {
+    constructor(
+        id: string,
+        results: { [key: string]: { [key: string]: number } },
+    ) {
         super(id, results);
     }
 

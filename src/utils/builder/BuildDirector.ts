@@ -28,7 +28,7 @@ export class BuildDirector {
         return this.reportBuilder.build(results);
     }
 
-    public makeReportFrom(content: string): AbstractReportModel {
-        return this.reportBuilder.build(content);
+    public makeReportFrom(id: string, content: any): AbstractReportModel {
+        return this.reportBuilder.buildFrom(id, content);
     }
 }

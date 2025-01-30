@@ -128,21 +128,29 @@ export class XML_Controller {
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 
+        console.log('Loaded reports:', generatedReports);
+
         return this.director.makeCase();
     }
 
-    private extractReports(tag: string): { [id: number]: AbstractReportModel } {
-        const dict: { [id: number]: ReportModel } = {};
+    private extractReports(tag: string): { [id: string]: AbstractReportModel } {
+        const dict: { [id: string]: AbstractReportModel } = {};
+        const element: HTMLCollection | undefined =
+            this.currentDoc?.getElementsByTagName(tag)[0].children;
+        console.log('Element:', element);
 
-        const element = this.currentDoc?.getElementsByTagName(tag)[0];
         if (element) {
-            element.childNodes.forEach((node) => {
-                if (node.nodeName !== '#text' && node.textContent != null) {
-                    const key: number = Number(node.nodeName);
-                    const value: AbstractReportModel =
-                        this.director.reportBuilder.build(node.textContent);
-                }
-            });
+            for (let i = 0; i < element.length; i++) {
+                const report: Element = element[i];
+                const id: string =
+                    report.getElementsByTagName('_id')[0].textContent || '-1';
+                console.log('Report ID:', id);
+                const resultsElement: Element =
+                    report.getElementsByTagName('results')[0];
+                const generatedReport: AbstractReportModel =
+                    this.director.makeReportFrom(id, resultsElement);
+                dict[id] = generatedReport;
+            }
         }
 
         return dict;

@@ -104,6 +104,7 @@ export enum UI_Elements {
     guideButton = 'scoringGuide',
     changeReportButton = 'changeReportBtn',
     backtoDataEntryButton = 'backBtn',
+    downloadButton = 'downloadBtn',
 }
 
 //Number enumeration of CaseModel attributes

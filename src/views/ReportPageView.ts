@@ -21,10 +21,12 @@ export class ReportPageView extends AbstractView {
         const report = DataController.getInstance().openReport;
 
         console.log(
+            'All reports:',
             (DataController.getInstance().openCase as CaseModel)
                 .generatedReports,
         );
         console.log(
+            'Most recent report:',
             (DataController.getInstance().openCase as CaseModel)
                 .mostRecentReport,
         );
@@ -44,38 +46,8 @@ export class ReportPageView extends AbstractView {
             );
         }
     }
+
     protected override initEventListeners(): void {
-        document
-            .getElementById('downloadBtn')!
-            .addEventListener(
-                'click',
-                async () =>
-                    await PageController.getInstance().exportReport(
-                        Pages.Report,
-                    ),
-            );
-    }
-
-    private loadElements(): void {
-        this.elements = [
-            document.getElementById(
-                UI_Elements.changeReportButton,
-            ) as HTMLElement,
-            document.getElementById(
-                UI_Elements.backtoDataEntryButton,
-            ) as HTMLElement,
-        ];
-    }
-
-    // TODO:
-    // Stored reports are being overwrtiten if a new report is generated (may be an issue with the autosave)
-    // Autonumberer currently breaks loading from file
-    // Change report dropdown menu to selected report id to display
-
-
-    //add event listeners here
-    public initEventListeners(): void {
-        //change report button
         this.elements[0].addEventListener('click', () => {
             const openCase = DataController.getInstance().openCase as CaseModel;
             // TODO: trigger dropdown menu
@@ -102,7 +74,31 @@ export class ReportPageView extends AbstractView {
                 SideBar.dataBar,
             );
         });
+
+        //download report as docx
+        this.elements[2].addEventListener(
+            'click',
+            async () =>
+                await PageController.getInstance().exportReport(Pages.Report),
+        );
     }
+
+    private loadElements(): void {
+        this.elements = [
+            document.getElementById(
+                UI_Elements.changeReportButton,
+            ) as HTMLElement,
+            document.getElementById(
+                UI_Elements.backtoDataEntryButton,
+            ) as HTMLElement,
+            document.getElementById(UI_Elements.downloadButton) as HTMLElement,
+        ];
+    }
+
+    // TODO:
+    // Stored reports are being overwrtiten if a new report is generated (may be an issue with the autosave)
+    // Autonumberer currently breaks loading from file
+    // Change report dropdown menu to selected report id to display
 
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
