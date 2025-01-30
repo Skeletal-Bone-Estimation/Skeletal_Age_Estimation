@@ -125,12 +125,14 @@ export enum CaseElement {
     notes = 13,
 }
 
+//Number enumeration of Analyzer strategies
 export enum Analyzers {
     Default = 'default',
     Image = 'imageAnalysis',
     Prediction = 'predictionAnalysis',
 }
 
+//String enumeration of ReportModel attributes
 export enum Report {
     notes = 'notes',
     thirdMolar = 'thirdMolar',
@@ -139,6 +141,7 @@ export enum Report {
     sternalEnd = 'sternalEnd',
 }
 
+//String enumeration used by the ReportModel
 export enum Side {
     L = 'L',
     R = 'R',
@@ -148,6 +151,7 @@ export enum Side {
     BR = 'BR',
 }
 
+//Number enumeration of Observers
 export enum Observers {
     autosave = 0,
     setMostRecentReport = 1,

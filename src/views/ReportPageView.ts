@@ -14,12 +14,14 @@ export class ReportPageView extends AbstractView {
         this.elements = [];
     }
 
+    //override render method for specialized view
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.loadElements();
         this.initEventListeners();
         const report = DataController.getInstance().openReport;
 
+        //debugging
         console.log(
             'All reports:',
             (DataController.getInstance().openCase as CaseModel)
@@ -47,6 +49,12 @@ export class ReportPageView extends AbstractView {
         }
     }
 
+    // TODO:
+    // Stored reports are being overwrtiten if a new report is generated (may be an issue with the autosave)
+    // Autonumberer currently breaks loading from file
+    // Change report dropdown menu to selected report id to display
+
+    //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
         this.elements[0].addEventListener('click', () => {
             const openCase = DataController.getInstance().openCase as CaseModel;
@@ -83,6 +91,7 @@ export class ReportPageView extends AbstractView {
         );
     }
 
+    //load elements from the html document into the elements array
     private loadElements(): void {
         this.elements = [
             document.getElementById(
@@ -95,11 +104,7 @@ export class ReportPageView extends AbstractView {
         ];
     }
 
-    // TODO:
-    // Stored reports are being overwrtiten if a new report is generated (may be an issue with the autosave)
-    // Autonumberer currently breaks loading from file
-    // Change report dropdown menu to selected report id to display
-
+    //load the report data into the report page
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
         const caseModel = DataController.getInstance().openCase as CaseModel;

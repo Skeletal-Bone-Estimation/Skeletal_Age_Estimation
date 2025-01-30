@@ -5,7 +5,6 @@ import { BuildDirector } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
 import { NullCaseModel } from '../models/NullCaseModel';
-import { ReportModel } from '../models/ReportModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 
@@ -128,46 +127,30 @@ export class XML_Controller {
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 
-        console.log('Loaded reports:', generatedReports);
+        //console.log('Loaded reports:', generatedReports);
 
         return this.director.makeCase();
     }
 
+    //extracts reports from the XML file into the correctly formatted dictionary
     private extractReports(tag: string): { [id: string]: AbstractReportModel } {
         const dict: { [id: string]: AbstractReportModel } = {};
         const element: HTMLCollection | undefined =
             this.currentDoc?.getElementsByTagName(tag)[0].children;
-        console.log('Element:', element);
 
         if (element) {
-            for (let i = 0; i < element.length; i++) {
-                const report: Element = element[i];
+            for (let i = 0; i < element.length; i++) { //iterate list of reports
+                const report: Element = element[i]; //extract single report xml
                 const id: string =
-                    report.getElementsByTagName('_id')[0].textContent || '-1';
-                console.log('Report ID:', id);
+                    report.getElementsByTagName('_id')[0].textContent || '-1'; //extract id
                 const resultsElement: Element =
-                    report.getElementsByTagName('results')[0];
+                    report.getElementsByTagName('results')[0]; //extract results dict
                 const generatedReport: AbstractReportModel =
-                    this.director.makeReportFrom(id, resultsElement);
-                dict[id] = generatedReport;
+                    this.director.makeReportFrom(id, resultsElement); //parse results dict and make report
+                dict[id] = generatedReport; //store report in dictionary
             }
         }
 
-        return dict;
-    }
-
-    private extractDict(id: string): { [key: string]: number } {
-        const dict: { [key: string]: number } = {};
-        const element = this.currentDoc?.getElementsByTagName(id)[0];
-        if (element) {
-            element.childNodes.forEach((node) => {
-                if (node.nodeName !== '#text') {
-                    const key: string = node.nodeName;
-                    const value: number = Number(node.textContent) || -1;
-                    dict[key] = value;
-                }
-            });
-        }
         return dict;
     }
 
@@ -176,6 +159,7 @@ export class XML_Controller {
         throw new Error('Parse collection not yet implemented');
     }
 
+    //loads a single case from a file
     public loadFile(event: Event, callback: () => void) {
         const files = (event.target as HTMLInputElement).files;
         if (files && files[0]) {
@@ -201,6 +185,7 @@ export class XML_Controller {
         } else throw new Error('No file selected');
     }
 
+    //saves a single case to a file
     public saveAsFile(_case: CaseModel, filename: string): void {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({ object: _case });
