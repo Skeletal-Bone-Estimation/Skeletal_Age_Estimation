@@ -50,12 +50,12 @@ export class ReportPageView extends AbstractView {
     }
 
     // TODO:
-    // Stored reports are being overwrtiten if a new report is generated (may be an issue with the autosave)
-    // Autonumberer currently breaks loading from file
+    // Stored reports are being overwrtiten if a new report is generated
     // Change report dropdown menu to selected report id to display
 
     //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
+        //change report button
         this.elements[0].addEventListener('click', () => {
             const openCase = DataController.getInstance().openCase as CaseModel;
             // TODO: trigger dropdown menu

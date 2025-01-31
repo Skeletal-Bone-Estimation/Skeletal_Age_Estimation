@@ -30,7 +30,7 @@ export class ReportBuilder {
         return new ReportModel(id, loadedResults);
     }
 
-    //formats the results from the XML file into a dictionary for use in 
+    //formats the results from the XML file into a dictionary for use in
     // the ReportModel
     public buildResultDictionary(results: Element): {
         [key: string]: { [key: string]: number };

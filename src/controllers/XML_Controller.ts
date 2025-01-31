@@ -139,7 +139,8 @@ export class XML_Controller {
             this.currentDoc?.getElementsByTagName(tag)[0].children;
 
         if (element) {
-            for (let i = 0; i < element.length; i++) { //iterate list of reports
+            for (let i = 0; i < element.length; i++) {
+                //iterate list of reports
                 const report: Element = element[i]; //extract single report xml
                 const id: string =
                     report.getElementsByTagName('_id')[0].textContent || '-1'; //extract id

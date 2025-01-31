@@ -19,38 +19,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         super(sex, affinity);
 
         // report view will ignore default sentinel value of -1
-        this.results = {
-            pubicSymphysis: {
-                L: -1,
-                L_min: -1,
-                L_max: -1,
-                R: -1,
-                R_min: -1,
-                R_max: -1,
-            },
-            sternalEnd: {
-                L: -1,
-                L_min: -1,
-                L_max: -1,
-                R: -1,
-                R_min: -1,
-                R_max: -1,
-            },
-            auricularSurface: {
-                L: -1,
-                L_min: -1,
-                L_max: -1,
-                R: -1,
-                R_min: -1,
-                R_max: -1,
-            },
-            thirdMolar: {
-                TL: -1,
-                TR: -1,
-                BL: -1,
-                BR: -1,
-            },
-        };
+        this.results = this.resetResults();
     }
 
     // implemented abstract analysis method inherited from parent
@@ -433,5 +402,40 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
     // calculates the average of two numbers
     private average(v1: number, v2: number): number {
         return (v1 + v2) / 2.0;
+    }
+
+    private resetResults(): { [key: string]: { [key: string]: number } } {
+        return {
+            pubicSymphysis: {
+                L: -1,
+                L_min: -1,
+                L_max: -1,
+                R: -1,
+                R_min: -1,
+                R_max: -1,
+            },
+            sternalEnd: {
+                L: -1,
+                L_min: -1,
+                L_max: -1,
+                R: -1,
+                R_min: -1,
+                R_max: -1,
+            },
+            auricularSurface: {
+                L: -1,
+                L_min: -1,
+                L_max: -1,
+                R: -1,
+                R_min: -1,
+                R_max: -1,
+            },
+            thirdMolar: {
+                TL: -1,
+                TR: -1,
+                BL: -1,
+                BR: -1,
+            },
+        };
     }
 }
