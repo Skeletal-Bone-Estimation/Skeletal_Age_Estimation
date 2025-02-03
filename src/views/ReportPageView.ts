@@ -3,13 +3,16 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Observers, Side, SideBar, UI_Elements } from '../utils/enums';
-import { NullReportModel } from '../models/NullReportModel';
+import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class ReportPageView extends AbstractView {
+
+    private elements: HTMLElement[];
+
     constructor(document: Document) {
         super(document);
+        this.elements = [];
     }
 
     //override render method for specialized view
@@ -32,7 +35,6 @@ export class ReportPageView extends AbstractView {
         // );
       
         // call load report method with the most recent report
-        const report = DataController.getInstance().getMostRecentReport();
         if (report) {
             this.loadReport(report as ReportModel);
             //console.log('Report data loaded');
@@ -62,7 +64,7 @@ export class ReportPageView extends AbstractView {
         this.elements[2].addEventListener(
             'click',
             async () =>
-                await PageController.getInstance().exportReport(Pages.Report),
+                await PageController.getInstance().exportReport(DataController.getInstance().openReport as ReportModel),
         );
       
         const report = DataController.getInstance().getMostRecentReport();
