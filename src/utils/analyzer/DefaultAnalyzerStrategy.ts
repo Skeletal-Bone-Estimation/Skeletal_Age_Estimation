@@ -25,7 +25,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
     } {
         var isMale: boolean = false;
         var isUnknown: boolean = false;
-        var results: {} = this.resetResults();
+        var results: { [key: string]: { [key: string]: number } } = this.resetResults();
 
         if (this.sex == Sex.Male) isMale = true;
         else if (this.sex == Sex.Unknown) isUnknown = true;
@@ -61,6 +61,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             Side.C,
             isMale,
             isUnknown,
+            results
         );
         this.sternalEndCombined(
             _case.fourthRibL,
@@ -68,11 +69,13 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             Side.C,
             isMale,
             isUnknown,
+            results
         );
         this.auricularSurfaceCombined(
             _case.auricularAreaL,
             _case.auricularAreaR,
             Side.C,
+            results
         );
         /*
         this.combinedAll(
@@ -237,6 +240,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         side: Side,
         isMale: boolean,
         isUnknown: boolean,
+        results: { [key: string]: { [key: string]: number } }
     ): void {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
@@ -382,9 +386,9 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S1, S2, S3] = getSymphysisValues(data1);
         const [S4, S5, S6] = getSymphysisValues(data2);
 
-        this.results[Report.pubicSymphysis][`${side}`] = this.average(S1, S4);
-        this.results[Report.pubicSymphysis][`${side}_min`] = Math.min(S2, S5);
-        this.results[Report.pubicSymphysis][`${side}_max`] = Math.max(S3, S6);
+        results[Report.pubicSymphysis][`${side}`] = this.average(S1, S4);
+        results[Report.pubicSymphysis][`${side}_min`] = Math.min(S2, S5);
+        results[Report.pubicSymphysis][`${side}_max`] = Math.max(S3, S6);
     }
 
     // analyzes sternal end age based of the Hartnett 2010 chart, discriminating male and female while
@@ -533,6 +537,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         side: Side,
         isMale: boolean,
         isUnknown: boolean,
+        results: { [key: string]: { [key: string]: number } }
     ): void {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
@@ -678,9 +683,9 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S1, S2, S3] = getSternalEndValues(data1);
         const [S4, S5, S6] = getSternalEndValues(data2);
 
-        this.results[Report.sternalEnd][`${side}`] = this.average(S1, S4);
-        this.results[Report.sternalEnd][`${side}_min`] = Math.min(S2, S5);
-        this.results[Report.sternalEnd][`${side}_max`] = Math.max(S3, S6);
+        results[Report.sternalEnd][`${side}`] = this.average(S1, S4);
+        results[Report.sternalEnd][`${side}_min`] = Math.min(S2, S5);
+        results[Report.sternalEnd][`${side}_max`] = Math.max(S3, S6);
     }
 
     // analyzes auricular surface age based of the Osborne et al. 2004 chart
@@ -735,6 +740,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         data1: AuricularArea,
         data2: AuricularArea,
         side: Side,
+        results: { [key: string]: { [key: string]: number } }
     ): void {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
@@ -766,9 +772,9 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S1, S2, S3] = getAuricularSurfaceValues(data1);
         const [S4, S5, S6] = getAuricularSurfaceValues(data2);
 
-        this.results[Report.auricularSurface][`${side}`] = this.average(S1, S4);
-        this.results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S5);
-        this.results[Report.auricularSurface][`${side}_max`] = Math.max(S3, S6);
+        results[Report.auricularSurface][`${side}`] = this.average(S1, S4);
+        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S5);
+        results[Report.auricularSurface][`${side}_max`] = Math.max(S3, S6);
     }
     /*
     private combinedAll(
@@ -1203,7 +1209,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                   BL: -1,
                   BR: -1,
               },
-        };),
+            })
         );
     }
 

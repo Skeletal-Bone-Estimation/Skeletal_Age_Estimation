@@ -28,7 +28,6 @@ import {
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
 import { AbstractReportModel } from '../models/AbstractReportModel';
-import { ReportModel } from '../models/ReportModel';
 
 export class PageController {
     private static instance: PageController;
