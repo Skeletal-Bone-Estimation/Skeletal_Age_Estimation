@@ -136,6 +136,7 @@ export enum Report {
     pubicSymphysis = 'pubicSymphysis',
     auricularSurface = 'auricularSurface',
     sternalEnd = 'sternalEnd',
+    //combined = 'combinedAll',
 }
 
 export enum Side {
@@ -145,6 +146,8 @@ export enum Side {
     TR = 'TR',
     BL = 'BL',
     BR = 'BR',
+    C = 'C',
+    //CA = 'CA',
 }
 
 export enum Observers {

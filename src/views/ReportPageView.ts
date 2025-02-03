@@ -66,8 +66,10 @@ export class ReportPageView extends AbstractView {
             'Pubic Symphysis',
             report.getPubicSymphysis(Side.L),
             report.getPubicSymphysis(Side.R),
+            report.getPubicSymphysis(Side.C),
             report.getPubicSymphysisRange(Side.L),
             report.getPubicSymphysisRange(Side.R),
+            report.getPubicSymphysisRange(Side.C),
         );
 
         // Display the auricular surface range
@@ -76,8 +78,10 @@ export class ReportPageView extends AbstractView {
             'Auricular Surface',
             report.getAuricularSurface(Side.L),
             report.getAuricularSurface(Side.R),
+            report.getAuricularSurface(Side.C),
             report.getAuricularSurfaceRange(Side.L),
             report.getAuricularSurfaceRange(Side.R),
+            report.getAuricularSurfaceRange(Side.C),
         );
 
         // Display the sternal end range
@@ -86,8 +90,10 @@ export class ReportPageView extends AbstractView {
             'Sternal End',
             report.getSternalEnd(Side.L),
             report.getSternalEnd(Side.R),
+            report.getSternalEnd(Side.C),
             report.getSternalEndRange(Side.L),
             report.getSternalEndRange(Side.R),
+            report.getSternalEndRange(Side.C),
         );
 
         // Display the third molar data
@@ -111,8 +117,10 @@ export class ReportPageView extends AbstractView {
         sectionTitle: string,
         leftValue: number,
         rightValue: number,
+        combinedValue: number,
         leftRange: { min: number; max: number },
         rightRange: { min: number; max: number },
+        combinedRange: { min: number; max: number },
     ): void {
         const element = document.getElementById(elementId);
         if (!element) {
@@ -122,10 +130,12 @@ export class ReportPageView extends AbstractView {
 
         element.innerHTML = `
             <strong>${sectionTitle}:</strong>
-            <p>Left: ${leftValue}</p>
-            <p>95% Confidence Range: ${leftRange.min} - ${leftRange.max}</p>
-            <p>Right: ${rightValue}</p>
-            <p>95% Confidence Range: ${rightRange.min} - ${rightRange.max}</p>
+            <p>Left: ${leftValue.toFixed(2)}</p>
+            <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
+            <p>Right: ${rightValue.toFixed(2)}</p>
+            <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
+            <p>Combined: ${combinedValue.toFixed(2)}</p>
+            <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
         `;
     }
 
@@ -143,6 +153,6 @@ export class ReportPageView extends AbstractView {
     // Placeholder for summarized range calculation
     private calculateSummarizedRange(report: AbstractReportModel): string {
         // TODO: Implement logic for computing the overall summarized range
-        return 'To Be Determined';
+        return `${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)}`;
     }
 }
