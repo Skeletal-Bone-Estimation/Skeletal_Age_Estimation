@@ -26,7 +26,9 @@ import {
     SternalEnd,
     PubicSymphysis,
 } from '../utils/enums';
+import { ReportModal } from '../views/ReportModal';
 import { AbstractReportModel } from '../models/AbstractReportModel';
+import { ReportModel } from '../models/ReportModel';
 
 export class PageController {
     private static instance: PageController;
@@ -43,6 +45,7 @@ export class PageController {
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
+            reportModal: new ReportModal(document),
             //add additional views here
         };
         this.currentView = this.views[Pages.Home];
@@ -300,5 +303,22 @@ Taking into consideration all the age analysis performed, the age range for this
         } catch (error) {
             console.error('Error exporting to Word:', error);
         }
+    }
+
+    public async loadModal(): Promise<void> {
+        this.currentView = this.views.reportModal;
+        (this.currentView as ReportModal).openModal();
+        (this.currentView as ReportModal).render(
+            await this.loadPageContent(Pages.ReportModal),
+        );
+    }
+
+    public unloadModal(): void {
+        this.currentView = this.views.report;
+    }
+
+    public loadReport(report: AbstractReportModel) {
+        DataController.getInstance().openReport = report;
+        this.navigateTo(Pages.Report, SideBar.createBar);
     }
 }

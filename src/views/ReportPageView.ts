@@ -12,20 +12,59 @@ export class ReportPageView extends AbstractView {
         super(document);
     }
 
+    //override render method for specialized view
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
+        const report = DataController.getInstance().openReport;
 
+        //debugging
+        // console.log(
+        //     'All reports:',
+        //     (DataController.getInstance().openCase as CaseModel)
+        //         .generatedReports,
+        // );
+        // console.log('Open Report:', DataController.getInstance().openReport);
+        // console.log(
+        //     'Most recent report:',
+        //     (DataController.getInstance().openCase as CaseModel)
+        //         .mostRecentReport,
+        // );
+      
         // call load report method with the most recent report
         const report = DataController.getInstance().getMostRecentReport();
         if (report) {
             this.loadReport(report as ReportModel);
-            console.log('Report data loaded');
+            //console.log('Report data loaded');
         } else {
             console.error('No report found.');
         }
     }
+
+    //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
+        //report archive  button
+        this.elements[0].addEventListener('click', async () => {
+            //open modal window and fill with content
+            const pageController = PageController.getInstance();
+            await pageController.loadModal();
+        });
+
+        //back to data entry button
+        this.elements[1].addEventListener('click', () => {
+            PageController.getInstance().navigateTo(
+                Pages.DataEntry,
+                SideBar.dataBar,
+            );
+        });
+
+        //download report as docx
+        this.elements[2].addEventListener(
+            'click',
+            async () =>
+                await PageController.getInstance().exportReport(Pages.Report),
+        );
+      
         const report = DataController.getInstance().getMostRecentReport();
         if (report) {
             document
@@ -40,6 +79,20 @@ export class ReportPageView extends AbstractView {
         }
     }
 
+    //load elements from the html document into the elements array
+    private loadElements(): void {
+        this.elements = [
+            document.getElementById(
+                UI_Elements.reportArchiveButton,
+            ) as HTMLElement,
+            document.getElementById(
+                UI_Elements.backtoDataEntryButton,
+            ) as HTMLElement,
+            document.getElementById(UI_Elements.downloadButton) as HTMLElement,
+        ];
+    }
+
+    //load the report data into the report page
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
         const caseModel = DataController.getInstance().openCase as CaseModel;

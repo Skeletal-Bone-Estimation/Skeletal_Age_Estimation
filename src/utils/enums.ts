@@ -74,6 +74,7 @@ export enum Pages {
     Create = 'create',
     DataEntry = 'dataEntry',
     Report = 'report',
+    ReportModal = 'reportArchiveModal',
 }
 
 //References to the name of the html files for their corresponding pages
@@ -104,6 +105,13 @@ export enum UI_Elements {
     guideButton = 'scoringGuide',
     changeReportButton = 'changeReportBtn',
     backtoDataEntryButton = 'backBtn',
+    downloadButton = 'downloadBtn',
+    reportArchiveButton = 'archiveBtn',
+    modalContent = 'modalContent',
+    modalContainer = 'modalContainer',
+    closeModalButton = 'closeModal',
+    reportArchiveList = 'reportList',
+    viewReportButton = 'submitReportBtn',
 }
 
 //Number enumeration of CaseModel attributes
@@ -124,12 +132,14 @@ export enum CaseElement {
     notes = 13,
 }
 
+//Number enumeration of Analyzer strategies
 export enum Analyzers {
     Default = 'default',
     Image = 'imageAnalysis',
     Prediction = 'predictionAnalysis',
 }
 
+//String enumeration of ReportModel attributes
 export enum Report {
     notes = 'notes',
     thirdMolar = 'thirdMolar',
@@ -139,6 +149,7 @@ export enum Report {
     //combined = 'combinedAll',
 }
 
+//String enumeration used by the ReportModel
 export enum Side {
     L = 'L',
     R = 'R',
@@ -150,6 +161,7 @@ export enum Side {
     //CA = 'CA',
 }
 
+//Number enumeration of Observers
 export enum Observers {
     autosave = 0,
     setMostRecentReport = 1,

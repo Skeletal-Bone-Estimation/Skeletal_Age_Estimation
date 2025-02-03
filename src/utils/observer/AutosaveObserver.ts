@@ -10,11 +10,13 @@ import { ObserverIF } from './ObserverIF';
 export class AutosaveObserver implements ObserverIF {
     constructor() {}
 
+    // executes the appropriate method based on the observer notified
     public update(arg: Observers, data: any = null): void {
         if (arg != Observers.autosave) return;
         this.autosave();
     }
 
+    //autosaves the current case when triggered
     private autosave(): void {
         //console.log('autosaving');
         const openCase: AbstractCaseModel =

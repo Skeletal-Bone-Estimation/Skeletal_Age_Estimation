@@ -20,15 +20,19 @@ export class BuildDirector {
         this.reportBuilder = new ReportBuilder();
     }
 
+    //TODO: return an AbstractCaseModel
+    //builds a case model object
     public makeCase(): CaseModel {
         return this.caseBuilder.build();
     }
 
+    //builds a report model object
     public makeReport(results: {}): AbstractReportModel {
         return this.reportBuilder.build(results);
     }
 
-    public makeReportFrom(content: string): AbstractReportModel {
-        return this.reportBuilder.build(content);
+    //builds a report model object from a given id and content
+    public makeReportFrom(id: string, content: Element): AbstractReportModel {
+        return this.reportBuilder.buildFrom(id, content);
     }
 }
