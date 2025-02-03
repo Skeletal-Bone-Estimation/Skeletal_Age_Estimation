@@ -1,16 +1,17 @@
 import { DataController } from '../controllers/DataController';
 import { PageController } from '../controllers/PageController';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 import { CaseModel } from '../models/CaseModel';
-import { UI_Elements } from '../utils/enums';
+import { NullReportModel } from '../models/NullReportModel';
+import { ReportModel } from '../models/ReportModel';
+import { Observers, Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractModal } from './AbstractModal';
 
 export class ReportModal extends AbstractModal {
-    private selectedCaseID: string;
     private selectedReportID: string;
 
     constructor(document: Document) {
         super(document);
-        this.selectedCaseID = '';
         this.selectedReportID = '';
     }
 
@@ -37,9 +38,22 @@ export class ReportModal extends AbstractModal {
                     list.innerHTML != 'No reports loaded in any case.' &&
                     list.innerHTML != ''
                 ) {
-                    PageController.getInstance().viewReportFromModal(
-                        this.selectedCaseID,
-                        this.selectedReportID,
+                    const openCase = DataController.getInstance()
+                        .openCase as CaseModel;
+                    const report =
+                        openCase.generatedReports[this.selectedReportID];
+                    if (report instanceof NullReportModel) {
+                        console.error('Null report selected.');
+                        PageController.getInstance().navigateTo(
+                            Pages.DataEntry,
+                            SideBar.dataBar,
+                        );
+                        return;
+                    }
+                    openCase.notify(Observers.setSelectedReport, report);
+                    PageController.getInstance().unloadModal();
+                    PageController.getInstance().loadReport(
+                        report as ReportModel,
                     );
                     this.closeModal();
                 }
@@ -63,30 +77,23 @@ export class ReportModal extends AbstractModal {
             return;
         }
 
-        //iterate cases
-        dataController.loadedCases.forEach((_case) => {
-            var reports = _case.generatedReports;
-            list.innerHTML = ''; //clear list
+        const _case = dataController.openCase as CaseModel;
 
-            //iterate reports
-            Object.keys(reports).forEach((report) => {
-                const element = document.createElement('li');
-                element.textContent = `Case: ${(dataController.openCase as CaseModel).caseID} - Report: ${report}`;
-                element.addEventListener('click', () => {
-                    //select element
-                    const selected = document.querySelector('.selected');
-                    if (selected) selected.classList.remove('selected');
-                    element.classList.add('selected');
+        Object.keys(_case.generatedReports).forEach((report) => {
+            const element = document.createElement('li');
+            element.textContent = `Report: ${report}`;
+            element.addEventListener('click', () => {
+                //select element
+                const selected = document.querySelector('.selected');
+                if (selected) selected.classList.remove('selected');
+                element.classList.add('selected');
 
-                    //save attributes for later
-                    this.selectedCaseID = _case.caseID;
-                    this.selectedReportID = report;
-                });
-                list.appendChild(element);
+                //save attribute for later
+                this.selectedReportID = report;
             });
+            list.appendChild(element);
         });
 
-        if (list.innerHTML == '')
-            list.innerHTML = 'No reports loaded in any case.';
+        if (list.innerHTML == '') list.innerHTML = 'No reports loaded.';
     }
 }

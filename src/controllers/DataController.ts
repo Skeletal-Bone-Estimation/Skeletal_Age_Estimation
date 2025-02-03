@@ -224,19 +224,17 @@ export class DataController {
         (this.openCase as CaseModel).mostRecentReport = report;
     }
 
-    public selectReport(caseID: string, reportID: string): void {
+    public selectReport(reportID: string): void {
         // console.log('Most Recent (DC):', this.getMostRecentReport());
         // console.log('Open Report(DC):', this._openReport);
-        this.loadedCases.forEach((_case: CaseModel) => {
-            if (_case.caseID == caseID) {
-                Object.keys(_case.generatedReports).forEach((report) => {
-                    if (report == reportID)
-                        _case.notify(
-                            Observers.setSelectedReport,
-                            this.getReport(report),
-                        );
-                });
-            }
-        });
+        Object.keys((this.openCase as CaseModel).generatedReports).forEach(
+            (report) => {
+                if (report == reportID)
+                    this.openCase.notify(
+                        Observers.setSelectedReport,
+                        this.getReport(report),
+                    );
+            },
+        );
     }
 }

@@ -3,7 +3,8 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
+import { Observers, Pages, Side, SideBar, UI_Elements } from '../utils/enums';
+import { NullReportModel } from '../models/NullReportModel';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
@@ -51,8 +52,15 @@ export class ReportPageView extends AbstractView {
 
     //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
+        //report archive  button
+        this.elements[0].addEventListener('click', async () => {
+            //open modal window and fill with content
+            const pageController = PageController.getInstance();
+            await pageController.loadModal();
+        });
+
         //back to data entry button
-        this.elements[0].addEventListener('click', () => {
+        this.elements[1].addEventListener('click', () => {
             PageController.getInstance().navigateTo(
                 Pages.DataEntry,
                 SideBar.dataBar,
@@ -60,7 +68,7 @@ export class ReportPageView extends AbstractView {
         });
 
         //download report as docx
-        this.elements[1].addEventListener(
+        this.elements[2].addEventListener(
             'click',
             async () =>
                 await PageController.getInstance().exportReport(Pages.Report),
@@ -70,6 +78,9 @@ export class ReportPageView extends AbstractView {
     //load elements from the html document into the elements array
     private loadElements(): void {
         this.elements = [
+            document.getElementById(
+                UI_Elements.reportArchiveButton,
+            ) as HTMLElement,
             document.getElementById(
                 UI_Elements.backtoDataEntryButton,
             ) as HTMLElement,
