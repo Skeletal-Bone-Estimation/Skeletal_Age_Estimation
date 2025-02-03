@@ -12,7 +12,9 @@ import { ReportPageView } from '../views/ReportPageView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
+import { ReportModel } from '../models/ReportModel';
 import {
+    Side,
     Pages,
     SideBar,
     UI_Elements,
@@ -255,12 +257,22 @@ export class PageController {
     }
 
     public async exportReport(
-        page: Pages,
+        report: ReportModel,
         filename: string = 'default_report.docx',
     ): Promise<void> {
-        console.log('Generating report...');
+        const content = `<p><i>IF ADULT</i><br />
+Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+        <br />
+        <br />
+The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+        <br />
+        <br />
+Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.TL)).toLowerCase()}
+        <br />
+        <br />
+        <br />
 
-        const content = await this.loadPageContent(page);
+Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
         if (!content.trim()) {
             console.warn('Export failed: Empty content.');
             return;

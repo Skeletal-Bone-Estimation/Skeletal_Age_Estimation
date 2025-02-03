@@ -146,6 +146,7 @@ export enum Report {
     pubicSymphysis = 'pubicSymphysis',
     auricularSurface = 'auricularSurface',
     sternalEnd = 'sternalEnd',
+    //combined = 'combinedAll',
 }
 
 //String enumeration used by the ReportModel
@@ -156,6 +157,8 @@ export enum Side {
     TR = 'TR',
     BL = 'BL',
     BR = 'BR',
+    C = 'C',
+    //CA = 'CA',
 }
 
 //Number enumeration of Observers
