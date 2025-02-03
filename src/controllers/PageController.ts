@@ -24,6 +24,9 @@ import {
     SternalEnd,
     PubicSymphysis,
 } from '../utils/enums';
+import { ReportModal } from '../views/ReportModal';
+import { ModalIF } from '../views/ModalIF';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class PageController {
     private static instance: PageController;
@@ -31,6 +34,7 @@ export class PageController {
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private currentView: AbstractView;
+    private previousView: AbstractView;
 
     private constructor() {
         this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
@@ -40,9 +44,11 @@ export class PageController {
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
+            reportModal: new ReportModal(document),
             //add additional views here
         };
         this.currentView = this.views[Pages.Home];
+        this.previousView = this.currentView;
         //automatically loads in the homeBar when first opened
         this.loadSideBarContent(SideBar.homeBar);
         this.initEventListeners();
@@ -98,6 +104,19 @@ export class PageController {
             .addEventListener('click', () =>
                 document.getElementById('loadCase')!.click(),
             );
+
+        //report archive button (opens modal window)
+        document
+            .getElementById(UI_Elements.reportArchiveButton)!
+            .addEventListener('click', async () => {
+                //open modal window and fill with content
+                this.previousView = this.currentView;
+                this.currentView = this.views.reportModal;
+                (this.currentView as ReportModal).openModal();
+                (this.currentView as ReportModal).render(
+                    await this.loadPageContent(Pages.ReportModal),
+                );
+            });
     }
 
     //asynchronous function that will render the page using the view's specific render function
@@ -287,5 +306,10 @@ export class PageController {
         } catch (error) {
             console.error('Error exporting to Word:', error);
         }
+    }
+
+    public viewReportFromModal(caseID: string, reportID: string): void {
+        DataController.getInstance().selectReport(caseID, reportID);
+        this.navigateTo(Pages.Report, SideBar.createBar);
     }
 }

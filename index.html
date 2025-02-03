@@ -41,12 +41,19 @@
                 <button class="button-dark-top" id="homeBtn">Home</button>
                 <button class="button-dark-top" id="saveBtn">Save Case</button>
                 <button class="button-dark-top" id="loadBtn">Open Case</button>
+                <button class="button-dark-top" id="archiveBtn">Report Archive</button>
                 <input type="file" id="loadCase" accept=".xml" style="display: none;"/>
             </div>
 
             <div id="rootDiv">
                 <!-- Content goes here -->
             </div>
+            <div class="modal" id="modalContainer" style="display:none;">
+                <div id="modalContent">
+                  <!-- Content from modal will be injected here -->
+                </div>
+            </div>
+              
         </div>
     </div>
     <script>var exports = {};</script>

@@ -74,6 +74,7 @@ export enum Pages {
     Create = 'create',
     DataEntry = 'dataEntry',
     Report = 'report',
+    ReportModal = 'reportArchiveModal',
 }
 
 //References to the name of the html files for their corresponding pages
@@ -105,6 +106,12 @@ export enum UI_Elements {
     changeReportButton = 'changeReportBtn',
     backtoDataEntryButton = 'backBtn',
     downloadButton = 'downloadBtn',
+    reportArchiveButton = 'archiveBtn',
+    modalContent = 'modalContent',
+    modalContainer = 'modalContainer',
+    closeModalButton = 'closeModal',
+    reportArchiveList = 'reportList',
+    viewReportButton = 'submitReportBtn',
 }
 
 //Number enumeration of CaseModel attributes

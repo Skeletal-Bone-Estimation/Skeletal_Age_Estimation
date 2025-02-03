@@ -58,7 +58,7 @@ export class DataController {
     }
 
     //retreives the ReportModel of the currently opened case based on the id parameter
-    public getReport(id: number): AbstractReportModel {
+    public getReport(id: string): AbstractReportModel {
         return (this.openCase as CaseModel).generatedReports[id];
     }
 
@@ -71,7 +71,7 @@ export class DataController {
     }
 
     //retreives the list of ReportModels stored by the currently opened case
-    public getReports(): { [id: number]: AbstractReportModel } {
+    public getReports(): { [id: string]: AbstractReportModel } {
         return (this._openCase as CaseModel).generatedReports;
     }
 
@@ -222,5 +222,21 @@ export class DataController {
 
     public setMostRecentReport(report: AbstractReportModel): void {
         (this.openCase as CaseModel).mostRecentReport = report;
+    }
+
+    public selectReport(caseID: string, reportID: string): void {
+        // console.log('Most Recent (DC):', this.getMostRecentReport());
+        // console.log('Open Report(DC):', this._openReport);
+        this.loadedCases.forEach((_case: CaseModel) => {
+            if (_case.caseID == caseID) {
+                Object.keys(_case.generatedReports).forEach((report) => {
+                    if (report == reportID)
+                        _case.notify(
+                            Observers.setSelectedReport,
+                            this.getReport(report),
+                        );
+                });
+            }
+        });
     }
 }

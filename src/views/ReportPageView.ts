@@ -3,8 +3,7 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Observers, Pages, Side, SideBar, UI_Elements } from '../utils/enums';
-import { NullReportModel } from '../models/NullReportModel';
+import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
@@ -22,21 +21,22 @@ export class ReportPageView extends AbstractView {
         const report = DataController.getInstance().openReport;
 
         //debugging
-        console.log(
-            'All reports:',
-            (DataController.getInstance().openCase as CaseModel)
-                .generatedReports,
-        );
-        console.log(
-            'Most recent report:',
-            (DataController.getInstance().openCase as CaseModel)
-                .mostRecentReport,
-        );
+        // console.log(
+        //     'All reports:',
+        //     (DataController.getInstance().openCase as CaseModel)
+        //         .generatedReports,
+        // );
+        // console.log('Open Report:', DataController.getInstance().openReport);
+        // console.log(
+        //     'Most recent report:',
+        //     (DataController.getInstance().openCase as CaseModel)
+        //         .mostRecentReport,
+        // );
 
         // call load report method with the most recent report
         if (report instanceof ReportModel) {
             this.loadReport(report as ReportModel);
-            console.log('Report data loaded');
+            //console.log('Report data loaded');
         } else {
             console.error('No report found.');
 
@@ -49,34 +49,10 @@ export class ReportPageView extends AbstractView {
         }
     }
 
-    // TODO:
-    // Stored reports are being overwrtiten if a new report is generated
-    // Change report dropdown menu to selected report id to display
-
     //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
-        //change report button
-        this.elements[0].addEventListener('click', () => {
-            const openCase = DataController.getInstance().openCase as CaseModel;
-            // TODO: trigger dropdown menu
-            const selectedID = 'A1'; // TODO: Replace with selected report ID from GUI
-
-            const report = openCase.generatedReports[selectedID];
-            if (report instanceof NullReportModel) {
-                console.error('Null report selected.');
-                PageController.getInstance().navigateTo(
-                    Pages.DataEntry,
-                    SideBar.dataBar,
-                );
-                return;
-            }
-
-            openCase.notify(Observers.setSelectedReport, report); // TODO: Replace with enum value for report change
-            this.loadReport(report as ReportModel);
-        });
-
         //back to data entry button
-        this.elements[1].addEventListener('click', () => {
+        this.elements[0].addEventListener('click', () => {
             PageController.getInstance().navigateTo(
                 Pages.DataEntry,
                 SideBar.dataBar,
@@ -84,7 +60,7 @@ export class ReportPageView extends AbstractView {
         });
 
         //download report as docx
-        this.elements[2].addEventListener(
+        this.elements[1].addEventListener(
             'click',
             async () =>
                 await PageController.getInstance().exportReport(Pages.Report),
@@ -94,9 +70,6 @@ export class ReportPageView extends AbstractView {
     //load elements from the html document into the elements array
     private loadElements(): void {
         this.elements = [
-            document.getElementById(
-                UI_Elements.changeReportButton,
-            ) as HTMLElement,
             document.getElementById(
                 UI_Elements.backtoDataEntryButton,
             ) as HTMLElement,
