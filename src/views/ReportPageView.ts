@@ -24,6 +24,7 @@ export class ReportPageView extends AbstractView {
         }
     }
     protected override initEventListeners(): void {
+        // download button
         document
             .getElementById('downloadBtn')!
             .addEventListener(
@@ -31,6 +32,16 @@ export class ReportPageView extends AbstractView {
                 async () =>
                     await PageController.getInstance().exportReport(
                         Pages.Report,
+                    ),
+            );
+
+        document
+            .getElementById('compareBtn')!
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().navigateTo(
+                        Pages.Compare,
                     ),
             );
     }

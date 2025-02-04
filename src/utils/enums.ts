@@ -74,6 +74,7 @@ export enum Pages {
     Create = 'create',
     DataEntry = 'dataEntry',
     Report = 'report',
+    Compare = 'compare',
 }
 
 //References to the name of the html files for their corresponding pages
