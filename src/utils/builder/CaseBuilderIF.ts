@@ -25,5 +25,9 @@ export interface CaseBuilderIF {
     setFourthRibL(fourthRibL: SternalEnd): CaseBuilderIF;
     setFourthRibR(fourthRibR: SternalEnd): CaseBuilderIF;
     setNotes(notes: string): CaseBuilderIF;
+    setAuricularImages(images: string[]): CaseBuilderIF;
+    setPubicImages(images: string[]): CaseBuilderIF;
+    setSternalImages(images: string[]): CaseBuilderIF;
+    setMolarImages(images: string[]): CaseBuilderIF;
     setReportsGenerated(reports: { [id: number]: ReportModel }): CaseBuilderIF;
 }

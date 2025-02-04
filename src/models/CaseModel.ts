@@ -29,6 +29,10 @@ export class CaseModel extends AbstractCaseModel {
     protected _fourthRibL: SternalEnd;
     protected _fourthRibR: SternalEnd;
     protected _notes: string;
+    protected _auricularImages: string[];
+    protected _pubicImages: string[];
+    protected _sternalImages: string[];
+    protected _molarImages: string[];
     protected _generatedReports: { [id: string]: ReportModel };
     private _mostRecentReport: ReportModel | null;
 
@@ -47,6 +51,10 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibL: SternalEnd,
         fourthRibR: SternalEnd,
         notes: string,
+        auricularImages: string[] = [],
+        pubicImages: string[] = [],
+        sternalImages: string[] = [],
+        molarImages: string[] = [],
         generatedReports: { [key: string]: ReportModel },
     ) {
         super();
@@ -65,6 +73,10 @@ export class CaseModel extends AbstractCaseModel {
         this._fourthRibR = fourthRibR;
         this._generatedReports = generatedReports;
         this._notes = notes;
+        this._auricularImages = auricularImages;
+        this._pubicImages = pubicImages;
+        this._sternalImages = sternalImages;
+        this._molarImages = molarImages;
         this.observers = [];
         this._mostRecentReport = null;
         this.attach(new AutosaveObserver());
@@ -188,6 +200,37 @@ export class CaseModel extends AbstractCaseModel {
 
     public set notes(value: string) {
         this._notes = value;
+    }
+
+    public get auricularImages(): string[] {
+        return this._auricularImages;
+    }
+
+    public set auricularImages(value: string[]) {
+        this._auricularImages = value;
+    }
+    public get pubicImages(): string[] {
+        return this._pubicImages;
+    }
+
+    public set pubicImages(value: string[]) {
+        this._pubicImages = value;
+    }
+
+    public get sternalImages(): string[] {
+        return this._sternalImages;
+    }
+
+    public set sternalImages(value: string[]) {
+        this._sternalImages = value;
+    }
+
+    public get molarImages(): string[] {
+        return this._molarImages;
+    }
+
+    public set molarImages(value: string[]) {
+        this._molarImages = value;
     }
 
     public get generatedReports(): { [id: number]: ReportModel } {

@@ -64,6 +64,12 @@ export class PageController {
         this.currentView = this.views[page];
         if (sidebar) await this.loadSideBarContent(sidebar);
         await this.loadPage(page);
+
+        //if view is data entry initialize listeners for file upload
+        if (page === Pages.DataEntry) {
+            console.log('initializing file upload listeners for Data Entry page...',);
+            this.initFileUploadListeners();
+        }
     }
 
     //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
@@ -98,6 +104,57 @@ export class PageController {
             .addEventListener('click', () =>
                 document.getElementById('loadCase')!.click(),
             );
+        this.initFileUploadListeners();
+    }
+
+
+    //take in file inputs and pass them to data controller to be uploaded
+    private initFileUploadListeners(): void {
+        //verify current view is data entry
+        if (this.currentView !== this.views[Pages.DataEntry]) {
+            console.log('Skipping file upload listener setup: Not on Data Entry page.',);
+            return;
+        }
+
+        const fileInputs = [
+            {
+                id: UI_Elements.uploadAuricular,
+                caseAttr: CaseElement.auricularImages,
+            },
+            { id: UI_Elements.uploadPubic, caseAttr: CaseElement.pubicImages },
+            {
+                id: UI_Elements.uploadSternal,
+                caseAttr: CaseElement.sternalImages,
+            },
+            { id: UI_Elements.uploadMolar, caseAttr: CaseElement.molarImages },
+        ];
+
+        fileInputs.forEach(({ id, caseAttr }) => {
+            const inputElement = document.getElementById(
+                id,
+            ) as HTMLInputElement;
+
+            if (!inputElement) {
+                console.error(`file input element not found: ${id}.`,);
+                return;
+            }
+
+            console.log(`found file input: ${id}`);
+
+            inputElement.addEventListener('change', async (event) => {
+                console.log(`File selected for ${caseAttr}`);
+                const files = (event.target as HTMLInputElement).files;
+                if (files && files.length > 0) {
+                    console.log(`${files.length} files selected for ${caseAttr}`,);
+                    await DataController.getInstance().handleFileUpload(
+                        files,
+                        caseAttr,
+                    );
+                } else {
+                    console.error(`no files detected for ${caseAttr}`);
+                }
+            });
+        });
     }
 
     //asynchronous function that will render the page using the view's specific render function
@@ -286,6 +343,61 @@ export class PageController {
             console.log('File download started successfully:', filename);
         } catch (error) {
             console.error('Error exporting to Word:', error);
+        }
+    }
+
+    public async handleFileUpload(
+        inputId: string,
+        caseAttr: keyof CaseModel,
+        files: File[],
+    ) {
+        console.log(`Handling upload for ${caseAttr}`);
+
+        const _case = this.getOpenCase();
+        const caseFolder = `/uploads/${_case.caseID}/`;
+        const uploadedPaths: string[] = [];
+
+        for (const file of files) {
+            const filePath = `${caseFolder}${file.name}`;
+            uploadedPaths.push(filePath);
+
+            // 🔹 Upload file asynchronously
+            await this.uploadFileToUploads(file, filePath, _case.caseID);
+        }
+
+        // 🔹 Update case model with uploaded image paths
+        (_case as any)[caseAttr] = uploadedPaths;
+        console.log(`Updated ${caseAttr} with files:`, uploadedPaths);
+
+        XML_Controller.getInstance().saveAsFile(
+            _case,
+            `save_data/${_case.caseID}.xml`,
+        );
+    }
+
+    //gives each case their own uploads folder with images
+    private async uploadFileToUploads(
+        file: File,
+        filePath: string,
+        caseID: string,
+    ): Promise<string> {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('caseID', caseID);
+
+        try {
+            const response = await fetch('/upload-endpoint', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            console.log(`Upload successful for ${file.name}:`, data);
+
+            return filePath; // ✅ Return the saved file path
+        } catch (error) {
+            console.error(`Upload failed for ${file.name}:`, error);
+            return ''; // Return empty string if upload fails
         }
     }
 }

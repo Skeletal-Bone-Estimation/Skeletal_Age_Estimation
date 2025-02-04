@@ -102,6 +102,10 @@ export enum UI_Elements {
     fourthRibR = 'fourthRibR',
     analyzeButton = 'dataEntryReport',
     guideButton = 'scoringGuide',
+    uploadAuricular = 'uploadAuricular',
+    uploadPubic = 'uploadPubic',
+    uploadSternal = 'uploadSternal',
+    uploadMolar = 'uploadMolar',
 }
 
 //Number enumeration of CaseModel attributes
@@ -120,6 +124,10 @@ export enum CaseElement {
     fourthRibL = 11,
     fourthRibR = 12,
     notes = 13,
+    auricularImages = 14,
+    pubicImages = 15,
+    sternalImages = 16,
+    molarImages = 17,
 }
 
 export enum Analyzers {
