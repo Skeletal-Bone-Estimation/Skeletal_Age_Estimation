@@ -7,7 +7,6 @@ import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class ReportPageView extends AbstractView {
-
     private elements: HTMLElement[];
 
     constructor(document: Document) {
@@ -33,7 +32,7 @@ export class ReportPageView extends AbstractView {
         //     (DataController.getInstance().openCase as CaseModel)
         //         .mostRecentReport,
         // );
-      
+
         // call load report method with the most recent report
         if (report) {
             this.loadReport(report as ReportModel);
@@ -64,9 +63,11 @@ export class ReportPageView extends AbstractView {
         this.elements[2].addEventListener(
             'click',
             async () =>
-                await PageController.getInstance().exportReport(DataController.getInstance().openReport as ReportModel),
+                await PageController.getInstance().exportReport(
+                    DataController.getInstance().openReport as ReportModel,
+                ),
         );
-      
+
         const report = DataController.getInstance().getMostRecentReport();
         if (report) {
             document
