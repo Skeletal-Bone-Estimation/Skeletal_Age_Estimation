@@ -247,15 +247,10 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         // Helper function to determine values based on PubicSymphysis phase
         const getSymphysisValues = (
             data: PubicSymphysis,
-        ): [number, number, number] => {
+        ): [number, number] => {
             switch (data) {
                 case PubicSymphysis.One:
                     return [
-                        isUnknown
-                            ? this.average(19.29, 19.8)
-                            : isMale
-                              ? 19.29
-                              : 19.8,
                         isUnknown
                             ? this.average(15.43, 17.14)
                             : isMale
@@ -270,11 +265,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case PubicSymphysis.Two:
                     return [
                         isUnknown
-                            ? this.average(22.14, 23.2)
-                            : isMale
-                              ? 22.14
-                              : 23.2,
-                        isUnknown
                             ? this.average(18.42, 18.44)
                             : isMale
                               ? 18.42
@@ -287,11 +277,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ];
                 case PubicSymphysis.Three:
                     return [
-                        isUnknown
-                            ? this.average(29.53, 31.44)
-                            : isMale
-                              ? 29.53
-                              : 31.44,
                         isUnknown
                             ? this.average(16.27, 21.2)
                             : isMale
@@ -306,11 +291,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case PubicSymphysis.Four:
                     return [
                         isUnknown
-                            ? this.average(42.54, 43.26)
-                            : isMale
-                              ? 42.54
-                              : 43.26,
-                        isUnknown
                             ? this.average(24.94, 31.02)
                             : isMale
                               ? 24.94
@@ -323,11 +303,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ];
                 case PubicSymphysis.Five:
                     return [
-                        isUnknown
-                            ? this.average(53.87, 51.47)
-                            : isMale
-                              ? 53.87
-                              : 51.47,
                         isUnknown
                             ? this.average(37.03, 43.59)
                             : isMale
@@ -342,11 +317,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case PubicSymphysis.Six:
                     return [
                         isUnknown
-                            ? this.average(63.76, 72.34)
-                            : isMale
-                              ? 63.76
-                              : 72.34,
-                        isUnknown
                             ? this.average(47.64, 57.62)
                             : isMale
                               ? 47.64
@@ -360,11 +330,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case PubicSymphysis.Seven:
                     return [
                         isUnknown
-                            ? this.average(77.0, 82.54)
-                            : isMale
-                              ? 77.0
-                              : 81.2,
-                        isUnknown
                             ? this.average(58.34, 67.72)
                             : isMale
                               ? 58.34
@@ -376,19 +341,19 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                               : 97.36,
                     ];
                 case PubicSymphysis.Unknown:
-                    return [0, 0, 0]; // Default values if unknown
+                    return [0, 0]; // Default values if unknown
                 default:
                     throw new Error('Invalid pubic symphysis phase');
             }
         };
 
         // Get values for both datasets
-        const [S1, S2, S3] = getSymphysisValues(data1);
-        const [S4, S5, S6] = getSymphysisValues(data2);
+        const [S1, S2] = getSymphysisValues(data1);
+        const [S3, S4] = getSymphysisValues(data2);
 
-        results[Report.pubicSymphysis][`${side}`] = this.average(S1, S4);
-        results[Report.pubicSymphysis][`${side}_min`] = Math.min(S2, S5);
-        results[Report.pubicSymphysis][`${side}_max`] = Math.max(S3, S6);
+        results[Report.pubicSymphysis][`${side}_min`] = Math.min(S1, S3);
+        results[Report.pubicSymphysis][`${side}_max`] = Math.max(S2, S4);
+        results[Report.pubicSymphysis][`${side}`] = this.average(Math.min(S1, S3), Math.max(S2, S4));
     }
 
     // analyzes sternal end age based of the Hartnett 2010 chart, discriminating male and female while
@@ -544,15 +509,10 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         // Helper function to determine values based on SternalEnd phase
         const getSternalEndValues = (
             data: SternalEnd,
-        ): [number, number, number] => {
+        ): [number, number] => {
             switch (data) {
                 case SternalEnd.One:
                     return [
-                        isUnknown
-                            ? this.average(20.0, 19.57)
-                            : isMale
-                              ? 20.0
-                              : 19.57,
                         isUnknown
                             ? this.average(17.1, 16.23)
                             : isMale
@@ -567,11 +527,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case SternalEnd.Two:
                     return [
                         isUnknown
-                            ? this.average(24.63, 25.14)
-                            : isMale
-                              ? 24.63
-                              : 25.14,
-                        isUnknown
                             ? this.average(20.63, 22.8)
                             : isMale
                               ? 20.63
@@ -584,11 +539,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ];
                 case SternalEnd.Three:
                     return [
-                        isUnknown
-                            ? this.average(32.27, 32.95)
-                            : isMale
-                              ? 32.27
-                              : 32.95,
                         isUnknown
                             ? this.average(24.89, 26.61)
                             : isMale
@@ -603,11 +553,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case SternalEnd.Four:
                     return [
                         isUnknown
-                            ? this.average(42.43, 43.52)
-                            : isMale
-                              ? 42.43
-                              : 43.52,
-                        isUnknown
                             ? this.average(36.47, 37.36)
                             : isMale
                               ? 36.47
@@ -620,11 +565,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ];
                 case SternalEnd.Five:
                     return [
-                        isUnknown
-                            ? this.average(52.05, 51.69)
-                            : isMale
-                              ? 52.05
-                              : 51.69,
                         isUnknown
                             ? this.average(45.05, 45.07)
                             : isMale
@@ -639,11 +579,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case SternalEnd.Six:
                     return [
                         isUnknown
-                            ? this.average(63.13, 67.17)
-                            : isMale
-                              ? 63.13
-                              : 67.17,
-                        isUnknown
                             ? this.average(56.07, 60.35)
                             : isMale
                               ? 56.07
@@ -657,11 +592,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case SternalEnd.Seven:
                     return [
                         isUnknown
-                            ? this.average(80.91, 81.2)
-                            : isMale
-                              ? 80.91
-                              : 81.2,
-                        isUnknown
                             ? this.average(67.71, 67.3)
                             : isMale
                               ? 67.71
@@ -673,19 +603,19 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                               : 95.1,
                     ];
                 case SternalEnd.Unknown:
-                    return [0, 0, 0]; // Default values if unknown
+                    return [0, 0]; // Default values if unknown
                 default:
                     throw new Error('Invalid pubic symphysis phase');
             }
         };
 
         // Get values for both datasets
-        const [S1, S2, S3] = getSternalEndValues(data1);
-        const [S4, S5, S6] = getSternalEndValues(data2);
+        const [S1, S2] = getSternalEndValues(data1);
+        const [S3, S4] = getSternalEndValues(data2);
 
-        results[Report.sternalEnd][`${side}`] = this.average(S1, S4);
-        results[Report.sternalEnd][`${side}_min`] = Math.min(S2, S5);
-        results[Report.sternalEnd][`${side}_max`] = Math.max(S3, S6);
+        results[Report.sternalEnd][`${side}_min`] = Math.min(S1, S3);
+        results[Report.sternalEnd][`${side}_max`] = Math.max(S2, S4);
+        results[Report.sternalEnd][`${side}`] = this.average(Math.min(S1, S3), Math.max(S2, S4));
     }
 
     // analyzes auricular surface age based of the Osborne et al. 2004 chart
@@ -747,34 +677,35 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         // Helper function to determine values based on SternalEnd phase
         const getAuricularSurfaceValues = (
             data: AuricularArea,
-        ): [number, number, number] => {
+        ): [number, number] => {
             switch (data) {
                 case AuricularArea.One:
-                    return [21.1, 15.14, 27.06];
+                    return [15.14, 27.06];
                 case AuricularArea.Two:
-                    return [29.5, 13.1, 45.9];
+                    return [13.1, 45.9];
                 case AuricularArea.Three:
-                    return [42.0, 14.52, 69.48];
+                    return [14.52, 69.48];
                 case AuricularArea.Four:
-                    return [47.8, 19.9, 75.7];
+                    return [19.9, 75.7];
                 case AuricularArea.Five:
-                    return [53.1, 24.82, 81.38];
+                    return [24.82, 81.38];
                 case AuricularArea.Six:
-                    return [58.9, 28.42, 89.38];
+                    return [28.42, 89.38];
                 case AuricularArea.Unknown:
-                    return [0, 0, 0]; // Default values if unknown
+                    return [0, 0]; // Default values if unknown
                 default:
                     throw new Error('Invalid pubic symphysis phase');
             }
         };
 
         // Get values for both datasets
-        const [S1, S2, S3] = getAuricularSurfaceValues(data1);
-        const [S4, S5, S6] = getAuricularSurfaceValues(data2);
+        const [S1, S2] = getAuricularSurfaceValues(data1);
+        const [S3, S4] = getAuricularSurfaceValues(data2);
 
-        results[Report.auricularSurface][`${side}`] = this.average(S1, S4);
-        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S5);
-        results[Report.auricularSurface][`${side}_max`] = Math.max(S3, S6);
+        
+        results[Report.auricularSurface][`${side}_min`] = Math.min(S1, S3);
+        results[Report.auricularSurface][`${side}_max`] = Math.max(S2, S4);
+        results[Report.auricularSurface][`${side}`] = this.average(Math.min(S1, S3), Math.max(S2, S4));
     }
     /*
     private combinedAll(
