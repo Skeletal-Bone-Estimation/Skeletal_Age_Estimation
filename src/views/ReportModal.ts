@@ -7,18 +7,27 @@ import { ReportModel } from '../models/ReportModel';
 import { Observers, Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractModal } from './AbstractModal';
 
+//TODO:
+// refactor reports to store in list
+// store index of selected report
+// disable button until report is selected
+// acquire report through index lookup
+// figure out whats going on with the combined values
+
 export class ReportModal extends AbstractModal {
     private selectedReportID: string;
+    private selectedIdx: number;
 
     constructor(document: Document) {
         super(document);
         this.selectedReportID = '';
+        this.selectedIdx = -1;
     }
 
     public override async render(htmlContent: string): Promise<void> {
         this.modalContent.innerHTML = htmlContent;
-        await this.fillReportList();
         this.initEventListeners();
+        await this.fillReportList();
     }
 
     public override async openModal(): Promise<void> {
@@ -26,10 +35,14 @@ export class ReportModal extends AbstractModal {
     }
 
     protected override initEventListeners(): void {
+        const dc = DataController.getInstance();
+        const pc = PageController.getInstance();
+
         //view selected report button
         document
             .getElementById(UI_Elements.viewReportButton)
-            ?.addEventListener('click', () => {
+            ?.addEventListener('click', async () => {
+                await this.fillReportList();
                 const list = document.getElementById(
                     UI_Elements.reportArchiveList,
                 ) as HTMLElement;
@@ -38,23 +51,22 @@ export class ReportModal extends AbstractModal {
                     list.innerHTML != 'No reports loaded in any case.' &&
                     list.innerHTML != ''
                 ) {
-                    const openCase = DataController.getInstance()
-                        .openCase as CaseModel;
+                    const openCase = dc.openCase as CaseModel;
+
+                    //TODO: check if idx == -1 for errors
                     const report =
-                        openCase.generatedReports[this.selectedReportID];
+                        openCase.generatedReports[this.selectedIdx];
+
                     if (report instanceof NullReportModel) {
                         console.error('Null report selected.');
-                        PageController.getInstance().navigateTo(
-                            Pages.DataEntry,
-                            SideBar.dataBar,
-                        );
+                        pc.navigateTo(Pages.DataEntry, SideBar.createBar);
                         return;
                     }
+
                     openCase.notify(Observers.setSelectedReport, report);
-                    PageController.getInstance().unloadModal();
-                    PageController.getInstance().loadReport(
-                        report as ReportModel,
-                    );
+                    pc.unloadModal();
+                    pc.loadReport(this.selectedIdx);
+
                     this.closeModal();
                 }
             });
@@ -78,10 +90,12 @@ export class ReportModal extends AbstractModal {
         }
 
         const _case = dataController.openCase as CaseModel;
+        console.log('Loaded reports:', _case.generatedReports);
 
-        Object.keys(_case.generatedReports).forEach((report) => {
+        _case.generatedReports.forEach((report: AbstractReportModel) => {
             const element = document.createElement('li');
-            element.textContent = `Report: ${report}`;
+            const reportID: string = (report as ReportModel).id;
+            element.textContent = `Report: ${reportID}`;
             element.addEventListener('click', () => {
                 //select element
                 const selected = document.querySelector('.selected');
@@ -89,7 +103,8 @@ export class ReportModal extends AbstractModal {
                 element.classList.add('selected');
 
                 //save attribute for later
-                this.selectedReportID = report;
+                this.selectedReportID = reportID;
+                this.selectedIdx = dataController.findReportIndex(reportID);
             });
             list.appendChild(element);
         });

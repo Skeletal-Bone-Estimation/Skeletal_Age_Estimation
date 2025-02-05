@@ -316,8 +316,9 @@ Taking into consideration all the age analysis performed, the age range for this
         this.currentView = this.views.report;
     }
 
-    public loadReport(report: AbstractReportModel) {
-        DataController.getInstance().openReport = report;
+    public loadReport(reportIDX: number) {
+        const dc = DataController.getInstance();
+        dc.openReport = (dc.openCase as CaseModel).generatedReports[reportIDX];
         this.navigateTo(Pages.Report, SideBar.createBar);
     }
 }

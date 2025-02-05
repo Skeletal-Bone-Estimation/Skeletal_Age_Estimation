@@ -32,7 +32,7 @@ export class CaseModel extends AbstractCaseModel {
     protected _fourthRibL: SternalEnd;
     protected _fourthRibR: SternalEnd;
     protected _notes: string;
-    protected _generatedReports: { [id: string]: AbstractReportModel };
+    protected _generatedReports: AbstractReportModel[];
     private _mostRecentReport: AbstractReportModel;
 
     constructor(
@@ -50,7 +50,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibL: SternalEnd,
         fourthRibR: SternalEnd,
         notes: string,
-        generatedReports: { [key: string]: AbstractReportModel },
+        generatedReports: AbstractReportModel[],
     ) {
         super();
         this._caseID = caseID;
@@ -194,19 +194,24 @@ export class CaseModel extends AbstractCaseModel {
         this._notes = value;
     }
 
-    public get generatedReports(): { [id: string]: AbstractReportModel } {
+    public get generatedReports(): AbstractReportModel[] {
         return this._generatedReports;
     }
 
-    public set generatedReports(value: { [id: string]: ReportModel }) {
+    public set generatedReports(value: AbstractReportModel[]) {
         this._generatedReports = value;
     }
 
     public addReport(report: AbstractReportModel): void {
-        this._generatedReports[report.id] = report;
+        this._generatedReports.push(report);
     }
 
     public removeReport(report: AbstractReportModel): void {
-        delete this._generatedReports[report.id];
+        var idx: number = DataController.getInstance().findReportIndex(
+            (report as ReportModel).id,
+        );
+        idx != -1
+            ? this._generatedReports.splice(idx, 1)
+            : console.error(`Report at index ${idx} not found`);
     }
 }

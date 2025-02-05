@@ -19,6 +19,7 @@ import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 import { NullReportModel } from '../models/NullReportModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
+import { ReportModel } from '../models/ReportModel';
 
 export class DataController {
     private static instance: DataController;
@@ -57,11 +58,6 @@ export class DataController {
         return this._openCase;
     }
 
-    //retreives the ReportModel of the currently opened case based on the id parameter
-    public getReport(id: string): AbstractReportModel {
-        return (this.openCase as CaseModel).generatedReports[id];
-    }
-
     public getNumReports(): number {
         var sum: number = 0;
         this._loadedCases.forEach(
@@ -71,7 +67,7 @@ export class DataController {
     }
 
     //retreives the list of ReportModels stored by the currently opened case
-    public getReports(): { [id: string]: AbstractReportModel } {
+    public getReports(): AbstractReportModel[] {
         return (this._openCase as CaseModel).generatedReports;
     }
 
@@ -209,6 +205,7 @@ export class DataController {
         director.caseBuilder.setNotes(notes);
 
         this._openCase = director.makeCase();
+        this.addCase(this._openCase as CaseModel);
     }
 
     public createReport(results: {}): AbstractReportModel {
@@ -224,17 +221,16 @@ export class DataController {
         (this.openCase as CaseModel).mostRecentReport = report;
     }
 
-    public selectReport(reportID: string): void {
-        // console.log('Most Recent (DC):', this.getMostRecentReport());
-        // console.log('Open Report(DC):', this._openReport);
-        Object.keys((this.openCase as CaseModel).generatedReports).forEach(
-            (report) => {
-                if (report == reportID)
-                    this.openCase.notify(
-                        Observers.setSelectedReport,
-                        this.getReport(report),
-                    );
-            },
-        );
+    public findReportIndex(id: string): number {
+        var idx = -1;
+        const _case: CaseModel = this._openCase as CaseModel;
+        for (var i: number = 0; i < _case.generatedReports.length; i++) {
+            if ((_case.generatedReports[i] as ReportModel).id == id) {
+                idx = i;
+                break;
+            }
+        }
+        console.log(`Index of ${id} found at ${idx}`);
+        return idx;
     }
 }

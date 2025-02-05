@@ -133,8 +133,8 @@ export class XML_Controller {
     }
 
     //extracts reports from the XML file into the correctly formatted dictionary
-    private extractReports(tag: string): { [id: string]: AbstractReportModel } {
-        const dict: { [id: string]: AbstractReportModel } = {};
+    private extractReports(tag: string): AbstractReportModel[] {
+        const list: AbstractReportModel[] = [];
         const element: HTMLCollection | undefined =
             this.currentDoc?.getElementsByTagName(tag)[0].children;
 
@@ -148,11 +148,11 @@ export class XML_Controller {
                     report.getElementsByTagName('results')[0]; //extract results dict
                 const generatedReport: AbstractReportModel =
                     this.director.makeReportFrom(id, resultsElement); //parse results dict and make report
-                dict[id] = generatedReport; //store report in dictionary
+                list.push(generatedReport); //store report in dictionary
             }
         }
 
-        return dict;
+        return list;
     }
 
     // TODO: load collection of files (as a folder)

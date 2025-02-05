@@ -25,11 +25,11 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
     } {
         var isMale: boolean = false;
         var isUnknown: boolean = false;
-        var results: { [key: string]: { [key: string]: number } } = this.resetResults();
+        var results: { [key: string]: { [key: string]: number } } =
+            this.resetResults();
 
         if (this.sex == Sex.Male) isMale = true;
         else if (this.sex == Sex.Unknown) isUnknown = true;
-
 
         this.pubicSymphysis(
             _case.pubicSymphysisL,
@@ -53,7 +53,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         this.thirdMolar(_case.thirdMolarTR, Side.TR, results);
         this.thirdMolar(_case.thirdMolarBL, Side.BL, results);
         this.thirdMolar(_case.thirdMolarBR, Side.BR, results);
-      
+
         //update combine methods to incorporate into the new results dict impl.
         this.pubicSymphysisCombined(
             _case.pubicSymphysisL,
@@ -61,7 +61,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             Side.C,
             isMale,
             isUnknown,
-            results
+            results,
         );
         this.sternalEndCombined(
             _case.fourthRibL,
@@ -69,13 +69,13 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             Side.C,
             isMale,
             isUnknown,
-            results
+            results,
         );
         this.auricularSurfaceCombined(
             _case.auricularAreaL,
             _case.auricularAreaR,
             Side.C,
-            results
+            results,
         );
         /*
         this.combinedAll(
@@ -240,7 +240,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         side: Side,
         isMale: boolean,
         isUnknown: boolean,
-        results: { [key: string]: { [key: string]: number } }
+        results: { [key: string]: { [key: string]: number } },
     ): void {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
@@ -537,7 +537,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         side: Side,
         isMale: boolean,
         isUnknown: boolean,
-        results: { [key: string]: { [key: string]: number } }
+        results: { [key: string]: { [key: string]: number } },
     ): void {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
@@ -740,7 +740,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         data1: AuricularArea,
         data2: AuricularArea,
         side: Side,
-        results: { [key: string]: { [key: string]: number } }
+        results: { [key: string]: { [key: string]: number } },
     ): void {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
@@ -1163,53 +1163,53 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
     private resetResults(): { [key: string]: { [key: string]: number } } {
         return JSON.parse(
             JSON.stringify({
-              pubicSymphysis: {
-                  L: -1,
-                  L_min: -1,
-                  L_max: -1,
-                  R: -1,
-                  R_min: -1,
-                  R_max: -1,
-                  C: -1,
-                  C_min: -1,
-                  c_max: -1,
-              },
-              sternalEnd: {
-                  L: -1,
-                  L_min: -1,
-                  L_max: -1,
-                  R: -1,
-                  R_min: -1,
-                  R_max: -1,
-                  C: -1,
-                  C_min: -1,
-                  c_max: -1,
-              },
-              auricularSurface: {
-                  L: -1,
-                  L_min: -1,
-                  L_max: -1,
-                  R: -1,
-                  R_min: -1,
-                  R_max: -1,
-                  C: -1,
-                  C_min: -1,
-                  c_max: -1,
-              },
-              /*
+                pubicSymphysis: {
+                    L: -1,
+                    L_min: -1,
+                    L_max: -1,
+                    R: -1,
+                    R_min: -1,
+                    R_max: -1,
+                    C: -1,
+                    C_min: -1,
+                    c_max: -1,
+                },
+                sternalEnd: {
+                    L: -1,
+                    L_min: -1,
+                    L_max: -1,
+                    R: -1,
+                    R_min: -1,
+                    R_max: -1,
+                    C: -1,
+                    C_min: -1,
+                    c_max: -1,
+                },
+                auricularSurface: {
+                    L: -1,
+                    L_min: -1,
+                    L_max: -1,
+                    R: -1,
+                    R_min: -1,
+                    R_max: -1,
+                    C: -1,
+                    C_min: -1,
+                    c_max: -1,
+                },
+                /*
               combinedAll: {
                   CA: -1,
                   CA_min: -1,
                   CA_max: -1,
               },
               */
-              thirdMolar: {
-                  TL: -1,
-                  TR: -1,
-                  BL: -1,
-                  BR: -1,
-              },
-            })
+                thirdMolar: {
+                    TL: -1,
+                    TR: -1,
+                    BL: -1,
+                    BR: -1,
+                },
+            }),
         );
     }
 
@@ -1226,5 +1226,4 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         return (v1 + v2 + v3 + v4 + v5 + v6) / 6.0;
     }
     */
-
 }
