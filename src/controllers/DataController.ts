@@ -5,7 +5,6 @@ import { rmSync } from 'fs';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
-import { ReportModel } from '../models/ReportModel';
 import {
     Sex,
     Affinity,
@@ -14,25 +13,39 @@ import {
     PubicSymphysis,
     SternalEnd,
     AuricularArea,
+    Observers,
 } from '../utils/enums';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
+import { NullReportModel } from '../models/NullReportModel';
+import { AbstractReportModel } from '../models/AbstractReportModel';
+import { ReportModel } from '../models/ReportModel';
 
 export class DataController {
     private static instance: DataController;
     private xmlController: XML_Controller = XML_Controller.getInstance();
     private _loadedCases: CaseModel[];
     private _openCase: AbstractCaseModel;
+    private _openReport: AbstractReportModel;
 
     private constructor() {
         this._loadedCases = [];
         this._openCase = new NullCaseModel();
+        this._openReport = new NullReportModel();
     }
 
     //retreives the instance of the PAgeController singleton
     public static getInstance(): DataController {
         if (!this.instance) this.instance = new DataController();
         return this.instance;
+    }
+
+    public get openReport(): AbstractReportModel {
+        return this._openReport;
+    }
+
+    public set openReport(report: AbstractReportModel) {
+        this._openReport = report;
     }
 
     //retreives the reference to the list of currently opened CaseModel objects
@@ -45,11 +58,6 @@ export class DataController {
         return this._openCase;
     }
 
-    //retreives the ReportModel of the currently opened case based on the id parameter
-    public getReport(id: number): ReportModel {
-        return (this.openCase as CaseModel).generatedReports[id];
-    }
-
     public getNumReports(): number {
         var sum: number = 0;
         this._loadedCases.forEach(
@@ -59,7 +67,7 @@ export class DataController {
     }
 
     //retreives the list of ReportModels stored by the currently opened case
-    public getReports(): { [id: number]: ReportModel } {
+    public getReports(): AbstractReportModel[] {
         return (this._openCase as CaseModel).generatedReports;
     }
 
@@ -159,7 +167,7 @@ export class DataController {
                 );
         }
 
-        this.openCase.notify(); //autosave
+        this.openCase.notify(Observers.autosave); //autosave
         if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
     }
 
@@ -197,14 +205,32 @@ export class DataController {
         director.caseBuilder.setNotes(notes);
 
         this._openCase = director.makeCase();
+        this.addCase(this._openCase as CaseModel);
     }
 
-    public createReport(results: {}): ReportModel {
+    public createReport(results: {}): AbstractReportModel {
         var director = new BuildDirector();
         return director.makeReport(results);
     }
 
-    public getMostRecentReport(): ReportModel | null {
+    public getMostRecentReport(): AbstractReportModel {
         return (this.openCase as CaseModel).mostRecentReport;
+    }
+
+    public setMostRecentReport(report: AbstractReportModel): void {
+        (this.openCase as CaseModel).mostRecentReport = report;
+    }
+
+    public findReportIndex(id: string): number {
+        var idx = -1;
+        const _case: CaseModel = this._openCase as CaseModel;
+        for (var i: number = 0; i < _case.generatedReports.length; i++) {
+            if ((_case.generatedReports[i] as ReportModel).id == id) {
+                idx = i;
+                break;
+            }
+        }
+        console.log(`Index of ${id} found at ${idx}`);
+        return idx;
     }
 }

@@ -1,7 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
+import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
-import { ReportModel } from '../../models/ReportModel';
 import { CaseBuilderIF } from './CaseBuilderIF';
 
 // Concrete builder for CaseModel
@@ -20,7 +20,7 @@ export class CaseBuilder implements CaseBuilderIF {
     private _fourthRibL: number;
     private _fourthRibR: number;
     private _notes: string;
-    private _generatedReports: { [key: number]: ReportModel };
+    private _generatedReports: AbstractReportModel[];
 
     constructor() {
         this._caseID = '';
@@ -37,7 +37,7 @@ export class CaseBuilder implements CaseBuilderIF {
         this._fourthRibL = 1;
         this._fourthRibR = 1;
         this._notes = '';
-        this._generatedReports = {};
+        this._generatedReports = [];
     }
 
     public setCaseID(caseID: string): CaseBuilderIF {
@@ -110,9 +110,9 @@ export class CaseBuilder implements CaseBuilderIF {
         return this;
     }
 
-    public setReportsGenerated(generatedReports: {
-        [key: number]: ReportModel;
-    }): CaseBuilderIF {
+    public setReportsGenerated(
+        generatedReports: AbstractReportModel[],
+    ): CaseBuilderIF {
         this._generatedReports = generatedReports;
         return this;
     }

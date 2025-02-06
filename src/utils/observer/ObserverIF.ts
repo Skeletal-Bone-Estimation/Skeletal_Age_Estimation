@@ -1,5 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
+import { Observers } from '../enums';
+
 export interface ObserverIF {
-    update(): void;
+    update(arg: Observers, data: any): void;
 }

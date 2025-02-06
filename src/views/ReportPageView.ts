@@ -3,39 +3,86 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Side, Pages } from '../utils/enums';
+import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 import { updateRangeBar } from '../utils/charts/tester';
 
 export class ReportPageView extends AbstractView {
+    private elements: HTMLElement[];
+
     constructor(document: Document) {
         super(document);
+        this.elements = [];
     }
 
+    //override render method for specialized view
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
+        this.loadElements();
         this.initEventListeners();
+        const report = DataController.getInstance().openReport;
+
+        //debugging
+        // console.log(
+        //     'All reports:',
+        //     (DataController.getInstance().openCase as CaseModel)
+        //         .generatedReports,
+        // );
+        // console.log('Open Report:', DataController.getInstance().openReport);
+        // console.log(
+        //     'Most recent report:',
+        //     (DataController.getInstance().openCase as CaseModel)
+        //         .mostRecentReport,
+        // );
 
         // call load report method with the most recent report
-        const report = DataController.getInstance().getMostRecentReport();
         if (report) {
-            this.loadReport(report);
-            console.log('Report data loaded');
+            this.loadReport(report as ReportModel);
+            //console.log('Report data loaded');
         } else {
             console.error('No report found.');
         }
     }
-    protected override initEventListeners(): void {
-        // download button
-        document
-            .getElementById('downloadBtn')!
-            .addEventListener(
-                'click',
-                async () =>
-                    await PageController.getInstance().exportReport(
-                        Pages.Report,
-                    ),
-            );
 
+    //override initEventListeners method for view specific listeners
+    protected override initEventListeners(): void {
+
+        //report archive  button
+        this.elements[0].addEventListener('click', async () => {
+            //open modal window and fill with content
+            const pageController = PageController.getInstance();
+            await pageController.loadModal();
+        });
+
+        //back to data entry button
+        this.elements[1].addEventListener('click', () => {
+            PageController.getInstance().navigateTo(
+                Pages.DataEntry,
+                SideBar.dataBar,
+            );
+        });
+
+        //download report as docx
+        this.elements[2].addEventListener(
+            'click',
+            async () =>
+                await PageController.getInstance().exportReport(
+                    DataController.getInstance().openReport as ReportModel,
+                ),
+        );
+
+        const report = DataController.getInstance().getMostRecentReport();
+        if (report) {
+            document
+                .getElementById('downloadBtn')!
+                .addEventListener(
+                    'click',
+                    async () =>
+                        await PageController.getInstance().exportReport(
+                            report as ReportModel,
+                        ),
+                );
+        }
         document
             .getElementById('compareBtn')!
             .addEventListener(
@@ -47,6 +94,20 @@ export class ReportPageView extends AbstractView {
             );
     }
 
+    //load elements from the html document into the elements array
+    private loadElements(): void {
+        this.elements = [
+            document.getElementById(
+                UI_Elements.reportArchiveButton,
+            ) as HTMLElement,
+            document.getElementById(
+                UI_Elements.backtoDataEntryButton,
+            ) as HTMLElement,
+            document.getElementById(UI_Elements.downloadButton) as HTMLElement,
+        ];
+    }
+
+    //load the report data into the report page
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
         const caseModel = DataController.getInstance().openCase as CaseModel;
@@ -75,8 +136,10 @@ export class ReportPageView extends AbstractView {
             'Pubic Symphysis',
             report.getPubicSymphysis(Side.L),
             report.getPubicSymphysis(Side.R),
+            report.getPubicSymphysis(Side.C),
             report.getPubicSymphysisRange(Side.L),
             report.getPubicSymphysisRange(Side.R),
+            report.getPubicSymphysisRange(Side.C),
         );
 
         // Display the auricular surface range
@@ -85,8 +148,10 @@ export class ReportPageView extends AbstractView {
             'Auricular Surface',
             report.getAuricularSurface(Side.L),
             report.getAuricularSurface(Side.R),
+            report.getAuricularSurface(Side.C),
             report.getAuricularSurfaceRange(Side.L),
             report.getAuricularSurfaceRange(Side.R),
+            report.getAuricularSurfaceRange(Side.C),
         );
 
         // Display the sternal end range
@@ -95,8 +160,10 @@ export class ReportPageView extends AbstractView {
             'Sternal End',
             report.getSternalEnd(Side.L),
             report.getSternalEnd(Side.R),
+            report.getSternalEnd(Side.C),
             report.getSternalEndRange(Side.L),
             report.getSternalEndRange(Side.R),
+            report.getSternalEndRange(Side.C),
         );
 
         // Display the third molar data
@@ -120,8 +187,10 @@ export class ReportPageView extends AbstractView {
         sectionTitle: string,
         leftValue: number,
         rightValue: number,
+        combinedValue: number,
         leftRange: { min: number; max: number },
         rightRange: { min: number; max: number },
+        combinedRange: { min: number; max: number },
     ): void {
         const element = document.getElementById(elementId);
         if (!element) {
@@ -131,10 +200,12 @@ export class ReportPageView extends AbstractView {
 
         element.innerHTML = `
             <strong>${sectionTitle}:</strong>
-            <p>Left: ${leftValue}</p>
-            <p>95% Confidence Range: ${leftRange.min} - ${leftRange.max}</p>
-            <p>Right: ${rightValue}</p>
-            <p>95% Confidence Range: ${rightRange.min} - ${rightRange.max}</p>
+            <p>Left: ${leftValue.toFixed(2)}</p>
+            <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
+            <p>Right: ${rightValue.toFixed(2)}</p>
+            <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
+            <p>Combined: ${combinedValue.toFixed(2)}</p>
+            <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
         `;
     }
 
@@ -145,9 +216,13 @@ export class ReportPageView extends AbstractView {
         return 'Unknown';
     }
 
+    public accessFormatThirdMolar(value: number): string {
+        return this.formatThirdMolar(value);
+    }
+
     // Placeholder for summarized range calculation
-    private calculateSummarizedRange(report: ReportModel): string {
+    private calculateSummarizedRange(report: AbstractReportModel): string {
         // TODO: Implement logic for computing the overall summarized range
-        return 'To Be Determined';
+        return `${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)}`;
     }
 }

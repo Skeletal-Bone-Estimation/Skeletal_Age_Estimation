@@ -13,7 +13,9 @@ import { ComparePageView } from '../views/ComparePageView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
+import { ReportModel } from '../models/ReportModel';
 import {
+    Side,
     Pages,
     SideBar,
     UI_Elements,
@@ -25,6 +27,8 @@ import {
     SternalEnd,
     PubicSymphysis,
 } from '../utils/enums';
+import { ReportModal } from '../views/ReportModal';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class PageController {
     private static instance: PageController;
@@ -41,7 +45,11 @@ export class PageController {
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
+
+            reportModal: new ReportModal(document),
+
             compare: new ComparePageView(document),
+
             //add additional views here
         };
         this.currentView = this.views[Pages.Home];
@@ -133,11 +141,11 @@ export class PageController {
     //asynchronously loads sidebar content from html files
     private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
-            console.log(`Loading sidebar content for: ${page}`);
+            //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);
-            console.log('Sidebar content:', content);
+            //console.log('Sidebar content:', content);
             this.rootBarDiv.innerHTML = content;
-            console.log('Sidebar content loaded into rootBarDiv');
+            //console.log('Sidebar content loaded into rootBarDiv');
         } catch (error) {
             console.error('Error loading sidebar content:', error);
         }
@@ -253,12 +261,22 @@ export class PageController {
     }
 
     public async exportReport(
-        page: Pages,
+        report: ReportModel,
         filename: string = 'default_report.docx',
     ): Promise<void> {
-        console.log('Generating report...');
+        const content = `<p><i>IF ADULT</i><br />
+Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+        <br />
+        <br />
+The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+        <br />
+        <br />
+Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.TL)).toLowerCase()}
+        <br />
+        <br />
+        <br />
 
-        const content = await this.loadPageContent(page);
+Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
         if (!content.trim()) {
             console.warn('Export failed: Empty content.');
             return;
@@ -289,5 +307,23 @@ export class PageController {
         } catch (error) {
             console.error('Error exporting to Word:', error);
         }
+    }
+
+    public async loadModal(): Promise<void> {
+        this.currentView = this.views.reportModal;
+        (this.currentView as ReportModal).openModal();
+        (this.currentView as ReportModal).render(
+            await this.loadPageContent(Pages.ReportModal),
+        );
+    }
+
+    public unloadModal(): void {
+        this.currentView = this.views.report;
+    }
+
+    public loadReport(reportIDX: number) {
+        const dc = DataController.getInstance();
+        dc.openReport = (dc.openCase as CaseModel).generatedReports[reportIDX];
+        this.navigateTo(Pages.Report, SideBar.createBar);
     }
 }

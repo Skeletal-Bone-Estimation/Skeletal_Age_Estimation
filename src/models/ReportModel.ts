@@ -1,14 +1,13 @@
 import { Side } from '../utils/enums';
+import { AbstractReportModel } from './AbstractReportModel';
 
 //ReportModel.ts
-export class ReportModel {
-    private _id: string;
-
-    private results: { [key: string]: { [key: string]: number } };
-
-    constructor(id: string, results: {}) {
-        this._id = id;
-        this.results = results;
+export class ReportModel extends AbstractReportModel {
+    constructor(
+        id: string,
+        results: { [key: string]: { [key: string]: number } },
+    ) {
+        super(id, results);
     }
 
     // Read-only access to Report Data
@@ -17,13 +16,13 @@ export class ReportModel {
     }
 
     public getPubicSymphysis(side: Side): number {
-        if (side != Side.L && side != Side.R)
+        if (side != Side.L && side != Side.R && side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
         return this.results['pubicSymphysis'][side];
     }
 
     public getPubicSymphysisRange(side: Side): { min: number; max: number } {
-        this.validateSide(side, ['L', 'R'], 'pubic symphysis');
+        this.validateSide(side, ['L', 'R', 'C'], 'pubic symphysis');
         return {
             min: this.results['pubicSymphysis'][`${side}_min`],
             max: this.results['pubicSymphysis'][`${side}_max`],
@@ -31,13 +30,13 @@ export class ReportModel {
     }
 
     public getSternalEnd(side: Side): number {
-        if (side != Side.L && side != Side.R)
+        if (side != Side.L && side != Side.R && side != Side.C)
             throw new Error('Invalid side for sternal end analysis');
         return this.results['sternalEnd'][side];
     }
 
     public getSternalEndRange(side: Side): { min: number; max: number } {
-        this.validateSide(side, ['L', 'R'], 'sternal end');
+        this.validateSide(side, ['L', 'R', 'C'], 'sternal end');
         return {
             min: this.results['sternalEnd'][`${side}_min`],
             max: this.results['sternalEnd'][`${side}_max`],
@@ -45,13 +44,13 @@ export class ReportModel {
     }
 
     public getAuricularSurface(side: Side): number {
-        if (side != Side.L && side != Side.R)
+        if (side != Side.L && side != Side.R && side != Side.C)
             throw new Error('Invalid side for auricular surface analysis');
         return this.results['auricularSurface'][side];
     }
 
     public getAuricularSurfaceRange(side: Side): { min: number; max: number } {
-        this.validateSide(side, ['L', 'R'], 'auricular surface');
+        this.validateSide(side, ['L', 'R', 'C'], 'auricular surface');
         return {
             min: this.results['auricularSurface'][`${side}_min`],
             max: this.results['auricularSurface'][`${side}_max`],
