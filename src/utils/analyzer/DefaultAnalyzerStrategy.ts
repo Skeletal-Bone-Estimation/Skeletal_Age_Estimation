@@ -245,9 +245,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
         // Helper function to determine values based on PubicSymphysis phase
-        const getSymphysisValues = (
-            data: PubicSymphysis,
-        ): [number, number] => {
+        const getSymphysisValues = (data: PubicSymphysis): [number, number] => {
             switch (data) {
                 case PubicSymphysis.One:
                     return [
@@ -353,7 +351,10 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
 
         results[Report.pubicSymphysis][`${side}_min`] = Math.min(S1, S3);
         results[Report.pubicSymphysis][`${side}_max`] = Math.max(S2, S4);
-        results[Report.pubicSymphysis][`${side}`] = this.average(Math.min(S1, S3), Math.max(S2, S4));
+        results[Report.pubicSymphysis][`${side}`] = this.average(
+            Math.min(S1, S3),
+            Math.max(S2, S4),
+        );
     }
 
     // analyzes sternal end age based of the Hartnett 2010 chart, discriminating male and female while
@@ -507,9 +508,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         if (side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
         // Helper function to determine values based on SternalEnd phase
-        const getSternalEndValues = (
-            data: SternalEnd,
-        ): [number, number] => {
+        const getSternalEndValues = (data: SternalEnd): [number, number] => {
             switch (data) {
                 case SternalEnd.One:
                     return [
@@ -615,7 +614,10 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
 
         results[Report.sternalEnd][`${side}_min`] = Math.min(S1, S3);
         results[Report.sternalEnd][`${side}_max`] = Math.max(S2, S4);
-        results[Report.sternalEnd][`${side}`] = this.average(Math.min(S1, S3), Math.max(S2, S4));
+        results[Report.sternalEnd][`${side}`] = this.average(
+            Math.min(S1, S3),
+            Math.max(S2, S4),
+        );
     }
 
     // analyzes auricular surface age based of the Osborne et al. 2004 chart
@@ -702,10 +704,12 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S1, S2] = getAuricularSurfaceValues(data1);
         const [S3, S4] = getAuricularSurfaceValues(data2);
 
-        
         results[Report.auricularSurface][`${side}_min`] = Math.min(S1, S3);
         results[Report.auricularSurface][`${side}_max`] = Math.max(S2, S4);
-        results[Report.auricularSurface][`${side}`] = this.average(Math.min(S1, S3), Math.max(S2, S4));
+        results[Report.auricularSurface][`${side}`] = this.average(
+            Math.min(S1, S3),
+            Math.max(S2, S4),
+        );
     }
     /*
     private combinedAll(
