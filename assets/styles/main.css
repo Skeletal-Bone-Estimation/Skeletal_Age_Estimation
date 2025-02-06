@@ -436,7 +436,7 @@ body {
 #graphDiv {
   display: flex;
   flex-direction: column;
-  gap: 15px; 
+  gap: 50px; 
   align-items: center;
   justify-content: center; 
   width: 100%;
@@ -444,13 +444,14 @@ body {
 }
 
 /* temp graph placement */
-#graphPlacement {
+.graphPlacement {
   width: clamp(300px, 80%, 900px); 
   aspect-ratio: 1; 
   background: white;
   border: 2px solid var(--div-color-2);
   border-radius: 5px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -708,4 +709,21 @@ input[type="text"] {
   padding: 8px;
   border: 1px solid var(--border-color-on-light);
   background-color: white;
+}
+
+.range-container {
+  position: relative;
+  flex-direction: row;
+  width: 80%;
+  height: 20px;
+  background-color: #ddd; 
+  border-radius: 10px;
+  margin: 20px auto;
+}
+
+.range-bar {
+  position: absolute;
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 10px;
 }

@@ -4,6 +4,7 @@ import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
 import { Side, Pages } from '../utils/enums';
+import { updateRangeBar } from '../utils/charts/tester';
 
 export class ReportPageView extends AbstractView {
     constructor(document: Document) {
@@ -65,6 +66,8 @@ export class ReportPageView extends AbstractView {
         } else {
             console.error('SummarizedRange not found');
         }
+
+        updateRangeBar(15, 27, 30, 80, 23, 42, 58, 60, 10, 15, 32, 60);
 
         // Display estimated pubic symphysis range
         this.displayDataSection(
