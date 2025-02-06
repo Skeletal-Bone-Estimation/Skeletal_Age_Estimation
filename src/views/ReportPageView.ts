@@ -5,6 +5,7 @@ import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
 import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractReportModel } from '../models/AbstractReportModel';
+import { updateRangeBar } from '../utils/charts/tester';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
@@ -45,6 +46,7 @@ export class ReportPageView extends AbstractView {
 
     //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
+
         //report archive  button
         this.elements[0].addEventListener('click', async () => {
             //open modal window and fill with content
@@ -81,6 +83,15 @@ export class ReportPageView extends AbstractView {
                         ),
                 );
         }
+        document
+            .getElementById('compareBtn')!
+            .addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().navigateTo(
+                        Pages.Compare,
+                    ),
+            );
     }
 
     //load elements from the html document into the elements array
@@ -116,6 +127,8 @@ export class ReportPageView extends AbstractView {
         } else {
             console.error('SummarizedRange not found');
         }
+
+        updateRangeBar(15, 27, 30, 80, 23, 42, 58, 60, 10, 15, 32, 60);
 
         // Display estimated pubic symphysis range
         this.displayDataSection(

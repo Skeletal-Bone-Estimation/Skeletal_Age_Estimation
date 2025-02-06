@@ -9,6 +9,7 @@ import { HomePageView } from '../views/HomePageView';
 import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
 import { ReportPageView } from '../views/ReportPageView';
+import { ComparePageView } from '../views/ComparePageView';
 import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
@@ -44,7 +45,11 @@ export class PageController {
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
+
             reportModal: new ReportModal(document),
+
+            compare: new ComparePageView(document),
+
             //add additional views here
         };
         this.currentView = this.views[Pages.Home];

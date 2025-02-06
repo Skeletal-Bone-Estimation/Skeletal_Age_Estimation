@@ -75,6 +75,7 @@ export enum Pages {
     DataEntry = 'dataEntry',
     Report = 'report',
     ReportModal = 'reportArchiveModal',
+    Compare = 'compare',
 }
 
 //References to the name of the html files for their corresponding pages
