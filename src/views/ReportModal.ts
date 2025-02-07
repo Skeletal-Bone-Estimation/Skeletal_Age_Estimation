@@ -7,33 +7,34 @@ import { ReportModel } from '../models/ReportModel';
 import { Observers, Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractModal } from './AbstractModal';
 
-//TODO:
-// refactor reports to store in list
-// store index of selected report
-// disable button until report is selected
-// acquire report through index lookup
-// figure out whats going on with the combined values
-
 export class ReportModal extends AbstractModal {
-    private selectedReportID: string;
     private selectedIdx: number;
 
     constructor(document: Document) {
         super(document);
-        this.selectedReportID = '';
         this.selectedIdx = -1;
     }
 
+    /**
+     * Override render method to display the modal content.
+     * @param htmlContent The HTML content to render.
+     */
     public override async render(htmlContent: string): Promise<void> {
         this.modalContent.innerHTML = htmlContent;
         this.initEventListeners();
         await this.fillReportList();
     }
 
+    /**
+     * Override method to open the modal.
+     */
     public override async openModal(): Promise<void> {
         this.modalContainer.style.display = 'flex';
     }
 
+    /**
+     * Initialize event listeners for the modal.
+     */
     protected override initEventListeners(): void {
         const dc = DataController.getInstance();
         const pc = PageController.getInstance();
@@ -76,6 +77,9 @@ export class ReportModal extends AbstractModal {
             ?.addEventListener('click', () => this.closeModal());
     }
 
+    /**
+     * Fill the report list with available reports.
+     */
     private async fillReportList(): Promise<void> {
         const dataController = DataController.getInstance();
         const list = document.getElementById(
@@ -102,7 +106,6 @@ export class ReportModal extends AbstractModal {
                 element.classList.add('selected');
 
                 //save attribute for later
-                this.selectedReportID = reportID;
                 this.selectedIdx = dataController.findReportIndex(reportID);
             });
             list.appendChild(element);

@@ -7,6 +7,11 @@ export class ImageAnalyzerStrategy extends AbstractAnalyzer {
         super(sex, affinity);
     }
 
+    /**
+     * Executes the image analysis on the given case.
+     * @param _case The case to analyze.
+     * @returns The analysis results as an object.
+     */
     executeAnalysis(_case: CaseModel): {} {
         // TODO: Image analysis logic
         // package image data

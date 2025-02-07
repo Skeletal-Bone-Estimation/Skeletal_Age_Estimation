@@ -1,7 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
-//HomePageView.ts
-
 import { PageController } from '../controllers/PageController';
 import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
@@ -11,7 +8,10 @@ export class HomePageView extends AbstractView {
         super(document);
     }
 
-    //specialized method to load content with specific home page requirements
+    /**
+     * Specialized method to load content with specific home page requirements.
+     * @param htmlContent The HTML content to render.
+     */
     public override render(htmlContent: string): void {
         //console.log('loaded from HomePageView');
         this.contentDiv.innerHTML = htmlContent;
@@ -19,6 +19,9 @@ export class HomePageView extends AbstractView {
         this.setSidebarListeners();
     }
 
+    /**
+     * Initialize event listeners for the home page.
+     */
     protected override initEventListeners(): void {
         document
             .getElementById('homeCreate')!

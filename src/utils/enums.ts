@@ -1,6 +1,8 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
-//Population Affinity
+/**
+ * Enumeration for population affinity.
+ */
 export enum Affinity {
     White = 0,
     Black = 1,
@@ -8,7 +10,9 @@ export enum Affinity {
     Error = -1,
 }
 
-//Sex
+/**
+ * Enumeration for sex.
+ */
 export enum Sex {
     Male = 0,
     Female = 1,
@@ -16,7 +20,9 @@ export enum Sex {
     Error = -1,
 }
 
-//Phase of the Third Molar
+/**
+ * Enumeration for the phase of the third molar.
+ */
 export enum ThirdMolar {
     A = 0,
     B = 1,
@@ -30,7 +36,9 @@ export enum ThirdMolar {
     Error = -1,
 }
 
-//Phase of the AuricularArea
+/**
+ * Enumeration for the phase of the auricular area.
+ */
 export enum AuricularArea {
     One = 1,
     Two = 2,
@@ -42,7 +50,9 @@ export enum AuricularArea {
     Error = -1,
 }
 
-//Phase of the SternalEnd
+/**
+ * Enumeration for the phase of the sternal end.
+ */
 export enum SternalEnd {
     One = 1,
     Two = 2,
@@ -55,7 +65,9 @@ export enum SternalEnd {
     Error = -1,
 }
 
-//Phase of the PubicSymphysis
+/**
+ * Enumeration for the phase of the pubic symphysis.
+ */
 export enum PubicSymphysis {
     One = 1,
     Two = 2,
@@ -68,7 +80,9 @@ export enum PubicSymphysis {
     Error = -1,
 }
 
-//References to the name of the html files for their corresponding pages
+/**
+ * Enumeration for the names of the HTML files for their corresponding pages.
+ */
 export enum Pages {
     Home = 'home',
     Create = 'create',
@@ -78,14 +92,18 @@ export enum Pages {
     Compare = 'compare',
 }
 
-//References to the name of the html files for their corresponding pages
+/**
+ * Enumeration for the names of the HTML files for their corresponding sidebars.
+ */
 export enum SideBar {
     dataBar = 'dataEntrySide',
     homeBar = 'homeSide',
     createBar = 'createSide',
 }
 
-//References to the id of the corresponding element
+/**
+ * Enumeration for the IDs of the corresponding UI elements.
+ */
 export enum UI_Elements {
     createStartCase = 'createStart',
     dataSideCaseID = 'dataEntrySideCaseID',
@@ -115,7 +133,9 @@ export enum UI_Elements {
     viewReportButton = 'submitReportBtn',
 }
 
-//Number enumeration of CaseModel attributes
+/**
+ * Enumeration for the attributes of a CaseModel.
+ */
 export enum CaseElement {
     caseID = 0,
     sex = 1,
@@ -133,24 +153,29 @@ export enum CaseElement {
     notes = 13,
 }
 
-//Number enumeration of Analyzer strategies
+/**
+ * Enumeration for the analyzer strategies.
+ */
 export enum Analyzers {
     Default = 'default',
     Image = 'imageAnalysis',
     Prediction = 'predictionAnalysis',
 }
 
-//String enumeration of ReportModel attributes
+/**
+ * Enumeration for the attributes of a ReportModel.
+ */
 export enum Report {
     notes = 'notes',
     thirdMolar = 'thirdMolar',
     pubicSymphysis = 'pubicSymphysis',
     auricularSurface = 'auricularSurface',
     sternalEnd = 'sternalEnd',
-    //combined = 'combinedAll',
 }
 
-//String enumeration used by the ReportModel
+/**
+ * Enumeration for the sides used by the ReportModel.
+ */
 export enum Side {
     L = 'L',
     R = 'R',
@@ -159,10 +184,11 @@ export enum Side {
     BL = 'BL',
     BR = 'BR',
     C = 'C',
-    //CA = 'CA',
 }
 
-//Number enumeration of Observers
+/**
+ * Enumeration for the observers.
+ */
 export enum Observers {
     autosave = 0,
     setMostRecentReport = 1,

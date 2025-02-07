@@ -1,5 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
 import { CaseModel } from '../models/CaseModel';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
@@ -8,7 +7,6 @@ import { NullCaseModel } from '../models/NullCaseModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 
-//XML_Controller.ts
 export class XML_Controller {
     private static instance: XML_Controller;
     private currentDoc: Document | null;
@@ -19,16 +17,27 @@ export class XML_Controller {
         this.director = new BuildDirector();
     }
 
+    /**
+     * Retrieves the singleton instance of the XML_Controller class.
+     * @returns The singleton instance.
+     */
     public static getInstance(): XML_Controller {
         if (!this.instance) this.instance = new XML_Controller();
         return this.instance;
     }
 
+    /**
+     * Gets the current document.
+     * @returns The current document or null if not set.
+     */
     public getCurrentDoc(): Document | null {
         return this.currentDoc;
     }
 
-    //loads a single xml file into a CaseModel object
+    /**
+     * Loads a single XML file into a CaseModel object.
+     * @returns The parsed AbstractCaseModel.
+     */
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
             console.error('Current doc error');
@@ -132,7 +141,11 @@ export class XML_Controller {
         return this.director.makeCase();
     }
 
-    //extracts reports from the XML file into the correctly formatted dictionary
+    /**
+     * Extracts reports from the XML file into the correctly formatted dictionary.
+     * @param tag The tag name to extract reports from.
+     * @returns An array of AbstractReportModel objects.
+     */
     private extractReports(tag: string): AbstractReportModel[] {
         const list: AbstractReportModel[] = [];
         const container = this.currentDoc?.getElementsByTagName(tag)[0];
@@ -179,12 +192,20 @@ export class XML_Controller {
         return list;
     }
 
-    // TODO: load collection of files (as a folder)
+    //TODO
+    /**
+     * Parses a collection of files (as a folder).
+     * @returns An array of CaseModel objects.
+     */
     public parseCollection(): CaseModel[] {
         throw new Error('Parse collection not yet implemented');
     }
 
-    //loads a single case from a file
+    /**
+     * Loads a single case from a file.
+     * @param event The event triggering the file load.
+     * @param callback The callback function to execute after loading the file.
+     */
     public loadFile(event: Event, callback: () => void) {
         const files = (event.target as HTMLInputElement).files;
         if (files && files[0]) {
@@ -210,7 +231,11 @@ export class XML_Controller {
         } else throw new Error('No file selected');
     }
 
-    //saves a single case to a file
+    /**
+     * Saves a single case to a file.
+     * @param _case The CaseModel to save.
+     * @param filename The filename to save the case as.
+     */
     public saveAsFile(_case: CaseModel, filename: string): void {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({ object: _case });
@@ -218,13 +243,22 @@ export class XML_Controller {
         //console.log(`File saved to ${filename}`);
     }
 
-    // TODO: load collection of cases as folder selected by user
+    //TODO
+    /**
+     * Loads a collection of cases as a folder selected by the user.
+     * @param event The event triggering the collection load.
+     */
     public loadCollection(event: Event): void {
         // for loop to execute parseSingleFile for each case in collection
         throw new Error('Load collection not implemented yet');
     }
 
-    //TODO: save collection of cases into new folder named by the user
+    //TODO
+    /**
+     * Saves a collection of cases into a new folder named by the user.
+     * @param _case The CaseModel to save.
+     * @param filename The filename to save the collection as.
+     */
     public saveAsCollection(_case: CaseModel, filename: string): void {
         // for loop to execute saveAsFile for each case in collection
         throw new Error('Save as collection not yet implemented');

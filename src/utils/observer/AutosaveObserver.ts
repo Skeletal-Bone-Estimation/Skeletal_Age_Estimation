@@ -1,5 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
 import { DataController } from '../../controllers/DataController';
 import { XML_Controller } from '../../controllers/XML_Controller';
 import { AbstractCaseModel } from '../../models/AbstractCaseModel';
@@ -10,13 +9,19 @@ import { ObserverIF } from './ObserverIF';
 export class AutosaveObserver implements ObserverIF {
     constructor() {}
 
-    // executes the appropriate method based on the observer notified
+    /**
+     * Executes the appropriate method based on the observer notified.
+     * @param arg The observer type.
+     * @param data The data to be processed.
+     */
     public update(arg: Observers, data: any = null): void {
         if (arg != Observers.autosave) return;
         this.autosave();
     }
 
-    //autosaves the current case when triggered
+    /**
+     * Autosaves the current case when triggered.
+     */
     private autosave(): void {
         //console.log('autosaving');
         const openCase: AbstractCaseModel =

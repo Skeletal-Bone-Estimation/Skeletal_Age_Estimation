@@ -1,7 +1,6 @@
 import { Side } from '../utils/enums';
 import { AbstractReportModel } from './AbstractReportModel';
 
-//ReportModel.ts
 export class ReportModel extends AbstractReportModel {
     constructor(
         id: string,
@@ -10,17 +9,30 @@ export class ReportModel extends AbstractReportModel {
         super(id, results);
     }
 
-    // Read-only access to Report Data
+    /**
+     * Read-only access to Report ID.
+     * @returns The report ID.
+     */
     public get id() {
         return this._id;
     }
 
+    /**
+     * Retrieves the pubic symphysis value for the specified side.
+     * @param side The side to retrieve the value for.
+     * @returns The pubic symphysis value.
+     */
     public getPubicSymphysis(side: Side): number {
         if (side != Side.L && side != Side.R && side != Side.C)
             throw new Error('Invalid side for pubic symphysis analysis');
         return this.results['pubicSymphysis'][side];
     }
 
+    /**
+     * Retrieves the pubic symphysis range for the specified side.
+     * @param side The side to retrieve the range for.
+     * @returns The pubic symphysis range.
+     */
     public getPubicSymphysisRange(side: Side): { min: number; max: number } {
         this.validateSide(side, ['L', 'R', 'C'], 'pubic symphysis');
         return {
@@ -29,12 +41,22 @@ export class ReportModel extends AbstractReportModel {
         };
     }
 
+    /**
+     * Retrieves the sternal end value for the specified side.
+     * @param side The side to retrieve the value for.
+     * @returns The sternal end value.
+     */
     public getSternalEnd(side: Side): number {
         if (side != Side.L && side != Side.R && side != Side.C)
             throw new Error('Invalid side for sternal end analysis');
         return this.results['sternalEnd'][side];
     }
 
+    /**
+     * Retrieves the sternal end range for the specified side.
+     * @param side The side to retrieve the range for.
+     * @returns The sternal end range.
+     */
     public getSternalEndRange(side: Side): { min: number; max: number } {
         this.validateSide(side, ['L', 'R', 'C'], 'sternal end');
         return {
@@ -43,12 +65,22 @@ export class ReportModel extends AbstractReportModel {
         };
     }
 
+    /**
+     * Retrieves the auricular surface value for the specified side.
+     * @param side The side to retrieve the value for.
+     * @returns The auricular surface value.
+     */
     public getAuricularSurface(side: Side): number {
         if (side != Side.L && side != Side.R && side != Side.C)
             throw new Error('Invalid side for auricular surface analysis');
         return this.results['auricularSurface'][side];
     }
 
+    /**
+     * Retrieves the auricular surface range for the specified side.
+     * @param side The side to retrieve the range for.
+     * @returns The auricular surface range.
+     */
     public getAuricularSurfaceRange(side: Side): { min: number; max: number } {
         this.validateSide(side, ['L', 'R', 'C'], 'auricular surface');
         return {
@@ -57,6 +89,11 @@ export class ReportModel extends AbstractReportModel {
         };
     }
 
+    /**
+     * Retrieves the third molar value for the specified side.
+     * @param side The side to retrieve the value for.
+     * @returns The third molar value.
+     */
     public getThirdMolar(side: Side): number {
         if (
             side != Side.TL &&
@@ -68,6 +105,12 @@ export class ReportModel extends AbstractReportModel {
         return this.results['thirdMolar'][side];
     }
 
+    /**
+     * Validates the side for the specified section.
+     * @param side The side to validate.
+     * @param validSides The valid sides for the section.
+     * @param section The section being validated.
+     */
     private validateSide(
         side: Side,
         validSides: string[],

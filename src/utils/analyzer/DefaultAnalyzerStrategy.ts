@@ -19,7 +19,11 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         super(sex, affinity);
     }
 
-    // implemented abstract analysis method inherited from parent
+    /**
+     * Implemented abstract analysis method inherited from parent.
+     * @param _case The case to analyze.
+     * @returns The analysis results as a dictionary.
+     */
     public executeAnalysis(_case: CaseModel): {
         [key: string]: { [key: string]: number };
     } {
@@ -94,8 +98,14 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         return results;
     }
 
-    // analyzes pubic symphysis age based off the Hartnett 2010 chart, discriminating male and female while
-    // calculating an average for cases with an unknown sex
+    /**
+     * Analyzes pubic symphysis age based off the Hartnett 2010 chart.
+     * @param data The pubic symphysis data.
+     * @param side The side to analyze.
+     * @param isMale Whether the individual is male.
+     * @param isUnknown Whether the sex is unknown.
+     * @param results The results dictionary to store the analysis.
+     */
     private pubicSymphysis(
         data: PubicSymphysis,
         side: Side,
@@ -234,6 +244,15 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         }
     }
 
+    /**
+     * Combines pubic symphysis data from both sides.
+     * @param data1 The pubic symphysis data for the left side.
+     * @param data2 The pubic symphysis data for the right side.
+     * @param side The side to analyze.
+     * @param isMale Whether the individual is male.
+     * @param isUnknown Whether the sex is unknown.
+     * @param results The results dictionary to store the analysis.
+     */
     private pubicSymphysisCombined(
         data1: PubicSymphysis,
         data2: PubicSymphysis,
@@ -357,8 +376,14 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         );
     }
 
-    // analyzes sternal end age based of the Hartnett 2010 chart, discriminating male and female while
-    // calculating an average for cases with an unknown sex
+    /**
+     * Analyzes sternal end age based off the Hartnett 2010 chart.
+     * @param data The sternal end data.
+     * @param side The side to analyze.
+     * @param isMale Whether the individual is male.
+     * @param isUnknown Whether the sex is unknown.
+     * @param results The results dictionary to store the analysis.
+     */
     private sternalEnd(
         data: SternalEnd,
         side: Side,
@@ -497,6 +522,15 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         }
     }
 
+    /**
+     * Combines sternal end data from both sides.
+     * @param data1 The sternal end data for the left side.
+     * @param data2 The sternal end data for the right side.
+     * @param side The side to analyze.
+     * @param isMale Whether the individual is male.
+     * @param isUnknown Whether the sex is unknown.
+     * @param results The results dictionary to store the analysis.
+     */
     private sternalEndCombined(
         data1: SternalEnd,
         data2: SternalEnd,
@@ -620,7 +654,12 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         );
     }
 
-    // analyzes auricular surface age based of the Osborne et al. 2004 chart
+    /**
+     * Analyzes auricular surface age based off the Osborne et al. 2004 chart.
+     * @param data The auricular surface data.
+     * @param side The side to analyze.
+     * @param results The results dictionary to store the analysis.
+     */
     private auricularSurface(
         data: AuricularArea,
         side: Side,
@@ -668,6 +707,13 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         }
     }
 
+    /**
+     * Combines auricular surface data from both sides.
+     * @param data1 The auricular surface data for the left side.
+     * @param data2 The auricular surface data for the right side.
+     * @param side The side to analyze.
+     * @param results The results dictionary to store the analysis.
+     */
     private auricularSurfaceCombined(
         data1: AuricularArea,
         data2: AuricularArea,
@@ -711,7 +757,115 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             Math.max(S2, S4),
         );
     }
-    /*
+
+    /**
+     * Analyzes third molar age based off the Mincer et al. 1993 chart.
+     * @param data The third molar data.
+     * @param side The side to analyze.
+     * @param results The results dictionary to store the analysis.
+     */
+    private thirdMolar(
+        data: ThirdMolar,
+        side: Side,
+        results: { [key: string]: { [key: string]: number } },
+    ): void {
+        if (
+            side != Side.TL &&
+            side != Side.TR &&
+            side != Side.BL &&
+            side != Side.BR
+        )
+            throw new Error('Invalid side for auricular surface analysis');
+
+        switch (data) {
+            case ThirdMolar.A:
+            case ThirdMolar.B:
+            case ThirdMolar.C:
+            case ThirdMolar.D:
+            case ThirdMolar.E:
+            case ThirdMolar.F:
+            case ThirdMolar.G:
+                results[Report.thirdMolar][`${side}`] = 0;
+                break;
+            case ThirdMolar.H:
+                results[Report.thirdMolar][`${side}`] = 18;
+                break;
+            case ThirdMolar.Unknown:
+                break;
+            case ThirdMolar.Error:
+            default:
+                throw new Error('Invalid third molar phase');
+        }
+    }
+
+    /**
+     * Calculates the average of two numbers.
+     * @param v1 The first number.
+     * @param v2 The second number.
+     * @returns The average of the two numbers.
+     */
+    private average(v1: number, v2: number): number {
+        return (v1 + v2) / 2.0;
+    }
+
+    /**
+     * Resets the results dictionary.
+     * @returns The reset results dictionary.
+     */
+    private resetResults(): { [key: string]: { [key: string]: number } } {
+        return JSON.parse(
+            JSON.stringify({
+                pubicSymphysis: {
+                    L: -1,
+                    L_min: -1,
+                    L_max: -1,
+                    R: -1,
+                    R_min: -1,
+                    R_max: -1,
+                    C: -1,
+                    C_min: -1,
+                    C_max: -1,
+                },
+                sternalEnd: {
+                    L: -1,
+                    L_min: -1,
+                    L_max: -1,
+                    R: -1,
+                    R_min: -1,
+                    R_max: -1,
+                    C: -1,
+                    C_min: -1,
+                    C_max: -1,
+                },
+                auricularSurface: {
+                    L: -1,
+                    L_min: -1,
+                    L_max: -1,
+                    R: -1,
+                    R_min: -1,
+                    R_max: -1,
+                    C: -1,
+                    C_min: -1,
+                    C_max: -1,
+                },
+                /*
+              combinedAll: {
+                  CA: -1,
+                  CA_min: -1,
+                  CA_max: -1,
+              },
+              */
+                thirdMolar: {
+                    TL: -1,
+                    TR: -1,
+                    BL: -1,
+                    BR: -1,
+                },
+            }),
+        );
+    }
+
+/*
     private combinedAll(
         dataP1: PubicSymphysis,
         dataP2: PubicSymphysis,
@@ -1055,100 +1209,8 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         );
     }
     */
-    // analyzes third molar age based of the Mincer et al. 1993 chart
-    private thirdMolar(
-        data: ThirdMolar,
-        side: Side,
-        results: { [key: string]: { [key: string]: number } },
-    ): void {
-        if (
-            side != Side.TL &&
-            side != Side.TR &&
-            side != Side.BL &&
-            side != Side.BR
-        )
-            throw new Error('Invalid side for auricular surface analysis');
 
-        switch (data) {
-            case ThirdMolar.A:
-            case ThirdMolar.B:
-            case ThirdMolar.C:
-            case ThirdMolar.D:
-            case ThirdMolar.E:
-            case ThirdMolar.F:
-            case ThirdMolar.G:
-                results[Report.thirdMolar][`${side}`] = 0;
-                break;
-            case ThirdMolar.H:
-                results[Report.thirdMolar][`${side}`] = 18;
-                break;
-            case ThirdMolar.Unknown:
-                break;
-            case ThirdMolar.Error:
-            default:
-                throw new Error('Invalid third molar phase');
-        }
-    }
-
-    // calculates the average of two numbers
-    private average(v1: number, v2: number): number {
-        return (v1 + v2) / 2.0;
-    }
-
-    private resetResults(): { [key: string]: { [key: string]: number } } {
-        return JSON.parse(
-            JSON.stringify({
-                pubicSymphysis: {
-                    L: -1,
-                    L_min: -1,
-                    L_max: -1,
-                    R: -1,
-                    R_min: -1,
-                    R_max: -1,
-                    C: -1,
-                    C_min: -1,
-                    C_max: -1,
-                },
-                sternalEnd: {
-                    L: -1,
-                    L_min: -1,
-                    L_max: -1,
-                    R: -1,
-                    R_min: -1,
-                    R_max: -1,
-                    C: -1,
-                    C_min: -1,
-                    C_max: -1,
-                },
-                auricularSurface: {
-                    L: -1,
-                    L_min: -1,
-                    L_max: -1,
-                    R: -1,
-                    R_min: -1,
-                    R_max: -1,
-                    C: -1,
-                    C_min: -1,
-                    C_max: -1,
-                },
-                /*
-              combinedAll: {
-                  CA: -1,
-                  CA_min: -1,
-                  CA_max: -1,
-              },
-              */
-                thirdMolar: {
-                    TL: -1,
-                    TR: -1,
-                    BL: -1,
-                    BR: -1,
-                },
-            }),
-        );
-    }
-
-    /*
+/*
     // calculates the average of six numbers
     private averageExpanded(
         v1: number,
@@ -1160,5 +1222,5 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
     ): number {
         return (v1 + v2 + v3 + v4 + v5 + v6) / 6.0;
     }
-    */
+*/
 }

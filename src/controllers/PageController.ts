@@ -1,6 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
-// src/controllers/PageController.ts
 import * as fs from 'fs';
 import * as path from 'path';
 import generateBlob from 'html-to-docx';
@@ -28,7 +26,6 @@ import {
     PubicSymphysis,
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
-import { AbstractReportModel } from '../models/AbstractReportModel';
 
 export class PageController {
     private static instance: PageController;
@@ -58,6 +55,10 @@ export class PageController {
         this.initEventListeners();
     }
 
+    /**
+     * Retrieves the singleton instance of the PageController class.
+     * @returns The singleton instance.
+     */
     public static getInstance(): PageController {
         if (!PageController.instance)
             PageController.instance = new PageController();
@@ -65,18 +66,30 @@ export class PageController {
     }
 
     // READ FROM GUI
+    /**
+     * Creates a new case with the specified parameters.
+     * @param id The case ID.
+     * @param sex The sex of the individual.
+     * @param pop The population affinity.
+     */
     public createCase(id: string, sex: number, pop: number) {
         DataController.getInstance().createCase(id, sex, pop); //pass parameters to this function
     }
 
-    //public function to dynamically swap requested content into the index html file
+    /**
+     * Navigates to the specified page and optionally loads the sidebar content.
+     * @param page The page to navigate to.
+     * @param sidebar The sidebar to load (optional).
+     */
     public async navigateTo(page: Pages, sidebar: SideBar | null = null) {
         this.currentView = this.views[page];
         if (sidebar) await this.loadSideBarContent(sidebar);
         await this.loadPage(page);
     }
 
-    //assigns event listeners to objects within the document (can only be called while in the renderer.ts file)
+    /**
+     * Initializes event listeners for the document.
+     */
     private initEventListeners(): void {
         //home button
         document
@@ -110,7 +123,10 @@ export class PageController {
             );
     }
 
-    //asynchronous function that will render the page using the view's specific render function
+    /**
+     * Asynchronously loads the page content and renders it using the view's specific render function.
+     * @param page The page to load.
+     */
     private async loadPage(page: Pages): Promise<void> {
         try {
             const content = await this.loadPageContent(page);
@@ -120,7 +136,11 @@ export class PageController {
         }
     }
 
-    // asynchronous function that will retreive the html content included in the desired file
+    /**
+     * Asynchronously retrieves the HTML content from the desired file.
+     * @param page The page or sidebar to load content for.
+     * @returns The HTML content as a string.
+     */
     private async loadPageContent(page: Pages | SideBar): Promise<string> {
         const filePath = path.join(
             __dirname,
@@ -138,7 +158,10 @@ export class PageController {
         });
     }
 
-    //asynchronously loads sidebar content from html files
+    /**
+     * Asynchronously loads sidebar content from HTML files.
+     * @param page The sidebar to load content for.
+     */
     private async loadSideBarContent(page: SideBar): Promise<void> {
         try {
             //console.log(`Loading sidebar content for: ${page}`);
@@ -151,7 +174,11 @@ export class PageController {
         }
     }
 
-    //delegates to XML_Controller.editCase with parameters based on the id enumeration
+    /**
+     * Delegates to XML_Controller.editCase with parameters based on the ID enumeration.
+     * @param id The UI element ID.
+     * @param content The new content for the specified element.
+     */
     public editCase(
         id: UI_Elements,
         content:
@@ -256,10 +283,19 @@ export class PageController {
         }
     }
 
+    /**
+     * Gets the currently open case.
+     * @returns The currently open CaseModel.
+     */
     public getOpenCase(): CaseModel {
         return DataController.getInstance().openCase as CaseModel;
     }
 
+    /**
+     * Exports the report to a Word document.
+     * @param report The report to export.
+     * @param filename The filename to save the report as (optional).
+     */
     public async exportReport(
         report: ReportModel,
         filename: string = 'default_report.docx',
@@ -309,6 +345,9 @@ Taking into consideration all the age analysis performed, the age range for this
         }
     }
 
+    /**
+     * Loads the report modal.
+     */
     public async loadModal(): Promise<void> {
         this.currentView = this.views.reportModal;
         (this.currentView as ReportModal).openModal();
@@ -317,10 +356,17 @@ Taking into consideration all the age analysis performed, the age range for this
         );
     }
 
+    /**
+     * Unloads the report modal.
+     */
     public unloadModal(): void {
         this.currentView = this.views.report;
     }
 
+    /**
+     * Loads the report by its index.
+     * @param reportIDX The index of the report to load.
+     */
     public loadReport(reportIDX: number) {
         const dc = DataController.getInstance();
         dc.openReport = (dc.openCase as CaseModel).generatedReports[reportIDX];
