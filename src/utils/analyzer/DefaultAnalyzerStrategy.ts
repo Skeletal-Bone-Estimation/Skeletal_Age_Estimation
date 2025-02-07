@@ -1107,7 +1107,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     R_max: -1,
                     C: -1,
                     C_min: -1,
-                    c_max: -1,
+                    C_max: -1,
                 },
                 sternalEnd: {
                     L: -1,
@@ -1118,7 +1118,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     R_max: -1,
                     C: -1,
                     C_min: -1,
-                    c_max: -1,
+                    C_max: -1,
                 },
                 auricularSurface: {
                     L: -1,
@@ -1129,7 +1129,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     R_max: -1,
                     C: -1,
                     C_min: -1,
-                    c_max: -1,
+                    C_max: -1,
                 },
                 /*
               combinedAll: {
