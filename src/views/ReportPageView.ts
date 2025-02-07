@@ -46,7 +46,6 @@ export class ReportPageView extends AbstractView {
 
     //override initEventListeners method for view specific listeners
     protected override initEventListeners(): void {
-
         //report archive  button
         this.elements[0].addEventListener('click', async () => {
             //open modal window and fill with content

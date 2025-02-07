@@ -54,8 +54,7 @@ export class ReportModal extends AbstractModal {
                     const openCase = dc.openCase as CaseModel;
 
                     //TODO: check if idx == -1 for errors
-                    const report =
-                        openCase.generatedReports[this.selectedIdx];
+                    const report = openCase.generatedReports[this.selectedIdx];
 
                     if (report instanceof NullReportModel) {
                         console.error('Null report selected.');

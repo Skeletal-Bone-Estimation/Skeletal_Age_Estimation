@@ -51,6 +51,9 @@ export class ReportBuilder {
                 R: extractValue('R'),
                 R_min: extractValue('R_min'),
                 R_max: extractValue('R_max'),
+                C: extractValue('C'),
+                C_min: extractValue('C_min'),
+                C_max: extractValue('C_max'),
             },
             sternalEnd: {
                 L: extractValue('L'),
@@ -59,6 +62,9 @@ export class ReportBuilder {
                 R: extractValue('R'),
                 R_min: extractValue('R_min'),
                 R_max: extractValue('R_max'),
+                C: extractValue('C'),
+                C_min: extractValue('C_min'),
+                C_max: extractValue('C_max'),
             },
             auricularSurface: {
                 L: extractValue('L'),
@@ -67,6 +73,9 @@ export class ReportBuilder {
                 R: extractValue('R'),
                 R_min: extractValue('R_min'),
                 R_max: extractValue('R_max'),
+                C: extractValue('C'),
+                C_min: extractValue('C_min'),
+                C_max: extractValue('C_max'),
             },
             thirdMolar: {
                 TL: extractValue('TL'),

@@ -135,21 +135,45 @@ export class XML_Controller {
     //extracts reports from the XML file into the correctly formatted dictionary
     private extractReports(tag: string): AbstractReportModel[] {
         const list: AbstractReportModel[] = [];
-        const element: HTMLCollection | undefined =
-            this.currentDoc?.getElementsByTagName(tag)[0].children;
+        const container = this.currentDoc?.getElementsByTagName(tag)[0];
 
-        if (element) {
-            for (let i = 0; i < element.length; i++) {
-                //iterate list of reports
-                const report: Element = element[i]; //extract single report xml
-                const id: string =
-                    report.getElementsByTagName('_id')[0].textContent || '-1'; //extract id
-                const resultsElement: Element =
-                    report.getElementsByTagName('results')[0]; //extract results dict
-                const generatedReport: AbstractReportModel =
-                    this.director.makeReportFrom(id, resultsElement); //parse results dict and make report
-                list.push(generatedReport); //store report in dictionary
+        if (!container) {
+            console.error('Error accessing _generatedReports in XML');
+            return list;
+        }
+
+        if (container && container.children) {
+            const children = container.children;
+            if (children.length % 2 !== 0) {
+                console.error(
+                    'Unexpected XML Structure: expected pairs of <_id> and <results>',
+                );
+                return list;
             }
+        }
+
+        for (var i = 0; i < container?.children.length; i += 2) {
+            const idElement = container.children[i];
+            const resultsElement = container.children[i + 1];
+
+            if (
+                idElement.tagName !== '_id' ||
+                resultsElement.tagName !== 'results'
+            ) {
+                console.error(
+                    'Unexpected XML structure in report pair',
+                    idElement,
+                    resultsElement,
+                );
+                continue;
+            }
+
+            list.push(
+                this.director.makeReportFrom(
+                    idElement.textContent || '-1',
+                    resultsElement,
+                ),
+            );
         }
 
         return list;
