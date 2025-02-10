@@ -12,8 +12,13 @@ import {
     AuricularArea,
     PubicSymphysis,
     SternalEnd,
+    Analyzers,
 } from '../utils/enums';
+import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
+import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
+import { DataController } from '../controllers/DataController';
+import { ReportModel } from '../models/ReportModel';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
@@ -243,6 +248,22 @@ export class DataEntryView extends AbstractView {
             console.error('notes not found!');
         }
 
+        const analyzeButton = document.getElementById(
+            UI_Elements.analyzeButton,
+        ) as HTMLButtonElement;
+
+        const guideButton = document.getElementById(
+            UI_Elements.guideButton,
+        ) as HTMLButtonElement;
+
+        if (!analyzeButton) {
+            console.error('analyzeButton not found!');
+        }
+
+        if (!guideButton) {
+            console.error('guideButton not found');
+        }
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -254,7 +275,8 @@ export class DataEntryView extends AbstractView {
             thirdMolarTR &&
             thirdMolarBL &&
             thirdMolarBR &&
-            notes
+            notes &&
+            analyzeButton
         ) {
             console.log('elements present');
 
@@ -355,6 +377,33 @@ export class DataEntryView extends AbstractView {
                         UI_Elements.notes,
                         target.value as string,
                     );
+            });
+
+            analyzeButton.addEventListener('click', (event) => {
+                var _case: CaseModel =
+                    PageController.getInstance().getOpenCase();
+                const target = event.target as HTMLButtonElement;
+                const sex = this.parseSex(target.value);
+                const affinity = this.parseAffinity(target.value);
+                AnalysisContext.getInstance(sex, affinity).analyze(
+                    _case,
+                    Analyzers.Default,
+                );
+                PageController.getInstance().navigateTo(
+                    Pages.Report,
+                    SideBar.createBar,
+                );
+
+                // var report =
+                //     DataController.getInstance().getMostRecentReport() as ReportModel;
+                // console.log('Generated Report: ', report);
+            });
+
+            guideButton.addEventListener('click', (event) => {
+                window.open(
+                    './assets/guidelines/Scoring Guidelines for Skeletal Bone Age Estimation.pdf',
+                    '_blank',
+                );
             });
         }
     }

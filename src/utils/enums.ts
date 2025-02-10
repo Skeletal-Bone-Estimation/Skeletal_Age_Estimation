@@ -73,6 +73,7 @@ export enum Pages {
     Home = 'home',
     Create = 'create',
     DataEntry = 'dataEntry',
+    Report = 'report',
 }
 
 //References to the name of the html files for their corresponding pages
@@ -99,6 +100,8 @@ export enum UI_Elements {
     auricularAreaR = 'auricularAreaR',
     fourthRibL = 'fourthRibL',
     fourthRibR = 'fourthRibR',
+    analyzeButton = 'dataEntryReport',
+    guideButton = 'scoringGuide',
 }
 
 //Number enumeration of CaseModel attributes
@@ -120,9 +123,9 @@ export enum CaseElement {
 }
 
 export enum Analyzers {
-    Default = "default",
-    Image = "imageAnalysis",
-    Prediction = "predictionAnalysis"
+    Default = 'default',
+    Image = 'imageAnalysis',
+    Prediction = 'predictionAnalysis',
 }
 
 export enum Report {
@@ -139,5 +142,5 @@ export enum Side {
     TL = 'TL',
     TR = 'TR',
     BL = 'BL',
-    BR = 'BR'
+    BR = 'BR',
 }
