@@ -242,15 +242,19 @@ export class XML_Controller {
 
                 auricularImages: _case.auricularImages.length
                     ? {
-                          image: _case.auricularImages.map((path) => ({ _: path,})),
+                          image: _case.auricularImages.map((path) => ({
+                              _: path,
+                          })),
                       }
-                    : { image: [] }, 
+                    : { image: [] },
                 pubicImages: _case.pubicImages.length
                     ? { image: _case.pubicImages.map((path) => ({ _: path })) }
                     : { image: [] },
                 sternalImages: _case.sternalImages.length
                     ? {
-                          image: _case.sternalImages.map((path) => ({_: path,})),
+                          image: _case.sternalImages.map((path) => ({
+                              _: path,
+                          })),
                       }
                     : { image: [] },
                 molarImages: _case.molarImages.length

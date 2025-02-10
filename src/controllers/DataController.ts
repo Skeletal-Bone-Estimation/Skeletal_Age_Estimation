@@ -244,8 +244,10 @@ export class DataController {
     }
 
     //save the image in uploads folder tied to specific case
-    public async handleFileUpload(files: FileList,caseAttr: CaseElement,): Promise<void> {
-        
+    public async handleFileUpload(
+        files: FileList,
+        caseAttr: CaseElement,
+    ): Promise<void> {
         console.log(
             `handleFileUpload called for ${caseAttr}, ${files.length} files received.`,
         );
@@ -285,7 +287,7 @@ export class DataController {
         (_case as any)[caseAttr] = uploadedPaths;
         console.log('Updated case images:', _case);
 
-        //save 
+        //save
         this._openCase.notify();
         XML_Controller.getInstance().saveAsFile(
             _case,

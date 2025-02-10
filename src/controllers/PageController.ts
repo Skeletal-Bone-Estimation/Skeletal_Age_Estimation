@@ -67,7 +67,9 @@ export class PageController {
 
         //if view is data entry initialize listeners for file upload
         if (page === Pages.DataEntry) {
-            console.log('initializing file upload listeners for Data Entry page...',);
+            console.log(
+                'initializing file upload listeners for Data Entry page...',
+            );
             this.initFileUploadListeners();
         }
     }
@@ -107,12 +109,13 @@ export class PageController {
         this.initFileUploadListeners();
     }
 
-
     //take in file inputs and pass them to data controller to be uploaded
     private initFileUploadListeners(): void {
         //verify current view is data entry
         if (this.currentView !== this.views[Pages.DataEntry]) {
-            console.log('Skipping file upload listener setup: Not on Data Entry page.',);
+            console.log(
+                'Skipping file upload listener setup: Not on Data Entry page.',
+            );
             return;
         }
 
@@ -135,7 +138,7 @@ export class PageController {
             ) as HTMLInputElement;
 
             if (!inputElement) {
-                console.error(`file input element not found: ${id}.`,);
+                console.error(`file input element not found: ${id}.`);
                 return;
             }
 
@@ -145,7 +148,9 @@ export class PageController {
                 console.log(`File selected for ${caseAttr}`);
                 const files = (event.target as HTMLInputElement).files;
                 if (files && files.length > 0) {
-                    console.log(`${files.length} files selected for ${caseAttr}`,);
+                    console.log(
+                        `${files.length} files selected for ${caseAttr}`,
+                    );
                     await DataController.getInstance().handleFileUpload(
                         files,
                         caseAttr,
