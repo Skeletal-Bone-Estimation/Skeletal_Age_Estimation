@@ -410,12 +410,15 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         };
 
         // Get values for both datasets
-        const [S1, S2, S3] = getSymphysisValues(data1);
-        const [S4, S5, S6] = getSymphysisValues(data2);
+        if (data1 > data2) {
+            var [S1, S2, S3] = getSymphysisValues(data1);
+        } else {
+            var [S1, S2, S3] = getSymphysisValues(data2);
+        }
 
-        results[Report.pubicSymphysis][`${side}`] = Math.max(S1, S4);
-        results[Report.pubicSymphysis][`${side}_min`] = Math.min(S2, S5);
-        results[Report.pubicSymphysis][`${side}_max`] = Math.max(S3, S6);
+        results[Report.pubicSymphysis][`${side}`] = S1;
+        results[Report.pubicSymphysis][`${side}_min`] = S2;
+        results[Report.pubicSymphysis][`${side}_max`] = S3;
     }
 
     /**
