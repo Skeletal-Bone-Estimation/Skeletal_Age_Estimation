@@ -107,12 +107,10 @@ export interface CaseBuilderIF {
      * @returns The CaseBuilderIF instance.
      */
     setNotes(notes: string): CaseBuilderIF;
-
-    /**
-     * Sets the reports generated for the case.
-     * @param reports The reports to set.
-     * @returns The CaseBuilderIF instance.
-     */
+    setAuricularImages(images: string[]): CaseBuilderIF;
+    setPubicImages(images: string[]): CaseBuilderIF;
+    setSternalImages(images: string[]): CaseBuilderIF;
+    setMolarImages(images: string[]): CaseBuilderIF;
     setReportsGenerated(reports: {
         [id: number]: AbstractReportModel;
     }): CaseBuilderIF;

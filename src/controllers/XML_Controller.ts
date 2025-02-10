@@ -41,99 +41,113 @@ export class XML_Controller {
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
             console.error('Current doc error');
-            return new NullCaseModel(); //error model
+            return new NullCaseModel(); // error model
         }
 
+        console.log('Starting parsing');
+
         const caseID =
-            this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
+            this.currentDoc?.getElementsByTagName('caseID')[0]?.textContent;
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
 
-        const populationAffinity = this.currentDoc?.getElementsByTagName(
-            '_populationAffinity',
-        )[0]?.textContent;
+        const populationAffinity =
+            this.currentDoc?.getElementsByTagName('populationAffinity')[0]
+                ?.textContent;
         this.director.caseBuilder.setPopulationAffinity(
             populationAffinity ? Number(populationAffinity) : -1,
         );
 
         const sex =
-            this.currentDoc?.getElementsByTagName('_sex')[0]?.textContent;
+            this.currentDoc?.getElementsByTagName('sex')[0]?.textContent;
         this.director.caseBuilder.setSex(sex ? Number(sex) : -1);
 
         const thirdMolarTL =
-            this.currentDoc?.getElementsByTagName('_thirdMolarTL')[0]
+            this.currentDoc?.getElementsByTagName('thirdMolarTL')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarTL(
             thirdMolarTL ? Number(thirdMolarTL) : -1,
         );
 
         const thirdMolarTR =
-            this.currentDoc?.getElementsByTagName('_thirdMolarTR')[0]
+            this.currentDoc?.getElementsByTagName('thirdMolarTR')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarTR(
             thirdMolarTR ? Number(thirdMolarTR) : -1,
         );
 
-        const thirdMolarBR =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
+        const thirdMolarBL =
+            this.currentDoc?.getElementsByTagName('thirdMolarBL')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBL(
-            thirdMolarBR ? Number(thirdMolarBR) : -1,
-        );
-
-        const thirdMolarBL =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
-                ?.textContent;
-        this.director.caseBuilder.setThirdMolarBR(
             thirdMolarBL ? Number(thirdMolarBL) : -1,
         );
 
+        const thirdMolarBR =
+            this.currentDoc?.getElementsByTagName('thirdMolarBR')[0]
+                ?.textContent;
+        this.director.caseBuilder.setThirdMolarBR(
+            thirdMolarBR ? Number(thirdMolarBR) : -1,
+        );
+
         const pubicSymphysisL =
-            this.currentDoc?.getElementsByTagName('_pubicSymphysisL')[0]
+            this.currentDoc?.getElementsByTagName('pubicSymphysisL')[0]
                 ?.textContent;
         this.director.caseBuilder.setPubicSymphysisL(
             pubicSymphysisL ? Number(pubicSymphysisL) : -1,
         );
 
         const pubicSymphysisR =
-            this.currentDoc?.getElementsByTagName('_pubicSymphysisR')[0]
+            this.currentDoc?.getElementsByTagName('pubicSymphysisR')[0]
                 ?.textContent;
         this.director.caseBuilder.setPubicSymphysisR(
             pubicSymphysisR ? Number(pubicSymphysisR) : -1,
         );
 
         const auricularAreaL =
-            this.currentDoc?.getElementsByTagName('_auricularAreaL')[0]
+            this.currentDoc?.getElementsByTagName('auricularAreaL')[0]
                 ?.textContent;
         this.director.caseBuilder.setAuricularAreaL(
             auricularAreaL ? Number(auricularAreaL) : -1,
         );
 
         const auricularAreaR =
-            this.currentDoc?.getElementsByTagName('_auricularAreaR')[0]
+            this.currentDoc?.getElementsByTagName('auricularAreaR')[0]
                 ?.textContent;
         this.director.caseBuilder.setAuricularAreaR(
             auricularAreaR ? Number(auricularAreaR) : -1,
         );
 
         const fourthRibL =
-            this.currentDoc?.getElementsByTagName('_fourthRibL')[0]
-                ?.textContent;
+            this.currentDoc?.getElementsByTagName('fourthRibL')[0]?.textContent;
         this.director.caseBuilder.setFourthRibL(
             fourthRibL ? Number(fourthRibL) : -1,
         );
 
         const fourthRibR =
-            this.currentDoc?.getElementsByTagName('_fourthRibR')[0]
-                ?.textContent;
+            this.currentDoc?.getElementsByTagName('fourthRibR')[0]?.textContent;
         this.director.caseBuilder.setFourthRibR(
             fourthRibR ? Number(fourthRibR) : -1,
         );
 
         const notes =
-            this.currentDoc?.getElementsByTagName('_notes')[0]?.textContent;
-        this.director.caseBuilder.setNotes(notes ? notes : 'NOTES ERROR');
+            this.currentDoc?.getElementsByTagName('notes')[0]?.textContent;
+        this.director.caseBuilder.setNotes(notes ? notes : '');
 
-        const generatedReports = this.extractReports('_generatedReports');
+        //extract the images
+        this.director.caseBuilder.setAuricularImages(
+            this.extractImagePaths('auricularImages'),
+        );
+        this.director.caseBuilder.setPubicImages(
+            this.extractImagePaths('pubicImages'),
+        );
+        this.director.caseBuilder.setSternalImages(
+            this.extractImagePaths('sternalImages'),
+        );
+        this.director.caseBuilder.setMolarImages(
+            this.extractImagePaths('molarImages'),
+        );
+
+        const generatedReports = this.extractReports('generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 
         //console.log('Loaded reports:', generatedReports);
@@ -141,15 +155,24 @@ export class XML_Controller {
         return this.director.makeCase();
     }
 
-    /**
-     * Extracts reports from the XML file into the correctly formatted dictionary.
-     * @param tag The tag name to extract reports from.
-     * @returns An array of AbstractReportModel objects.
-     */
+    private extractImagePaths(tag: string): string[] {
+        const paths: string[] = [];
+        const elements = this.currentDoc?.getElementsByTagName(tag);
+
+        if (elements && elements.length > 0) {
+            Array.from(elements[0].childNodes).forEach((node) => {
+                if (node.nodeName !== '#text' && node.textContent) {
+                    paths.push(node.textContent.trim());
+                }
+            });
+        }
+
+        return paths;
+    }
+
     private extractReports(tag: string): AbstractReportModel[] {
         const list: AbstractReportModel[] = [];
         const container = this.currentDoc?.getElementsByTagName(tag)[0];
-
         if (!container) {
             console.error('Error accessing _generatedReports in XML');
             return list;
@@ -238,9 +261,48 @@ export class XML_Controller {
      */
     public saveAsFile(_case: CaseModel, filename: string): void {
         const builder: Builder = new Builder();
-        const xmlString: string = builder.buildObject({ object: _case });
+        const xmlObject = {
+            object: {
+                caseID: _case.caseID,
+                populationAffinity: _case.populationAffinity,
+                sex: _case.sex,
+                thirdMolarTL: _case.thirdMolarTL,
+                thirdMolarTR: _case.thirdMolarTR,
+                thirdMolarBL: _case.thirdMolarBL,
+                thirdMolarBR: _case.thirdMolarBR,
+                pubicSymphysisL: _case.pubicSymphysisL,
+                pubicSymphysisR: _case.pubicSymphysisR,
+                auricularAreaL: _case.auricularAreaL,
+                auricularAreaR: _case.auricularAreaR,
+                fourthRibL: _case.fourthRibL,
+                fourthRibR: _case.fourthRibR,
+                notes: _case.notes,
+
+                auricularImages: _case.auricularImages.length
+                    ? {
+                          image: _case.auricularImages.map((path) => ({
+                              _: path,
+                          })),
+                      }
+                    : { image: [] },
+                pubicImages: _case.pubicImages.length
+                    ? { image: _case.pubicImages.map((path) => ({ _: path })) }
+                    : { image: [] },
+                sternalImages: _case.sternalImages.length
+                    ? {
+                          image: _case.sternalImages.map((path) => ({
+                              _: path,
+                          })),
+                      }
+                    : { image: [] },
+                molarImages: _case.molarImages.length
+                    ? { image: _case.molarImages.map((path) => ({ _: path })) }
+                    : { image: [] },
+            },
+        };
+
+        const xmlString: string = builder.buildObject(xmlObject);
         writeFileSync(filename, xmlString, 'utf-8');
-        //console.log(`File saved to ${filename}`);
     }
 
     //TODO
