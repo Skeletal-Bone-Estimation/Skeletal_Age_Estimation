@@ -12,9 +12,9 @@ let startWidth: number;
 
 // Mouse down event handler for starting the resizing
 const mouseDownHandler = (e: MouseEvent) => {
-    console.log(resizer);
+    //console.log(resizer);
     // Log the event for debugging
-    console.log('Resizer mousedown event triggered');
+    //console.log('Resizer mousedown event triggered');
 
     startX = e.clientX; // Get the current mouse X position
     startWidth = parseInt(window.getComputedStyle(sidebar).width, 10); // Get current width of the sidebar
@@ -27,7 +27,7 @@ const mouseDownHandler = (e: MouseEvent) => {
 
 // Mouse move event handler for resizing the sidebar
 const mouseMoveHandler = (e: MouseEvent) => {
-    console.log('Resizing in progress');
+    //console.log('Resizing in progress');
 
     // Calculate new width based on mouse movement
     const newWidth = startWidth + (e.clientX - startX);
@@ -38,7 +38,7 @@ const mouseMoveHandler = (e: MouseEvent) => {
 
 // Mouse up event handler for stopping the resizing
 const mouseUpHandler = () => {
-    console.log('Resizer mouseup event triggered');
+    //console.log('Resizer mouseup event triggered');
 
     // Remove the event listeners after resizing
     document.removeEventListener('mousemove', mouseMoveHandler);

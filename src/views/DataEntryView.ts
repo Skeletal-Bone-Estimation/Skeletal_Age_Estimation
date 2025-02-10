@@ -1,7 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
-// DataEntryView.ts
-
 import { PageController } from '../controllers/PageController';
 import { CaseModel } from '../models/CaseModel';
 import {
@@ -17,15 +14,16 @@ import {
 import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
-import { DataController } from '../controllers/DataController';
-import { ReportModel } from '../models/ReportModel';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
         super(document);
     }
 
-    //specialized method to load content with specific data entry page requirements
+    /**
+     * Specialized method to load content with specific data entry page requirements.
+     * @param htmlContent The HTML content to render.
+     */
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
@@ -33,6 +31,9 @@ export class DataEntryView extends AbstractView {
         this.autoLoadCaseData();
     }
 
+    /**
+     * Automatically load case data into the form fields.
+     */
     public autoLoadCaseData() {
         var _case: CaseModel = PageController.getInstance().getOpenCase();
         const caseID = document.getElementById(
@@ -159,6 +160,9 @@ export class DataEntryView extends AbstractView {
         notes.value = _case.notes;
     }
 
+    /**
+     * Initialize event listeners for the data entry page.
+     */
     protected override initEventListeners() {
         const auricularAreaL = document.getElementById(
             UI_Elements.auricularAreaL,
@@ -278,7 +282,7 @@ export class DataEntryView extends AbstractView {
             notes &&
             analyzeButton
         ) {
-            console.log('elements present');
+            //console.log('elements present');
 
             auricularAreaL.addEventListener('input', (event) => {
                 const target = event.target as HTMLSelectElement;
@@ -408,7 +412,9 @@ export class DataEntryView extends AbstractView {
         }
     }
 
-    //specialized method to connect listeners for data entry sidebar content
+    /**
+     * Specialized method to connect listeners for data entry sidebar content.
+     */
     protected override setSidebarListeners() {
         const caseInput = document.getElementById(
             UI_Elements.dataSideCaseID,
@@ -464,6 +470,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Parse a string value to an Affinity enum.
+     * @param value The string value to parse.
+     * @returns The corresponding Affinity enum value.
+     */
     private parseAffinity(value: string): Affinity {
         switch (value.toLowerCase()) {
             case 'white':
@@ -477,6 +488,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Convert an Affinity enum value to a string.
+     * @param value The Affinity enum value to convert.
+     * @returns The corresponding string value.
+     */
     private parseAffinitytoString(value: Affinity): string {
         switch (value) {
             case 0:
@@ -490,6 +506,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Parse a string value to a Sex enum.
+     * @param value The string value to parse.
+     * @returns The corresponding Sex enum value.
+     */
     private parseSex(value: string): Sex {
         switch (value.toLowerCase()) {
             case 'male':
@@ -503,6 +524,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Convert a Sex enum value to a string.
+     * @param value The Sex enum value to convert.
+     * @returns The corresponding string value.
+     */
     private parseSexToString(value: Sex): string {
         switch (value) {
             case 0:
@@ -516,6 +542,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Parse a string value to a ThirdMolar enum.
+     * @param value The string value to parse.
+     * @returns The corresponding ThirdMolar enum value.
+     */
     private parseThirdMolar(value: string): ThirdMolar {
         switch (value.toLowerCase()) {
             case 'a':
@@ -541,6 +572,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Convert a ThirdMolar enum value to a string.
+     * @param value The ThirdMolar enum value to convert.
+     * @returns The corresponding string value.
+     */
     private parseThirdMolarToString(value: ThirdMolar): string {
         switch (value) {
             case 0:
@@ -566,6 +602,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Parse a string value to an AuricularArea enum.
+     * @param value The string value to parse.
+     * @returns The corresponding AuricularArea enum value.
+     */
     private parseAuricularArea(value: string): AuricularArea {
         switch (value.toLowerCase()) {
             case 'one':
@@ -587,6 +628,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Convert an AuricularArea enum value to a string.
+     * @param value The AuricularArea enum value to convert.
+     * @returns The corresponding string value.
+     */
     private parseAuricularAreaToString(value: AuricularArea): string {
         switch (value) {
             case 1:
@@ -608,6 +654,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Parse a string value to a PubicSymphysis enum.
+     * @param value The string value to parse.
+     * @returns The corresponding PubicSymphysis enum value.
+     */
     private parsePubicSymphysis(value: string): PubicSymphysis {
         switch (value.toLowerCase()) {
             case 'one':
@@ -631,6 +682,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Convert a PubicSymphysis enum value to a string.
+     * @param value The PubicSymphysis enum value to convert.
+     * @returns The corresponding string value.
+     */
     private parsePublicSymphysisToString(value: PubicSymphysis): string {
         switch (value) {
             case 1:
@@ -654,6 +710,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Parse a string value to a SternalEnd enum.
+     * @param value The string value to parse.
+     * @returns The corresponding SternalEnd enum value.
+     */
     private parseFourthRib(value: string): SternalEnd {
         switch (value.toLowerCase()) {
             case 'one':
@@ -677,6 +738,11 @@ export class DataEntryView extends AbstractView {
         }
     }
 
+    /**
+     * Convert a SternalEnd enum value to a string.
+     * @param value The SternalEnd enum value to convert.
+     * @returns The corresponding string value.
+     */
     private parseFourthRibToString(value: SternalEnd): string {
         switch (value) {
             case 1:

@@ -1,14 +1,12 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
 import { CaseModel } from '../models/CaseModel';
-import { BuildDirector, ReportType } from '../utils/builder/BuildDirector';
+import { BuildDirector } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
 import { NullCaseModel } from '../models/NullCaseModel';
-import { ReportModel } from '../models/ReportModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
+import { AbstractReportModel } from '../models/AbstractReportModel';
 
-//XML_Controller.ts
 export class XML_Controller {
     private static instance: XML_Controller;
     private currentDoc: Document | null;
@@ -19,16 +17,27 @@ export class XML_Controller {
         this.director = new BuildDirector();
     }
 
+    /**
+     * Retrieves the singleton instance of the XML_Controller class.
+     * @returns The singleton instance.
+     */
     public static getInstance(): XML_Controller {
         if (!this.instance) this.instance = new XML_Controller();
         return this.instance;
     }
 
+    /**
+     * Gets the current document.
+     * @returns The current document or null if not set.
+     */
     public getCurrentDoc(): Document | null {
         return this.currentDoc;
     }
 
-    //loads a single xml file into a CaseModel object
+    /**
+     * Loads a single XML file into a CaseModel object.
+     * @returns The parsed AbstractCaseModel.
+     */
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
             console.error('Current doc error');
@@ -141,6 +150,8 @@ export class XML_Controller {
         const generatedReports = this.extractReports('generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 
+        //console.log('Loaded reports:', generatedReports);
+
         return this.director.makeCase();
     }
 
@@ -159,43 +170,65 @@ export class XML_Controller {
         return paths;
     }
 
-    private extractReports(tag: string): { [id: number]: ReportModel } {
-        const dict: { [id: number]: ReportModel } = {};
-
-        const element = this.currentDoc?.getElementsByTagName(tag)[0];
-        if (element) {
-            element.childNodes.forEach((node) => {
-                if (node.nodeName !== '#text' && node.textContent != null) {
-                    const key: number = Number(node.nodeName);
-                    const value: ReportModel =
-                        this.director.reportBuilder.build(node.textContent);
-                }
-            });
+    private extractReports(tag: string): AbstractReportModel[] {
+        const list: AbstractReportModel[] = [];
+        const container = this.currentDoc?.getElementsByTagName(tag)[0];
+        if (!container) {
+            console.error('Error accessing _generatedReports in XML');
+            return list;
         }
 
-        return dict;
-    }
-
-    private extractDict(id: string): { [key: string]: number } {
-        const dict: { [key: string]: number } = {};
-        const element = this.currentDoc?.getElementsByTagName(id)[0];
-        if (element) {
-            element.childNodes.forEach((node) => {
-                if (node.nodeName !== '#text') {
-                    const key: string = node.nodeName;
-                    const value: number = Number(node.textContent) || -1;
-                    dict[key] = value;
-                }
-            });
+        if (container && container.children) {
+            const children = container.children;
+            if (children.length % 2 !== 0) {
+                console.error(
+                    'Unexpected XML Structure: expected pairs of <_id> and <results>',
+                );
+                return list;
+            }
         }
-        return dict;
+
+        for (var i = 0; i < container?.children.length; i += 2) {
+            const idElement = container.children[i];
+            const resultsElement = container.children[i + 1];
+
+            if (
+                idElement.tagName !== '_id' ||
+                resultsElement.tagName !== 'results'
+            ) {
+                console.error(
+                    'Unexpected XML structure in report pair',
+                    idElement,
+                    resultsElement,
+                );
+                continue;
+            }
+
+            list.push(
+                this.director.makeReportFrom(
+                    idElement.textContent || '-1',
+                    resultsElement,
+                ),
+            );
+        }
+
+        return list;
     }
 
-    // TODO: load collection of files (as a folder)
+    //TODO
+    /**
+     * Parses a collection of files (as a folder).
+     * @returns An array of CaseModel objects.
+     */
     public parseCollection(): CaseModel[] {
         throw new Error('Parse collection not yet implemented');
     }
 
+    /**
+     * Loads a single case from a file.
+     * @param event The event triggering the file load.
+     * @param callback The callback function to execute after loading the file.
+     */
     public loadFile(event: Event, callback: () => void) {
         const files = (event.target as HTMLInputElement).files;
         if (files && files[0]) {
@@ -221,6 +254,11 @@ export class XML_Controller {
         } else throw new Error('No file selected');
     }
 
+    /**
+     * Saves a single case to a file.
+     * @param _case The CaseModel to save.
+     * @param filename The filename to save the case as.
+     */
     public saveAsFile(_case: CaseModel, filename: string): void {
         const builder: Builder = new Builder();
         const xmlObject = {
@@ -267,13 +305,22 @@ export class XML_Controller {
         writeFileSync(filename, xmlString, 'utf-8');
     }
 
-    // TODO: load collection of cases as folder selected by user
+    //TODO
+    /**
+     * Loads a collection of cases as a folder selected by the user.
+     * @param event The event triggering the collection load.
+     */
     public loadCollection(event: Event): void {
         // for loop to execute parseSingleFile for each case in collection
         throw new Error('Load collection not implemented yet');
     }
 
-    //TODO: save collection of cases into new folder named by the user
+    //TODO
+    /**
+     * Saves a collection of cases into a new folder named by the user.
+     * @param _case The CaseModel to save.
+     * @param filename The filename to save the collection as.
+     */
     public saveAsCollection(_case: CaseModel, filename: string): void {
         // for loop to execute saveAsFile for each case in collection
         throw new Error('Save as collection not yet implemented');
