@@ -19,10 +19,6 @@ export class CaseBuilder implements CaseBuilderIF {
     private _fourthRibL: number;
     private _fourthRibR: number;
     private _notes: string;
-    private _auricularImages: string[];
-    private _pubicImages: string[];
-    private _sternalImages: string[];
-    private _molarImages: string[];
     private _generatedReports: AbstractReportModel[];
 
     constructor() {
@@ -40,10 +36,6 @@ export class CaseBuilder implements CaseBuilderIF {
         this._fourthRibL = 1;
         this._fourthRibR = 1;
         this._notes = '';
-        this._auricularImages = [];
-        this._pubicImages = [];
-        this._sternalImages = [];
-        this._molarImages = [];
         this._generatedReports = [];
     }
 
@@ -187,26 +179,11 @@ export class CaseBuilder implements CaseBuilderIF {
         return this;
     }
 
-    public setAuricularImages(images: string[]): CaseBuilderIF {
-        this._auricularImages = images;
-        return this;
-    }
-
-    public setPubicImages(images: string[]): CaseBuilderIF {
-        this._pubicImages = images;
-        return this;
-    }
-
-    public setSternalImages(images: string[]): CaseBuilderIF {
-        this._sternalImages = images;
-        return this;
-    }
-
-    public setMolarImages(images: string[]): CaseBuilderIF {
-        this._molarImages = images;
-        return this;
-    }
-
+    /**
+     * Sets the reports generated for the case.
+     * @param generatedReports The reports to set.
+     * @returns The CaseBuilderIF instance.
+     */
     public setReportsGenerated(
         generatedReports: AbstractReportModel[],
     ): CaseBuilderIF {
@@ -234,10 +211,6 @@ export class CaseBuilder implements CaseBuilderIF {
             this._fourthRibL,
             this._fourthRibR,
             this._notes,
-            this._auricularImages,
-            this._pubicImages,
-            this._sternalImages,
-            this._molarImages,
             this._generatedReports,
         );
     }

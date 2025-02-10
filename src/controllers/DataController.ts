@@ -1,7 +1,5 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { rmSync } from 'fs';
-import * as fs from 'fs';
-import * as path from 'path';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
 import { NullCaseModel } from '../models/NullCaseModel';
@@ -117,24 +115,12 @@ export class DataController {
      * @param event The event triggering the file load.
      */
     public loadCaseFromFile(event: Event): void {
-        console.log('LOAD CASE FROM FILE CALLED');
         this.xmlController.loadFile(event, () => {
             //callback function executed within the implementation of XML_Controller.loadFile(...)
             const loadedCase: AbstractCaseModel =
                 this.xmlController.parseSingleFile();
-
-            //makes sure that past xml files will work as expected
-            //failsafe for unexpected behavior if case doesnt have image data
-            if (loadedCase instanceof CaseModel) {
-                loadedCase.auricularImages ??= [];
-                loadedCase.pubicImages ??= [];
-                loadedCase.sternalImages ??= [];
-                loadedCase.molarImages ??= [];
-            }
             this.addCase(loadedCase as CaseModel);
             this._openCase = loadedCase;
-
-            console.log('Case successfully loaded:', this._openCase);
         });
     }
 
@@ -157,7 +143,6 @@ export class DataController {
         element: CaseElement,
         content:
             | string
-            | string[]
             | Affinity
             | Sex
             | ThirdMolar
@@ -214,18 +199,6 @@ export class DataController {
             case CaseElement.notes:
                 obj.notes = content as string;
                 break;
-            case CaseElement.auricularImages:
-                obj.auricularImages = content as string[];
-                break;
-            case CaseElement.pubicImages:
-                obj.pubicImages = content as string[];
-                break;
-            case CaseElement.sternalImages:
-                obj.sternalImages = content as string[];
-                break;
-            case CaseElement.molarImages:
-                obj.molarImages = content as string[];
-                break;
             default:
                 throw new Error(
                     'Invalid CaseElement passed to DataController.editCase(...)',
@@ -268,10 +241,6 @@ export class DataController {
         fourthRibL: SternalEnd = SternalEnd.Unknown,
         fourthRibR: SternalEnd = SternalEnd.Unknown,
         notes: string = '',
-        auricularImages: string[] = [],
-        pubicImages: string[] = [],
-        sternalImages: string[] = [],
-        molarImages: string[] = [],
     ) {
         var director = new BuildDirector();
 
@@ -289,10 +258,6 @@ export class DataController {
         director.caseBuilder.setFourthRibL(fourthRibL);
         director.caseBuilder.setFourthRibR(fourthRibR);
         director.caseBuilder.setNotes(notes);
-        director.caseBuilder.setAuricularImages(auricularImages);
-        director.caseBuilder.setPubicImages(pubicImages);
-        director.caseBuilder.setSternalImages(sternalImages);
-        director.caseBuilder.setMolarImages(molarImages);
 
         this._openCase = director.makeCase();
         this.addCase(this._openCase as CaseModel);
@@ -314,58 +279,6 @@ export class DataController {
      */
     public getMostRecentReport(): AbstractReportModel {
         return (this.openCase as CaseModel).mostRecentReport;
-    }
-
-    //save the image in uploads folder tied to specific case
-    public async handleFileUpload(
-        files: FileList,
-        caseAttr: CaseElement,
-    ): Promise<void> {
-        console.log(
-            `handleFileUpload called for ${caseAttr}, ${files.length} files received.`,
-        );
-
-        if (!(this._openCase instanceof CaseModel)) return;
-
-        const _case = this._openCase as CaseModel;
-        const caseFolder = path.join(__dirname, '../../uploads', _case.caseID);
-
-        //verify folder exists
-        if (!fs.existsSync(caseFolder)) {
-            fs.mkdirSync(caseFolder, { recursive: true });
-            console.log(`Created directory: ${caseFolder}`);
-        }
-
-        const uploadedPaths: string[] = [];
-
-        for (const file of Array.from(files)) {
-            const filePath = path.join(caseFolder, file.name);
-            uploadedPaths.push(`/uploads/${_case.caseID}/${file.name}`);
-
-            //we copy the pic to uploads
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                if (event.target?.result) {
-                    fs.writeFileSync(
-                        filePath,
-                        Buffer.from(event.target.result as ArrayBuffer),
-                    );
-                    console.log(`saved file: ${filePath}`);
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        //store the image path in the casemodel
-        (_case as any)[caseAttr] = uploadedPaths;
-        console.log('Updated case images:', _case);
-
-        //save
-        this._openCase.notify(Observers.autosave);
-        XML_Controller.getInstance().saveAsFile(
-            _case,
-            `save_data/${_case.caseID}.xml`,
-        );
     }
 
     /**
