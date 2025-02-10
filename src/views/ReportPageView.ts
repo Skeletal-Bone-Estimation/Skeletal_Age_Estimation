@@ -184,6 +184,7 @@ export class ReportPageView extends AbstractView {
                 <p>Top Right: ${this.formatThirdMolar(report.getThirdMolar(Side.TR))}</p>
                 <p>Bottom Left: ${this.formatThirdMolar(report.getThirdMolar(Side.BL))}</p>
                 <p>Bottom Right: ${this.formatThirdMolar(report.getThirdMolar(Side.BR))}</p>
+                <p>Actual: ${this.formatThirdMolar(report.getThirdMolar(Side.C))}</p>
             `;
         } else {
             console.error('Element molarData not found!');
@@ -235,7 +236,9 @@ export class ReportPageView extends AbstractView {
      */
     private formatThirdMolar(value: number): string {
         if (value === 0) return 'Under 18.';
-        if (value === 18) return '18 or Older';
+        if (value === 1) return 'Possibly 18';
+        if (value === 2) return 'Likely 18 or Older';
+        if (value === 3) return '18 or Older';
         return 'Unknown';
     }
 

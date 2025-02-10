@@ -143,7 +143,9 @@ export class ComparePageView extends AbstractView {
      */
     private formatThirdMolar(value: number): string {
         if (value === 0) return 'Under 18.';
-        if (value === 18) return '18 or Older';
+        if (value === 1) return 'Possibly 18';
+        if (value === 2) return 'Likely 18 or Older';
+        if (value === 3) return '18 or Older';
         return 'Unknown';
     }
 

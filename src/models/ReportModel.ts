@@ -99,7 +99,8 @@ export class ReportModel extends AbstractReportModel {
             side != Side.TL &&
             side != Side.TR &&
             side != Side.BL &&
-            side != Side.BR
+            side != Side.BR &&
+            side != Side.C
         )
             throw new Error('Invalid side for third molar analysis');
         return this.results['thirdMolar'][side];
