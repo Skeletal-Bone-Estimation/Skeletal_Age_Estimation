@@ -5,39 +5,46 @@
 
         <!--This is where the graph goes-->
         <div class="graphPlacement">
-            <!-- Add vertical lines here -->
-            <div class="vertical-line line-10"> 10% </div>
-            <div class="vertical-line line-20"> 20% </div>
-            <div class="vertical-line line-30"> 30% </div>
-            <div class="vertical-line line-40"> 40% </div>
-            <div class="vertical-line line-50"> 50% </div>
-            <div class="vertical-line line-60"> 60% </div>
-            <div class="vertical-line line-70"> 70% </div>
-            <div class="vertical-line line-80"> 80% </div>
-            <div class="vertical-line line-90"> 90% </div>
+
+            <p>Pubic Symphysis Left</p>
+            <div class="range-container">
+                <div class="range-bar" id="bar1"></div>
+            </div>
+        
+            <p>Pubic Symphysis Right</p>
+            <div class="range-container">
+                <div class="range-bar" id="bar2"></div>
+            </div>
+
+            <p>Auricular Surface Left</p>
+            <div class="range-container">
+                <div class="range-bar" id="bar3"></div>
+            </div>
+        
+            <p>Auricular Surface Right</p>
+            <div class="range-container">
+                <div class="range-bar" id="bar4"></div>
+            </div>
             
+            <p>Sternal End Left</p>
             <div class="range-container">
-                <div class="range-bar" id="ageBar"> Age Range </div>
+                <div class="range-bar" id="bar5"></div>
             </div>
-
+        
+            <p>Sternal End Right</p>
             <div class="range-container">
-                <div class="range-bar" id="pubicSymphysisBar"> Pubic Symphysis </div>
-            </div>
-
-            <div class="range-container">
-                <div class="range-bar" id="auricularSurfaceBar"> Auricular Surface </div>
-            </div>
-
-            <div class="range-container">
-                <div class="range-bar" id="sternalEndBar"> Sternal End </div>
-            </div>       
+                <div class="range-bar" id="bar6"></div>
+            </div> 
+            
         </div>
         
         <div class="reportButtonsContainer">
             <button class="reportButtons" id="downloadBtn">Download Report</button>
             <button class="reportButtons" id="printBtn">Print Report</button>
             <button class="reportButtons" id="archiveBtn">Report Archive</button>
+            <button class="reportButtons" id="changeBtn">Change Report</button>
             <button class="reportButtons" id="compareBtn">Compare Report</button>
+
         </div>
         <button class="reportButtons" id="backBtn">Back to Data Entry</button>
     </div>
@@ -49,7 +56,7 @@
         <!--overall range summarized from all methods-->
         <div id="summarizedRange"></div>
 
-        <!--different ranges for individual methods-->
+        <!--different ranges for indiviudal methods-->
         <div class="dataChartDiv">
             <div id="pubicData"></div>
             <div id="auricularData"></div>
@@ -57,5 +64,7 @@
             <div id="molarData"></div>
         </div>
     </div>
+
+    <script src="tester.ts"></script>
 
 </div>
