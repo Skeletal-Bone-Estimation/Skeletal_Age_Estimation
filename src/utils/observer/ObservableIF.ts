@@ -1,5 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
 import { Observers } from '../enums';
 import { ObserverIF } from './ObserverIF';
 

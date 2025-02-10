@@ -1,6 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
-//DataController.ts
 import { rmSync } from 'fs';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { CaseModel } from '../models/CaseModel';
@@ -34,30 +32,51 @@ export class DataController {
         this._openReport = new NullReportModel();
     }
 
-    //retreives the instance of the PAgeController singleton
+    /**
+     * Retrieves the singleton instance from the static DataController object.
+     * @returns The singleton instance.
+     */
     public static getInstance(): DataController {
         if (!this.instance) this.instance = new DataController();
         return this.instance;
     }
 
+    /**
+     * Accessor for the _openReport attribute.
+     * @returns The open AbstractReportModel object.
+     */
     public get openReport(): AbstractReportModel {
         return this._openReport;
     }
 
+    /**
+     * Mutator for the _openReport attribute.
+     * @param report The new AbstractReportModel being assigned.
+     */
     public set openReport(report: AbstractReportModel) {
         this._openReport = report;
     }
 
-    //retreives the reference to the list of currently opened CaseModel objects
+    /**
+     * Retrieves the reference to the list of currently opened CaseModel objects.
+     * @returns The list of loaded CaseModel objects.
+     */
     public get loadedCases(): CaseModel[] {
         return this._loadedCases;
     }
 
-    //retreives the reference to the currently opened CaseModel object
+    /**
+     * Accessor for the openCase attribute.
+     * @returns The _openCase attribute.
+     */
     public get openCase(): AbstractCaseModel {
         return this._openCase;
     }
 
+    /**
+     * Retrieves the number of reports across all loaded cases.
+     * @returns The total number of reports.
+     */
     public getNumReports(): number {
         var sum: number = 0;
         this._loadedCases.forEach(
@@ -66,23 +85,35 @@ export class DataController {
         return sum;
     }
 
-    //retreives the list of ReportModels stored by the currently opened case
+    /**
+     * Retrieves the list of ReportModels stored by the currently opened case.
+     * @returns List of AbstractReportModel objects.
+     */
     public getReports(): AbstractReportModel[] {
         return (this._openCase as CaseModel).generatedReports;
     }
 
-    //adds a case to the list of opened cases
+    /**
+     * Adds a case to the list of opened cases.
+     * @param newCase The new CaseModel to be added.
+     */
     public addCase(newCase: CaseModel): void {
         this._loadedCases.push(newCase);
     }
 
-    //removes a case from the list of opened cases
+    /**
+     * Removes a case from the list of opened cases.
+     * @param selectedCase The CaseModel to be removed.
+     */
     public deleteCase(selectedCase: CaseModel): void {
         const index = this._loadedCases.indexOf(selectedCase);
         this._loadedCases.splice(index, 1);
     }
 
-    //delegates to the xml controller to handle loading a file from xml and stores a refernece to the loaded object
+    /**
+     * Delegates to the XML controller to handle loading a file from XML and stores a reference to the loaded object.
+     * @param event The event triggering the file load.
+     */
     public loadCaseFromFile(event: Event): void {
         this.xmlController.loadFile(event, () => {
             //callback function executed within the implementation of XML_Controller.loadFile(...)
@@ -93,14 +124,21 @@ export class DataController {
         });
     }
 
-    //delegates to XML_Controller to handle parsing the collection and stores a reference to the resulting list
+    /**
+     * Delegates to XML_Controller to handle parsing the collection and stores a reference to the resulting list.
+     * @param event The event triggering the collection load.
+     */
     public loadCollectionFromFile(event: Event): void {
         this.xmlController.loadCollection(event);
         const loadedCases: CaseModel[] = this.xmlController.parseCollection();
         this._loadedCases = loadedCases;
     }
 
-    //edits an attribute of the currently opened CaseModel object based on the enumeration parameter
+    /**
+     * Edits an attribute of the currently opened CaseModel object based on the enumeration parameter.
+     * @param element The CaseElement to be edited.
+     * @param content The new content for the specified element.
+     */
     public editCase(
         element: CaseElement,
         content:
@@ -171,6 +209,23 @@ export class DataController {
         if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
     }
 
+    /**
+     * Creates a new case with the specified attributes.
+     * @param caseID The ID of the new case.
+     * @param sex The sex of the individual in the case.
+     * @param affinity The population affinity of the individual in the case.
+     * @param thirdMolarTL The third molar status for the top left.
+     * @param thirdMolarTR The third molar status for the top right.
+     * @param thirdMolarBL The third molar status for the bottom left.
+     * @param thirdMolarBR The third molar status for the bottom right.
+     * @param pubicSymphysisL The pubic symphysis status for the left side.
+     * @param pubicSymphysisR The pubic symphysis status for the right side.
+     * @param auricularAreaL The auricular area status for the left side.
+     * @param auricularAreaR The auricular area status for the right side.
+     * @param fourthRibL The sternal end status for the left fourth rib.
+     * @param fourthRibR The sternal end status for the right fourth rib.
+     * @param notes Additional notes for the case.
+     */
     public createCase(
         caseID: string,
         sex: Sex,
@@ -208,19 +263,37 @@ export class DataController {
         this.addCase(this._openCase as CaseModel);
     }
 
+    /**
+     * Creates a new report with the specified results.
+     * @param results The results to be included in the report.
+     * @returns The newly created AbstractReportModel.
+     */
     public createReport(results: {}): AbstractReportModel {
         var director = new BuildDirector();
         return director.makeReport(results);
     }
 
+    /**
+     * Retrieves the most recent report from the currently opened case.
+     * @returns The most recent AbstractReportModel.
+     */
     public getMostRecentReport(): AbstractReportModel {
         return (this.openCase as CaseModel).mostRecentReport;
     }
 
+    /**
+     * Sets the most recent report for the currently opened case.
+     * @param report The new most recent AbstractReportModel.
+     */
     public setMostRecentReport(report: AbstractReportModel): void {
         (this.openCase as CaseModel).mostRecentReport = report;
     }
 
+    /**
+     * Finds the index of a report by its ID.
+     * @param id The ID of the report to find.
+     * @returns The index of the report, or -1 if not found.
+     */
     public findReportIndex(id: string): number {
         var idx = -1;
         const _case: CaseModel = this._openCase as CaseModel;

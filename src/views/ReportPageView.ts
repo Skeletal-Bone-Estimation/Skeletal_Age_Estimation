@@ -15,7 +15,10 @@ export class ReportPageView extends AbstractView {
         this.elements = [];
     }
 
-    //override render method for specialized view
+    /**
+     * Override render method for specialized view.
+     * @param htmlContent The HTML content to render.
+     */
     public override render(htmlContent: string): void {
         this.contentDiv.innerHTML = htmlContent;
         this.loadElements();
@@ -44,7 +47,9 @@ export class ReportPageView extends AbstractView {
         }
     }
 
-    //override initEventListeners method for view specific listeners
+    /**
+     * Override initEventListeners method for view-specific listeners.
+     */
     protected override initEventListeners(): void {
         //report archive  button
         this.elements[0].addEventListener('click', async () => {
@@ -93,7 +98,9 @@ export class ReportPageView extends AbstractView {
             );
     }
 
-    //load elements from the html document into the elements array
+    /**
+     * Load elements from the HTML document into the elements array.
+     */
     private loadElements(): void {
         this.elements = [
             document.getElementById(
@@ -106,7 +113,10 @@ export class ReportPageView extends AbstractView {
         ];
     }
 
-    //load the report data into the report page
+    /**
+     * Load the report data into the report page.
+     * @param report The ReportModel to load.
+     */
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
         const caseModel = DataController.getInstance().openCase as CaseModel;
@@ -175,13 +185,24 @@ export class ReportPageView extends AbstractView {
                 <p>Top Right: ${this.formatThirdMolar(report.getThirdMolar(Side.TR))}</p>
                 <p>Bottom Left: ${this.formatThirdMolar(report.getThirdMolar(Side.BL))}</p>
                 <p>Bottom Right: ${this.formatThirdMolar(report.getThirdMolar(Side.BR))}</p>
+                <p>Actual: ${this.formatThirdMolar(report.getThirdMolar(Side.C))}</p>
             `;
         } else {
             console.error('Element molarData not found!');
         }
     }
 
-    // Helper function to display data sections with ranges
+    /**
+     * Helper function to display data sections with ranges.
+     * @param elementId The ID of the HTML element to populate.
+     * @param sectionTitle The title of the section.
+     * @param leftValue The left value to display.
+     * @param rightValue The right value to display.
+     * @param combinedValue The combined value to display.
+     * @param leftRange The range for the left value.
+     * @param rightRange The range for the right value.
+     * @param combinedRange The range for the combined value.
+     */
     private displayDataSection(
         elementId: string,
         sectionTitle: string,
@@ -212,18 +233,33 @@ export class ReportPageView extends AbstractView {
         updateRangeBar(combinedRange.min, combinedRange.max, graphId);
     }
 
-    // Temporary function for formatting third molar results
+    /**
+     * Temporary function for formatting third molar results.
+     * @param value The value to format.
+     * @returns The formatted string.
+     */
     private formatThirdMolar(value: number): string {
         if (value === 0) return 'Under 18.';
-        if (value === 18) return '18 or Older';
+        if (value === 1) return 'Possibly 18';
+        if (value === 2) return 'Likely 18 or Older';
+        if (value === 3) return '18 or Older';
         return 'Unknown';
     }
 
+    /**
+     * Public access method for formatThirdMolar.
+     * @param value The value to format.
+     * @returns The formatted string.
+     */
     public accessFormatThirdMolar(value: number): string {
         return this.formatThirdMolar(value);
     }
 
-    // Placeholder for summarized range calculation
+    /**
+     * The summarized range calculation.
+     * @param report The report to calculate the range for.
+     * @returns The summarized range as a string.
+     */
     private calculateSummarizedRange(report: AbstractReportModel): string {
         // Get the minimum and maximum age across all ranges
         const minAge = Math.min(

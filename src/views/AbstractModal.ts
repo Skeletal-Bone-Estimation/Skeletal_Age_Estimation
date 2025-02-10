@@ -16,13 +16,17 @@ export class AbstractModal extends AbstractView implements ModalIF {
         ) as HTMLElement;
     }
 
+    /**
+     * Open the modal by displaying the modal container.
+     */
     public openModal(): void {
-        // Create a container div to hold the modal if it doesn't exist
         this.modalContainer.style.display = 'flex';
     }
 
+    /**
+     * Close the modal by hiding the modal container.
+     */
     protected closeModal(): void {
-        //close modal
         this.modalContainer.style.display = 'none';
     }
 }
