@@ -392,7 +392,7 @@ body {
 #reportAndGuideDiv {
   display: flex;
   flex-direction: column; 
-  align-items: flex-start;
+  align-items: flex;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -412,8 +412,8 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   margin-left: 20px;
-  margin-bottom: 175px;
-  margin-top: 50px;
+  margin-bottom: 130px;
+  margin-top: 5px;
 }
 
 #scoringGuide, #dataEntryReport {
@@ -436,7 +436,7 @@ body {
 #graphDiv {
   display: flex;
   flex-direction: column;
-  gap: 15px; 
+  gap: 50px; 
   align-items: center;
   justify-content: center; 
   width: 100%;
@@ -444,13 +444,14 @@ body {
 }
 
 /* temp graph placement */
-#graphPlacement {
+.graphPlacement {
   width: clamp(300px, 80%, 900px); 
   aspect-ratio: 1; 
   background: white;
   border: 2px solid var(--div-color-2);
   border-radius: 5px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -556,6 +557,131 @@ body {
   gap: 10px; 
 }
 
+.compareDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.compareHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 50px;
+}
+
+/* case title in compare*/
+#reportCaseTitleCompare {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 150px; 
+  text-align: center;
+  padding: 15px;
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  font-size: clamp(14px, 2vw, 18px); 
+  box-sizing: border-box;
+}
+
+.compareBack {
+  margin-left: auto;
+}
+
+.compareData {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; 
+  align-items: center;
+  gap: 400px; 
+}
+
+.compareDataLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  gap: 10px; 
+}
+
+#graphPlacementLeft {
+  width: clamp(400px, 50%, 400px); 
+  aspect-ratio: 1; 
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dataChartDivLeft {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px; 
+  width: 150%; 
+  max-width: 2000px; 
+  padding: 10px;
+  box-sizing: border-box; 
+}
+
+#summarizedRangeLeft {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 250px; 
+  text-align: center;
+  padding: 15px;
+  background-color: var(--div-color-2);
+  color: var(--div-color-1);
+  font-size: clamp(14px, 2vw, 18px); 
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.compareDataRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  gap: 10px; 
+}
+
+#graphPlacementRight {
+  width: clamp(400px, 50%, 400px); 
+  aspect-ratio: 1; 
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dataChartDivRight {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px; 
+  width: 150%; 
+  max-width: 2000px; 
+  padding: 10px;
+  box-sizing: border-box; 
+}
+
+#summarizedRangeRight {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 250px; 
+  text-align: center;
+  padding: 15px;
+  background-color: var(--div-color-2);
+  color: var(--div-color-1);
+  font-size: clamp(14px, 2vw, 18px); 
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
 /*method labels*/
 .methodLabel {
   font-weight: bold;
@@ -580,7 +706,67 @@ select {
 
 input[type="text"] {
   border-radius: 12px;
-  padding: 8px;;
+  padding: 8px;
   border: 1px solid var(--border-color-on-light);
   background-color: white;
+}
+
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Ensure it overlays other content */
+}
+
+#modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#reportModalButtons {
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  width: auto;
+}
+
+#reportList li {
+  padding: 8px;
+  cursor: pointer; /* Make the cursor a pointer to indicate it's clickable */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover */
+}
+
+#reportArchiveList li:hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+  color: #333; /* Change text color on hover */
+}
+
+.selected {
+  background-color: #007bff; /* Blue background for selected item */
+  color: white; /* White text for selected item */
+}
+
+.range-container {
+  position: relative;
+  flex-direction: row;
+  width: 80%;
+  height: 20px;
+  background-color: #ddd; 
+  border-radius: 10px;
+  margin: 20px auto;
+}
+
+.range-bar {
+  position: absolute;
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 10px;
 }

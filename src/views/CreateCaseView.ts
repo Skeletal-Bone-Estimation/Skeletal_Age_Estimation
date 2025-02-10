@@ -1,5 +1,4 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
-
 import { PageController } from '../controllers/PageController';
 import { Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractView } from './AbstractView';
@@ -12,14 +11,21 @@ export class CreateCaseView extends AbstractView {
         super(document);
     }
 
+    /**
+     * Specialized method to load content with specific case creation page requirements.
+     * @param htmlContent The HTML content to render.
+     */
     public override render(htmlContent: string): void {
         //console.log('loaded from CaseCreationView);
-        console.log('Rendering CreateCaseView'); // Debugging line
+        //console.log('Rendering CreateCaseView'); // Debugging line
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
     }
 
+    /**
+     * Initialize event listeners for the case creation page.
+     */
     protected override initEventListeners(): void {
         document
             .getElementById(UI_Elements.createStartCase)!
@@ -40,7 +46,7 @@ export class CreateCaseView extends AbstractView {
                     populationAffinitySelect.value,
                 );
 
-                console.log({ caseID, sex, populationAffinity }); // Debugging line
+                //console.log({ caseID, sex, populationAffinity }); // Debugging line
 
                 PageController.getInstance().createCase(
                     caseID,

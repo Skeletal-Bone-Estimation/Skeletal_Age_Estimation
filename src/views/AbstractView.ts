@@ -8,13 +8,25 @@ export abstract class AbstractView {
         this.contentDiv = document.getElementById('rootDiv')!; // Get the rootDiv element from the DOM
     }
 
-    // Default method to load content into the rootDiv
+    /**
+     * Default method to load content into the rootDiv.
+     * @param htmlContent The HTML content to render.
+     */
     public render(htmlContent: string): void {
         //console.log('loaded from AbstractView');
         this.contentDiv.innerHTML = htmlContent; // Set the innerHTML of the contentDiv
     }
 
+    /**
+     * Initialize event listeners.
+     * This method can be overridden by subclasses.
+     */
     protected initEventListeners(): void {}
+
+    /**
+     * Placeholder method for setting sidebar listeners.
+     * This method can be overridden by subclasses.
+     */
     protected setSidebarListeners(): void {
         // Placeholder method for setting sidebar listeners, can be overridden
     }
