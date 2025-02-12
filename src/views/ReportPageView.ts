@@ -5,7 +5,7 @@ import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
 import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractReportModel } from '../models/AbstractReportModel';
-import { updateRangeBar } from '../utils/charts/tester';
+import { updateRangeBar } from '../utils/charts/ageRangeChart';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
@@ -137,8 +137,6 @@ export class ReportPageView extends AbstractView {
             console.error('SummarizedRange not found');
         }
 
-        updateRangeBar(15, 27, 30, 80, 23, 42, 58, 60, 10, 15, 32, 60);
-
         // Display estimated pubic symphysis range
         this.displayDataSection(
             'pubicData',
@@ -149,6 +147,7 @@ export class ReportPageView extends AbstractView {
             report.getPubicSymphysisRange(Side.L),
             report.getPubicSymphysisRange(Side.R),
             report.getPubicSymphysisRange(Side.C),
+            'pubicSymphysisBar',
         );
 
         // Display the auricular surface range
@@ -161,6 +160,7 @@ export class ReportPageView extends AbstractView {
             report.getAuricularSurfaceRange(Side.L),
             report.getAuricularSurfaceRange(Side.R),
             report.getAuricularSurfaceRange(Side.C),
+            'auricularSurfaceBar',
         );
 
         // Display the sternal end range
@@ -173,6 +173,7 @@ export class ReportPageView extends AbstractView {
             report.getSternalEndRange(Side.L),
             report.getSternalEndRange(Side.R),
             report.getSternalEndRange(Side.C),
+            'sternalEndBar',
         );
 
         // Display the third molar data
@@ -211,6 +212,7 @@ export class ReportPageView extends AbstractView {
         leftRange: { min: number; max: number },
         rightRange: { min: number; max: number },
         combinedRange: { min: number; max: number },
+        graphId: string,
     ): void {
         const element = document.getElementById(elementId);
         if (!element) {
@@ -227,6 +229,8 @@ export class ReportPageView extends AbstractView {
             <p>Combined: ${combinedValue.toFixed(2)}</p>
             <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
         `;
+
+        updateRangeBar(combinedRange.min, combinedRange.max, graphId);
     }
 
     /**
@@ -257,6 +261,26 @@ export class ReportPageView extends AbstractView {
      * @returns The summarized range as a string.
      */
     private calculateSummarizedRange(report: AbstractReportModel): string {
-        return `${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)}`;
+        // Get the minimum and maximum age across all ranges
+        const minAge = Math.min(
+            report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min,
+        ).toFixed(2);
+
+        const maxAge = Math.max(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).max,
+        ).toFixed(2);
+
+        // Convert min/max to numbers for updateRangeBar
+        const minAgeNum = parseFloat(minAge);
+        const maxAgeNum = parseFloat(maxAge);
+
+        // Update the UI range bar (adjust the ID accordingly)
+        updateRangeBar(minAgeNum, maxAgeNum, 'ageBar');
+
+        return `${minAge} - ${maxAge}`;
     }
 }
