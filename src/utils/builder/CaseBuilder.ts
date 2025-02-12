@@ -1,6 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
+import { NullReportModel } from '../../models/NullReportModel';
 import { CaseBuilderIF } from './CaseBuilderIF';
 
 // Concrete builder for CaseModel
@@ -20,6 +21,7 @@ export class CaseBuilder implements CaseBuilderIF {
     private _fourthRibR: number;
     private _notes: string;
     private _generatedReports: AbstractReportModel[];
+    private _mostRecentReport: AbstractReportModel;
 
     constructor() {
         this._caseID = '';
@@ -37,6 +39,7 @@ export class CaseBuilder implements CaseBuilderIF {
         this._fourthRibR = 1;
         this._notes = '';
         this._generatedReports = [];
+        this._mostRecentReport = new NullReportModel();
     }
 
     /**
@@ -192,6 +195,16 @@ export class CaseBuilder implements CaseBuilderIF {
     }
 
     /**
+     * Sets the reports generated for the case.
+     * @param generatedReports The reports to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setMostRecentReport(report: AbstractReportModel): CaseBuilderIF {
+        this._mostRecentReport = report;
+        return this;
+    }
+
+    /**
      * Builds and returns the CaseModel.
      * @returns The built CaseModel.
      */
@@ -212,6 +225,7 @@ export class CaseBuilder implements CaseBuilderIF {
             this._fourthRibR,
             this._notes,
             this._generatedReports,
+            this._mostRecentReport,
         );
     }
 }
