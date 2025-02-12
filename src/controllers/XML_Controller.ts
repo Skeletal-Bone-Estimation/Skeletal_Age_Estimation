@@ -6,6 +6,7 @@ import { Builder } from 'xml2js';
 import { NullCaseModel } from '../models/NullCaseModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
+import { ReportModel } from '../models/ReportModel';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -136,9 +137,39 @@ export class XML_Controller {
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 
+        const mostRecentReport = this.extractReport(
+            this.currentDoc.getElementsByTagName('_mostRecentReport')[0],
+        );
+        if (mostRecentReport)
+            this.director.caseBuilder.setMostRecentReport(
+                mostRecentReport as ReportModel,
+            );
+
         //console.log('Loaded reports:', generatedReports);
+        console.log('Loaded Case:', this.director.makeCase());
 
         return this.director.makeCase();
+    }
+
+    /**
+     * Extracts a single report from an Element.
+     * @param reportElement The element containing the report data
+     * @returns An AbstractReportModel or null
+     */
+    private extractReport(reportElement: Element): AbstractReportModel | null {
+        const idElement = reportElement.getElementsByTagName('_id')[0];
+        const resultsElement = reportElement.getElementsByTagName('results')[0];
+
+        if (!idElement || !resultsElement) {
+            console.error(
+                'Missing <_id> or <results> tag in <report>',
+                reportElement,
+            );
+            return null;
+        }
+
+        const id = idElement.textContent || '-1';
+        return this.director.makeReportFrom(id, resultsElement);
     }
 
     /**
@@ -155,38 +186,19 @@ export class XML_Controller {
             return list;
         }
 
-        if (container && container.children) {
-            const children = container.children;
-            if (children.length % 2 !== 0) {
+        //iterate _generatedReports tag
+        for (var i = 0; i < container.children.length; i++) {
+            const reportElement = container.children[i];
+            if (reportElement.tagName !== 'report') {
                 console.error(
-                    'Unexpected XML Structure: expected pairs of <_id> and <results>',
-                );
-                return list;
-            }
-        }
-
-        for (var i = 0; i < container?.children.length; i += 2) {
-            const idElement = container.children[i];
-            const resultsElement = container.children[i + 1];
-
-            if (
-                idElement.tagName !== '_id' ||
-                resultsElement.tagName !== 'results'
-            ) {
-                console.error(
-                    'Unexpected XML structure in report pair',
-                    idElement,
-                    resultsElement,
+                    'Unexpected XML structure: Expected <report> tag',
+                    reportElement,
                 );
                 continue;
             }
 
-            list.push(
-                this.director.makeReportFrom(
-                    idElement.textContent || '-1',
-                    resultsElement,
-                ),
-            );
+            var report = this.extractReport(reportElement);
+            if (report != null) list.push(report as ReportModel);
         }
 
         return list;
@@ -238,7 +250,14 @@ export class XML_Controller {
      */
     public saveAsFile(_case: CaseModel, filename: string): void {
         const builder: Builder = new Builder();
-        const xmlString: string = builder.buildObject({ object: _case });
+        const xmlString: string = builder.buildObject({
+            object: {
+                ..._case,
+                _generatedReports: {
+                    report: _case.generatedReports,
+                },
+            },
+        });
         writeFileSync(filename, xmlString, 'utf-8');
         //console.log(`File saved to ${filename}`);
     }

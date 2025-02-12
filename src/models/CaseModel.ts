@@ -48,6 +48,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibR: SternalEnd,
         notes: string,
         generatedReports: AbstractReportModel[],
+        mostRecentReport: AbstractReportModel,
     ) {
         super();
         this._caseID = caseID;
@@ -66,7 +67,7 @@ export class CaseModel extends AbstractCaseModel {
         this._generatedReports = generatedReports;
         this._notes = notes;
         this.observers = [];
-        this._mostRecentReport = DataController.getInstance().createReport({}); //will create a NullReportModel
+        this._mostRecentReport = mostRecentReport;
         this.attach(new AutosaveObserver());
         this.attach(new ReportManagerObserver());
     }
