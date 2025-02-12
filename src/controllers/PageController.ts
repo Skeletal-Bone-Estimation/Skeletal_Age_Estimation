@@ -26,13 +26,14 @@ import {
     PubicSymphysis,
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
-import { isElementAccessExpression } from 'typescript';
+import { CaseItem } from '../views/CaseItem';
 
 export class PageController {
     private static instance: PageController;
     private contentDiv: HTMLElement;
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
+    private sidebarCaseItems: CaseItem[];
     private currentView: AbstractView;
 
     private constructor() {
@@ -50,6 +51,7 @@ export class PageController {
 
             //add additional views here
         };
+        this.sidebarCaseItems = [];
         this.currentView = this.views[Pages.Home];
         //automatically loads in the homeBar when first opened
         this.loadSideBarContent(SideBar.homeBar);
@@ -66,7 +68,6 @@ export class PageController {
         return PageController.instance;
     }
 
-    // READ FROM GUI
     /**
      * Creates a new case with the specified parameters.
      * @param id The case ID.
@@ -375,5 +376,40 @@ export class PageController {
         const dc = DataController.getInstance();
         dc.openReport = (dc.openCase as CaseModel).generatedReports[reportIDX];
         this.navigateTo(Pages.Report, SideBar.createBar);
+    }
+
+    public createCaseItem(caseID: string): void {
+        const caseItem = new CaseItem(caseID);
+        caseItem.renderCase();
+        this.sidebarCaseItems.push(caseItem);
+    }
+
+    public makeActiveCase(id: string): void {
+        const dc = DataController.getInstance();
+        dc.makeActiveCase(dc.findCaseIndex(id));
+    }
+
+    public deleteCaseItem(caseID: string): void {
+        for (var i = 0; i < this.sidebarCaseItems.length; i++) {
+            const item = this.sidebarCaseItems[i];
+            if (item.id == caseID) {
+                const dc = DataController.getInstance();
+                dc.deleteCase(dc.findCaseIndex(caseID));
+                this.sidebarCaseItems.splice(i, 1);
+                this.renderCases();
+            }
+        }
+    }
+
+    private renderCases(): void {
+        const list = document.getElementById('caseList') as HTMLElement;
+        list.innerHTML = '';
+
+        if (this.sidebarCaseItems.length == 0)
+            list.innerHTML = 'No cases loaded'; //TODO: update to look better
+        else
+            this.sidebarCaseItems.forEach((item) => {
+                item.renderCase();
+            });
     }
 }

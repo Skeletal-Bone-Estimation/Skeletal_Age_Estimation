@@ -93,6 +93,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 3;
+  display: flex;
+  flex-direction: column;
 }
 
 .sideBarHeader {
@@ -111,9 +113,23 @@ body {
   font-size: 175%;
 }
 
-#cases {
+#caseList {
+  flex: 0 0 70%;
+  overflow-y: auto;
   border-bottom-style: solid;
   border-bottom-color: var(--resizer-color);
+}
+
+.caseItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.caseButtons {
+  display: flex;
+  gap: 10px;
 }
 
 .topBar {
