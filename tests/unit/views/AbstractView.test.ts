@@ -16,6 +16,12 @@ describe('AbstractView (via ConcreteView)', () => {
         mockRootDiv.id = 'rootDiv';
         document.body.appendChild(mockRootDiv); // Append to the document body
 
+        // Ensure `document.getElementById` returns the correct element
+        jest.spyOn(document, 'getElementById').mockImplementation((id: string) => {
+            if (id === 'rootDiv') return mockRootDiv;
+            return null;
+        });
+
         // Create an instance of ConcreteView with the real document
         concreteView = new ConcreteView(document);
     });
@@ -23,6 +29,11 @@ describe('AbstractView (via ConcreteView)', () => {
     afterEach(() => {
         // Clean up after each test
         document.body.removeChild(mockRootDiv);
+        jest.restoreAllMocks(); // Reset any mocks
+    });
+
+    it('should initialize contentDiv to reference rootDiv', () => {
+        expect(concreteView.contentDiv).toBe(mockRootDiv);
     });
 
     it('should update the innerHTML of the rootDiv when render is called', () => {
@@ -36,10 +47,15 @@ describe('AbstractView (via ConcreteView)', () => {
         expect(mockRootDiv.innerHTML).toBe(htmlContent);
     });
 
-    it('should set up the sidebar listeners (empty method)', () => {
-        // Just call the method, it doesn't do anything in this case, but we check it doesn't throw errors
+    it('should call the placeholder method setSidebarListeners without errors', () => {
         expect(() => {
-            concreteView.setSidebarListeners();
+            (concreteView as any).setSidebarListeners();
+        }).not.toThrow();
+    });
+
+    it('should call the placeholder method initEventListeners without errors', () => {
+        expect(() => {
+            (concreteView as any).initEventListeners();
         }).not.toThrow();
     });
 });
