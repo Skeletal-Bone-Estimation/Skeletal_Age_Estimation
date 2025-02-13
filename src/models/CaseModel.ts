@@ -9,7 +9,7 @@ import {
     ThirdMolar,
 } from '../utils/enums';
 import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
-import { ReportManagerObserver } from '../utils/observer/ReportManagerOberver';
+import { ReportManagerObserver } from '../utils/observer/ReportManagerObserver';
 import { AbstractCaseModel } from './AbstractCaseModel';
 import { AbstractReportModel } from './AbstractReportModel';
 import { ReportModel } from './ReportModel';
