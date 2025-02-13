@@ -23,6 +23,7 @@
     },
     "homepage": "https://github.com/Majorsaturn/Skeletal_Age_Estimation#readme",
     "devDependencies": {
+        "@testing-library/dom": "^10.4.0",
         "@types/electron": "^1.4.38",
         "@types/html-to-docx": "^1.8.0",
         "@types/jest": "^29.5.14",
