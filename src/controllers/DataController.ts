@@ -19,6 +19,7 @@ import { NullReportModel } from '../models/NullReportModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
 import { PageController } from './PageController';
+import { Autonumberer } from '../utils/Autonumberer';
 
 export class DataController {
     private static instance: DataController;
@@ -262,6 +263,7 @@ export class DataController {
 
         this._openCase = director.makeCase();
         this.addCase(this._openCase as CaseModel);
+        Autonumberer.getInstance().updateExistingValues();
     }
 
     /**
@@ -318,5 +320,6 @@ export class DataController {
     public makeActiveCase(idx: number): void {
         if (idx == -1) return; //TODO: trigger error message popup
         this._openCase = this._loadedCases[idx];
+        Autonumberer.getInstance().updateExistingValues();
     }
 }
