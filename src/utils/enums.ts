@@ -131,6 +131,8 @@ export enum UI_Elements {
     closeModalButton = 'closeModal',
     reportArchiveList = 'reportList',
     viewReportButton = 'submitReportBtn',
+    analysisSelector = 'analysisSelector',
+    mostRecentReportButton = 'viewMostRecentReport',
 }
 
 /**

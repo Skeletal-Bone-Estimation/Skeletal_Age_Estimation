@@ -18,6 +18,8 @@ import { XML_Controller } from './XML_Controller';
 import { NullReportModel } from '../models/NullReportModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
+import { PageController } from './PageController';
+import { Autonumberer } from '../utils/Autonumberer';
 
 export class DataController {
     private static instance: DataController;
@@ -99,15 +101,15 @@ export class DataController {
      */
     public addCase(newCase: CaseModel): void {
         this._loadedCases.push(newCase);
+        PageController.getInstance().createCaseItem(newCase.caseID);
     }
 
     /**
      * Removes a case from the list of opened cases.
-     * @param selectedCase The CaseModel to be removed.
+     * @param idx The index to delete
      */
-    public deleteCase(selectedCase: CaseModel): void {
-        const index = this._loadedCases.indexOf(selectedCase);
-        this._loadedCases.splice(index, 1);
+    public deleteCase(idx: number): void {
+        this._loadedCases.splice(idx, 1);
     }
 
     /**
@@ -261,6 +263,7 @@ export class DataController {
 
         this._openCase = director.makeCase();
         this.addCase(this._openCase as CaseModel);
+        Autonumberer.getInstance().updateExistingValues();
     }
 
     /**
@@ -295,15 +298,28 @@ export class DataController {
      * @returns The index of the report, or -1 if not found.
      */
     public findReportIndex(id: string): number {
-        var idx = -1;
         const _case: CaseModel = this._openCase as CaseModel;
         for (var i: number = 0; i < _case.generatedReports.length; i++) {
-            if ((_case.generatedReports[i] as ReportModel).id == id) {
-                idx = i;
-                break;
-            }
+            if ((_case.generatedReports[i] as ReportModel).id == id) return i;
         }
-        console.log(`Index of ${id} found at ${idx}`);
-        return idx;
+        return -1;
+    }
+
+    /**
+     * Finds the index of a case by its ID.
+     * @param id The ID of the case to find.
+     * @returns The index of the case, or -1 if not found.
+     */
+    public findCaseIndex(id: string): number {
+        for (var i = 0; i < this._loadedCases.length; i++) {
+            if (this._loadedCases[i].caseID == id) return i;
+        }
+        return -1;
+    }
+
+    public makeActiveCase(idx: number): void {
+        if (idx == -1) return; //TODO: trigger error message popup
+        this._openCase = this._loadedCases[idx];
+        Autonumberer.getInstance().updateExistingValues();
     }
 }
