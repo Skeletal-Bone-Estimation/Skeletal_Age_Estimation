@@ -27,17 +27,17 @@ export class CaseItem {
         buttonDiv.classList.add('caseButtons');
 
         const makeActiveBtn = document.createElement('button');
-        makeActiveBtn.textContent = 'Make Active';
+        makeActiveBtn.textContent = 'Select';
         makeActiveBtn.addEventListener('click', async () => {
             PageController.getInstance().makeActiveCase(this.caseID);
             await PageController.getInstance().navigateTo(
                 Pages.DataEntry,
-                SideBar.createBar,
+                SideBar.dataBar,
             );
         });
 
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete Case';
+        deleteBtn.textContent = 'Delete';
         deleteBtn.addEventListener('click', async () => {
             PageController.getInstance().deleteCaseItem(this.caseID);
             await PageController.getInstance().navigateTo(

@@ -93,7 +93,7 @@ export class ReportModal extends AbstractModal {
         }
 
         const _case = dataController.openCase as CaseModel;
-        console.log('Loaded reports:', _case.generatedReports);
+        //console.log('Loaded reports:', _case.generatedReports);
 
         _case.generatedReports.forEach((report: AbstractReportModel) => {
             const element = document.createElement('li');

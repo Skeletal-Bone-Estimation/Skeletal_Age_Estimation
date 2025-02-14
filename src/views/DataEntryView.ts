@@ -10,10 +10,13 @@ import {
     PubicSymphysis,
     SternalEnd,
     Analyzers,
+    Observers,
 } from '../utils/enums';
 import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
+import { DataController } from '../controllers/DataController';
+import { ReportModel } from '../models/ReportModel';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
@@ -268,6 +271,17 @@ export class DataEntryView extends AbstractView {
             console.error('guideButton not found');
         }
 
+        const mostRecentReportButton = document.getElementById(
+            UI_Elements.mostRecentReportButton,
+        ) as HTMLButtonElement;
+        if (!mostRecentReportButton)
+            console.error('most recent report button not found');
+
+        const analysisSelector = document.getElementById(
+            UI_Elements.analysisSelector,
+        ) as HTMLButtonElement;
+        if (!analysisSelector) console.error('analysis selector not found');
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -280,7 +294,10 @@ export class DataEntryView extends AbstractView {
             thirdMolarBL &&
             thirdMolarBR &&
             notes &&
-            analyzeButton
+            analyzeButton &&
+            guideButton &&
+            analysisSelector &&
+            mostRecentReportButton
         ) {
             //console.log('elements present');
 
@@ -408,6 +425,52 @@ export class DataEntryView extends AbstractView {
                     './assets/guidelines/Scoring Guidelines for Skeletal Bone Age Estimation.pdf',
                     '_blank',
                 );
+            });
+
+            mostRecentReportButton.addEventListener('click', () => {
+                const dc = DataController.getInstance();
+                dc.openCase.notify(
+                    Observers.setSelectedReport,
+                    (dc.openCase as CaseModel).generatedReports[
+                        dc.findReportIndex(
+                            (dc.getMostRecentReport() as ReportModel).id,
+                        )
+                    ],
+                );
+                PageController.getInstance().navigateTo(
+                    Pages.Report,
+                    SideBar.dataBar,
+                );
+            });
+
+            analysisSelector.addEventListener('change', () => {
+                const _case = DataController.getInstance()
+                    .openCase as CaseModel;
+                switch (analysisSelector.value) {
+                    case 'default':
+                        AnalysisContext.getInstance(
+                            _case.sex,
+                            _case.populationAffinity,
+                        ).setStrategy(Analyzers.Default);
+                        //console.log('Default analysis selected');
+                        break;
+                    case 'image':
+                        AnalysisContext.getInstance(
+                            _case.sex,
+                            _case.populationAffinity,
+                        ).setStrategy(Analyzers.Image);
+                        //console.log('Image analysis selected');
+                        break;
+                    case 'prediction':
+                        AnalysisContext.getInstance(
+                            _case.sex,
+                            _case.populationAffinity,
+                        ).setStrategy(Analyzers.Prediction);
+                        //console.log('Regression analysis selected');
+                        break;
+                    default:
+                        console.error('invalid analyzer selected');
+                }
             });
         }
     }

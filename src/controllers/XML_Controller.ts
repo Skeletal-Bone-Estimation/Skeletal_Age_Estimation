@@ -146,7 +146,7 @@ export class XML_Controller {
             );
 
         //console.log('Loaded reports:', generatedReports);
-        console.log('Loaded Case:', this.director.makeCase());
+        //console.log('Loaded Case:', this.director.makeCase());
 
         return this.director.makeCase();
     }

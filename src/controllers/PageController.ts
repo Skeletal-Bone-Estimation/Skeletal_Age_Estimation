@@ -344,7 +344,7 @@ export class PageController {
             document.body.removeChild(link);
             URL.revokeObjectURL(url); // Release the object URL
 
-            console.log('File download started successfully:', filename);
+            //console.log('File download started successfully:', filename);
         } catch (error) {
             console.error('Error exporting to Word:', error);
         }
@@ -397,6 +397,7 @@ export class PageController {
                 dc.deleteCase(dc.findCaseIndex(caseID));
                 this.sidebarCaseItems.splice(i, 1);
                 this.renderCases();
+                return;
             }
         }
     }
