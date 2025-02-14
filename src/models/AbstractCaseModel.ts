@@ -4,7 +4,7 @@ import { ObservableIF } from '../utils/observer/ObservableIF';
 import { ObserverIF } from '../utils/observer/ObserverIF';
 
 export abstract class AbstractCaseModel implements ObservableIF {
-    protected observers: ObserverIF[] = [];
+    public observers: ObserverIF[] = [];
 
     /**
      * Attaches an observer to the case model.

@@ -2,7 +2,7 @@ import { Side } from '../utils/enums';
 
 export abstract class AbstractReportModel {
     protected _id: string;
-    protected results: { [key: string]: { [key: string]: number } };
+    public results: { [key: string]: { [key: string]: number } };
 
     constructor(
         id: string,

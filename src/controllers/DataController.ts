@@ -21,7 +21,7 @@ import { ReportModel } from '../models/ReportModel';
 
 export class DataController {
     private static instance: DataController;
-    private xmlController: XML_Controller = XML_Controller.getInstance();
+    public xmlController: XML_Controller = XML_Controller.getInstance();
     private _loadedCases: CaseModel[];
     private _openCase: AbstractCaseModel;
     private _openReport: AbstractReportModel;
