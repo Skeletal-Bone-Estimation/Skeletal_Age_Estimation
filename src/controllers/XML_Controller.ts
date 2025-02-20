@@ -12,7 +12,7 @@ export class XML_Controller {
     private currentDoc: Document | null;
     private director: BuildDirector;
 
-    private constructor() {
+    public constructor() {
         this.currentDoc = null;
         this.director = new BuildDirector();
     }
@@ -146,7 +146,7 @@ export class XML_Controller {
      * @param tag The tag name to extract reports from.
      * @returns An array of AbstractReportModel objects.
      */
-    private extractReports(tag: string): AbstractReportModel[] {
+    public extractReports(tag: string): AbstractReportModel[] {
         const list: AbstractReportModel[] = [];
         const container = this.currentDoc?.getElementsByTagName(tag)[0];
 

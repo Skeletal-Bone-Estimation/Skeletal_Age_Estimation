@@ -142,7 +142,7 @@ export class PageController {
      * @param page The page or sidebar to load content for.
      * @returns The HTML content as a string.
      */
-    private async loadPageContent(page: Pages | SideBar): Promise<string> {
+    public async loadPageContent(page: Pages | SideBar): Promise<string> {
         const filePath = path.join(
             __dirname,
             '../../templates/',
@@ -163,7 +163,7 @@ export class PageController {
      * Asynchronously loads sidebar content from HTML files.
      * @param page The sidebar to load content for.
      */
-    private async loadSideBarContent(page: SideBar): Promise<void> {
+    public async loadSideBarContent(page: SideBar): Promise<void> {
         try {
             //console.log(`Loading sidebar content for: ${page}`);
             const content = await this.loadPageContent(page);

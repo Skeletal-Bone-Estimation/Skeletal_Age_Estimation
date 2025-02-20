@@ -1,13 +1,12 @@
-//AbstractCaseModel.test.ts
 import { AbstractCaseModel } from '../../../src/models/AbstractCaseModel';
 import { ObserverIF } from '../../../src/utils/observer/ObserverIF';
+import { Observers } from '../../../src/utils/enums'; // Import Observers enum
 
-// A mock observer implementation for testing purposes
+// Mock observer implementation
 class MockObserver implements ObserverIF {
-    update = jest.fn(); // Mock the update method
+    update = jest.fn();
 }
 
-// A concrete implementation of AbstractCaseModel for testing
 class TestCaseModel extends AbstractCaseModel {}
 
 describe('AbstractCaseModel', () => {
@@ -43,7 +42,8 @@ describe('AbstractCaseModel', () => {
         model.attach(observer1);
         model.attach(observer2);
 
-        model.notify();
+        // Now pass a valid enum value from Observers
+        model.notify(Observers.autosave);
 
         expect(observer1.update).toHaveBeenCalledTimes(1);
         expect(observer2.update).toHaveBeenCalledTimes(1);
@@ -55,7 +55,8 @@ describe('AbstractCaseModel', () => {
 
         model.detach(observer1);
 
-        model.notify();
+        // Notify only observer2 with a valid enum value from Observers
+        model.notify(Observers.setMostRecentReport);
 
         expect(observer1.update).not.toHaveBeenCalled();
         expect(observer2.update).toHaveBeenCalledTimes(1);
