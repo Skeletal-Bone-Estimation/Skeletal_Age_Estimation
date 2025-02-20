@@ -1,5 +1,6 @@
 //compare page view tests
 //started 2-12 finished: 
+//still in progress, not sure if we have most current version of compare page view
 
 import { ComparePageView } from '../../../src/views/ComparePageView';
 import { PageController } from '../../../src/controllers/PageController';
