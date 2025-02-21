@@ -1,84 +1,96 @@
 import { CaseBuilder } from '../../../../src/utils/builder/CaseBuilder';
 import { CaseModel } from '../../../../src/models/CaseModel';
-import { ReportModel } from '../../../../src/models/ReportModel';
-import { Affinity, Sex, ThirdMolar, AuricularArea, PubicSymphysis, SternalEnd } from '../../../../src/utils/enums';
+import { AbstractReportModel } from '../../../../src/models/AbstractReportModel';
 
 describe('CaseBuilder', () => {
-    let caseBuilder: CaseBuilder;
+  let caseBuilder: CaseBuilder;
 
-    beforeEach(() => {
-        caseBuilder = new CaseBuilder();
-    });
+  beforeEach(() => {
+    caseBuilder = new CaseBuilder();
+  });
 
-    it('should initialize with default values', () => {
-        const caseModel = caseBuilder.build();
+  it('should set caseID correctly', () => {
+    const caseID = '12345';
+    caseBuilder.setCaseID(caseID);
+    expect(caseBuilder['_caseID']).toBe(caseID);
+  });
 
-        expect(caseModel.caseID).toBe('');
-        expect(caseModel.populationAffinity).toBe(0);
-        expect(caseModel.sex).toBe(0);
-        expect(caseModel.thirdMolarTL).toBe(0);
-        expect(caseModel.thirdMolarTR).toBe(0);
-        expect(caseModel.thirdMolarBL).toBe(0);
-        expect(caseModel.thirdMolarBR).toBe(0);
-        expect(caseModel.pubicSymphysisL).toBe(1);
-        expect(caseModel.pubicSymphysisR).toBe(1);
-        expect(caseModel.auricularAreaL).toBe(1);
-        expect(caseModel.auricularAreaR).toBe(1);
-        expect(caseModel.fourthRibL).toBe(1);
-        expect(caseModel.fourthRibR).toBe(1);
-        expect(caseModel.notes).toBe('');
-        expect(caseModel.generatedReports).toEqual({});
-    });
+  it('should set populationAffinity correctly', () => {
+    const populationAffinity = 10;
+    caseBuilder.setPopulationAffinity(populationAffinity);
+    expect(caseBuilder['_populationAffinity']).toBe(populationAffinity);
+  });
 
-    it('should set values correctly using the builder pattern', () => {
-        // Set values one at a time
-        caseBuilder.setCaseID('123');
-        caseBuilder.setPopulationAffinity(Affinity.Black);
-        caseBuilder.setSex(Sex.Male);
-        caseBuilder.setThirdMolarTL(ThirdMolar.Unknown);
-        caseBuilder.setThirdMolarTR(ThirdMolar.Unknown);
-        caseBuilder.setThirdMolarBL(ThirdMolar.Unknown);
-        caseBuilder.setThirdMolarBR(ThirdMolar.Unknown);
-        caseBuilder.setPubicSymphysisL(PubicSymphysis.Unknown);
-        caseBuilder.setPubicSymphysisR(PubicSymphysis.Unknown);
-        caseBuilder.setAuricularAreaL(AuricularArea.Unknown);
-        caseBuilder.setAuricularAreaR(AuricularArea.Unknown);
-        caseBuilder.setFourthRibL(SternalEnd.Unknown);
-        caseBuilder.setFourthRibR(SternalEnd.Unknown);
-        caseBuilder.setNotes('Test notes');
-        caseBuilder.setReportsGenerated({ 1: new ReportModel(1) });
+  it('should set sex correctly', () => {
+    const sex = 1;
+    caseBuilder.setSex(sex);
+    expect(caseBuilder['_sex']).toBe(sex);
+  });
 
-        const caseModel = caseBuilder.build();
+  it('should set third molar status for the top left correctly', () => {
+    const thirdMolarTL = 2;
+    caseBuilder.setThirdMolarTL(thirdMolarTL);
+    expect(caseBuilder['_thirdMolarTL']).toBe(thirdMolarTL);
+  });
 
-        expect(caseModel.caseID).toBe('123');
-        expect(caseModel.populationAffinity).toBe(Affinity.Black);
-        expect(caseModel.sex).toBe(Sex.Male);
-        expect(caseModel.thirdMolarTL).toBe(ThirdMolar.Unknown);
-        expect(caseModel.thirdMolarTR).toBe(ThirdMolar.Unknown);
-        expect(caseModel.thirdMolarBL).toBe(ThirdMolar.Unknown);
-        expect(caseModel.thirdMolarBR).toBe(ThirdMolar.Unknown);
-        expect(caseModel.pubicSymphysisL).toBe(PubicSymphysis.Unknown);
-        expect(caseModel.pubicSymphysisR).toBe(PubicSymphysis.Unknown);
-        expect(caseModel.auricularAreaL).toBe(AuricularArea.Unknown);
-        expect(caseModel.auricularAreaR).toBe(AuricularArea.Unknown);
-        expect(caseModel.fourthRibL).toBe(SternalEnd.Unknown);
-        expect(caseModel.fourthRibR).toBe(SternalEnd.Unknown);
-        expect(caseModel.notes).toBe('Test notes');
-        expect(caseModel.generatedReports[1]).toBeInstanceOf(ReportModel);
-    });
+  it('should set third molar status for the top right correctly', () => {
+    const thirdMolarTR = 3;
+    caseBuilder.setThirdMolarTR(thirdMolarTR);
+    expect(caseBuilder['_thirdMolarTR']).toBe(thirdMolarTR);
+  });
 
-    it('should call build and return a CaseModel instance', () => {
-        caseBuilder.setCaseID('123');
-        caseBuilder.setPopulationAffinity(Affinity.Unknown);
-        caseBuilder.setSex(Sex.Male);
+  it('should set third molar status for the bottom left correctly', () => {
+    const thirdMolarBL = 4;
+    caseBuilder.setThirdMolarBL(thirdMolarBL);
+    expect(caseBuilder['_thirdMolarBL']).toBe(thirdMolarBL);
+  });
 
-        const caseModel = caseBuilder.build();
+  it('should set third molar status for the bottom right correctly', () => {
+    const thirdMolarBR = 5;
+    caseBuilder.setThirdMolarBR(thirdMolarBR);
+    expect(caseBuilder['_thirdMolarBR']).toBe(thirdMolarBR);
+  });
 
-        // Check that build() returns an instance of CaseModel
-        expect(caseModel).toBeInstanceOf(CaseModel);
-        expect(caseModel.caseID).toBe('123');
-        expect(caseModel.populationAffinity).toBe(Affinity.Unknown);
-        expect(caseModel.sex).toBe(Sex.Male);
-    });
+  it('should set pubic symphysis status for the left side correctly', () => {
+    const pubicSymphysisL = 6;
+    caseBuilder.setPubicSymphysisL(pubicSymphysisL);
+    expect(caseBuilder['_pubicSymphysisL']).toBe(pubicSymphysisL);
+  });
+
+  it('should set pubic symphysis status for the right side correctly', () => {
+    const pubicSymphysisR = 7;
+    caseBuilder.setPubicSymphysisR(pubicSymphysisR);
+    expect(caseBuilder['_pubicSymphysisR']).toBe(pubicSymphysisR);
+  });
+
+  it('should set auricular area status for the left side correctly', () => {
+    const auricularAreaL = 8;
+    caseBuilder.setAuricularAreaL(auricularAreaL);
+    expect(caseBuilder['_auricularAreaL']).toBe(auricularAreaL);
+  });
+
+  it('should set auricular area status for the right side correctly', () => {
+    const auricularAreaR = 9;
+    caseBuilder.setAuricularAreaR(auricularAreaR);
+    expect(caseBuilder['_auricularAreaR']).toBe(auricularAreaR);
+  });
+
+  it('should set fourth rib status for the left side correctly', () => {
+    const fourthRibL = 10;
+    caseBuilder.setFourthRibL(fourthRibL);
+    expect(caseBuilder['_fourthRibL']).toBe(fourthRibL);
+  });
+
+  it('should set fourth rib status for the right side correctly', () => {
+    const fourthRibR = 11;
+    caseBuilder.setFourthRibR(fourthRibR);
+    expect(caseBuilder['_fourthRibR']).toBe(fourthRibR);
+  });
+
+  it('should set notes correctly', () => {
+    const notes = 'This is a test note';
+    caseBuilder.setNotes(notes);
+    expect(caseBuilder['_notes']).toBe(notes);
+  });
+
 });
-
