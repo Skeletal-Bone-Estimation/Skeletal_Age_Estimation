@@ -1,20 +1,74 @@
+//started updating : 2/17
+//finished updating : 2
+//updated test for sidebarlisteners
+//and added tests for the guide button and analyze button
+
+jest.mock('../../../src/controllers/PageController');
+
 import { DataEntryView } from '../../../src/views/DataEntryView';
 import { PageController } from '../../../src/controllers/PageController';
 import { UI_Elements } from '../../../src/utils/enums';
 
-// Mock the PageController class
-jest.mock('../../../src/controllers/PageController', () => ({
-    PageController: {
-        getInstance: jest.fn(),
-    },
-}));
+
+jest.mock('../../../src/views/ReportPageView', () => {
+    return {
+        ReportPageView: jest.fn().mockImplementation(() => ({
+            render: jest.fn(),
+        })),
+    };
+});
+
+jest.mock('../../../src/controllers/DataController', () => {
+    return {
+        DataController: {
+            getInstance: jest.fn(() => ({
+                getReports: jest.fn(() => [{ id: 'report1' }]), 
+                createReport: jest.fn(),
+            })),
+        },
+    };
+});
+
+const mockPageControllerInstance = {
+    getOpenCase: jest.fn().mockReturnValue({
+        caseID: 'test123',
+        sex: 0,
+        populationAffinity: 1,
+        auricularAreaL: 2,
+        auricularAreaR: 3,
+        pubicSymphysisL: 4,
+        pubicSymphysisR: 5,
+        fourthRibL: 6,
+        fourthRibR: 7,
+        thirdMolarTL: 8,
+        thirdMolarTR: 1,
+        thirdMolarBL: 2,
+        thirdMolarBR: 3,
+        notes: 'test notes',
+    }),
+    editCase: jest.fn(),
+    navigateTo: jest.fn(),
+    loadSideBarContent: jest.fn(),
+};
+
+
+const PageControllerModule = require('../../../src/controllers/PageController');
+PageControllerModule.PageController.getInstance = jest.fn(() => mockPageControllerInstance);
+
+
+
 
 describe('DataEntryView', () => {
     let dataEntryView: DataEntryView;
-    let pageControllerMock: jest.Mocked<PageController>;
+    let pageControllerMock: typeof mockPageControllerInstance;
 
     beforeEach(() => {
         // Mock the DOM structure
+        jest.resetModules(); // Ensures fresh modules are loaded
+        jest.clearAllMocks(); // Clears previous mocks
+    
+        pageControllerMock = PageControllerModule.PageController.getInstance();
+
         document.body.innerHTML = `
             <div id="rootDiv"></div>
             <input id="${UI_Elements.auricularAreaL}" />
@@ -37,17 +91,9 @@ describe('DataEntryView', () => {
                 <option value="white">White</option>
                 <option value="black">Black</option>
             </select>
+            <button id="${UI_Elements.analyzeButton}"></button>
+            <button id="${UI_Elements.guideButton}"></button>
         `;
-
-        // Mock PageController methods
-        pageControllerMock = {
-            createCase: jest.fn(),
-            navigateTo: jest.fn(),
-            loadSideBarContent: jest.fn(),
-            editCase: jest.fn(),
-        } as unknown as jest.Mocked<PageController>;
-
-        (PageController.getInstance as jest.Mock).mockReturnValue(pageControllerMock);
 
         // Initialize DataEntryView
         dataEntryView = new DataEntryView(document);
@@ -144,26 +190,62 @@ describe('DataEntryView', () => {
         });
     });
 
-    describe('setSidebarListeners method', () => {
-        it('should add event listeners to sidebar elements', () => {
-            dataEntryView.setSidebarListeners();
-
+    describe('Sidebar event listeners (indirect test via autoLoadCaseData)', () => {
+        it('should update case data when sidebar inputs change', () => {
+         
+            dataEntryView.autoLoadCaseData();
+        
             const caseInput = document.getElementById(UI_Elements.dataSideCaseID) as HTMLInputElement;
             const sexSelector = document.getElementById(UI_Elements.dataSideSex) as HTMLSelectElement;
             const affinitySelector = document.getElementById(UI_Elements.dataSideAffinity) as HTMLSelectElement;
-
+        
+            
             caseInput.value = 'caseXYZ';
             caseInput.dispatchEvent(new Event('input'));
-
+        
             sexSelector.value = 'female';
-            sexSelector.dispatchEvent(new Event('input'));
-
+            sexSelector.dispatchEvent(new Event('change')); 
+        
             affinitySelector.value = 'black';
-            affinitySelector.dispatchEvent(new Event('input'));
-
+            affinitySelector.dispatchEvent(new Event('change'));
+        
+        
+            expect(pageControllerMock.editCase).toHaveBeenCalledTimes(3); // Expect 3 calls
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideCaseID, 'caseXYZ');
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideSex, 1);
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideAffinity, 1);
         });
+        
     });
+    
+
+    describe('Button Clicks', () => {
+        it('should navigate to Report page when analyze button is clicked', () => {
+            document.body.innerHTML += `<button id="${UI_Elements.analyzeButton}"></button>`;
+        
+            dataEntryView.render('<div></div>'); // Rendering triggers event listeners
+        
+            const analyzeButton = document.getElementById(UI_Elements.analyzeButton) as HTMLButtonElement;
+            analyzeButton.click(); // Simulate click
+        
+            expect(mockPageControllerInstance.navigateTo).toHaveBeenCalledWith('ReportPageView');
+        });
+        
+
+    it('should open guidelines PDF when guide button is clicked', () => {
+        global.open = jest.fn();
+        document.body.innerHTML += `<button id="${UI_Elements.guideButton}"></button>`;
+
+        dataEntryView.render('<div></div>');
+
+        const guideButton = document.getElementById(UI_Elements.guideButton) as HTMLButtonElement;
+        guideButton.click();
+
+        expect(global.open).toHaveBeenCalledWith(
+            './assets/guidelines/Scoring Guidelines for Skeletal Bone Age Estimation.pdf',
+            '_blank'
+        );
+    });
+});
+
 });
