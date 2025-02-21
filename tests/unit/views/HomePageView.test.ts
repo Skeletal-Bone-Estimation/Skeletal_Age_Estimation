@@ -1,6 +1,7 @@
 //started updating Feb 16
-//finished updating: 
+//finished updating: feb16
 //initially didnt pass on feb 16th:
+//no new tests needed just had to fix V
 //navigateTo now takes 2 args instead of 1
 
 import { HomePageView } from '../../../src/views/HomePageView';
