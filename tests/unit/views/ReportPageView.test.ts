@@ -1,3 +1,7 @@
+//started feb 17
+//finished feb 19:
+//had to make some methods public in reportpageview
+
 import { ReportPageView } from '../../../src/views/ReportPageView';
 import { DataController } from '../../../src/controllers/DataController';
 import { PageController } from '../../../src/controllers/PageController';
