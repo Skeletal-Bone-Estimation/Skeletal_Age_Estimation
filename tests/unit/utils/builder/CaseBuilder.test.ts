@@ -1,96 +1,78 @@
+// CaseBuilder.test.ts
 import { CaseBuilder } from '../../../../src/utils/builder/CaseBuilder';
 import { CaseModel } from '../../../../src/models/CaseModel';
 import { AbstractReportModel } from '../../../../src/models/AbstractReportModel';
 
 describe('CaseBuilder', () => {
-  let caseBuilder: CaseBuilder;
+  it('should initialize a CaseModel with default values', () => {
+    const builder = new CaseBuilder() as any; // cast to any so build() is accessible
+    const caseModel: CaseModel = builder.build();
 
-  beforeEach(() => {
-    caseBuilder = new CaseBuilder();
+    // Check default values as defined in the builder constructor:
+    expect(caseModel.caseID).toBe('');
+    expect(caseModel.populationAffinity).toBe(0);
+    expect(caseModel.sex).toBe(0);
+    expect(caseModel.thirdMolarTL).toBe(0);
+    expect(caseModel.thirdMolarTR).toBe(0);
+    expect(caseModel.thirdMolarBL).toBe(0);
+    expect(caseModel.thirdMolarBR).toBe(0);
+    expect(caseModel.pubicSymphysisL).toBe(1);
+    expect(caseModel.pubicSymphysisR).toBe(1);
+    expect(caseModel.auricularAreaL).toBe(1);
+    expect(caseModel.auricularAreaR).toBe(1);
+    expect(caseModel.fourthRibL).toBe(1);
+    expect(caseModel.fourthRibR).toBe(1);
+    expect(caseModel.notes).toBe('');
+    expect(caseModel.generatedReports).toEqual([]);
   });
 
-  it('should set caseID correctly', () => {
-    const caseID = '12345';
-    caseBuilder.setCaseID(caseID);
-    expect(caseBuilder['_caseID']).toBe(caseID);
+  it('should update the case model with new values using setters', () => {
+    const builder = new CaseBuilder() as any;
+    // Update a single property: caseID
+    builder.setCaseID('UPDATED_CASE');
+    const caseModel: CaseModel = builder.build();
+
+    expect(caseModel.caseID).toBe('UPDATED_CASE');
+    // Other values remain at default
+    expect(caseModel.populationAffinity).toBe(0);
+    expect(caseModel.sex).toBe(0);
   });
 
-  it('should set populationAffinity correctly', () => {
-    const populationAffinity = 10;
-    caseBuilder.setPopulationAffinity(populationAffinity);
-    expect(caseBuilder['_populationAffinity']).toBe(populationAffinity);
-  });
+  it('should build a new CaseModel with non-default values using chained setters', () => {
+    const dummyReports = [{ id: 'report1' }] as AbstractReportModel[];
+    const builder = new CaseBuilder() as any;
+    const caseModel: CaseModel = builder
+      .setCaseID('NEW_CASE')
+      .setPopulationAffinity(2)
+      .setSex(1)
+      .setThirdMolarTL(1)
+      .setThirdMolarTR(2)
+      .setThirdMolarBL(3)
+      .setThirdMolarBR(4)
+      .setPubicSymphysisL(5)
+      .setPubicSymphysisR(6)
+      .setAuricularAreaL(7)
+      .setAuricularAreaR(8)
+      .setFourthRibL(9)
+      .setFourthRibR(10)
+      .setNotes('Custom notes')
+      .setReportsGenerated(dummyReports)
+      .build();
 
-  it('should set sex correctly', () => {
-    const sex = 1;
-    caseBuilder.setSex(sex);
-    expect(caseBuilder['_sex']).toBe(sex);
+    expect(caseModel.caseID).toBe('NEW_CASE');
+    expect(caseModel.populationAffinity).toBe(2);
+    expect(caseModel.sex).toBe(1);
+    expect(caseModel.thirdMolarTL).toBe(1);
+    expect(caseModel.thirdMolarTR).toBe(2);
+    expect(caseModel.thirdMolarBL).toBe(3);
+    expect(caseModel.thirdMolarBR).toBe(4);
+    expect(caseModel.pubicSymphysisL).toBe(5);
+    expect(caseModel.pubicSymphysisR).toBe(6);
+    expect(caseModel.auricularAreaL).toBe(7);
+    expect(caseModel.auricularAreaR).toBe(8);
+    expect(caseModel.fourthRibL).toBe(9);
+    expect(caseModel.fourthRibR).toBe(10);
+    expect(caseModel.notes).toBe('Custom notes');
+    expect(caseModel.generatedReports).toEqual(dummyReports);
   });
-
-  it('should set third molar status for the top left correctly', () => {
-    const thirdMolarTL = 2;
-    caseBuilder.setThirdMolarTL(thirdMolarTL);
-    expect(caseBuilder['_thirdMolarTL']).toBe(thirdMolarTL);
-  });
-
-  it('should set third molar status for the top right correctly', () => {
-    const thirdMolarTR = 3;
-    caseBuilder.setThirdMolarTR(thirdMolarTR);
-    expect(caseBuilder['_thirdMolarTR']).toBe(thirdMolarTR);
-  });
-
-  it('should set third molar status for the bottom left correctly', () => {
-    const thirdMolarBL = 4;
-    caseBuilder.setThirdMolarBL(thirdMolarBL);
-    expect(caseBuilder['_thirdMolarBL']).toBe(thirdMolarBL);
-  });
-
-  it('should set third molar status for the bottom right correctly', () => {
-    const thirdMolarBR = 5;
-    caseBuilder.setThirdMolarBR(thirdMolarBR);
-    expect(caseBuilder['_thirdMolarBR']).toBe(thirdMolarBR);
-  });
-
-  it('should set pubic symphysis status for the left side correctly', () => {
-    const pubicSymphysisL = 6;
-    caseBuilder.setPubicSymphysisL(pubicSymphysisL);
-    expect(caseBuilder['_pubicSymphysisL']).toBe(pubicSymphysisL);
-  });
-
-  it('should set pubic symphysis status for the right side correctly', () => {
-    const pubicSymphysisR = 7;
-    caseBuilder.setPubicSymphysisR(pubicSymphysisR);
-    expect(caseBuilder['_pubicSymphysisR']).toBe(pubicSymphysisR);
-  });
-
-  it('should set auricular area status for the left side correctly', () => {
-    const auricularAreaL = 8;
-    caseBuilder.setAuricularAreaL(auricularAreaL);
-    expect(caseBuilder['_auricularAreaL']).toBe(auricularAreaL);
-  });
-
-  it('should set auricular area status for the right side correctly', () => {
-    const auricularAreaR = 9;
-    caseBuilder.setAuricularAreaR(auricularAreaR);
-    expect(caseBuilder['_auricularAreaR']).toBe(auricularAreaR);
-  });
-
-  it('should set fourth rib status for the left side correctly', () => {
-    const fourthRibL = 10;
-    caseBuilder.setFourthRibL(fourthRibL);
-    expect(caseBuilder['_fourthRibL']).toBe(fourthRibL);
-  });
-
-  it('should set fourth rib status for the right side correctly', () => {
-    const fourthRibR = 11;
-    caseBuilder.setFourthRibR(fourthRibR);
-    expect(caseBuilder['_fourthRibR']).toBe(fourthRibR);
-  });
-
-  it('should set notes correctly', () => {
-    const notes = 'This is a test note';
-    caseBuilder.setNotes(notes);
-    expect(caseBuilder['_notes']).toBe(notes);
-  });
-
 });
