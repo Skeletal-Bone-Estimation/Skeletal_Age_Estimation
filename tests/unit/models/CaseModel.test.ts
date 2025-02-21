@@ -75,7 +75,7 @@ describe('CaseModel', () => {
             [],
         );
     });
-
+    // done
     it('should initialize with correct values', () => {
         expect(caseModel.caseID).toBe('case-123');
         expect(caseModel.populationAffinity).toBe(Affinity.Unknown);
@@ -92,11 +92,12 @@ describe('CaseModel', () => {
         expect(caseModel.fourthRibR).toBe(SternalEnd.Unknown);
         expect(caseModel.notes).toBe('Test notes');
     });
-
+    // done
     it('should add a report correctly', () => {
         caseModel.addReport(mockReport);
         expect(caseModel.generatedReports).toContain(mockReport);
     });
+    // done
     /*
     it('should remove a report correctly', () => {
         caseModel.addReport(mockReport);
@@ -116,26 +117,27 @@ describe('CaseModel', () => {
         expect(caseModel.generatedReports.some(r => r.id === "1")).toBe(false);
     });
     */
+    // done
     it('should update caseID', () => {
         caseModel.caseID = 'new-case-id';
         expect(caseModel.caseID).toBe('new-case-id');
     });
-
+    // done
     it('should update notes', () => {
         caseModel.notes = 'Updated notes';
         expect(caseModel.notes).toBe('Updated notes');
     });
-
+    // done
     it('should update populationAffinity', () => {
         caseModel.populationAffinity = Affinity.Black;
         expect(caseModel.populationAffinity).toBe(Affinity.Black);
     });
-
+    //done
     it('should update sex', () => {
         caseModel.sex = Sex.Female;
         expect(caseModel.sex).toBe(Sex.Female);
     });
-
+    // done
     it('should handle undefined generatedReports', () => {
         const newCaseModel = new CaseModel(
             'case-124',
@@ -156,6 +158,7 @@ describe('CaseModel', () => {
         );
         expect(newCaseModel.generatedReports).toEqual([]);
     });
+    // done
     /*
     it('should attach an AutosaveObserver', () => {
         const autosaveObserverMock = jest.fn();  // Create the mock before the test
@@ -185,7 +188,7 @@ describe('CaseModel', () => {
         expect(autosaveObserverMock).toHaveBeenCalledTimes(1);  // Expect only one call
         expect(autosaveObserverMock).toHaveBeenCalledWith(expect.any(Object));  // Ensure it is called with an object
     });
-
+    // done
     it('should notify the observer on changes', () => {
         // Simulate a change in the caseModel that triggers the observer
         const observer = new AutosaveObserver();
