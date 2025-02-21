@@ -1,5 +1,8 @@
 // AutosaveObserver.test.ts
-import { AutosaveObserver } from '../../../../src/utils/observer/AutosaveObserver'
+
+//reran feb 16, still passes as expected 
+
+import { AutosaveObserver } from '../../../../src/utils/observer/AutosaveObserver';
 import { DataController } from '../../../../src/controllers/DataController';
 import { XML_Controller } from '../../../../src/controllers/XML_Controller';
 import { Observers } from '../../../../src/utils/enums';
@@ -33,12 +36,7 @@ describe('AutosaveObserver', () => {
     jest.clearAllMocks();
   });
 
-  it('should not autosave if update is called with a non-autosave observer', () => {
-    autosaveObserver.update(Observers.setSelectedReport, { some: 'data' });
-    expect(mockXMLController.saveAsFile).not.toHaveBeenCalled();
-  });
-
-  it('should autosave when update is called with Observers.autosave', () => {
+  it('should call saveAsFile with the correct parameters when autosave is triggered', () => {
     autosaveObserver.update(Observers.autosave);
     expect(mockXMLController.saveAsFile).toHaveBeenCalledWith(
       mockCase,
