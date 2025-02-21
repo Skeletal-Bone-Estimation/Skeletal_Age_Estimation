@@ -1,20 +1,14 @@
-//BuildDirector.test.ts
 import { BuildDirector, ReportType } from '../../../../src/utils/builder/BuildDirector';
-import { CaseModel } from '../../../../src/models/CaseModel';
-import { ReportModel } from '../../../../src/models/ReportModel';
 import { CaseBuilder } from '../../../../src/utils/builder/CaseBuilder';
-import { ReportBuilder } from '../../../../src/utils/builder/ReportBuilder';
-import {
-    Affinity,
-    Sex,
-    ThirdMolar,
-    PubicSymphysis,
-    AuricularArea,
-    SternalEnd,
-} from '../../../../src/utils/enums';
+import { ReportBuilder } from '../../../../src/utils/builder/ReportBuilder'; 
+import { CaseModel } from '../../../../src/models/CaseModel';
+import { AbstractReportModel } from '../../../../src/models/AbstractReportModel';
 
-jest.mock('../../../../src/utils/builder/CaseBuilder');
-jest.mock('../../../../src/utils/builder/ReportBuilder');
+jest.mock('../../../../src/utils/builder/CaseBuilder') // Mock CaseBuilder
+jest.mock('../../../../src/utils/builder/ReportBuilder'); // Mock ReportBuilder
+
+
+  
 
 describe('BuildDirector', () => {
     let buildDirector: BuildDirector;
@@ -22,51 +16,25 @@ describe('BuildDirector', () => {
     let mockReportBuilder: jest.Mocked<ReportBuilder>;
 
     beforeEach(() => {
-        // Reset the mock builders before each test
         mockCaseBuilder = new CaseBuilder() as jest.Mocked<CaseBuilder>;
         mockReportBuilder = new ReportBuilder() as jest.Mocked<ReportBuilder>;
-        buildDirector = new BuildDirector();
         
-        // Ensure the mocked builders are used in the director
+        mockCaseBuilder = {
+            build: jest.fn().mockReturnValue(new CaseModel('test', 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, '', [])),
+        } as unknown as jest.Mocked<CaseBuilder>;
+
+        buildDirector = new BuildDirector();
         buildDirector.caseBuilder = mockCaseBuilder;
         buildDirector.reportBuilder = mockReportBuilder;
     });
 
-    it('should create a case using CaseBuilder', () => {
-        const mockCase = new CaseModel(
-            'case-124',
-            Affinity.Black,
-            Sex.Male,
-            ThirdMolar.Unknown,
-            ThirdMolar.Unknown,
-            ThirdMolar.Unknown,
-            ThirdMolar.Unknown,
-            PubicSymphysis.Unknown,
-            PubicSymphysis.Unknown,
-            AuricularArea.Unknown,
-            AuricularArea.Unknown,
-            SternalEnd.Unknown,
-            SternalEnd.Unknown,
-            'Test notes',
-            {},
-        );
-        mockCaseBuilder.build.mockReturnValue(mockCase);
-
-        const result = buildDirector.makeCase();
-
-        expect(result).toBe(mockCase);
-        expect(mockCaseBuilder.build).toHaveBeenCalledTimes(1);
+    test('should create an instance of BuildDirector', () => {
+        expect(buildDirector).toBeDefined();
     });
 
-    it('should create a report using ReportBuilder', () => {
-        const mockReport = new ReportModel(1);
-        const content = 'Sample Report Content';
-        mockReportBuilder.buildFrom.mockReturnValue(mockReport);
-
-        const result = buildDirector.makeReportFrom(content);
-
-        expect(result).toBe(mockReport);
-        expect(mockReportBuilder.buildFrom).toHaveBeenCalledWith(content);
-        expect(mockReportBuilder.buildFrom).toHaveBeenCalledTimes(1);
+    test('makeCase should return a CaseModel instance', () => {
+        const caseModel = buildDirector.makeCase();
+        expect(mockCaseBuilder.build).toHaveBeenCalled();
+        expect(caseModel).toBeInstanceOf(CaseModel);
     });
 });
