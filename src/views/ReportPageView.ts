@@ -50,7 +50,7 @@ export class ReportPageView extends AbstractView {
     /**
      * Override initEventListeners method for view-specific listeners.
      */
-    protected override initEventListeners(): void {
+    public override initEventListeners(): void {
         //report archive  button
         this.elements[0].addEventListener('click', async () => {
             //open modal window and fill with content
@@ -101,16 +101,12 @@ export class ReportPageView extends AbstractView {
     /**
      * Load elements from the HTML document into the elements array.
      */
-    private loadElements(): void {
+    public loadElements(): void {
         this.elements = [
-            document.getElementById(
-                UI_Elements.reportArchiveButton,
-            ) as HTMLElement,
-            document.getElementById(
-                UI_Elements.backtoDataEntryButton,
-            ) as HTMLElement,
-            document.getElementById(UI_Elements.downloadButton) as HTMLElement,
-        ];
+            document.getElementById(UI_Elements.reportArchiveButton),
+            document.getElementById(UI_Elements.backtoDataEntryButton),
+            document.getElementById(UI_Elements.downloadButton),
+        ].filter((el): el is HTMLElement => el !== null);
     }
 
     /**
