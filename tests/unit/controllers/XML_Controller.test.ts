@@ -28,7 +28,7 @@ describe('XML_Controller', () => {
       </object>
     `], { type: 'text/xml' });
   });
-
+  // done
   it('should parse XML file and populate the CaseModel correctly', async () => {
     const mockEvent = {
       target: {
@@ -72,13 +72,13 @@ describe('XML_Controller', () => {
     });
   });
   
-
+  // done
   it('should return a NullCaseModel when no document is loaded', () => {
     controller['currentDoc'] = null;
     const result = controller.parseSingleFile();
     expect(result).toBeInstanceOf(NullCaseModel);
   });
-
+  // done
   it('should call the correct callback after file is loaded', (done) => {
     const mockEvent = {
       target: {
@@ -95,7 +95,7 @@ describe('XML_Controller', () => {
       done();
     }, 100);
   });
-
+  // done
   it('should handle missing file correctly', () => {
     const mockEvent = {
       target: {
@@ -107,7 +107,7 @@ describe('XML_Controller', () => {
       controller.loadFile(mockEvent, jest.fn());
     }).toThrow('No file selected');
   });
-
+  
   it('should extract reports from XML file correctly', () => {
     const mockReportXML = `
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

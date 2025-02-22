@@ -68,6 +68,7 @@ describe('PageController', () => {
             }
         };
     });
+    // done
     describe('loadModal', () => {
         it('should load the modal and render the content', async () => {
             // Prepare the mock data for loadPageContent
@@ -85,7 +86,7 @@ describe('PageController', () => {
             expect(mockRender).toHaveBeenCalledWith(mockPageContent);
         });
     });
-
+    // done
     describe('unloadModal', () => {
         it('should unload the modal and reset currentView', () => {
             // Initially setting currentView to reportModal
@@ -98,7 +99,7 @@ describe('PageController', () => {
             expect(pageController['currentView']).toBe(pageController['views'].report);
         });
     });
-
+    // done
     describe('loadReport', () => {
         it('should load the correct report based on reportIDX', () => {
             // Mock DataController and the CaseModel instance
@@ -159,7 +160,7 @@ describe('PageController', () => {
         afterEach(() => {
             jest.restoreAllMocks();
         });
-
+        // done
         it('should export a report successfully when valid data is provided', async () => {
             // Mock the methods on the report
             jest.spyOn(report, 'getThirdMolar').mockReturnValue(1);
@@ -216,16 +217,16 @@ describe('PageController', () => {
         });
         */
     });
-    
+    // done
     it('should initialize with correct default values', () => {
         expect(pageController).toBeInstanceOf(PageController);
     });
-
+    // done
     it('should return the same instance for multiple calls to getInstance', () => {
         const secondInstance = PageController.getInstance();
         expect(secondInstance).toBe(pageController);
     });
-
+    // done
     it('should call navigateTo with the correct page', async () => {
         const mockLoadPage = jest
             .spyOn(pageController as any, 'loadPage')
@@ -235,7 +236,7 @@ describe('PageController', () => {
 
         expect(mockLoadPage).toHaveBeenCalledTimes(0);
     });
-
+    // done
     it('should handle errors when loading a page', async () => {
         const mockLoadPageContent = jest
             .spyOn(pageController as any, 'loadPageContent')
@@ -251,7 +252,7 @@ describe('PageController', () => {
         mockLoadPageContent.mockRestore();
         consoleErrorSpy.mockRestore();
     });
-
+    // done
     it('should initialize event listeners correctly', () => {
         const homeBtn = document.getElementById('homeBtn');
         const createBtn = document.getElementById('createBtn');
@@ -261,7 +262,7 @@ describe('PageController', () => {
         expect(createBtn).not.toBeNull();
         expect(dataEntryBtn).not.toBeNull();
     });
-
+    // done
     it('should call DataController to create a case', () => {
         const mockCreateCase = jest.fn();
         (DataController.getInstance as jest.Mock).mockReturnValue({
@@ -271,6 +272,7 @@ describe('PageController', () => {
         pageController.createCase('test_id', Sex.Male, Affinity.White);
         expect(mockCreateCase).toHaveBeenCalledWith('test_id', Sex.Male, Affinity.White);
     });
+    // done
     describe('editCase method', () => {
         it('should correctly map UI_Elements.dataSideCaseID to CaseElement.caseID and call DataController', () => {
             const editCaseMock = jest.fn();
@@ -322,7 +324,7 @@ describe('PageController', () => {
             ).toThrow('Invalid ui element passed to PageController.editcase()');
         });
     });
-
+    // done
     it('should correctly load sidebar content', async () => {
         const mockLoadPageContent = jest
             .spyOn(pageController as any, 'loadPageContent')
@@ -335,7 +337,7 @@ describe('PageController', () => {
             'Sidebar Content',
         );
     });
-
+    // done
     it('should call XML_Controller to save a case', () => {
         const mockSaveAsFile = jest.fn();
         const mockCase = { caseID: '1234' };
