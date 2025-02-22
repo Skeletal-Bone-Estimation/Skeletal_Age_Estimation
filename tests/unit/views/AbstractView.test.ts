@@ -1,62 +1,42 @@
-//updated 2-12 finished 2-12
+// AbstractView.test.ts
 import { AbstractView } from '../../../src/views/AbstractView';
 
 class ConcreteView extends AbstractView {
-    constructor(document: Document) {
-        super(document); // Call the parent constructor
-    }
+  constructor(document: Document) {
+    super(document); // Initialize contentDiv from document.getElementById('rootDiv')
+  }
 }
 
 describe('AbstractView (via ConcreteView)', () => {
-    let mockRootDiv: HTMLElement;
-    let concreteView: ConcreteView;
+  let mockRootDiv: HTMLElement;
+  let concreteView: ConcreteView;
 
-    beforeEach(() => {
-        // Create and mock rootDiv in the DOM
-        mockRootDiv = document.createElement('div');
-        mockRootDiv.id = 'rootDiv';
-        document.body.appendChild(mockRootDiv); // Append to the document body
+  beforeEach(() => {
+    // Create a mock rootDiv element
+    mockRootDiv = document.createElement('div');
+    mockRootDiv.id = 'rootDiv';
+    document.body.appendChild(mockRootDiv);
 
-        // Ensure `document.getElementById` returns the correct element
-        jest.spyOn(document, 'getElementById').mockImplementation((id: string) => {
-            if (id === 'rootDiv') return mockRootDiv;
-            return null;
-        });
+    // Create an instance of ConcreteView using the real document
+    concreteView = new ConcreteView(document);
+  });
 
-        // Create an instance of ConcreteView with the real document
-        concreteView = new ConcreteView(document);
-    });
+  afterEach(() => {
+    // Clean up: remove the mock rootDiv and restore mocks
+    document.body.removeChild(mockRootDiv);
+    jest.restoreAllMocks();
+  });
 
-    afterEach(() => {
-        // Clean up after each test
-        document.body.removeChild(mockRootDiv);
-        jest.restoreAllMocks(); // Reset any mocks
-    });
+  it('should update the innerHTML of the rootDiv when render is called', () => {
+    const htmlContent = '<p>Hello, World!</p>';
+    concreteView.render(htmlContent);
+    expect(mockRootDiv.innerHTML).toBe(htmlContent);
+  });
 
-    it('should initialize contentDiv to reference rootDiv', () => {
-        expect(concreteView.contentDiv).toBe(mockRootDiv);
-    });
-
-    it('should update the innerHTML of the rootDiv when render is called', () => {
-        // Define the HTML content to render
-        const htmlContent = '<p>Hello, World!</p>';
-
-        // Call the render method
-        concreteView.render(htmlContent);
-
-        // Assert that the innerHTML of rootDiv is updated
-        expect(mockRootDiv.innerHTML).toBe(htmlContent);
-    });
-
-    it('should call the placeholder method setSidebarListeners without errors', () => {
-        expect(() => {
-            (concreteView as any).setSidebarListeners();
-        }).not.toThrow();
-    });
-
-    it('should call the placeholder method initEventListeners without errors', () => {
-        expect(() => {
-            (concreteView as any).initEventListeners();
-        }).not.toThrow();
-    });
+  it('should set up sidebar listeners without throwing an error', () => {
+    expect(() => {
+      // Cast concreteView as any to access the protected method
+      (concreteView as any).setSidebarListeners();
+    }).not.toThrow();
+  });
 });

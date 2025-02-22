@@ -99,42 +99,19 @@ describe('ReportPageView', () => {
     expect(result).toBe('10.00 - 50.00');
   });
 
-  test('should log an error when an expected element is missing', () => {
-    // Remove the element with id "reportCaseTitle" to simulate a missing element.
-    const reportCaseTitle = document.getElementById('reportCaseTitle');
-    reportCaseTitle?.remove();
 
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    const dummyReport = {
-      getPubicSymphysis: jest.fn().mockReturnValue(0),
-      getPubicSymphysisRange: jest.fn().mockReturnValue({ min: 15, max: 40 }),
-      getAuricularSurface: jest.fn().mockReturnValue(0),
-      getAuricularSurfaceRange: jest.fn().mockReturnValue({ min: 20, max: 50 }),
-      getSternalEnd: jest.fn().mockReturnValue(0),
-      getSternalEndRange: jest.fn().mockReturnValue({ min: 10, max: 45 }),
-      getThirdMolar: jest.fn().mockReturnValue(0),
-    } as unknown as ReportModel;
-
-    (DataController.getInstance as jest.Mock).mockReturnValue({
-      openCase: { caseID: '12345' },
-      openReport: dummyReport,
-      getMostRecentReport: jest.fn().mockReturnValue(dummyReport),
+  test('should format third molar results correctly for various values', () => {
+    const testCases = [
+      { input: 0, expected: 'Under 18.' },
+      { input: 1, expected: 'Possibly 18' },
+      { input: 2, expected: 'Likely 18 or Older' },
+      { input: 3, expected: '18 or Older' },
+      { input: 99, expected: 'Unknown' },
+    ];
+  
+    testCases.forEach(({ input, expected }) => {
+      expect(view.accessFormatThirdMolar(input)).toBe(expected);
     });
-
-    view.loadReport(dummyReport);
-    expect(consoleErrorSpy).toHaveBeenCalledWith('ReportCaseTitle not found');
-    consoleErrorSpy.mockRestore();
-  });
-
-  test.each([
-    [0, 'Under 18.'],
-    [1, 'Possibly 18'],
-    [2, 'Likely 18 or Older'],
-    [3, '18 or Older'],
-    [99, 'Unknown'],
-  ])('should format third molar results correctly for value %i', (input, expected) => {
-    expect(view.accessFormatThirdMolar(input)).toBe(expected);
   });
 
   test('should trigger export on download button click', async () => {

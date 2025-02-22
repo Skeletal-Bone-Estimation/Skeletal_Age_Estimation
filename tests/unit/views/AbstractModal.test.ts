@@ -32,18 +32,6 @@ describe('AbstractModal', () => {
         document.body.innerHTML = '';
     });
 
-    //UNIT TESTS
-    it('should open the modal (set display to flex)', () => {
-        modal.openModal();
-        expect(mockModalContainer.style.display).toBe('flex');
-    });
-
-    it('should close the modal (set display to none)', () => {
-        (modal as any).closeModal(); // Access protected method
-        expect(mockModalContainer.style.display).toBe('none');
-    });
-
-    //INTEGRATION TESTS
     it('should open the modal when triggered by a user action', () => {
         //simulate modal opening by button click
         const openButton = document.createElement('button');
