@@ -113,7 +113,5 @@ export interface CaseBuilderIF {
      * @param reports The reports to set.
      * @returns The CaseBuilderIF instance.
      */
-    setReportsGenerated(reports: {
-        [id: number]: AbstractReportModel;
-    }): CaseBuilderIF;
+    setReportsGenerated(generatedReports: AbstractReportModel[]): CaseBuilderIF;
 }

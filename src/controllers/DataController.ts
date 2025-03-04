@@ -26,7 +26,7 @@ export class DataController {
     private xmlController: XML_Controller = XML_Controller.getInstance();
     private _loadedCases: CaseModel[];
     private _openCase: AbstractCaseModel;
-    private _openReport: AbstractReportModel;
+    private _openReport: string | NullReportModel;
 
     private constructor() {
         this._loadedCases = [];
@@ -47,7 +47,7 @@ export class DataController {
      * Accessor for the _openReport attribute.
      * @returns The open AbstractReportModel object.
      */
-    public get openReport(): AbstractReportModel {
+    public get openReport(): string | NullReportModel {
         return this._openReport;
     }
 
@@ -55,7 +55,7 @@ export class DataController {
      * Mutator for the _openReport attribute.
      * @param report The new AbstractReportModel being assigned.
      */
-    public set openReport(report: AbstractReportModel) {
+    public set openReport(report: string) {
         this._openReport = report;
     }
 
@@ -280,16 +280,18 @@ export class DataController {
      * Retrieves the most recent report from the currently opened case.
      * @returns The most recent AbstractReportModel.
      */
-    public getMostRecentReport(): AbstractReportModel {
-        return (this.openCase as CaseModel).mostRecentReport;
+    public getMostRecentReportIdx(): number {
+        return this.findReportIndex(
+            (this.openCase as CaseModel).mostRecentReport as string,
+        );
     }
 
     /**
      * Sets the most recent report for the currently opened case.
      * @param report The new most recent AbstractReportModel.
      */
-    public setMostRecentReport(report: AbstractReportModel): void {
-        (this.openCase as CaseModel).mostRecentReport = report;
+    public setMostRecentReport(reportID: string): void {
+        (this.openCase as CaseModel).mostRecentReport = reportID;
     }
 
     /**
@@ -298,11 +300,9 @@ export class DataController {
      * @returns The index of the report, or -1 if not found.
      */
     public findReportIndex(id: string): number {
-        const _case: CaseModel = this._openCase as CaseModel;
-        for (var i: number = 0; i < _case.generatedReports.length; i++) {
-            if ((_case.generatedReports[i] as ReportModel).id == id) return i;
-        }
-        return -1;
+        return (this.openCase as CaseModel).generatedReports.findIndex(
+            (item) => item.id === id,
+        );
     }
 
     /**

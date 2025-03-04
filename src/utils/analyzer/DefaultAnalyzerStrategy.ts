@@ -169,7 +169,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ? this.average(16.27, 21.2)
                     : isMale
                       ? 16.27
-                      : 21.20;
+                      : 21.2;
                 results[Report.pubicSymphysis][`${side}_max`] = isUnknown
                     ? this.average(42.79, 41.68)
                     : isMale
@@ -191,7 +191,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ? this.average(60.14, 55.5)
                     : isMale
                       ? 60.14
-                      : 55.50;
+                      : 55.5;
                 break;
             case PubicSymphysis.Five:
                 results[Report.pubicSymphysis][`${side}`] = isUnknown
