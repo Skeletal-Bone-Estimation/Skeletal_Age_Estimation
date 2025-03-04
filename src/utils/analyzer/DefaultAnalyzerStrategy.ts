@@ -341,7 +341,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                             ? this.average(24.94, 31.02)
                             : isMale
                               ? 24.94
-                              : 37.36,
+                              : 31.02,
                         isUnknown
                             ? this.average(60.14, 55.5)
                             : isMale
@@ -390,7 +390,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                             ? this.average(77.0, 82.54)
                             : isMale
                               ? 77.0
-                              : 81.2,
+                              : 82.54,
                         isUnknown
                             ? this.average(58.34, 67.72)
                             : isMale
