@@ -262,12 +262,15 @@ export class ReportPageView extends AbstractView {
      */
     private calculateSummarizedRange(report: AbstractReportModel): string {
         // Get the minimum and maximum age across all ranges
-        const minAge = Math.min(
-            report.getPubicSymphysisRange(Side.C).min,
-            report.getAuricularSurfaceRange(Side.C).min,
-            report.getSternalEndRange(Side.C).min,
-        ).toFixed(2);
-
+        if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
+            var minAge = Math.min(
+                report.getPubicSymphysisRange(Side.C).min,
+                report.getAuricularSurfaceRange(Side.C).min,
+                report.getSternalEndRange(Side.C).min,
+            ).toFixed(2);
+        } else {
+            var minAge = '18.00';
+        }
         const maxAge = Math.max(
             report.getPubicSymphysisRange(Side.C).max,
             report.getAuricularSurfaceRange(Side.C).max,
