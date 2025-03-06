@@ -22,6 +22,10 @@ export class CaseBuilder implements CaseBuilderIF {
     private _notes: string;
     private _generatedReports: AbstractReportModel[];
     private _mostRecentReport: AbstractReportModel;
+    private _pubicSymphysisImages: string[];
+    private _auricularSurfaceImages: string[];
+    private _fourthRibImages: string[];
+    private _thirdMolarImages: string[];
 
     constructor() {
         this._caseID = '';
@@ -40,6 +44,10 @@ export class CaseBuilder implements CaseBuilderIF {
         this._notes = '';
         this._generatedReports = [];
         this._mostRecentReport = new NullReportModel();
+        this._pubicSymphysisImages = [];
+        this._auricularSurfaceImages = [];
+        this._fourthRibImages = [];
+        this._thirdMolarImages = [];
     }
 
     /**
@@ -205,6 +213,45 @@ export class CaseBuilder implements CaseBuilderIF {
     }
 
     /**
+     * Sets the images arrays for the uploaded pubic symphysis images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setPubicSymphysisImages(images: string[]): CaseBuilderIF {
+        this._pubicSymphysisImages = images;
+        return this;
+    }
+
+    /**
+     * Sets the images arrays for the uploaded auricular surface images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setAuricularSurfaceImages(images: string[]): CaseBuilderIF {
+        this._auricularSurfaceImages = images;
+        return this;
+    }
+
+    /**
+     * Sets the images arrays for the uploaded fourth rib images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setFourthRibImages(images: string[]): CaseBuilderIF {
+        this._auricularSurfaceImages = images;
+        return this;
+    }
+    /**
+     * Sets the images arrays for the uploaded third molar images for the case
+     *  @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setThirdMolarImages(images: string[]): CaseBuilderIF {
+        this._thirdMolarImages = images;
+        return this;
+    }
+
+    /**
      * Builds and returns the CaseModel.
      * @returns The built CaseModel.
      */
@@ -226,6 +273,10 @@ export class CaseBuilder implements CaseBuilderIF {
             this._notes,
             this._generatedReports,
             this._mostRecentReport,
+            this._pubicSymphysisImages,
+            this._auricularSurfaceImages,
+            this._fourthRibImages,
+            this._thirdMolarImages,
         );
     }
 }

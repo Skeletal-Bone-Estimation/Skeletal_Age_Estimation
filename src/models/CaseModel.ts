@@ -31,6 +31,10 @@ export class CaseModel extends AbstractCaseModel {
     protected _notes: string;
     protected _generatedReports: AbstractReportModel[];
     private _mostRecentReport: AbstractReportModel;
+    protected _pubicSymphysisImages: string[];
+    protected _auricularSurfaceImages: string[];
+    protected _fourthRibImages: string[];
+    protected _thirdMolarImages: string[];
 
     constructor(
         caseID: string,
@@ -49,6 +53,10 @@ export class CaseModel extends AbstractCaseModel {
         notes: string,
         generatedReports: AbstractReportModel[],
         mostRecentReport: AbstractReportModel,
+        pubicSymphysisImages: string[] = [],
+        auricularSurfaceImages: string[] = [],
+        fourthRibImages: string[] = [],
+        thirdMolarImages: string[] = [],
     ) {
         super();
         this._caseID = caseID;
@@ -68,6 +76,10 @@ export class CaseModel extends AbstractCaseModel {
         this._notes = notes;
         this.observers = [];
         this._mostRecentReport = mostRecentReport;
+        this._pubicSymphysisImages = pubicSymphysisImages;
+        this._auricularSurfaceImages = auricularSurfaceImages;
+        this._fourthRibImages = fourthRibImages;
+        this._thirdMolarImages = thirdMolarImages;
         this.attach(new AutosaveObserver());
         this.attach(new ReportManagerObserver());
     }
@@ -326,6 +338,66 @@ export class CaseModel extends AbstractCaseModel {
      */
     public set generatedReports(value: AbstractReportModel[]) {
         this._generatedReports = value;
+    }
+
+    /**
+     * Gets the uploaded pubic symphysis images for the case
+     * @returns the uploaded pubic symphysis images
+     */
+    public get pubicSymphysisImages(): string[] {
+        return this._pubicSymphysisImages;
+    }
+    /**
+     * Sets the uploaded pubic symphysis images for the case
+     * @param images the uploaded pubic symphysis images
+     */
+    public set pubicSymphysisImages(images: string[]) {
+        this._pubicSymphysisImages = images;
+    }
+
+    /**
+     * Gets the uploaded auricular surface images for the case
+     * @returns the uploaded auricular surface images
+     */
+    public get auricularSurfaceImages(): string[] {
+        return this._auricularSurfaceImages;
+    }
+    /**
+     * Sets the uploaded auricular surface images for the case
+     * @param images the uploaded auricular surface images
+     */
+    public set auricularSurfaceImages(images: string[]) {
+        this._auricularSurfaceImages = images;
+    }
+
+    /**
+     * Gets the uploaded fourth rib images for the case
+     * @returns the uploaded fourth rib images
+     */
+    public get fourthRibImages(): string[] {
+        return this._fourthRibImages;
+    }
+    /**
+     * Sets the uploaded fourth rib images for the case
+     * @param images the uploaded fourth rib images
+     */
+    public set fourthRibImages(images: string[]) {
+        this._fourthRibImages = images;
+    }
+
+    /**
+     * Gets the uploaded third molar images for the case
+     * @returns the uploaded third molar images
+     */
+    public get thirdMolarImages(): string[] {
+        return this._thirdMolarImages;
+    }
+    /**
+     * Sets the uploaded third molar images for the case
+     * @param images the uploaded third molar images
+     */
+    public set thirdMolarImages(images: string[]) {
+        this._thirdMolarImages = images;
     }
 
     /**

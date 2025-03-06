@@ -145,6 +145,79 @@ export class XML_Controller {
                 mostRecentReport as ReportModel,
             );
 
+        const pubicImagesElement = this.currentDoc?.getElementsByTagName(
+            '_pubicSymphysisImages',
+        )[0];
+        if (pubicImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < pubicImagesElement.children.length; i++) {
+                const imageElement = pubicImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setPubicSymphysisImages(images);
+        } else {
+            this.director.caseBuilder.setPubicSymphysisImages([]);
+        }
+
+        const auricularImagesElement = this.currentDoc?.getElementsByTagName(
+            '_auricularSurfaceImages',
+        )[0];
+        if (auricularImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < auricularImagesElement.children.length; i++) {
+                const imageElement = auricularImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setAuricularSurfaceImages(images);
+        } else {
+            this.director.caseBuilder.setAuricularSurfaceImages([]);
+        }
+
+        const fourthRibImagesElement =
+            this.currentDoc?.getElementsByTagName('_fourthRibImages')[0];
+        if (fourthRibImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < fourthRibImagesElement.children.length; i++) {
+                const imageElement = fourthRibImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setFourthRibImages(images);
+        } else {
+            this.director.caseBuilder.setFourthRibImages([]);
+        }
+
+        const thirdMolarImagesElement =
+            this.currentDoc?.getElementsByTagName('_thirdMolarImages')[0];
+        if (thirdMolarImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < thirdMolarImagesElement.children.length; i++) {
+                const imageElement = thirdMolarImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setThirdMolarImages(images);
+        } else {
+            this.director.caseBuilder.setThirdMolarImages([]);
+        }
         //console.log('Loaded reports:', generatedReports);
         //console.log('Loaded Case:', this.director.makeCase());
 

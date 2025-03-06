@@ -80,6 +80,27 @@ body {
   background-color: var(--background-color);
 }
 
+/*upload images buttons*/
+.uploadImageButton {
+  background-color: transparent; 
+  border: none; 
+  padding: 0; 
+  margin-top: 10px; 
+  cursor: pointer; 
+}
+/*makes the image inside the button sized correctly */
+.uploadImageButton img {
+  width: 40px;   
+  height: 40px;     
+  object-fit: contain;
+  display: block; 
+}
+
+.uploadImageButton:hover img {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
 .wrapper {
   display: flex;
 }

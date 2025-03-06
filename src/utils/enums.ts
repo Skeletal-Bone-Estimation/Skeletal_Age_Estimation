@@ -153,6 +153,10 @@ export enum CaseElement {
     fourthRibL = 11,
     fourthRibR = 12,
     notes = 13,
+    pubicSymphysisImages = 14,
+    auricularSurfaceImages = 15,
+    fourthRibImages = 16,
+    thirdMolarImages = 17,
 }
 
 /**
