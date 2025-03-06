@@ -830,8 +830,8 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S4, S5, S6] = getAuricularSurfaceValues(data2);
 
         results[Report.auricularSurface][`${side}`] = this.average(S1, S4);
-        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S3);
-        results[Report.auricularSurface][`${side}_max`] = Math.max(S5, S6);
+        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S5);
+        results[Report.auricularSurface][`${side}_max`] = Math.max(S3, S6);
     }
 
     /**
