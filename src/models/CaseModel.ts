@@ -12,6 +12,7 @@ import { AutosaveObserver } from '../utils/observer/AutosaveObserver';
 import { ReportManagerObserver } from '../utils/observer/ReportManagerOberver';
 import { AbstractCaseModel } from './AbstractCaseModel';
 import { AbstractReportModel } from './AbstractReportModel';
+import { NullReportModel } from './NullReportModel';
 import { ReportModel } from './ReportModel';
 
 export class CaseModel extends AbstractCaseModel {
@@ -30,7 +31,7 @@ export class CaseModel extends AbstractCaseModel {
     protected _fourthRibR: SternalEnd;
     protected _notes: string;
     protected _generatedReports: AbstractReportModel[];
-    private _mostRecentReport: AbstractReportModel;
+    private _mostRecentReport: string | NullReportModel;
 
     constructor(
         caseID: string,
@@ -48,7 +49,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibR: SternalEnd,
         notes: string,
         generatedReports: AbstractReportModel[],
-        mostRecentReport: AbstractReportModel,
+        mostRecentReport: string | NullReportModel,
     ) {
         super();
         this._caseID = caseID;
@@ -76,7 +77,7 @@ export class CaseModel extends AbstractCaseModel {
      * Gets the most recent report.
      * @returns The most recent AbstractReportModel.
      */
-    public get mostRecentReport(): AbstractReportModel {
+    public get mostRecentReport(): string | NullReportModel {
         return this._mostRecentReport;
     }
 
@@ -84,8 +85,8 @@ export class CaseModel extends AbstractCaseModel {
      * Sets the most recent report.
      * @param report The new most recent AbstractReportModel.
      */
-    public set mostRecentReport(report: AbstractReportModel) {
-        this._mostRecentReport = report;
+    public set mostRecentReport(reportIdx: string) {
+        this._mostRecentReport = reportIdx;
     }
 
     /**
