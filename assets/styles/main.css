@@ -519,6 +519,15 @@ body {
   position: relative; /* This is needed for absolute positioning of the vertical lines */
 }
 
+.graphPlacement h3 {
+  position:absolute;
+  top: -10%;
+}
+
+.graphTitle {
+  position:absolute;
+  top: -10%;
+}
 
 /* Style for vertical lines */
 .vertical-line {

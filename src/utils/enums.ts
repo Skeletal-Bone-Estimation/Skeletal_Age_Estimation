@@ -133,6 +133,7 @@ export enum UI_Elements {
     viewReportButton = 'submitReportBtn',
     analysisSelector = 'analysisSelector',
     mostRecentReportButton = 'viewMostRecentReport',
+    changeGraphButton = 'changeGraphBtn',
 }
 
 /**

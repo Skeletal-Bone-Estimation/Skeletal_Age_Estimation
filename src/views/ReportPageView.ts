@@ -9,10 +9,12 @@ import { updateRangeBar } from '../utils/charts/ageRangeChart';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
+    private ninetyConfidenceInfo: number[];
 
     constructor(document: Document) {
         super(document);
         this.elements = [];
+        this.ninetyConfidenceInfo = [];
     }
 
     /**
@@ -77,6 +79,10 @@ export class ReportPageView extends AbstractView {
 
         const report = DataController.getInstance().getMostRecentReport();
         if (report) {
+            this.elements[3].addEventListener('click', () => {
+                console.log(this.ninetyConfidenceInfo);
+            });
+
             document
                 .getElementById('downloadBtn')!
                 .addEventListener(
@@ -109,7 +115,12 @@ export class ReportPageView extends AbstractView {
             document.getElementById(
                 UI_Elements.backtoDataEntryButton,
             ) as HTMLElement,
-            document.getElementById(UI_Elements.downloadButton) as HTMLElement,
+            document.getElementById(
+                UI_Elements.downloadButton
+            ) as HTMLElement,
+            document.getElementById(
+                UI_Elements.changeGraphButton,
+            ) as HTMLElement,
         ];
     }
 
@@ -118,6 +129,7 @@ export class ReportPageView extends AbstractView {
      * @param report The ReportModel to load.
      */
     public loadReport(report: ReportModel): void {
+        this.ninetyConfidenceInfo = this.calculateNinetyConfidenceInterval(report);
         // get the current case just so we can get the caseID
         const caseModel = DataController.getInstance().openCase as CaseModel;
 
@@ -189,6 +201,13 @@ export class ReportPageView extends AbstractView {
             `;
         } else {
             console.error('Element molarData not found!');
+        }
+
+        const graphTitle = document.getElementById('graphTitle');
+        if (graphTitle) {
+            graphTitle.innerHTML = `<strong><i>95% Confidence Interval</i></strong>`;
+        } else {
+            console.error('Element graphTitle not found!');
         }
     }
 
@@ -285,5 +304,96 @@ export class ReportPageView extends AbstractView {
         updateRangeBar(minAgeNum, maxAgeNum, 'ageBar');
 
         return `${minAge} - ${maxAge}`;
+    }
+
+    /**
+     * The 90% confidence interval calcutions.
+     * @param report The report to calculate the range for.
+     * @returns A number array containing the calculated confidence intervals.
+     */
+    private calculateNinetyConfidenceInterval(report: AbstractReportModel) {
+        if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
+            var minAgeOverall = Math.min(
+                report.getPubicSymphysisRange(Side.C).min,
+                report.getAuricularSurfaceRange(Side.C).min,
+                report.getSternalEndRange(Side.C).min,
+            );
+        } else {
+            var minAgeOverall = 18.0;
+        }
+
+        var maxAgeOverall = Math.max(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).max,
+        );
+
+        var standardErrorOverall = this.standardError(
+            maxAgeOverall,
+            minAgeOverall,
+        );
+        var standardErrorPub = this.standardError(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getPubicSymphysisRange(Side.C).min,
+        );
+        var standardErrorAur = this.standardError(
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).min,
+        );
+        var standardErrorRib = this.standardError(
+            report.getSternalEndRange(Side.C).max,
+            report.getSternalEndRange(Side.C).min,
+        );
+
+        var ninetyMarginErrorOverall = 1.645 * standardErrorOverall;
+        var ninetyMarginErrorPub = 1.645 * standardErrorPub;
+        var ninetyMarginErrorAur = 1.645 * standardErrorAur;
+        var ninetyMarginErrorRib = 1.645 * standardErrorRib;
+
+        var meanOverall = this.mean(maxAgeOverall, minAgeOverall);
+        var meanPub = this.mean(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getPubicSymphysisRange(Side.C).min,
+        );
+        var meanAur = this.mean(
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).min,
+        );
+        var meanRib = this.mean(
+            report.getSternalEndRange(Side.C).max,
+            report.getSternalEndRange(Side.C).min,
+        );
+
+        var minOverall = meanOverall - ninetyMarginErrorOverall;
+        var maxOverall = meanOverall + ninetyMarginErrorOverall;
+        var minPub = meanPub - ninetyMarginErrorPub;
+        var maxPub = meanPub + ninetyMarginErrorPub;
+        var minAur = meanAur - ninetyMarginErrorAur;
+        var maxAur = meanAur + ninetyMarginErrorAur;
+        var minRib = meanRib - ninetyMarginErrorRib;
+        var maxRib = meanRib + ninetyMarginErrorRib;
+
+        var information = [
+            minOverall,
+            maxOverall,
+            minPub,
+            maxPub,
+            minAur,
+            maxAur,
+            minRib,
+            maxRib,
+        ];
+
+        return information;
+    }
+
+    private standardError(U: number, L: number) {
+        var SE = (U - L) / (2 * 1.96);
+        return SE;
+    }
+
+    private mean(U: number, L: number) {
+        var M = (U + L) / 2;
+        return M;
     }
 }
