@@ -282,6 +282,30 @@ export class DataEntryView extends AbstractView {
         ) as HTMLButtonElement;
         if (!analysisSelector) console.error('analysis selector not found');
 
+        const uploadAuricularImages = document.getElementById(
+            UI_Elements.uploadAuricularImages,
+        ) as HTMLButtonElement;
+        if (!uploadAuricularImages)
+            console.error('upload auricular images button not found');
+
+        const uploadPubicImages = document.getElementById(
+            UI_Elements.uploadPubicImages,
+        ) as HTMLButtonElement;
+        if (!uploadPubicImages)
+            console.error('upload pubic images button not found');
+
+        const uploadSternalImages = document.getElementById(
+            UI_Elements.uploadSternalImages,
+        ) as HTMLButtonElement;
+        if (!uploadSternalImages)
+            console.error('upload sternal images button not found');
+
+        const uploadMolarImages = document.getElementById(
+            UI_Elements.uploadMolarImages,
+        ) as HTMLButtonElement;
+        if (!uploadMolarImages)
+            console.error('upload molar images button not found');
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -297,7 +321,11 @@ export class DataEntryView extends AbstractView {
             analyzeButton &&
             guideButton &&
             analysisSelector &&
-            mostRecentReportButton
+            mostRecentReportButton &&
+            uploadAuricularImages &&
+            uploadPubicImages &&
+            uploadSternalImages &&
+            uploadMolarImages
         ) {
             //console.log('elements present');
 
@@ -471,6 +499,129 @@ export class DataEntryView extends AbstractView {
                     default:
                         console.error('invalid analyzer selected');
                 }
+            });
+
+            uploadAuricularImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                //read in as base 64 string
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Auricular image base64:', base64String,);
+                            //update casse model
+                            const currentCase = DataController.getInstance()
+                                .openCase as CaseModel;
+                            //push the string
+                            currentCase.auricularSurfaceImages.push(
+                                base64String,
+                            );
+                            //trigger autosave observer
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    //clean
+                    document.body.removeChild(fileInput);
+                });
+
+                //trigger file selector
+                fileInput.click();
+            });
+
+            uploadPubicImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Pubic image base64:', base64String);
+                            const currentCase = DataController.getInstance()
+                                .openCase as CaseModel;
+
+                            currentCase.pubicSymphysisImages.push(base64String);
+
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    document.body.removeChild(fileInput);
+                });
+
+                fileInput.click();
+            });
+
+            uploadSternalImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Sternal image base64:', base64String);
+                            const currentCase = DataController.getInstance()
+                                .openCase as CaseModel;
+                            currentCase.fourthRibImages.push(base64String);
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    document.body.removeChild(fileInput);
+                });
+
+                fileInput.click();
+            });
+
+            uploadMolarImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Molar image base64:', base64String);
+                            const currentCase = DataController.getInstance()
+                                .openCase as CaseModel;
+
+                            currentCase.thirdMolarImages.push(base64String);
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    document.body.removeChild(fileInput);
+                });
+
+                fileInput.click();
             });
         }
     }

@@ -81,24 +81,24 @@ body {
 }
 
 /*upload images buttons*/
-.uploadImageButton {
-  background-color: transparent; 
-  border: none; 
-  padding: 0; 
-  margin-top: 10px; 
-  cursor: pointer; 
-}
-/*makes the image inside the button sized correctly */
-.uploadImageButton img {
-  width: 40px;   
-  height: 40px;     
-  object-fit: contain;
-  display: block; 
+.dataEntry .uploadImageButton {
+  margin-top: 15px;   
+  display: block;       
+  margin-left: 20px;
+  border: none;
+  margin-bottom: 5px;
+  background: none;
+  padding: 0;
+
 }
 
 .uploadImageButton:hover img {
   opacity: 0.8;
   transition: opacity 0.2s ease;
+}
+
+.uploadImageButton:active {
+  transform: scale(0.95);  
 }
 
 .wrapper {

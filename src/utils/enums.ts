@@ -133,6 +133,10 @@ export enum UI_Elements {
     viewReportButton = 'submitReportBtn',
     analysisSelector = 'analysisSelector',
     mostRecentReportButton = 'viewMostRecentReport',
+    uploadAuricularImages = 'uploadImageButtonAA',
+    uploadPubicImages = 'uploadImageButtonPS',
+    uploadSternalImages = 'uploadImageButtonSR',
+    uploadMolarImages = 'uploadImageButtonTM',
 }
 
 /**
