@@ -10,11 +10,13 @@ import { updateRangeBar } from '../utils/charts/ageRangeChart';
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
     private ninetyConfidenceInfo: number[];
+    private ninetyFiveConfidenceInfo: number[];
 
     constructor(document: Document) {
         super(document);
         this.elements = [];
         this.ninetyConfidenceInfo = [];
+        this.ninetyFiveConfidenceInfo = [];
     }
 
     /**
@@ -77,12 +79,38 @@ export class ReportPageView extends AbstractView {
                 ),
         );
 
+        // Button for changing graph to a 90% confidence interval
+        this.elements[3].addEventListener('click', () => {
+            //console.log(this.ninetyConfidenceInfo);
+            this.updateGraphNinety();
+            const graphTitle = document.getElementById('graphTitle');
+            if (graphTitle) {
+                this.updateGraphTitle(
+                    graphTitle as HTMLElement,
+                    `<strong><i>90% Confidence Interval</i></strong>`,
+                );
+            } else {
+                console.error('Element graphTitle not found!');
+            }
+        });
+
+        // Button for changing graph to a 95% confidence interval
+        this.elements[4].addEventListener('click', () => {
+            //console.log(this.ninetyFiveConfidenceInfo);
+            this.updateGraphNinetyFive();
+            const graphTitle = document.getElementById('graphTitle');
+            if (graphTitle) {
+                this.updateGraphTitle(
+                    graphTitle as HTMLElement,
+                    `<strong><i>95% Confidence Interval</i></strong>`,
+                );
+            } else {
+                console.error('Element graphTitle not found!');
+            }
+        });
+
         const report = DataController.getInstance().getMostRecentReport();
         if (report) {
-            this.elements[3].addEventListener('click', () => {
-                console.log(this.ninetyConfidenceInfo);
-            });
-
             document
                 .getElementById('downloadBtn')!
                 .addEventListener(
@@ -115,11 +143,12 @@ export class ReportPageView extends AbstractView {
             document.getElementById(
                 UI_Elements.backtoDataEntryButton,
             ) as HTMLElement,
+            document.getElementById(UI_Elements.downloadButton) as HTMLElement,
             document.getElementById(
-                UI_Elements.downloadButton
+                UI_Elements.changeGraphButton90,
             ) as HTMLElement,
             document.getElementById(
-                UI_Elements.changeGraphButton,
+                UI_Elements.changeGraphButton95,
             ) as HTMLElement,
         ];
     }
@@ -129,7 +158,7 @@ export class ReportPageView extends AbstractView {
      * @param report The ReportModel to load.
      */
     public loadReport(report: ReportModel): void {
-        this.ninetyConfidenceInfo = this.calculateNinetyConfidenceInterval(report);
+        this.calculateConfidenceIntervals(report);
         // get the current case just so we can get the caseID
         const caseModel = DataController.getInstance().openCase as CaseModel;
 
@@ -205,7 +234,10 @@ export class ReportPageView extends AbstractView {
 
         const graphTitle = document.getElementById('graphTitle');
         if (graphTitle) {
-            graphTitle.innerHTML = `<strong><i>95% Confidence Interval</i></strong>`;
+            this.updateGraphTitle(
+                graphTitle as HTMLElement,
+                `<strong><i>95% Confidence Interval</i></strong>`,
+            );
         } else {
             console.error('Element graphTitle not found!');
         }
@@ -311,7 +343,7 @@ export class ReportPageView extends AbstractView {
      * @param report The report to calculate the range for.
      * @returns A number array containing the calculated confidence intervals.
      */
-    private calculateNinetyConfidenceInterval(report: AbstractReportModel) {
+    private calculateConfidenceIntervals(report: AbstractReportModel) {
         if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
             var minAgeOverall = Math.min(
                 report.getPubicSymphysisRange(Side.C).min,
@@ -373,7 +405,7 @@ export class ReportPageView extends AbstractView {
         var minRib = meanRib - ninetyMarginErrorRib;
         var maxRib = meanRib + ninetyMarginErrorRib;
 
-        var information = [
+        this.ninetyConfidenceInfo = [
             minOverall,
             maxOverall,
             minPub,
@@ -384,7 +416,16 @@ export class ReportPageView extends AbstractView {
             maxRib,
         ];
 
-        return information;
+        this.ninetyFiveConfidenceInfo = [
+            minAgeOverall,
+            maxAgeOverall,
+            report.getPubicSymphysisRange(Side.C).min,
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).min,
+            report.getSternalEndRange(Side.C).max,
+        ];
     }
 
     private standardError(U: number, L: number) {
@@ -395,5 +436,59 @@ export class ReportPageView extends AbstractView {
     private mean(U: number, L: number) {
         var M = (U + L) / 2;
         return M;
+    }
+
+    private updateGraphNinety() {
+        updateRangeBar(
+            this.ninetyConfidenceInfo[0],
+            this.ninetyConfidenceInfo[1],
+            'ageBar',
+        );
+        updateRangeBar(
+            this.ninetyConfidenceInfo[2],
+            this.ninetyConfidenceInfo[3],
+            'pubicSymphysisBar',
+        );
+        updateRangeBar(
+            this.ninetyConfidenceInfo[4],
+            this.ninetyConfidenceInfo[5],
+            'auricularSurfaceBar',
+        );
+        updateRangeBar(
+            this.ninetyConfidenceInfo[6],
+            this.ninetyConfidenceInfo[7],
+            'sternalEndBar',
+        );
+    }
+
+    private updateGraphNinetyFive() {
+        updateRangeBar(
+            this.ninetyFiveConfidenceInfo[0],
+            this.ninetyFiveConfidenceInfo[1],
+            'ageBar',
+        );
+        updateRangeBar(
+            this.ninetyFiveConfidenceInfo[2],
+            this.ninetyFiveConfidenceInfo[3],
+            'pubicSymphysisBar',
+        );
+        updateRangeBar(
+            this.ninetyFiveConfidenceInfo[4],
+            this.ninetyFiveConfidenceInfo[5],
+            'auricularSurfaceBar',
+        );
+        updateRangeBar(
+            this.ninetyFiveConfidenceInfo[6],
+            this.ninetyFiveConfidenceInfo[7],
+            'sternalEndBar',
+        );
+    }
+
+    private updateGraphTitle(graphTitle: HTMLElement, title: string) {
+        if (graphTitle) {
+            graphTitle.innerHTML = title;
+        } else {
+            console.error('Element graphTitle not found!');
+        }
     }
 }
