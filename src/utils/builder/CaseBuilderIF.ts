@@ -108,9 +108,31 @@ export interface CaseBuilderIF {
      */
     setNotes(notes: string): CaseBuilderIF;
 
+   
     /**
-     * Sets the reports generated for the case.
-     * @param reports The reports to set.
+     * Sets the images arrays for the uploaded pubic symphysis images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    setPubicSymphysisImages(images: string[]): CaseBuilderIF;
+
+    /**
+     * Sets the images arrays for the uploaded auricular surface images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    setAuricularSurfaceImages(images: string[]): CaseBuilderIF;
+
+    /**
+     * Sets the images arrays for the uploaded fourth rib images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    setFourthRibImages(images: string[]): CaseBuilderIF;
+
+    /**
+     * Sets the images arrays for the uploaded third molar images for the case
+     *  @param images The images to set.
      * @returns The CaseBuilderIF instance.
      */
     setReportsGenerated(reports: {

@@ -374,7 +374,9 @@ export class PageController {
      */
     public loadReport(reportIDX: number) {
         const dc = DataController.getInstance();
-        dc.openReport = (dc.openCase as CaseModel).generatedReports[reportIDX];
+        dc.openReport = (dc.openCase as CaseModel).generatedReports[
+            reportIDX
+        ].id;
         this.navigateTo(Pages.Report, SideBar.createBar);
     }
 

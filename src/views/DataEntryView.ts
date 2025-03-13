@@ -460,10 +460,8 @@ export class DataEntryView extends AbstractView {
                 dc.openCase.notify(
                     Observers.setSelectedReport,
                     (dc.openCase as CaseModel).generatedReports[
-                        dc.findReportIndex(
-                            (dc.getMostRecentReport() as ReportModel).id,
-                        )
-                    ],
+                        dc.getMostRecentReportIdx()
+                    ].id,
                 );
                 PageController.getInstance().navigateTo(
                     Pages.Report,

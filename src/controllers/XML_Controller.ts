@@ -7,6 +7,7 @@ import { NullCaseModel } from '../models/NullCaseModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
+import { DataController } from './DataController';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -137,12 +138,11 @@ export class XML_Controller {
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
 
-        const mostRecentReport = this.extractReport(
-            this.currentDoc.getElementsByTagName('_mostRecentReport')[0],
-        );
-        if (mostRecentReport)
+        const mostRecentReport =
+            this.currentDoc.getElementsByTagName('_mostRecentReport')[0];
+        if (mostRecentReport.textContent)
             this.director.caseBuilder.setMostRecentReport(
-                mostRecentReport as ReportModel,
+                mostRecentReport.textContent,
             );
 
         const pubicImagesElement = this.currentDoc?.getElementsByTagName(
@@ -242,7 +242,11 @@ export class XML_Controller {
         }
 
         const id = idElement.textContent || '-1';
-        return this.director.makeReportFrom(id, resultsElement);
+        const report: AbstractReportModel = this.director.makeReportFrom(
+            id,
+            resultsElement,
+        );
+        return report;
     }
 
     /**

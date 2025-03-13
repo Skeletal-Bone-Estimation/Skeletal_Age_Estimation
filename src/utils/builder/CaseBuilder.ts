@@ -21,7 +21,7 @@ export class CaseBuilder implements CaseBuilderIF {
     private _fourthRibR: number;
     private _notes: string;
     private _generatedReports: AbstractReportModel[];
-    private _mostRecentReport: AbstractReportModel;
+    private _mostRecentReport: string | NullReportModel;
     private _pubicSymphysisImages: string[];
     private _auricularSurfaceImages: string[];
     private _fourthRibImages: string[];
@@ -207,7 +207,7 @@ export class CaseBuilder implements CaseBuilderIF {
      * @param generatedReports The reports to set.
      * @returns The CaseBuilderIF instance.
      */
-    public setMostRecentReport(report: AbstractReportModel): CaseBuilderIF {
+    public setMostRecentReport(report: string): CaseBuilderIF {
         this._mostRecentReport = report;
         return this;
     }
