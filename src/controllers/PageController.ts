@@ -27,6 +27,7 @@ import {
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
 import { CaseItem } from '../views/CaseItem';
+import { CompareModal } from '../views/CompareModal';
 
 export class PageController {
     private static instance: PageController;
@@ -46,6 +47,7 @@ export class PageController {
             report: new ReportPageView(document),
 
             reportModal: new ReportModal(document),
+            compareModal: new CompareModal(document),
 
             compare: new ComparePageView(document),
 
@@ -362,6 +364,17 @@ export class PageController {
     }
 
     /**
+     * Loads the report modal.
+     */
+    public async loadModalCompare(): Promise<void> {
+        this.currentView = this.views.compareModal;
+        (this.currentView as CompareModal).openModal();
+        (this.currentView as CompareModal).render(
+            await this.loadPageContent(Pages.CompareModal),
+        );
+    }
+
+    /**
      * Unloads the report modal.
      */
     public unloadModal(): void {
@@ -378,6 +391,18 @@ export class PageController {
             reportIDX
         ].id;
         this.navigateTo(Pages.Report, SideBar.createBar);
+    }
+
+    /**
+     * Loads the report by its index.
+     * @param reportIDX The index of the report to load.
+     */
+    public loadReportCompare(reportIDX: number) {
+        const dc = DataController.getInstance();
+        dc.openReport = (dc.openCase as CaseModel).generatedReports[
+            reportIDX
+        ].id;
+        this.navigateTo(Pages.Compare);
     }
 
     public createCaseItem(caseID: string): void {

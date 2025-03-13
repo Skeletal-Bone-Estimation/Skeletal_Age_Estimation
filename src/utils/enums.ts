@@ -89,6 +89,7 @@ export enum Pages {
     DataEntry = 'dataEntry',
     Report = 'report',
     ReportModal = 'reportArchiveModal',
+    CompareModal = 'compareArchiveModal',
     Compare = 'compare',
 }
 
@@ -131,6 +132,7 @@ export enum UI_Elements {
     closeModalButton = 'closeModal',
     reportArchiveList = 'reportList',
     viewReportButton = 'submitReportBtn',
+    viewReportCompareButton = 'submitCompareBtn',
     analysisSelector = 'analysisSelector',
     mostRecentReportButton = 'viewMostRecentReport',
 }
