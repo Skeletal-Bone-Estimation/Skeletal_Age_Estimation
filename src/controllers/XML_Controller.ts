@@ -131,7 +131,7 @@ export class XML_Controller {
 
         const notes =
             this.currentDoc?.getElementsByTagName('_notes')[0]?.textContent;
-        this.director.caseBuilder.setNotes(notes ? notes : 'NOTES ERROR');
+        this.director.caseBuilder.setNotes(notes ? notes : '');
 
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
