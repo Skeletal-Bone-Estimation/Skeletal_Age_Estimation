@@ -298,28 +298,34 @@ export class PageController {
      * @param report The report to export.
      * @param filename The filename to save the report as (optional).
      */
+    private isExporting = false;
     public async exportReport(
         report: ReportModel,
         filename: string = 'default_report.docx',
     ): Promise<void> {
+        if (this.isExporting) {
+            console.warn('Export already in progress');
+            return;
+        }
+
+        this.isExporting = true;
+
         if (report.getThirdMolar(Side.C) === 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
             var content = `
-            Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+            <p>Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. </p>
                     <br />
+            <p>The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. </p>
                     <br />
-            The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
                     <br />
-                    <br />
-            Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
-                    <br />
-                    <br />
-                    <br />
-            Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
         }
+
         if (!content.trim()) {
             console.warn('Export failed: Empty content.');
+            this.isExporting = false;
             return;
         }
 
@@ -338,15 +344,261 @@ export class PageController {
             link.href = url;
             link.download = filename;
             document.body.appendChild(link);
+
+            // Trigger click only once
             link.click();
 
             // Clean up
             document.body.removeChild(link);
-            URL.revokeObjectURL(url); // Release the object URL
-
-            //console.log('File download started successfully:', filename);
+            URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error exporting to Word:', error);
+        } finally {
+            this.isExporting = false;
+        }
+    }
+
+    public async printReport(report: ReportModel): Promise<void> {
+        if (this.isExporting) {
+            console.warn('Export already in progress');
+            return;
+        }
+
+        this.isExporting = true;
+
+        let content = '';
+
+        if (report.getThirdMolar(Side.C) === 0) {
+            content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
+        } else {
+            content = `
+                Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+                        <br />
+                        <br />
+                The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+                        <br />
+                        <br />
+                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
+                        <br />
+                        <br />
+                        <br />
+                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+        }
+
+        if (!content.trim()) {
+            console.warn('Print failed: Empty content.');
+            this.isExporting = false;
+            return;
+        }
+
+        try {
+            const printWindowProxy = window.open(
+                '',
+                '',
+                'width=800,height=600',
+            );
+            if (printWindowProxy) {
+                const printWindow = printWindowProxy as unknown as Window;
+                const divColor2 = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--div-color-2');
+                const onDark = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--on-dark');
+                const hoverOnLight = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--hover-on-light');
+
+                const elementOverall = document.getElementById(
+                    'ageBar',
+                ) as HTMLElement;
+                const elementPub = document.getElementById(
+                    'pubicSymphysisBar',
+                ) as HTMLElement;
+                const elementAur = document.getElementById(
+                    'auricularSurfaceBar',
+                ) as HTMLElement;
+                const elementRib = document.getElementById(
+                    'sternalEndBar',
+                ) as HTMLElement;
+
+                const stylesOverall = getComputedStyle(elementOverall);
+                const stylesPub = getComputedStyle(elementPub);
+                const stylesAur = getComputedStyle(elementAur);
+                const stylesRib = getComputedStyle(elementRib);
+
+                console.log(stylesOverall);
+
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    margin: 20px;
+                                }
+                                @media print {
+                                    h1{
+                                        display: none;
+                                    }
+                                    button {
+                                        display: none;
+                                    }
+                                }
+                                .reportButtons {
+                                    background-color: ${divColor2};
+                                    border: 2px solid ${divColor2};
+                                    color: ${onDark};
+                                    text-align: center;
+                                    text-decoration: none;
+                                    font-size: clamp(12px, 2vw, 16px);
+                                    padding: 10px 15px;
+                                    width: 50%;
+                                    box-sizing: border-box;
+                                    border-radius: 8px;
+                                }
+                                .reportButtons:hover {
+                                    background-color: ${hoverOnLight};
+                                    transition: 0.2s;
+                                }
+                                .button-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 20px;
+                                }
+                                .preview-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 20px;
+                                }
+                                .graphPlacement {
+                                    width: clamp(300px, 80%, 800px); 
+                                    aspect-ratio: 1; 
+                                    background: white;
+                                    border: 2px solid ${divColor2};
+                                    border-radius: 5px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                    position: relative;
+                                    margin-top: 50px; 
+                                }
+                                .graphPlacement h3 {
+                                    position:absolute;
+                                    top: -10%;
+                                }
+                                .graphTitle {
+                                    position:absolute;
+                                    top: -10%;
+                                }
+                                .vertical-line {
+                                    position: absolute;
+                                    top: 0;
+                                    bottom: 0;
+                                    width: 2px;
+                                    background-color: rgba(0,0,0,0.2);
+                                    font-weight: bold;
+                                }
+                                .line-10 { left: 10%; }
+                                .line-20 { left: 20%; }
+                                .line-30 { left: 30%; }
+                                .line-40 { left: 40%; }
+                                .line-50 { left: 50%; }
+                                .line-60 { left: 60%; }
+                                .line-70 { left: 70%; }
+                                .line-80 { left: 80%; }
+                                .line-90 { left: 90%; }
+                                .range-container {
+                                    position: relative;
+                                    flex-direction: row;
+                                    width: 100%;
+                                    height: 80px;
+                                    background-color: rgba(0, 0, 0, 0);
+                                    color: white;
+                                    margin: 20px auto;
+                                }
+                                .range-bar {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    text-align: center;
+                                    position: absolute;
+                                    height: 100%;
+                                    width: 100%; 
+                                    background-color: rgba(15, 89, 78, 0.9);
+                                    font-weight: bold;
+                                }
+                                #ageBar {
+                                    position: ${stylesOverall.getPropertyValue(stylesOverall[248])};
+                                    left: ${stylesOverall.getPropertyValue(stylesOverall[173])};
+                                    width: ${stylesOverall.getPropertyValue(stylesOverall[340])};
+                                }
+                                #pubicSymphysisBar {
+                                    position: ${stylesPub.getPropertyValue(stylesPub[248])};
+                                    left: ${stylesPub.getPropertyValue(stylesPub[173])};
+                                    width: ${stylesPub.getPropertyValue(stylesPub[340])};
+                                }
+                                #auricularSurfaceBar {
+                                    position: ${stylesAur.getPropertyValue(stylesAur[248])};
+                                    left: ${stylesAur.getPropertyValue(stylesAur[173])};
+                                    width: ${stylesAur.getPropertyValue(stylesAur[340])};
+                                }
+                                #sternalEndBar {
+                                    position: ${stylesRib.getPropertyValue(stylesRib[248])};
+                                    left: ${stylesRib.getPropertyValue(stylesRib[173])};
+                                    width: ${stylesRib.getPropertyValue(stylesRib[340])};
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="button-container">
+                                <button class="reportButtons" onclick="window.print(); window.close();">Print</button>
+                            </div>
+                            <div class="preview-container">
+                            <h1>PREVIEW</h1>
+                            </div>
+                            ${content}
+                            <br/>
+                            <div class="graphPlacement">
+                            <div class="graphTitle" id="graphTitle"><strong><i>95% Confidence Interval</i></strong></div>
+                            <h3>Age</h3>
+                            <div class="vertical-line line-10"> 10 </div>
+                            <div class="vertical-line line-20"> 20 </div>
+                            <div class="vertical-line line-30"> 30 </div>
+                            <div class="vertical-line line-40"> 40 </div>
+                            <div class="vertical-line line-50"> 50 </div>
+                            <div class="vertical-line line-60"> 60 </div>
+                            <div class="vertical-line line-70"> 70 </div>
+                            <div class="vertical-line line-80"> 80 </div>
+                            <div class="vertical-line line-90"> 90 </div>
+            
+                            <div class="range-container">
+                                <div class="range-bar" id="ageBar"> Age Range </div>
+                            </div>
+        
+                            <div class="range-container">
+                                <div class="range-bar" id="pubicSymphysisBar"> Pubic Symphysis </div>
+                            </div>
+
+                            <div class="range-container">
+                                <div class="range-bar" id="auricularSurfaceBar"> Auricular Surface </div>
+                            </div>
+        
+                            <div class="range-container">
+                                <div class="range-bar" id="sternalEndBar"> Sternal End </div>
+                            </div>         
+                        </div>
+                    </body>
+                    </html>
+                `);
+
+                printWindow.document.close();
+            }
+        } catch (error) {
+            console.error('Error preparing the print report:', error);
+        } finally {
+            this.isExporting = false;
         }
     }
 

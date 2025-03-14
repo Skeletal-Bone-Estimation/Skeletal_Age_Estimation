@@ -109,6 +109,14 @@ export class ReportPageView extends AbstractView {
                 }
             });
 
+            this.elements[5].addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().printReport(
+                        report as ReportModel,
+                    ),
+            );
+
             document
                 .getElementById('downloadBtn')!
                 .addEventListener(
@@ -148,6 +156,7 @@ export class ReportPageView extends AbstractView {
             document.getElementById(
                 UI_Elements.changeGraphButton95,
             ) as HTMLElement,
+            document.getElementById(UI_Elements.printButton) as HTMLElement,
         ];
     }
 
