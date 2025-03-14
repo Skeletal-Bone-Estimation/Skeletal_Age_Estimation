@@ -47,52 +47,58 @@ export class ReportBuilder {
         [key: string]: { [key: string]: number };
     } {
         const extractValue = (
+            section: Element,
             tag: string,
             defaultValue: number = -1,
         ): number => {
-            const element = results?.getElementsByTagName(tag)[0];
+            const element = section.getElementsByTagName(tag)[0];
             return element ? Number(element.textContent) : defaultValue;
         };
 
+        const pubicEl = results.getElementsByTagName('pubicSymphysis')[0];
+        const sternalEl = results.getElementsByTagName('sternalEnd')[0];
+        const auricularEl = results.getElementsByTagName('auricularSurface')[0];
+        const thirdMolarEl = results.getElementsByTagName('thirdMolar')[0];
+
         return {
             pubicSymphysis: {
-                L: extractValue('L'),
-                L_min: extractValue('L_min'),
-                L_max: extractValue('L_max'),
-                R: extractValue('R'),
-                R_min: extractValue('R_min'),
-                R_max: extractValue('R_max'),
-                C: extractValue('C'),
-                C_min: extractValue('C_min'),
-                C_max: extractValue('C_max'),
+                L: extractValue(pubicEl, 'L'),
+                L_min: extractValue(pubicEl, 'L_min'),
+                L_max: extractValue(pubicEl, 'L_max'),
+                R: extractValue(pubicEl, 'R'),
+                R_min: extractValue(pubicEl, 'R_min'),
+                R_max: extractValue(pubicEl, 'R_max'),
+                C: extractValue(pubicEl, 'C'),
+                C_min: extractValue(pubicEl, 'C_min'),
+                C_max: extractValue(pubicEl, 'C_max'),
             },
             sternalEnd: {
-                L: extractValue('L'),
-                L_min: extractValue('L_min'),
-                L_max: extractValue('L_max'),
-                R: extractValue('R'),
-                R_min: extractValue('R_min'),
-                R_max: extractValue('R_max'),
-                C: extractValue('C'),
-                C_min: extractValue('C_min'),
-                C_max: extractValue('C_max'),
+                L: extractValue(sternalEl, 'L'),
+                L_min: extractValue(sternalEl, 'L_min'),
+                L_max: extractValue(sternalEl, 'L_max'),
+                R: extractValue(sternalEl, 'R'),
+                R_min: extractValue(sternalEl, 'R_min'),
+                R_max: extractValue(sternalEl, 'R_max'),
+                C: extractValue(sternalEl, 'C'),
+                C_min: extractValue(sternalEl, 'C_min'),
+                C_max: extractValue(sternalEl, 'C_max'),
             },
             auricularSurface: {
-                L: extractValue('L'),
-                L_min: extractValue('L_min'),
-                L_max: extractValue('L_max'),
-                R: extractValue('R'),
-                R_min: extractValue('R_min'),
-                R_max: extractValue('R_max'),
-                C: extractValue('C'),
-                C_min: extractValue('C_min'),
-                C_max: extractValue('C_max'),
+                L: extractValue(auricularEl, 'L'),
+                L_min: extractValue(auricularEl, 'L_min'),
+                L_max: extractValue(auricularEl, 'L_max'),
+                R: extractValue(auricularEl, 'R'),
+                R_min: extractValue(auricularEl, 'R_min'),
+                R_max: extractValue(auricularEl, 'R_max'),
+                C: extractValue(auricularEl, 'C'),
+                C_min: extractValue(auricularEl, 'C_min'),
+                C_max: extractValue(auricularEl, 'C_max'),
             },
             thirdMolar: {
-                TL: extractValue('TL'),
-                TR: extractValue('TR'),
-                BL: extractValue('BL'),
-                BR: extractValue('BR'),
+                TL: extractValue(thirdMolarEl, 'TL'),
+                TR: extractValue(thirdMolarEl, 'TR'),
+                BL: extractValue(thirdMolarEl, 'BL'),
+                BR: extractValue(thirdMolarEl, 'BR'),
             },
         };
     }

@@ -30,7 +30,7 @@ export class CaseItem {
         const makeActiveBtn = document.createElement('button');
 
         const activeCaseID = DataController.getInstance().openCaseID;
-        console.log('Active Case:', activeCaseID);
+        //console.log('Active Case:', activeCaseID);
 
         if (this.caseID === activeCaseID) {
             makeActiveBtn.textContent = 'Active';

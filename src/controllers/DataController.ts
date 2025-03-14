@@ -328,7 +328,7 @@ export class DataController {
     public findReportIndex(id: string): number {
         return (
             this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel
-        ).generatedReports.findIndex((item) => item.id === id);
+        ).generatedReports.findIndex((item) => item.id.trim() === id.trim());
     }
 
     /**

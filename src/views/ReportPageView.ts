@@ -45,11 +45,12 @@ export class ReportPageView extends AbstractView {
 
         // call load report method with the most recent report
         if (!(report instanceof NullReportModel)) {
-            this.loadReport(
-                _case.generatedReports[
-                    DataController.getInstance().findReportIndex(report)
-                ] as ReportModel,
-            );
+            const idx = DataController.getInstance().findReportIndex(report);
+            if (idx === -1) {
+                console.error('Report not found.');
+                return;
+            }
+            this.loadReport(_case.generatedReports[idx] as ReportModel);
             //console.log('Report data loaded');
         } else {
             console.error('No report found.');

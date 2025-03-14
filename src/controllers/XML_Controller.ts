@@ -166,6 +166,8 @@ export class XML_Controller {
             return null;
         }
 
+        //('Results element:', resultsElement.innerHTML);
+
         const id = idElement.textContent || '-1';
         const report: AbstractReportModel = this.director.makeReportFrom(
             id,
