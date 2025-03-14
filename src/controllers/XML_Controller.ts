@@ -6,6 +6,7 @@ import { Builder } from 'xml2js';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
+import { DataController } from './DataController';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -46,6 +47,16 @@ export class XML_Controller {
 
         const caseID =
             this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
+
+        if (
+            DataController.getInstance().loadedCases.some(
+                (_case: CaseModel) => _case.caseID === caseID,
+            )
+        ) {
+            console.error('Case ID already exists:', caseID); //replace with modal popup
+            return new BuildDirector().makeNullCase(); // error model
+        }
+
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
 
         const populationAffinity = this.currentDoc?.getElementsByTagName(

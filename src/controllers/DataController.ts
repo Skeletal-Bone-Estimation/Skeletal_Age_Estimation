@@ -133,8 +133,14 @@ export class DataController {
             //callback function executed within the implementation of XML_Controller.loadFile(...)
             const loadedCase: AbstractCaseModel =
                 this.xmlController.parseSingleFile();
-            this._openCaseID = loadedCase.caseID;
-            this.addCase(loadedCase as CaseModel);
+
+            console.log(loadedCase);
+            console.log(this._loadedCases);
+
+            if (!(loadedCase instanceof NullCaseModel)) {
+                this._openCaseID = loadedCase.caseID;
+                this.addCase(loadedCase as CaseModel);
+            }
 
             const inputElement = event.target as HTMLInputElement;
             if (inputElement) inputElement.value = ''; //clears the input field
