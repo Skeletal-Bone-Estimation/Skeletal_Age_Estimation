@@ -74,14 +74,14 @@ export class XML_Controller {
         );
 
         const thirdMolarBR =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
+            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBL(
             thirdMolarBR ? Number(thirdMolarBR) : -1,
         );
 
         const thirdMolarBL =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
+            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBR(
             thirdMolarBL ? Number(thirdMolarBL) : -1,
