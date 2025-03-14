@@ -333,6 +333,12 @@ export class XML_Controller {
                 _generatedReports: {
                     report: _case.generatedReports,
                 },
+                _pubicSymphysisImages: { image: _case.pubicSymphysisImages },
+                _auricularSurfaceImages: {
+                    image: _case.auricularSurfaceImages,
+                },
+                _fourthRibImages: { image: _case.fourthRibImages },
+                _thirdMolarImages: { image: _case.thirdMolarImages },
             },
         });
         writeFileSync(filename, xmlString, 'utf-8');

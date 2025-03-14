@@ -32,7 +32,6 @@ export class CaseModel extends AbstractCaseModel {
     protected _notes: string;
     protected _generatedReports: AbstractReportModel[];
     private _mostRecentReport: string | NullReportModel;
-    private _mostRecentReport: AbstractReportModel;
     protected _pubicSymphysisImages: string[];
     protected _auricularSurfaceImages: string[];
     protected _fourthRibImages: string[];
@@ -55,7 +54,6 @@ export class CaseModel extends AbstractCaseModel {
         notes: string,
         generatedReports: AbstractReportModel[],
         mostRecentReport: string | NullReportModel,
-        mostRecentReport: AbstractReportModel,
         pubicSymphysisImages: string[] = [],
         auricularSurfaceImages: string[] = [],
         fourthRibImages: string[] = [],

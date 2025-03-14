@@ -17,6 +17,7 @@ import { AbstractView } from './AbstractView';
 import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
 import { DataController } from '../controllers/DataController';
 import { ReportModel } from '../models/ReportModel';
+import { GalleryModal } from '../views/GalleryModal';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
@@ -161,8 +162,78 @@ export class DataEntryView extends AbstractView {
         thirdMolarBL.value = this.parseThirdMolarToString(_case.thirdMolarBL);
         thirdMolarBR.value = this.parseThirdMolarToString(_case.thirdMolarBR);
         notes.value = _case.notes;
+
+        this.renderSavedImages();
     }
 
+    //renders all of the saved images in the case to their respective galleries
+    private renderSavedImages(): void {
+        const currentCase = DataController.getInstance().openCase as CaseModel;
+        const galleryModal = new GalleryModal(document);
+
+
+        //auricular images renders button to trigger modal
+        const galleryAuricularContainer =
+            document.getElementById('galleryAuricular');
+        if (galleryAuricularContainer) {
+            galleryAuricularContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Auricular Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Auricular Images',
+                    currentCase.auricularSurfaceImages,
+                );
+            });
+            galleryAuricularContainer.appendChild(button);
+        }
+
+        //pubic image renders button to trigger modal
+        const galleryPubicContainer = document.getElementById('galleryPubic');
+        if (galleryPubicContainer) {
+            galleryPubicContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Pubic Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Pubic Images',
+                    currentCase.pubicSymphysisImages,
+                );
+            });
+            galleryPubicContainer.appendChild(button);
+        }
+
+        //sternal images renders button for triggerin g modal
+        const gallerySternalContainer =
+            document.getElementById('gallerySternal');
+        if (gallerySternalContainer) {
+            gallerySternalContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Sternal Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Sternal Images',
+                    currentCase.fourthRibImages,
+                );
+            });
+            gallerySternalContainer.appendChild(button);
+        }
+
+        //molar images renders button for trigger
+        const galleryMolarContainer = document.getElementById('galleryMolar');
+        if (galleryMolarContainer) {
+            galleryMolarContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Molar Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Molar Images',
+                    currentCase.thirdMolarImages,
+                );
+            });
+            galleryMolarContainer.appendChild(button);
+        }
+    }
     /**
      * Initialize event listeners for the data entry page.
      */

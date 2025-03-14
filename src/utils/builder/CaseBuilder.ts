@@ -238,7 +238,7 @@ export class CaseBuilder implements CaseBuilderIF {
      * @returns The CaseBuilderIF instance.
      */
     public setFourthRibImages(images: string[]): CaseBuilderIF {
-        this._auricularSurfaceImages = images;
+        this._fourthRibImages = images;
         return this;
     }
     /**
