@@ -3,11 +3,9 @@ import { CaseModel } from '../models/CaseModel';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
-import { NullCaseModel } from '../models/NullCaseModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
-import { DataController } from './DataController';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -43,7 +41,7 @@ export class XML_Controller {
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
             console.error('Current doc error');
-            return new NullCaseModel(); //error model
+            return new BuildDirector().makeNullCase(); //error model
         }
 
         const caseID =

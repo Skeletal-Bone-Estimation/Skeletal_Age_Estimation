@@ -24,9 +24,11 @@ export class ReportPageView extends AbstractView {
         this.contentDiv.innerHTML = htmlContent;
         this.loadElements();
         this.initEventListeners();
-        const report = DataController.getInstance().openReport;
-        const _case: CaseModel = DataController.getInstance()
-            .openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const report = dc.openReport;
+        const _case: CaseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
 
         //debugging
         // console.log(
@@ -82,8 +84,11 @@ export class ReportPageView extends AbstractView {
                 ),
         );
 
-        const _case: CaseModel = DataController.getInstance()
-            .openCase as CaseModel;
+        const _case: CaseModel = DataController.getInstance().loadedCases[
+            DataController.getInstance().findCaseIndex(
+                DataController.getInstance().openCaseID,
+            )
+        ] as CaseModel;
         const report =
             _case.generatedReports[
                 DataController.getInstance().getMostRecentReportIdx()
@@ -130,8 +135,11 @@ export class ReportPageView extends AbstractView {
      * @param report The ReportModel to load.
      */
     public loadReport(report: ReportModel): void {
+        const dc = DataController.getInstance();
         // get the current case just so we can get the caseID
-        const caseModel = DataController.getInstance().openCase as CaseModel;
+        const caseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
 
         // Populate the case title
         const caseTitle = document.getElementById('reportCaseTitle');

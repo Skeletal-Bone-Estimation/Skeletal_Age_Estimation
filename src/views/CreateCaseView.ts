@@ -53,9 +53,12 @@ export class CreateCaseView extends AbstractView {
                     sex,
                     populationAffinity,
                 );
+                const dc = DataController.getInstance();
                 XML_Controller.getInstance().saveAsFile(
-                    DataController.getInstance().openCase as CaseModel,
-                    `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
+                    dc.loadedCases[
+                        dc.findCaseIndex(dc.openCaseID)
+                    ] as CaseModel,
+                    `save_data/${DataController.getInstance().openCaseID}.xml`,
                 );
 
                 PageController.getInstance().navigateTo(

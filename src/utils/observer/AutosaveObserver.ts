@@ -24,8 +24,9 @@ export class AutosaveObserver implements ObserverIF {
      */
     private autosave(): void {
         //console.log('autosaving');
+        const dc = DataController.getInstance();
         const openCase: AbstractCaseModel =
-            DataController.getInstance().openCase;
+            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
         const filename: string = (openCase as CaseModel).caseID;
         XML_Controller.getInstance().saveAsFile(
             openCase as CaseModel,
