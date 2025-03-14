@@ -99,12 +99,6 @@ export class PageController {
             .addEventListener('click', async () => {
                 await this.navigateTo(Pages.Home);
                 await this.loadSideBarContent(SideBar.homeBar);
-                console.log(DataController.getInstance().loadedCases);
-                console.log(
-                    'Open Case:',
-                    DataController.getInstance().openCaseID,
-                );
-                console.log(this.sidebarCaseItems);
             });
 
         //save case button
