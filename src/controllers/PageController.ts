@@ -560,35 +560,6 @@ export class PageController {
                             </div>
                             ${content}
                             <br/>
-                            <div class="graphPlacement">
-                            <div class="graphTitle" id="graphTitle"><strong><i>95% Confidence Interval</i></strong></div>
-                            <h3>Age</h3>
-                            <div class="vertical-line line-10"> 10 </div>
-                            <div class="vertical-line line-20"> 20 </div>
-                            <div class="vertical-line line-30"> 30 </div>
-                            <div class="vertical-line line-40"> 40 </div>
-                            <div class="vertical-line line-50"> 50 </div>
-                            <div class="vertical-line line-60"> 60 </div>
-                            <div class="vertical-line line-70"> 70 </div>
-                            <div class="vertical-line line-80"> 80 </div>
-                            <div class="vertical-line line-90"> 90 </div>
-            
-                            <div class="range-container">
-                                <div class="range-bar" id="ageBar"> Age Range </div>
-                            </div>
-        
-                            <div class="range-container">
-                                <div class="range-bar" id="pubicSymphysisBar"> Pubic Symphysis </div>
-                            </div>
-
-                            <div class="range-container">
-                                <div class="range-bar" id="auricularSurfaceBar"> Auricular Surface </div>
-                            </div>
-        
-                            <div class="range-container">
-                                <div class="range-bar" id="sternalEndBar"> Sternal End </div>
-                            </div>         
-                        </div>
                     </body>
                     </html>
                 `);
