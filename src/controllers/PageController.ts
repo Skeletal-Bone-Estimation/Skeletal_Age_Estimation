@@ -320,7 +320,14 @@ export class PageController {
                     <br />
             <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
                     <br />
-            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
+                const minValue = Math.min(
+                    report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
+                    report.getAuricularSurfaceRange(Side.C)?.min ?? Infinity,
+                    report.getSternalEndRange(Side.C)?.min ?? Infinity,
+                );
+                return (minValue < 18 ? 18 : minValue).toFixed(2);
+            })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
         }
 
         if (!content.trim()) {
@@ -358,13 +365,14 @@ export class PageController {
         }
     }
 
+    private isPrinting = false;
     public async printReport(report: ReportModel): Promise<void> {
-        if (this.isExporting) {
+        if (this.isPrinting) {
             console.warn('Export already in progress');
             return;
         }
 
-        this.isExporting = true;
+        this.isPrinting = true;
 
         let content = '';
 
@@ -382,12 +390,20 @@ export class PageController {
                         <br />
                         <br />
                         <br />
-                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
+                    const minValue = Math.min(
+                        report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
+                        report.getAuricularSurfaceRange(Side.C)?.min ??
+                            Infinity,
+                        report.getSternalEndRange(Side.C)?.min ?? Infinity,
+                    );
+                    return (minValue < 18 ? 18 : minValue).toFixed(2);
+                })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.`;
         }
 
         if (!content.trim()) {
             console.warn('Print failed: Empty content.');
-            this.isExporting = false;
+            this.isPrinting = false;
             return;
         }
 
@@ -408,26 +424,6 @@ export class PageController {
                 const hoverOnLight = getComputedStyle(
                     document.documentElement,
                 ).getPropertyValue('--hover-on-light');
-
-                const elementOverall = document.getElementById(
-                    'ageBar',
-                ) as HTMLElement;
-                const elementPub = document.getElementById(
-                    'pubicSymphysisBar',
-                ) as HTMLElement;
-                const elementAur = document.getElementById(
-                    'auricularSurfaceBar',
-                ) as HTMLElement;
-                const elementRib = document.getElementById(
-                    'sternalEndBar',
-                ) as HTMLElement;
-
-                const stylesOverall = getComputedStyle(elementOverall);
-                const stylesPub = getComputedStyle(elementPub);
-                const stylesAur = getComputedStyle(elementAur);
-                const stylesRib = getComputedStyle(elementRib);
-
-                console.log(stylesOverall);
 
                 printWindow.document.write(`
                     <html>
@@ -471,84 +467,6 @@ export class PageController {
                                     justify-content: center;
                                     margin-bottom: 20px;
                                 }
-                                .graphPlacement {
-                                    width: clamp(300px, 80%, 800px); 
-                                    aspect-ratio: 1; 
-                                    background: white;
-                                    border: 2px solid ${divColor2};
-                                    border-radius: 5px;
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: center;
-                                    align-items: center;
-                                    position: relative;
-                                    margin-top: 50px; 
-                                }
-                                .graphPlacement h3 {
-                                    position:absolute;
-                                    top: -10%;
-                                }
-                                .graphTitle {
-                                    position:absolute;
-                                    top: -10%;
-                                }
-                                .vertical-line {
-                                    position: absolute;
-                                    top: 0;
-                                    bottom: 0;
-                                    width: 2px;
-                                    background-color: rgba(0,0,0,0.2);
-                                    font-weight: bold;
-                                }
-                                .line-10 { left: 10%; }
-                                .line-20 { left: 20%; }
-                                .line-30 { left: 30%; }
-                                .line-40 { left: 40%; }
-                                .line-50 { left: 50%; }
-                                .line-60 { left: 60%; }
-                                .line-70 { left: 70%; }
-                                .line-80 { left: 80%; }
-                                .line-90 { left: 90%; }
-                                .range-container {
-                                    position: relative;
-                                    flex-direction: row;
-                                    width: 100%;
-                                    height: 80px;
-                                    background-color: rgba(0, 0, 0, 0);
-                                    color: white;
-                                    margin: 20px auto;
-                                }
-                                .range-bar {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    text-align: center;
-                                    position: absolute;
-                                    height: 100%;
-                                    width: 100%; 
-                                    background-color: rgba(15, 89, 78, 0.9);
-                                    font-weight: bold;
-                                }
-                                #ageBar {
-                                    position: ${stylesOverall.getPropertyValue(stylesOverall[248])};
-                                    left: ${stylesOverall.getPropertyValue(stylesOverall[173])};
-                                    width: ${stylesOverall.getPropertyValue(stylesOverall[340])};
-                                }
-                                #pubicSymphysisBar {
-                                    position: ${stylesPub.getPropertyValue(stylesPub[248])};
-                                    left: ${stylesPub.getPropertyValue(stylesPub[173])};
-                                    width: ${stylesPub.getPropertyValue(stylesPub[340])};
-                                }
-                                #auricularSurfaceBar {
-                                    position: ${stylesAur.getPropertyValue(stylesAur[248])};
-                                    left: ${stylesAur.getPropertyValue(stylesAur[173])};
-                                    width: ${stylesAur.getPropertyValue(stylesAur[340])};
-                                }
-                                #sternalEndBar {
-                                    position: ${stylesRib.getPropertyValue(stylesRib[248])};
-                                    left: ${stylesRib.getPropertyValue(stylesRib[173])};
-                                    width: ${stylesRib.getPropertyValue(stylesRib[340])};
-                                }
                             </style>
                         </head>
                         <body>
@@ -569,7 +487,7 @@ export class PageController {
         } catch (error) {
             console.error('Error preparing the print report:', error);
         } finally {
-            this.isExporting = false;
+            this.isPrinting = false;
         }
     }
 
@@ -597,7 +515,9 @@ export class PageController {
      */
     public loadReport(reportIDX: number) {
         const dc = DataController.getInstance();
-        dc.openReport = (dc.openCase as CaseModel).generatedReports[reportIDX];
+        dc.openReport = (dc.openCase as CaseModel).generatedReports[
+            reportIDX
+        ].id;
         this.navigateTo(Pages.Report, SideBar.createBar);
     }
 

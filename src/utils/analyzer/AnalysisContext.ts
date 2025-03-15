@@ -74,8 +74,8 @@ export class AnalysisContext {
         var results: {} = this.currentStrategy.executeAnalysis(_case);
         var report = DataController.getInstance().createReport(results);
         _case.addReport(report);
-        _case.notify(Observers.setMostRecentReport, report); // set most recent report
-        _case.notify(Observers.setSelectedReport, report); // set selected report
+        _case.notify(Observers.setMostRecentReport, report.id); // set most recent report
+        _case.notify(Observers.setSelectedReport, report.id); // set selected report
         _case.notify(Observers.autosave); // autosave
         Autonumberer.getInstance().updateExistingValues();
     }

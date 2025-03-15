@@ -6,6 +6,7 @@ import { ReportModel } from '../models/ReportModel';
 import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { updateRangeBar } from '../utils/charts/ageRangeChart';
+import { NullReportModel } from '../models/NullReportModel';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
@@ -26,6 +27,8 @@ export class ReportPageView extends AbstractView {
         this.loadElements();
         this.initEventListeners();
         const report = DataController.getInstance().openReport;
+        const _case: CaseModel = DataController.getInstance()
+            .openCase as CaseModel;
 
         //debugging
         // console.log(
@@ -41,8 +44,12 @@ export class ReportPageView extends AbstractView {
         // );
 
         // call load report method with the most recent report
-        if (report) {
-            this.loadReport(report as ReportModel);
+        if (!(report instanceof NullReportModel)) {
+            this.loadReport(
+                _case.generatedReports[
+                    DataController.getInstance().findReportIndex(report)
+                ] as ReportModel,
+            );
             //console.log('Report data loaded');
         } else {
             console.error('No report found.');
@@ -68,15 +75,6 @@ export class ReportPageView extends AbstractView {
             );
         });
 
-        //download report as docx
-        this.elements[2].addEventListener(
-            'click',
-            async () =>
-                await PageController.getInstance().exportReport(
-                    DataController.getInstance().openReport as ReportModel,
-                ),
-        );
-
         // Button for changing graph to a 90% confidence interval
         this.elements[3].addEventListener('click', () => {
             //console.log(this.ninetyConfidenceInfo);
@@ -92,11 +90,23 @@ export class ReportPageView extends AbstractView {
             }
         });
 
-        const report = DataController.getInstance().getMostRecentReport();
+        const _case: CaseModel = DataController.getInstance()
+            .openCase as CaseModel;
+        const report =
+            _case.generatedReports[
+                DataController.getInstance().getMostRecentReportIdx()
+            ];
         if (report) {
+            //download report as docx
+            this.elements[2].addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().exportReport(
+                        report as ReportModel,
+                    ),
+            );
             // Button for changing graph to a 95% confidence interval
             this.elements[4].addEventListener('click', () => {
-                //console.log(this.ninetyFiveConfidenceInfo);
                 this.updateGraphNinetyFive(report);
                 const graphTitle = document.getElementById('graphTitle');
                 if (graphTitle) {

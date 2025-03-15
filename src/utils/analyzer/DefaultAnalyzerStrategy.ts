@@ -173,7 +173,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ? this.average(24.94, 31.02)
                     : isMale
                       ? 24.94
-                      : 37.36;
+                      : 31.02;
                 results[Report.pubicSymphysis][`${side}_max`] = isUnknown
                     ? this.average(60.14, 55.5)
                     : isMale
@@ -219,7 +219,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     ? this.average(77.0, 82.54)
                     : isMale
                       ? 77.0
-                      : 81.2;
+                      : 82.54;
                 results[Report.pubicSymphysis][`${side}_min`] = isUnknown
                     ? this.average(58.34, 67.72)
                     : isMale
@@ -328,7 +328,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                             ? this.average(24.94, 31.02)
                             : isMale
                               ? 24.94
-                              : 37.36,
+                              : 31.02,
                         isUnknown
                             ? this.average(60.14, 55.5)
                             : isMale
@@ -377,7 +377,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                             ? this.average(77.0, 82.54)
                             : isMale
                               ? 77.0
-                              : 81.2,
+                              : 82.54,
                         isUnknown
                             ? this.average(58.34, 67.72)
                             : isMale
@@ -817,8 +817,8 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S4, S5, S6] = getAuricularSurfaceValues(data2);
 
         results[Report.auricularSurface][`${side}`] = this.average(S1, S4);
-        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S3);
-        results[Report.auricularSurface][`${side}_max`] = Math.max(S5, S6);
+        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S5);
+        results[Report.auricularSurface][`${side}_max`] = Math.max(S3, S6);
     }
 
     /**
@@ -966,18 +966,4 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             results[Report.thirdMolar][`${side}`] = 0;
         }
     }
-
-    /*
-    // calculates the average of six numbers
-    private averageExpanded(
-        v1: number,
-        v2: number,
-        v3: number,
-        v4: number,
-        v5: number,
-        v6: number,
-    ): number {
-        return (v1 + v2 + v3 + v4 + v5 + v6) / 6.0;
-    }
-*/
 }
