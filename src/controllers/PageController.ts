@@ -298,28 +298,41 @@ export class PageController {
      * @param report The report to export.
      * @param filename The filename to save the report as (optional).
      */
+    private isExporting = false;
     public async exportReport(
         report: ReportModel,
         filename: string = 'default_report.docx',
     ): Promise<void> {
+        if (this.isExporting) {
+            console.warn('Export already in progress');
+            return;
+        }
+
+        this.isExporting = true;
+
         if (report.getThirdMolar(Side.C) === 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
             var content = `
-            Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+            <p>Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. </p>
                     <br />
+            <p>The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. </p>
                     <br />
-            The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
                     <br />
-                    <br />
-            Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
-                    <br />
-                    <br />
-                    <br />
-            Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
+                const minValue = Math.min(
+                    report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
+                    report.getAuricularSurfaceRange(Side.C)?.min ?? Infinity,
+                    report.getSternalEndRange(Side.C)?.min ?? Infinity,
+                );
+                return (minValue < 18 ? 18 : minValue).toFixed(2);
+            })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
         }
+
         if (!content.trim()) {
             console.warn('Export failed: Empty content.');
+            this.isExporting = false;
             return;
         }
 
@@ -338,15 +351,143 @@ export class PageController {
             link.href = url;
             link.download = filename;
             document.body.appendChild(link);
+
+            // Trigger click only once
             link.click();
 
             // Clean up
             document.body.removeChild(link);
-            URL.revokeObjectURL(url); // Release the object URL
-
-            //console.log('File download started successfully:', filename);
+            URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error exporting to Word:', error);
+        } finally {
+            this.isExporting = false;
+        }
+    }
+
+    private isPrinting = false;
+    public async printReport(report: ReportModel): Promise<void> {
+        if (this.isPrinting) {
+            console.warn('Export already in progress');
+            return;
+        }
+
+        this.isPrinting = true;
+
+        let content = '';
+
+        if (report.getThirdMolar(Side.C) === 0) {
+            content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
+        } else {
+            content = `
+                Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+                        <br />
+                        <br />
+                The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+                        <br />
+                        <br />
+                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
+                        <br />
+                        <br />
+                        <br />
+                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
+                    const minValue = Math.min(
+                        report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
+                        report.getAuricularSurfaceRange(Side.C)?.min ??
+                            Infinity,
+                        report.getSternalEndRange(Side.C)?.min ?? Infinity,
+                    );
+                    return (minValue < 18 ? 18 : minValue).toFixed(2);
+                })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.`;
+        }
+
+        if (!content.trim()) {
+            console.warn('Print failed: Empty content.');
+            this.isPrinting = false;
+            return;
+        }
+
+        try {
+            const printWindowProxy = window.open(
+                '',
+                '',
+                'width=800,height=600',
+            );
+            if (printWindowProxy) {
+                const printWindow = printWindowProxy as unknown as Window;
+                const divColor2 = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--div-color-2');
+                const onDark = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--on-dark');
+                const hoverOnLight = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--hover-on-light');
+
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    margin: 20px;
+                                }
+                                @media print {
+                                    h1{
+                                        display: none;
+                                    }
+                                    button {
+                                        display: none;
+                                    }
+                                }
+                                .reportButtons {
+                                    background-color: ${divColor2};
+                                    border: 2px solid ${divColor2};
+                                    color: ${onDark};
+                                    text-align: center;
+                                    text-decoration: none;
+                                    font-size: clamp(12px, 2vw, 16px);
+                                    padding: 10px 15px;
+                                    width: 50%;
+                                    box-sizing: border-box;
+                                    border-radius: 8px;
+                                }
+                                .reportButtons:hover {
+                                    background-color: ${hoverOnLight};
+                                    transition: 0.2s;
+                                }
+                                .button-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 20px;
+                                }
+                                .preview-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="button-container">
+                                <button class="reportButtons" onclick="window.print(); window.close();">Print</button>
+                            </div>
+                            <div class="preview-container">
+                            <h1>PREVIEW</h1>
+                            </div>
+                            ${content}
+                            <br/>
+                    </body>
+                    </html>
+                `);
+
+                printWindow.document.close();
+            }
+        } catch (error) {
+            console.error('Error preparing the print report:', error);
+        } finally {
+            this.isPrinting = false;
         }
     }
 
