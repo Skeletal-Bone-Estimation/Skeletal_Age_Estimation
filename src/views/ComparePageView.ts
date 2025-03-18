@@ -92,6 +92,8 @@ export class ComparePageView extends AbstractView {
      * Initialize event listeners for the compare page.
      */
     protected override initEventListeners(): void {
+        const dc = DataController.getInstance();
+
         document
             .getElementById('compareReportChange')!
             .addEventListener('click', async () => {
@@ -103,6 +105,7 @@ export class ComparePageView extends AbstractView {
             .getElementById('backBtn')!
             .addEventListener('click', async () => {
                 this.isInitialReportLoaded = false;
+                dc.openReport = this.storedReport;
                 await PageController.getInstance().navigateTo(Pages.Report);
             });
     }
