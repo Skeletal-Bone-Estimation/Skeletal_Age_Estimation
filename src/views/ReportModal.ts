@@ -52,19 +52,20 @@ export class ReportModal extends AbstractModal {
                     list.innerHTML != 'No reports loaded in any case.' &&
                     list.innerHTML != ''
                 ) {
-                    const openCase = dc.openCase as CaseModel;
+                    const openCase = dc.loadedCases[
+                        dc.findCaseIndex(dc.openCaseID)
+                    ] as CaseModel;
 
                     //TODO: check if idx == -1 for errors
                     const report = openCase.generatedReports[this.selectedIdx];
 
                     if (report instanceof NullReportModel) {
                         console.error('Null report selected.');
-                        pc.navigateTo(Pages.DataEntry, SideBar.createBar);
+                        pc.navigateTo(Pages.DataEntry, SideBar.dataBar);
                         return;
                     }
 
                     openCase.notify(Observers.setSelectedReport, report.id);
-                    pc.unloadModal();
                     pc.loadReport(this.selectedIdx);
 
                     this.closeModal();
@@ -92,7 +93,10 @@ export class ReportModal extends AbstractModal {
             return;
         }
 
-        const _case = dataController.openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const _case = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
         //console.log('Loaded reports:', _case.generatedReports);
 
         _case.generatedReports.forEach((report: AbstractReportModel) => {
@@ -104,6 +108,9 @@ export class ReportModal extends AbstractModal {
                 const selected = document.querySelector('.selected');
                 if (selected) selected.classList.remove('selected');
                 element.classList.add('selected');
+                (document.getElementById(
+                    UI_Elements.viewReportButton,
+                ) as HTMLButtonElement)!.disabled = false;
 
                 //save attribute for later
                 this.selectedIdx = dataController.findReportIndex(reportID);

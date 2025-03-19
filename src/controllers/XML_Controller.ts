@@ -1,13 +1,14 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { CaseModel } from '../models/CaseModel';
 import { BuildDirector } from '../utils/builder/BuildDirector';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync } from 'fs';
 import { Builder } from 'xml2js';
-import { NullCaseModel } from '../models/NullCaseModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
 import { DataController } from './DataController';
+import { PageController } from './PageController';
+import { Modals } from '../utils/enums';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -40,15 +41,36 @@ export class XML_Controller {
      * Loads a single XML file into a CaseModel object.
      * @returns The parsed AbstractCaseModel.
      */
-    public parseSingleFile(): AbstractCaseModel {
+    public async parseSingleFile(): Promise<AbstractCaseModel> {
         if (!this.currentDoc) {
             console.error('Current doc error');
-            return new NullCaseModel(); //error model
+            return new BuildDirector().makeNullCase(); //error model
         }
 
         const caseID =
             this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
+
+        const test = async () => {
+            await PageController.getInstance().loadModal(
+                Modals.Error,
+                'This case has already been loaded.',
+            );
+        };
+
+        if (
+            DataController.getInstance().loadedCases.some(
+                (_case: CaseModel) => _case.caseID === caseID,
+            )
+        ) {
+            await test();
+            return new BuildDirector().makeNullCase(); // error model
+        }
+
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
+
+        const savePath =
+            this.currentDoc?.getElementsByTagName('_savePath')[0]?.textContent;
+        this.director.caseBuilder.setSavePath(savePath ? savePath : '');
 
         const populationAffinity = this.currentDoc?.getElementsByTagName(
             '_populationAffinity',
@@ -76,14 +98,14 @@ export class XML_Controller {
         );
 
         const thirdMolarBR =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
+            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBL(
             thirdMolarBR ? Number(thirdMolarBR) : -1,
         );
 
         const thirdMolarBL =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
+            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBR(
             thirdMolarBL ? Number(thirdMolarBL) : -1,
@@ -133,7 +155,7 @@ export class XML_Controller {
 
         const notes =
             this.currentDoc?.getElementsByTagName('_notes')[0]?.textContent;
-        this.director.caseBuilder.setNotes(notes ? notes : 'NOTES ERROR');
+        this.director.caseBuilder.setNotes(notes ? notes : '');
 
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
@@ -145,6 +167,79 @@ export class XML_Controller {
                 mostRecentReport.textContent,
             );
 
+        const pubicImagesElement = this.currentDoc?.getElementsByTagName(
+            '_pubicSymphysisImages',
+        )[0];
+        if (pubicImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < pubicImagesElement.children.length; i++) {
+                const imageElement = pubicImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setPubicSymphysisImages(images);
+        } else {
+            this.director.caseBuilder.setPubicSymphysisImages([]);
+        }
+
+        const auricularImagesElement = this.currentDoc?.getElementsByTagName(
+            '_auricularSurfaceImages',
+        )[0];
+        if (auricularImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < auricularImagesElement.children.length; i++) {
+                const imageElement = auricularImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setAuricularSurfaceImages(images);
+        } else {
+            this.director.caseBuilder.setAuricularSurfaceImages([]);
+        }
+
+        const fourthRibImagesElement =
+            this.currentDoc?.getElementsByTagName('_fourthRibImages')[0];
+        if (fourthRibImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < fourthRibImagesElement.children.length; i++) {
+                const imageElement = fourthRibImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setFourthRibImages(images);
+        } else {
+            this.director.caseBuilder.setFourthRibImages([]);
+        }
+
+        const thirdMolarImagesElement =
+            this.currentDoc?.getElementsByTagName('_thirdMolarImages')[0];
+        if (thirdMolarImagesElement) {
+            const images: string[] = [];
+            for (let i = 0; i < thirdMolarImagesElement.children.length; i++) {
+                const imageElement = thirdMolarImagesElement.children[i];
+                if (
+                    imageElement.tagName === 'image' &&
+                    imageElement.textContent
+                ) {
+                    images.push(imageElement.textContent);
+                }
+            }
+            this.director.caseBuilder.setThirdMolarImages(images);
+        } else {
+            this.director.caseBuilder.setThirdMolarImages([]);
+        }
         //console.log('Loaded reports:', generatedReports);
         //console.log('Loaded Case:', this.director.makeCase());
 
@@ -167,6 +262,8 @@ export class XML_Controller {
             );
             return null;
         }
+
+        //('Results element:', resultsElement.innerHTML);
 
         const id = idElement.textContent || '-1';
         const report: AbstractReportModel = this.director.makeReportFrom(
@@ -208,15 +305,6 @@ export class XML_Controller {
         return list;
     }
 
-    //TODO
-    /**
-     * Parses a collection of files (as a folder).
-     * @returns An array of CaseModel objects.
-     */
-    public parseCollection(): CaseModel[] {
-        throw new Error('Parse collection not yet implemented');
-    }
-
     /**
      * Loads a single case from a file.
      * @param event The event triggering the file load.
@@ -247,12 +335,16 @@ export class XML_Controller {
         } else throw new Error('No file selected');
     }
 
+    public validateSavePath(path: string): boolean {
+        return existsSync(path);
+    }
+
     /**
      * Saves a single case to a file.
      * @param _case The CaseModel to save.
      * @param filename The filename to save the case as.
      */
-    public saveAsFile(_case: CaseModel, filename: string): void {
+    public saveAsFile(_case: CaseModel, path: string, filename: string): void {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({
             object: {
@@ -260,10 +352,25 @@ export class XML_Controller {
                 _generatedReports: {
                     report: _case.generatedReports,
                 },
+                _pubicSymphysisImages: { image: _case.pubicSymphysisImages },
+                _auricularSurfaceImages: {
+                    image: _case.auricularSurfaceImages,
+                },
+                _fourthRibImages: { image: _case.fourthRibImages },
+                _thirdMolarImages: { image: _case.thirdMolarImages },
             },
         });
-        writeFileSync(filename, xmlString, 'utf-8');
+        writeFileSync(`${path}/${filename}.xml`, xmlString, 'utf-8');
         //console.log(`File saved to ${filename}`);
+    }
+
+    //TODO
+    /**
+     * Parses a collection of files (as a folder).
+     * @returns An array of CaseModel objects.
+     */
+    public parseCollection(): CaseModel[] {
+        throw new Error('Parse collection not yet implemented');
     }
 
     //TODO

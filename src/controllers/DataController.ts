@@ -12,12 +12,12 @@ import {
     SternalEnd,
     AuricularArea,
     Observers,
+    Modals,
 } from '../utils/enums';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 import { NullReportModel } from '../models/NullReportModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
-import { ReportModel } from '../models/ReportModel';
 import { PageController } from './PageController';
 import { Autonumberer } from '../utils/Autonumberer';
 
@@ -25,12 +25,13 @@ export class DataController {
     private static instance: DataController;
     private xmlController: XML_Controller = XML_Controller.getInstance();
     private _loadedCases: CaseModel[];
-    private _openCase: AbstractCaseModel;
+    private _openCaseID: string;
     private _openReport: string | NullReportModel;
+    private buildDirector: BuildDirector = new BuildDirector();
 
     private constructor() {
         this._loadedCases = [];
-        this._openCase = new NullCaseModel();
+        this._openCaseID = this.buildDirector.makeNullCase().caseID;
         this._openReport = new NullReportModel();
     }
 
@@ -71,8 +72,8 @@ export class DataController {
      * Accessor for the openCase attribute.
      * @returns The _openCase attribute.
      */
-    public get openCase(): AbstractCaseModel {
-        return this._openCase;
+    public get openCaseID(): string {
+        return this._openCaseID;
     }
 
     /**
@@ -92,7 +93,9 @@ export class DataController {
      * @returns List of AbstractReportModel objects.
      */
     public getReports(): AbstractReportModel[] {
-        return (this._openCase as CaseModel).generatedReports;
+        return (
+            this._loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel
+        ).generatedReports;
     }
 
     /**
@@ -100,6 +103,7 @@ export class DataController {
      * @param newCase The new CaseModel to be added.
      */
     public addCase(newCase: CaseModel): void {
+        if (this._loadedCases.length === 0) this._openCaseID = newCase.caseID;
         this._loadedCases.push(newCase);
         PageController.getInstance().createCaseItem(newCase.caseID);
     }
@@ -109,20 +113,39 @@ export class DataController {
      * @param idx The index to delete
      */
     public deleteCase(idx: number): void {
+        const deletedCase = this._loadedCases[idx];
         this._loadedCases.splice(idx, 1);
+        if (this._openCaseID === deletedCase.caseID) {
+            this._openCaseID =
+                this._loadedCases.length > 0
+                    ? this._loadedCases[0].caseID
+                    : this.buildDirector.makeNullCase().caseID;
+        }
     }
 
     /**
      * Delegates to the XML controller to handle loading a file from XML and stores a reference to the loaded object.
      * @param event The event triggering the file load.
      */
-    public loadCaseFromFile(event: Event): void {
-        this.xmlController.loadFile(event, () => {
+    public async loadCaseFromFile(event: Event): Promise<void> {
+        this.xmlController.loadFile(event, async () => {
             //callback function executed within the implementation of XML_Controller.loadFile(...)
             const loadedCase: AbstractCaseModel =
-                this.xmlController.parseSingleFile();
-            this.addCase(loadedCase as CaseModel);
-            this._openCase = loadedCase;
+                await this.xmlController.parseSingleFile();
+
+            //console.log(loadedCase);
+            //console.log(this._loadedCases);
+
+            if (!(loadedCase instanceof NullCaseModel)) {
+                this._openCaseID = loadedCase.caseID;
+                this.addCase(loadedCase as CaseModel);
+                if (!this.xmlController.validateSavePath(loadedCase.savePath)) {
+                    PageController.getInstance().loadModal(Modals.SavePath);
+                }
+            }
+
+            const inputElement = event.target as HTMLInputElement;
+            if (inputElement) inputElement.value = ''; //clears the input field
         });
     }
 
@@ -153,20 +176,31 @@ export class DataController {
             | AuricularArea
             | { [key: string]: number },
     ): void {
-        if (!(this._openCase instanceof CaseModel)) return;
+        console.log(this._openCaseID);
+        if (this._openCaseID === 'null') return;
 
-        var obj: CaseModel = this.openCase as CaseModel;
+        var obj: CaseModel = this.loadedCases[
+            this.findCaseIndex(this._openCaseID)
+        ] as CaseModel;
+        console.log(
+            'before switch:',
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel,
+        );
         var oldName = obj.caseID;
 
         switch (element) {
             case CaseElement.caseID:
                 obj.caseID = content as string;
+                if (this.openCaseID === oldName) this._openCaseID = obj.caseID;
                 break;
             case CaseElement.sex:
                 obj.sex = content as Sex;
                 break;
             case CaseElement.affinity:
                 obj.populationAffinity = content as Affinity;
+                break;
+            case CaseElement.savePath:
+                obj.savePath = content as string;
                 break;
             case CaseElement.thirdMolarTL:
                 obj.thirdMolarTL = content as ThirdMolar;
@@ -207,8 +241,16 @@ export class DataController {
                 );
         }
 
-        this.openCase.notify(Observers.autosave); //autosave
-        if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
+        console.log(
+            'after switch:',
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel,
+        );
+
+        this.loadedCases[this.findCaseIndex(this._openCaseID)].notify(
+            Observers.autosave,
+        ); //autosave
+        if (element === CaseElement.caseID)
+            rmSync(`${obj.savePath}/${oldName}.xml`); //deletes the file under the old case id
     }
 
     /**
@@ -216,6 +258,7 @@ export class DataController {
      * @param caseID The ID of the new case.
      * @param sex The sex of the individual in the case.
      * @param affinity The population affinity of the individual in the case.
+     * @param path The path to the save location of the file.
      * @param thirdMolarTL The third molar status for the top left.
      * @param thirdMolarTR The third molar status for the top right.
      * @param thirdMolarBL The third molar status for the bottom left.
@@ -232,6 +275,7 @@ export class DataController {
         caseID: string,
         sex: Sex,
         affinity: Affinity,
+        path: string,
         thirdMolarTL: ThirdMolar = ThirdMolar.Unknown,
         thirdMolarTR: ThirdMolar = ThirdMolar.Unknown,
         thirdMolarBL: ThirdMolar = ThirdMolar.Unknown,
@@ -249,6 +293,7 @@ export class DataController {
         director.caseBuilder.setCaseID(caseID);
         director.caseBuilder.setSex(sex);
         director.caseBuilder.setPopulationAffinity(affinity);
+        director.caseBuilder.setSavePath(path);
         director.caseBuilder.setThirdMolarTL(thirdMolarTL);
         director.caseBuilder.setThirdMolarTR(thirdMolarTR);
         director.caseBuilder.setThirdMolarBL(thirdMolarBL);
@@ -261,8 +306,9 @@ export class DataController {
         director.caseBuilder.setFourthRibR(fourthRibR);
         director.caseBuilder.setNotes(notes);
 
-        this._openCase = director.makeCase();
-        this.addCase(this._openCase as CaseModel);
+        const newCase = director.makeCase();
+        this._openCaseID = newCase.caseID;
+        this.addCase(newCase as CaseModel);
         Autonumberer.getInstance().updateExistingValues();
     }
 
@@ -282,7 +328,11 @@ export class DataController {
      */
     public getMostRecentReportIdx(): number {
         return this.findReportIndex(
-            (this.openCase as CaseModel).mostRecentReport as string,
+            (
+                this.loadedCases[
+                    this.findCaseIndex(this._openCaseID)
+                ] as CaseModel
+            ).mostRecentReport as string,
         );
     }
 
@@ -291,7 +341,9 @@ export class DataController {
      * @param report The new most recent AbstractReportModel.
      */
     public setMostRecentReport(reportID: string): void {
-        (this.openCase as CaseModel).mostRecentReport = reportID;
+        (
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel
+        ).mostRecentReport = reportID;
     }
 
     /**
@@ -300,9 +352,9 @@ export class DataController {
      * @returns The index of the report, or -1 if not found.
      */
     public findReportIndex(id: string): number {
-        return (this.openCase as CaseModel).generatedReports.findIndex(
-            (item) => item.id === id,
-        );
+        return (
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel
+        ).generatedReports.findIndex((item) => item.id.trim() === id.trim());
     }
 
     /**
@@ -319,7 +371,7 @@ export class DataController {
 
     public makeActiveCase(idx: number): void {
         if (idx == -1) return; //TODO: trigger error message popup
-        this._openCase = this._loadedCases[idx];
+        this._openCaseID = this._loadedCases[idx].caseID;
         Autonumberer.getInstance().updateExistingValues();
     }
 }

@@ -8,7 +8,6 @@ import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
 import { ReportPageView } from '../views/ReportPageView';
 import { ComparePageView } from '../views/ComparePageView';
-import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
@@ -24,37 +23,43 @@ import {
     AuricularArea,
     SternalEnd,
     PubicSymphysis,
+    Modals,
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
 import { CaseItem } from '../views/CaseItem';
+
+import { ErrorModal } from '../views/ErrorModal';
+import { AbstractModal } from '../views/AbstractModal';
+import { SavePathModal } from '../views/SavePathModal';
 import { CompareModal } from '../views/CompareModal';
 
 export class PageController {
     private static instance: PageController;
-    private contentDiv: HTMLElement;
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private sidebarCaseItems: CaseItem[];
     private currentView: AbstractView;
 
     private constructor() {
-        this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
         this.rootBarDiv = document.getElementById('rootBar')!;
         this.views = {
             home: new HomePageView(document),
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
-
             reportModal: new ReportModal(document),
+
             compareModal: new CompareModal(document),
 
             compare: new ComparePageView(document),
+            errorModal: new ErrorModal(document),
+            savePathModal: new SavePathModal(document),
 
             //add additional views here
         };
         this.sidebarCaseItems = [];
         this.currentView = this.views[Pages.Home];
+
         //automatically loads in the homeBar when first opened
         this.loadSideBarContent(SideBar.homeBar);
         this.initEventListeners();
@@ -76,8 +81,8 @@ export class PageController {
      * @param sex The sex of the individual.
      * @param pop The population affinity.
      */
-    public createCase(id: string, sex: number, pop: number) {
-        DataController.getInstance().createCase(id, sex, pop); //pass parameters to this function
+    public createCase(id: string, sex: number, pop: number, path: string) {
+        DataController.getInstance().createCase(id, sex, pop, path); //pass parameters to this function
     }
 
     /**
@@ -95,28 +100,38 @@ export class PageController {
      * Initializes event listeners for the document.
      */
     private initEventListeners(): void {
-        //home button
+        //create new case button
         document
-            .getElementById('homeBtn')!
+            .getElementById('createBtn')!
             .addEventListener('click', async () => {
-                await this.navigateTo(Pages.Home);
-                await this.loadSideBarContent(SideBar.homeBar);
+                await this.navigateTo(Pages.Create);
+                await this.loadSideBarContent(SideBar.dataBar);
             });
 
-        //save case button
-        document.getElementById('saveBtn')!.addEventListener('click', () => {
-            XML_Controller.getInstance().saveAsFile(
-                DataController.getInstance().openCase as CaseModel,
-                `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
-            );
-        });
+        //select new save path button
+        document
+            .getElementById('saveBtn')!
+            .addEventListener('click', async () => {
+                const dc = DataController.getInstance();
+                const newPath: string | null =
+                    await window.electronAPI.selectFolder();
+                if (newPath) {
+                    dc.editCase(CaseElement.savePath, newPath);
+                    this.loadModal(Modals.UpdatedSave);
+                } else
+                    PageController.getInstance().loadModal(
+                        Modals.Error,
+                        'Invalid save path selection.',
+                    );
+            });
 
         //hidden file load element
         document
             .getElementById('loadCase')!
             .addEventListener('change', async (event) => {
-                DataController.getInstance().loadCaseFromFile(event);
+                await DataController.getInstance().loadCaseFromFile(event);
                 await this.navigateTo(Pages.DataEntry, SideBar.dataBar);
+                console.log(DataController.getInstance().loadedCases);
             });
 
         //load case button
@@ -291,8 +306,8 @@ export class PageController {
      * Gets the currently open case.
      * @returns The currently open CaseModel.
      */
-    public getOpenCase(): CaseModel {
-        return DataController.getInstance().openCase as CaseModel;
+    public getOpenCaseID(): string {
+        return DataController.getInstance().openCaseID;
     }
 
     /**
@@ -300,28 +315,41 @@ export class PageController {
      * @param report The report to export.
      * @param filename The filename to save the report as (optional).
      */
+    private isExporting = false;
     public async exportReport(
         report: ReportModel,
         filename: string = 'default_report.docx',
     ): Promise<void> {
+        if (this.isExporting) {
+            console.warn('Export already in progress');
+            return;
+        }
+
+        this.isExporting = true;
+
         if (report.getThirdMolar(Side.C) === 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
             var content = `
-            Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+            <p>Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. </p>
                     <br />
+            <p>The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. </p>
                     <br />
-            The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
                     <br />
-                    <br />
-            Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
-                    <br />
-                    <br />
-                    <br />
-            Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${Math.min(report.getPubicSymphysisRange(Side.C).min, report.getAuricularSurfaceRange(Side.C).min, report.getSternalEndRange(Side.C).min).toFixed(2)} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
+                const minValue = Math.min(
+                    report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
+                    report.getAuricularSurfaceRange(Side.C)?.min ?? Infinity,
+                    report.getSternalEndRange(Side.C)?.min ?? Infinity,
+                );
+                return (minValue < 18 ? 18 : minValue).toFixed(2);
+            })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
         }
+
         if (!content.trim()) {
             console.warn('Export failed: Empty content.');
+            this.isExporting = false;
             return;
         }
 
@@ -340,30 +368,149 @@ export class PageController {
             link.href = url;
             link.download = filename;
             document.body.appendChild(link);
+
+            // Trigger click only once
             link.click();
 
             // Clean up
             document.body.removeChild(link);
-            URL.revokeObjectURL(url); // Release the object URL
-
-            //console.log('File download started successfully:', filename);
+            URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error exporting to Word:', error);
+        } finally {
+            this.isExporting = false;
+        }
+    }
+
+    private isPrinting = false;
+    public async printReport(report: ReportModel): Promise<void> {
+        if (this.isPrinting) {
+            console.warn('Export already in progress');
+            return;
+        }
+
+        this.isPrinting = true;
+
+        let content = '';
+
+        if (report.getThirdMolar(Side.C) === 0) {
+            content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
+        } else {
+            content = `
+                Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
+                        <br />
+                        <br />
+                The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
+                        <br />
+                        <br />
+                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
+                        <br />
+                        <br />
+                        <br />
+                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
+                    const minValue = Math.min(
+                        report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
+                        report.getAuricularSurfaceRange(Side.C)?.min ??
+                            Infinity,
+                        report.getSternalEndRange(Side.C)?.min ?? Infinity,
+                    );
+                    return (minValue < 18 ? 18 : minValue).toFixed(2);
+                })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.`;
+        }
+
+        if (!content.trim()) {
+            console.warn('Print failed: Empty content.');
+            this.isPrinting = false;
+            return;
+        }
+
+        try {
+            const printWindowProxy = window.open(
+                '',
+                '',
+                'width=800,height=600',
+            );
+            if (printWindowProxy) {
+                const printWindow = printWindowProxy as unknown as Window;
+                const divColor2 = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--div-color-2');
+                const onDark = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--on-dark');
+                const hoverOnLight = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue('--hover-on-light');
+
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    margin: 20px;
+                                }
+                                @media print {
+                                    h1{
+                                        display: none;
+                                    }
+                                    button {
+                                        display: none;
+                                    }
+                                }
+                                .reportButtons {
+                                    background-color: ${divColor2};
+                                    border: 2px solid ${divColor2};
+                                    color: ${onDark};
+                                    text-align: center;
+                                    text-decoration: none;
+                                    font-size: clamp(12px, 2vw, 16px);
+                                    padding: 10px 15px;
+                                    width: 50%;
+                                    box-sizing: border-box;
+                                    border-radius: 8px;
+                                }
+                                .reportButtons:hover {
+                                    background-color: ${hoverOnLight};
+                                    transition: 0.2s;
+                                }
+                                .button-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 20px;
+                                }
+                                .preview-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="button-container">
+                                <button class="reportButtons" onclick="window.print(); window.close();">Print</button>
+                            </div>
+                            <div class="preview-container">
+                            <h1>PREVIEW</h1>
+                            </div>
+                            ${content}
+                            <br/>
+                    </body>
+                    </html>
+                `);
+
+                printWindow.document.close();
+            }
+        } catch (error) {
+            console.error('Error preparing the print report:', error);
+        } finally {
+            this.isPrinting = false;
         }
     }
 
     /**
-     * Loads the report modal.
-     */
-    public async loadModal(): Promise<void> {
-        this.currentView = this.views.reportModal;
-        (this.currentView as ReportModal).openModal();
-        (this.currentView as ReportModal).render(
-            await this.loadPageContent(Pages.ReportModal),
-        );
-    }
 
-    /**
+     * Loads a modal.
      * Loads the report modal.
      */
     public async loadModalCompare(): Promise<void> {
@@ -377,8 +524,46 @@ export class PageController {
     /**
      * Unloads the report modal.
      */
-    public unloadModal(): void {
-        this.currentView = this.views.report;
+    public async loadModal(type: Modals, errorMsg = ''): Promise<void> {
+        var modal: AbstractModal;
+        switch (type) {
+            case Modals.Report:
+                modal = this.views.reportModal as AbstractModal;
+                (modal as ReportModal).openModal();
+                await (modal as ReportModal).render(
+                    await this.loadPageContent(Pages.ReportModal),
+                );
+                break;
+            case Modals.Error:
+                modal = this.views.errorModal as AbstractModal;
+                (modal as ErrorModal).openModal();
+                const content = await this.loadPageContent(Pages.Error);
+                await (modal as ErrorModal).render(content);
+                (modal as ErrorModal).displayError(errorMsg);
+                break;
+            case Modals.SavePath:
+                modal = this.views.savePathModal as AbstractModal;
+                (modal as SavePathModal).openModal();
+                await (modal as SavePathModal).render(
+                    await this.loadPageContent(Pages.SavePath),
+                );
+                break;
+            case Modals.UpdatedSave:
+                const dc = DataController.getInstance();
+                modal = this.views.savePathModal as AbstractModal;
+                (modal as SavePathModal).openModal();
+                await (modal as SavePathModal).render(
+                    await this.loadPageContent(Pages.SavePath),
+                );
+                (modal as SavePathModal).displayPath(
+                    dc.loadedCases[dc.findCaseIndex(dc.openCaseID)].savePath,
+                );
+                break;
+            default:
+                throw new Error(
+                    'Invalid modal type passed to PageController.loadModal()',
+                );
+        }
     }
 
     /**
@@ -387,10 +572,10 @@ export class PageController {
      */
     public loadReport(reportIDX: number) {
         const dc = DataController.getInstance();
-        dc.openReport = (dc.openCase as CaseModel).generatedReports[
-            reportIDX
-        ].id;
-        this.navigateTo(Pages.Report, SideBar.createBar);
+        dc.openReport = (
+            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
+        ).generatedReports[reportIDX].id;
+        this.navigateTo(Pages.Report, SideBar.dataBar);
     }
 
     /**
@@ -407,8 +592,8 @@ export class PageController {
 
     public createCaseItem(caseID: string): void {
         const caseItem = new CaseItem(caseID);
-        caseItem.renderCase();
         this.sidebarCaseItems.push(caseItem);
+        this.renderCases();
     }
 
     public makeActiveCase(id: string): void {
@@ -423,21 +608,22 @@ export class PageController {
                 const dc = DataController.getInstance();
                 dc.deleteCase(dc.findCaseIndex(caseID));
                 this.sidebarCaseItems.splice(i, 1);
-                this.renderCases();
+
+                if (dc.loadedCases.length > 0)
+                    this.navigateTo(Pages.DataEntry, SideBar.dataBar);
+                else this.navigateTo(Pages.Home, SideBar.homeBar);
+
                 return;
             }
         }
     }
 
-    private renderCases(): void {
+    public renderCases(): void {
         const list = document.getElementById('caseList') as HTMLElement;
         list.innerHTML = '';
 
-        if (this.sidebarCaseItems.length == 0)
-            list.innerHTML = 'No cases loaded'; //TODO: update to look better
-        else
-            this.sidebarCaseItems.forEach((item) => {
-                item.renderCase();
-            });
+        this.sidebarCaseItems.forEach((item) => {
+            item.renderCase();
+        });
     }
 }

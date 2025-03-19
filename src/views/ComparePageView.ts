@@ -1,3 +1,4 @@
+
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { PageController } from '../controllers/PageController';
 import { DataController } from '../controllers/DataController';
@@ -370,3 +371,4 @@ export class ComparePageView extends AbstractView {
         return `${minAge} - ${maxAge}`;
     }
 }
+

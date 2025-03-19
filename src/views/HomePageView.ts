@@ -14,6 +14,9 @@ export class HomePageView extends AbstractView {
      */
     public override render(htmlContent: string): void {
         //console.log('loaded from HomePageView');
+        (
+            document.getElementById('topBarButtons') as HTMLElement
+        ).style.display = 'none';
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
@@ -30,7 +33,7 @@ export class HomePageView extends AbstractView {
                 async () =>
                     await PageController.getInstance().navigateTo(
                         Pages.Create,
-                        SideBar.createBar,
+                        SideBar.dataBar,
                     ),
             );
 

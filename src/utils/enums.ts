@@ -91,6 +91,15 @@ export enum Pages {
     ReportModal = 'reportArchiveModal',
     CompareModal = 'compareArchiveModal',
     Compare = 'compare',
+    Error = 'errorModal',
+    SavePath = 'savePathModal',
+}
+
+export enum Modals {
+    Error = 'errorModal',
+    Report = 'reportArchiveModal',
+    SavePath = 'savePathModal',
+    UpdatedSave = 'updatedSavePathModal',
 }
 
 /**
@@ -135,6 +144,14 @@ export enum UI_Elements {
     viewReportCompareButton = 'submitCompareBtn',
     analysisSelector = 'analysisSelector',
     mostRecentReportButton = 'viewMostRecentReport',
+    uploadAuricularImages = 'uploadImageButtonAA',
+    uploadPubicImages = 'uploadImageButtonPS',
+    uploadSternalImages = 'uploadImageButtonSR',
+    uploadMolarImages = 'uploadImageButtonTM',
+    changeGraphButton90 = 'changeGraphBtn90',
+    changeGraphButton95 = 'changeGraphBtn95',
+    printButton = 'printBtn',
+    closeErrorModal = 'closeErrorModal',
 }
 
 /**
@@ -155,6 +172,11 @@ export enum CaseElement {
     fourthRibL = 11,
     fourthRibR = 12,
     notes = 13,
+    pubicSymphysisImages = 14,
+    auricularSurfaceImages = 15,
+    fourthRibImages = 16,
+    thirdMolarImages = 17,
+    savePath = 18,
 }
 
 /**

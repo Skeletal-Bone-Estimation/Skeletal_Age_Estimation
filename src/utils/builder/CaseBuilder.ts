@@ -1,7 +1,9 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
+import { NullCaseModel } from '../../models/NullCaseModel';
 import { NullReportModel } from '../../models/NullReportModel';
+import { Affinity, Sex } from '../enums';
 import { CaseBuilderIF } from './CaseBuilderIF';
 
 // Concrete builder for CaseModel
@@ -9,6 +11,7 @@ export class CaseBuilder implements CaseBuilderIF {
     private _caseID: string;
     private _populationAffinity: number;
     private _sex: number;
+    private _savePath: string;
     private _thirdMolarTL: number;
     private _thirdMolarTR: number;
     private _thirdMolarBL: number;
@@ -22,11 +25,16 @@ export class CaseBuilder implements CaseBuilderIF {
     private _notes: string;
     private _generatedReports: AbstractReportModel[];
     private _mostRecentReport: string | NullReportModel;
+    private _pubicSymphysisImages: string[];
+    private _auricularSurfaceImages: string[];
+    private _fourthRibImages: string[];
+    private _thirdMolarImages: string[];
 
     constructor() {
-        this._caseID = '';
-        this._populationAffinity = 0;
-        this._sex = 0;
+        this._caseID = 'null';
+        this._populationAffinity = Affinity.Unknown;
+        this._sex = Sex.Unknown;
+        this._savePath = '';
         this._thirdMolarTL = 0;
         this._thirdMolarTR = 0;
         this._thirdMolarBL = 0;
@@ -40,6 +48,18 @@ export class CaseBuilder implements CaseBuilderIF {
         this._notes = '';
         this._generatedReports = [];
         this._mostRecentReport = new NullReportModel();
+        this._pubicSymphysisImages = [];
+        this._auricularSurfaceImages = [];
+        this._fourthRibImages = [];
+        this._thirdMolarImages = [];
+    }
+
+    public buildNull(): NullCaseModel {
+        return new NullCaseModel(
+            this._caseID,
+            this._populationAffinity,
+            this._sex,
+        );
     }
 
     /**
@@ -69,6 +89,11 @@ export class CaseBuilder implements CaseBuilderIF {
      */
     public setSex(sex: number): CaseBuilderIF {
         this._sex = sex;
+        return this;
+    }
+
+    public setSavePath(path: string): CaseBuilderIF {
+        this._savePath = path;
         return this;
     }
 
@@ -205,6 +230,45 @@ export class CaseBuilder implements CaseBuilderIF {
     }
 
     /**
+     * Sets the images arrays for the uploaded pubic symphysis images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setPubicSymphysisImages(images: string[]): CaseBuilderIF {
+        this._pubicSymphysisImages = images;
+        return this;
+    }
+
+    /**
+     * Sets the images arrays for the uploaded auricular surface images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setAuricularSurfaceImages(images: string[]): CaseBuilderIF {
+        this._auricularSurfaceImages = images;
+        return this;
+    }
+
+    /**
+     * Sets the images arrays for the uploaded fourth rib images for the case
+     * @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setFourthRibImages(images: string[]): CaseBuilderIF {
+        this._fourthRibImages = images;
+        return this;
+    }
+    /**
+     * Sets the images arrays for the uploaded third molar images for the case
+     *  @param images The images to set.
+     * @returns The CaseBuilderIF instance.
+     */
+    public setThirdMolarImages(images: string[]): CaseBuilderIF {
+        this._thirdMolarImages = images;
+        return this;
+    }
+
+    /**
      * Builds and returns the CaseModel.
      * @returns The built CaseModel.
      */
@@ -213,6 +277,7 @@ export class CaseBuilder implements CaseBuilderIF {
             this._caseID,
             this._populationAffinity,
             this._sex,
+            this._savePath,
             this._thirdMolarTL,
             this._thirdMolarTR,
             this._thirdMolarBL,
@@ -226,6 +291,10 @@ export class CaseBuilder implements CaseBuilderIF {
             this._notes,
             this._generatedReports,
             this._mostRecentReport,
+            this._pubicSymphysisImages,
+            this._auricularSurfaceImages,
+            this._fourthRibImages,
+            this._thirdMolarImages,
         );
     }
 }

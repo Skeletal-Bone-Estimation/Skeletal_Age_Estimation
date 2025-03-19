@@ -17,6 +17,7 @@ import { AbstractView } from './AbstractView';
 import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
 import { DataController } from '../controllers/DataController';
 import { ReportModel } from '../models/ReportModel';
+import { GalleryModal } from '../views/GalleryModal';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
@@ -28,6 +29,9 @@ export class DataEntryView extends AbstractView {
      * @param htmlContent The HTML content to render.
      */
     public override render(htmlContent: string): void {
+        (
+            document.getElementById('topBarButtons') as HTMLElement
+        ).style.display = 'flex';
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
@@ -38,7 +42,10 @@ export class DataEntryView extends AbstractView {
      * Automatically load case data into the form fields.
      */
     public autoLoadCaseData() {
-        var _case: CaseModel = PageController.getInstance().getOpenCase();
+        const dc = DataController.getInstance();
+        var _case: CaseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
         const caseID = document.getElementById(
             UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
@@ -161,8 +168,80 @@ export class DataEntryView extends AbstractView {
         thirdMolarBL.value = this.parseThirdMolarToString(_case.thirdMolarBL);
         thirdMolarBR.value = this.parseThirdMolarToString(_case.thirdMolarBR);
         notes.value = _case.notes;
+
+        this.renderSavedImages();
     }
 
+    //renders all of the saved images in the case to their respective galleries
+    private renderSavedImages(): void {
+        const dc = DataController.getInstance();
+        const currentCase = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
+        const galleryModal = new GalleryModal(document);
+
+        //auricular images renders button to trigger modal
+        const galleryAuricularContainer =
+            document.getElementById('galleryAuricular');
+        if (galleryAuricularContainer) {
+            galleryAuricularContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Auricular Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Auricular Images',
+                    currentCase.auricularSurfaceImages,
+                );
+            });
+            galleryAuricularContainer.appendChild(button);
+        }
+
+        //pubic image renders button to trigger modal
+        const galleryPubicContainer = document.getElementById('galleryPubic');
+        if (galleryPubicContainer) {
+            galleryPubicContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Pubic Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Pubic Images',
+                    currentCase.pubicSymphysisImages,
+                );
+            });
+            galleryPubicContainer.appendChild(button);
+        }
+
+        //sternal images renders button for triggerin g modal
+        const gallerySternalContainer =
+            document.getElementById('gallerySternal');
+        if (gallerySternalContainer) {
+            gallerySternalContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Sternal Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Sternal Images',
+                    currentCase.fourthRibImages,
+                );
+            });
+            gallerySternalContainer.appendChild(button);
+        }
+
+        //molar images renders button for trigger
+        const galleryMolarContainer = document.getElementById('galleryMolar');
+        if (galleryMolarContainer) {
+            galleryMolarContainer.innerHTML = '';
+            const button = document.createElement('button');
+            button.innerText = 'View Molar Images';
+            button.addEventListener('click', () => {
+                galleryModal.openGallery(
+                    'Molar Images',
+                    currentCase.thirdMolarImages,
+                );
+            });
+            galleryMolarContainer.appendChild(button);
+        }
+    }
     /**
      * Initialize event listeners for the data entry page.
      */
@@ -282,6 +361,30 @@ export class DataEntryView extends AbstractView {
         ) as HTMLButtonElement;
         if (!analysisSelector) console.error('analysis selector not found');
 
+        const uploadAuricularImages = document.getElementById(
+            UI_Elements.uploadAuricularImages,
+        ) as HTMLButtonElement;
+        if (!uploadAuricularImages)
+            console.error('upload auricular images button not found');
+
+        const uploadPubicImages = document.getElementById(
+            UI_Elements.uploadPubicImages,
+        ) as HTMLButtonElement;
+        if (!uploadPubicImages)
+            console.error('upload pubic images button not found');
+
+        const uploadSternalImages = document.getElementById(
+            UI_Elements.uploadSternalImages,
+        ) as HTMLButtonElement;
+        if (!uploadSternalImages)
+            console.error('upload sternal images button not found');
+
+        const uploadMolarImages = document.getElementById(
+            UI_Elements.uploadMolarImages,
+        ) as HTMLButtonElement;
+        if (!uploadMolarImages)
+            console.error('upload molar images button not found');
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -297,7 +400,11 @@ export class DataEntryView extends AbstractView {
             analyzeButton &&
             guideButton &&
             analysisSelector &&
-            mostRecentReportButton
+            mostRecentReportButton &&
+            uploadAuricularImages &&
+            uploadPubicImages &&
+            uploadSternalImages &&
+            uploadMolarImages
         ) {
             //console.log('elements present');
 
@@ -401,8 +508,10 @@ export class DataEntryView extends AbstractView {
             });
 
             analyzeButton.addEventListener('click', (event) => {
-                var _case: CaseModel =
-                    PageController.getInstance().getOpenCase();
+                const dc = DataController.getInstance();
+                var _case: CaseModel = dc.loadedCases[
+                    dc.findCaseIndex(dc.openCaseID)
+                ] as CaseModel;
                 const target = event.target as HTMLButtonElement;
                 const sex = this.parseSex(target.value);
                 const affinity = this.parseAffinity(target.value);
@@ -412,7 +521,7 @@ export class DataEntryView extends AbstractView {
                 );
                 PageController.getInstance().navigateTo(
                     Pages.Report,
-                    SideBar.createBar,
+                    SideBar.dataBar,
                 );
 
                 // var report =
@@ -429,11 +538,15 @@ export class DataEntryView extends AbstractView {
 
             mostRecentReportButton.addEventListener('click', () => {
                 const dc = DataController.getInstance();
-                dc.openCase.notify(
+                (
+                    dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
+                ).notify(
                     Observers.setSelectedReport,
-                    (dc.openCase as CaseModel).generatedReports[
-                        dc.getMostRecentReportIdx()
-                    ].id,
+                    (
+                        dc.loadedCases[
+                            dc.findCaseIndex(dc.openCaseID)
+                        ] as CaseModel
+                    ).generatedReports[dc.getMostRecentReportIdx()].id,
                 );
                 PageController.getInstance().navigateTo(
                     Pages.Report,
@@ -442,8 +555,10 @@ export class DataEntryView extends AbstractView {
             });
 
             analysisSelector.addEventListener('change', () => {
-                const _case = DataController.getInstance()
-                    .openCase as CaseModel;
+                const dc = DataController.getInstance();
+                const _case = dc.loadedCases[
+                    dc.findCaseIndex(dc.openCaseID)
+                ] as CaseModel;
                 switch (analysisSelector.value) {
                     case 'default':
                         AnalysisContext.getInstance(
@@ -469,6 +584,137 @@ export class DataEntryView extends AbstractView {
                     default:
                         console.error('invalid analyzer selected');
                 }
+            });
+
+            uploadAuricularImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                const dc = DataController.getInstance();
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                //read in as base 64 string
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Auricular image base64:', base64String,);
+                            //update case model
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
+                            //push the string
+                            currentCase.auricularSurfaceImages.push(
+                                base64String,
+                            );
+                            //trigger autosave observer
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    //clean
+                    document.body.removeChild(fileInput);
+                });
+
+                //trigger file selector
+                fileInput.click();
+            });
+
+            uploadPubicImages.addEventListener('click', () => {
+                const dc = DataController.getInstance();
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Pubic image base64:', base64String);
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
+
+                            currentCase.pubicSymphysisImages.push(base64String);
+
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    document.body.removeChild(fileInput);
+                });
+
+                fileInput.click();
+            });
+
+            uploadSternalImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                const dc = DataController.getInstance();
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Sternal image base64:', base64String);
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
+                            currentCase.fourthRibImages.push(base64String);
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    document.body.removeChild(fileInput);
+                });
+
+                fileInput.click();
+            });
+
+            uploadMolarImages.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                const dc = DataController.getInstance();
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', (e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.files && target.files[0]) {
+                        const file = target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const base64String = evt.target?.result as string;
+                            //console.log('Molar image base64:', base64String);
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
+
+                            currentCase.thirdMolarImages.push(base64String);
+                            currentCase.notify(Observers.autosave);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    document.body.removeChild(fileInput);
+                });
+
+                fileInput.click();
             });
         }
     }
