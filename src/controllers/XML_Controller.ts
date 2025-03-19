@@ -1,7 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { CaseModel } from '../models/CaseModel';
 import { BuildDirector } from '../utils/builder/BuildDirector';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync } from 'fs';
 import { Builder } from 'xml2js';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
@@ -305,15 +305,6 @@ export class XML_Controller {
         return list;
     }
 
-    //TODO
-    /**
-     * Parses a collection of files (as a folder).
-     * @returns An array of CaseModel objects.
-     */
-    public parseCollection(): CaseModel[] {
-        throw new Error('Parse collection not yet implemented');
-    }
-
     /**
      * Loads a single case from a file.
      * @param event The event triggering the file load.
@@ -344,12 +335,16 @@ export class XML_Controller {
         } else throw new Error('No file selected');
     }
 
+    public validateSavePath(path: string): boolean {
+        return existsSync(path);
+    }
+
     /**
      * Saves a single case to a file.
      * @param _case The CaseModel to save.
      * @param filename The filename to save the case as.
      */
-    public saveAsFile(_case: CaseModel, filename: string): void {
+    public saveAsFile(_case: CaseModel, path: string, filename: string): void {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({
             object: {
@@ -365,8 +360,17 @@ export class XML_Controller {
                 _thirdMolarImages: { image: _case.thirdMolarImages },
             },
         });
-        writeFileSync(filename, xmlString, 'utf-8');
+        writeFileSync(`${path}/${filename}.xml`, xmlString, 'utf-8');
         //console.log(`File saved to ${filename}`);
+    }
+
+    //TODO
+    /**
+     * Parses a collection of files (as a folder).
+     * @returns An array of CaseModel objects.
+     */
+    public parseCollection(): CaseModel[] {
+        throw new Error('Parse collection not yet implemented');
     }
 
     //TODO

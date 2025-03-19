@@ -91,11 +91,13 @@ export enum Pages {
     ReportModal = 'reportArchiveModal',
     Compare = 'compare',
     Error = 'errorModal',
+    SavePath = 'savePathModal',
 }
 
 export enum Modals {
     Error = 'errorModal',
     Report = 'reportArchiveModal',
+    SavePath = 'savePathModal',
 }
 
 /**

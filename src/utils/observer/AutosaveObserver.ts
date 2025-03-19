@@ -30,7 +30,8 @@ export class AutosaveObserver implements ObserverIF {
         const filename: string = (openCase as CaseModel).caseID;
         XML_Controller.getInstance().saveAsFile(
             openCase as CaseModel,
-            `${openCase.savePath}/${filename}.xml`,
+            openCase.savePath,
+            filename,
         );
     }
 }

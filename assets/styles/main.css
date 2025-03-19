@@ -872,19 +872,19 @@ input[type="text"] {
   }
 }
 
-#errorHeader {
+#errorHeader, #savePathHeader {
   margin-top: 0;
   color: #c0392b;
   font-size: 24px;
 }
 
-#errorModalMsg {
+#errorModalMsg, #savePathModalMsg {
   color: #333;
   font-size: 16px;
   margin: 20px 0;
 }
 
-#closeErrorModal {
+#closeErrorModal, #selectSavePathBtn, #acceptNewSavePath {
   background-color: #c0392b;
   color: #fff;
   border: none;
@@ -893,6 +893,19 @@ input[type="text"] {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
+}
+
+#savePathButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+#selectSavePathBtn, #acceptNewSavePath {
+  background-color: var(--on-light);
+  width: 100%;
+  justify-content: center;
 }
 
 #closeErrorModal:hover {

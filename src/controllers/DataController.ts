@@ -12,6 +12,7 @@ import {
     SternalEnd,
     AuricularArea,
     Observers,
+    Modals,
 } from '../utils/enums';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
@@ -138,6 +139,9 @@ export class DataController {
             if (!(loadedCase instanceof NullCaseModel)) {
                 this._openCaseID = loadedCase.caseID;
                 this.addCase(loadedCase as CaseModel);
+                if (!this.xmlController.validateSavePath(loadedCase.savePath)) {
+                    PageController.getInstance().loadModal(Modals.SavePath);
+                }
             }
 
             const inputElement = event.target as HTMLInputElement;

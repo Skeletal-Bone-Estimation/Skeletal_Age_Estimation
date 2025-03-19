@@ -8,7 +8,6 @@ import { CreateCaseView } from '../views/CreateCaseView';
 import { DataEntryView } from '../views/DataEntryView';
 import { ReportPageView } from '../views/ReportPageView';
 import { ComparePageView } from '../views/ComparePageView';
-import { XML_Controller } from './XML_Controller';
 import { DataController } from './DataController';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
@@ -30,6 +29,7 @@ import { ReportModal } from '../views/ReportModal';
 import { CaseItem } from '../views/CaseItem';
 import { ErrorModal } from '../views/ErrorModal';
 import { AbstractModal } from '../views/AbstractModal';
+import { SavePathModal } from '../views/SavePathModal';
 
 export class PageController {
     private static instance: PageController;
@@ -48,6 +48,7 @@ export class PageController {
             reportModal: new ReportModal(document),
             compare: new ComparePageView(document),
             errorModal: new ErrorModal(document),
+            savePathModal: new SavePathModal(document),
 
             //add additional views here
         };
@@ -501,7 +502,7 @@ export class PageController {
     }
 
     /**
-     * Loads the report modal.
+     * Loads a modal.
      */
     public async loadModal(type: Modals, errorMsg = ''): Promise<void> {
         var modal: AbstractModal;
@@ -519,6 +520,13 @@ export class PageController {
                 const content = await this.loadPageContent(Pages.Error);
                 await (modal as ErrorModal).render(content);
                 (modal as ErrorModal).displayError(errorMsg);
+                break;
+            case Modals.SavePath:
+                modal = this.views.savePathModal as AbstractModal;
+                (modal as SavePathModal).openModal();
+                await (modal as SavePathModal).render(
+                    await this.loadPageContent(Pages.SavePath),
+                );
                 break;
             default:
                 throw new Error(

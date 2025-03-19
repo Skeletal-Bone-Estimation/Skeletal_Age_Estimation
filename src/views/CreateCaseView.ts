@@ -65,7 +65,8 @@ export class CreateCaseView extends AbstractView {
                     dc.loadedCases[
                         dc.findCaseIndex(dc.openCaseID)
                     ] as CaseModel,
-                    `${this.savePath}/${DataController.getInstance().openCaseID}.xml`,
+                    this.savePath,
+                    DataController.getInstance().openCaseID,
                 );
 
                 PageController.getInstance().navigateTo(
