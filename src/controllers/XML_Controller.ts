@@ -7,6 +7,8 @@ import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
 import { DataController } from './DataController';
+import { PageController } from './PageController';
+import { Modals } from '../utils/enums';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -39,7 +41,7 @@ export class XML_Controller {
      * Loads a single XML file into a CaseModel object.
      * @returns The parsed AbstractCaseModel.
      */
-    public parseSingleFile(): AbstractCaseModel {
+    public async parseSingleFile(): Promise<AbstractCaseModel> {
         if (!this.currentDoc) {
             console.error('Current doc error');
             return new BuildDirector().makeNullCase(); //error model
@@ -48,12 +50,19 @@ export class XML_Controller {
         const caseID =
             this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
 
+        const test = async () => {
+            await PageController.getInstance().loadModal(
+                Modals.Error,
+                'This case has already been loaded.',
+            );
+        };
+
         if (
             DataController.getInstance().loadedCases.some(
                 (_case: CaseModel) => _case.caseID === caseID,
             )
         ) {
-            console.error('Case ID already exists:', caseID); //replace with modal popup
+            await test();
             return new BuildDirector().makeNullCase(); // error model
         }
 

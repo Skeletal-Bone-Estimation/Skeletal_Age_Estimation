@@ -24,9 +24,12 @@ import {
     AuricularArea,
     SternalEnd,
     PubicSymphysis,
+    Modals,
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
 import { CaseItem } from '../views/CaseItem';
+import { ErrorModal } from '../views/ErrorModal';
+import { AbstractModal } from '../views/AbstractModal';
 
 export class PageController {
     private static instance: PageController;
@@ -44,15 +47,15 @@ export class PageController {
             create: new CreateCaseView(document),
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
-
             reportModal: new ReportModal(document),
-
             compare: new ComparePageView(document),
+            errorModal: new ErrorModal(document),
 
             //add additional views here
         };
         this.sidebarCaseItems = [];
         this.currentView = this.views[Pages.Home];
+
         //automatically loads in the homeBar when first opened
         this.loadSideBarContent(SideBar.homeBar);
         this.initEventListeners();
@@ -114,7 +117,7 @@ export class PageController {
         document
             .getElementById('loadCase')!
             .addEventListener('change', async (event) => {
-                DataController.getInstance().loadCaseFromFile(event);
+                await DataController.getInstance().loadCaseFromFile(event);
                 await this.navigateTo(Pages.DataEntry, SideBar.dataBar);
             });
 
@@ -495,19 +498,28 @@ export class PageController {
     /**
      * Loads the report modal.
      */
-    public async loadModal(): Promise<void> {
-        this.currentView = this.views.reportModal;
-        (this.currentView as ReportModal).openModal();
-        (this.currentView as ReportModal).render(
-            await this.loadPageContent(Pages.ReportModal),
-        );
-    }
-
-    /**
-     * Unloads the report modal.
-     */
-    public unloadModal(): void {
-        this.currentView = this.views.report;
+    public async loadModal(type: Modals, errorMsg = ''): Promise<void> {
+        var modal: AbstractModal;
+        switch (type) {
+            case Modals.Report:
+                modal = this.views.reportModal as AbstractModal;
+                (modal as ReportModal).openModal();
+                await (modal as ReportModal).render(
+                    await this.loadPageContent(Pages.ReportModal),
+                );
+                break;
+            case Modals.Error:
+                modal = this.views.errorModal as AbstractModal;
+                (modal as ErrorModal).openModal();
+                const content = await this.loadPageContent(Pages.Error);
+                await (modal as ErrorModal).render(content);
+                (modal as ErrorModal).displayError(errorMsg);
+                break;
+            default:
+                throw new Error(
+                    'Invalid modal type passed to PageController.loadModal()',
+                );
+        }
     }
 
     /**

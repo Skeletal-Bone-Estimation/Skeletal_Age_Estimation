@@ -90,6 +90,12 @@ export enum Pages {
     Report = 'report',
     ReportModal = 'reportArchiveModal',
     Compare = 'compare',
+    Error = 'errorModal',
+}
+
+export enum Modals {
+    Error = 'errorModal',
+    Report = 'reportArchiveModal',
 }
 
 /**
@@ -140,6 +146,7 @@ export enum UI_Elements {
     changeGraphButton90 = 'changeGraphBtn90',
     changeGraphButton95 = 'changeGraphBtn95',
     printButton = 'printBtn',
+    closeErrorModal = 'closeErrorModal',
 }
 
 /**

@@ -66,7 +66,6 @@ export class ReportModal extends AbstractModal {
                     }
 
                     openCase.notify(Observers.setSelectedReport, report.id);
-                    pc.unloadModal();
                     pc.loadReport(this.selectedIdx);
 
                     this.closeModal();

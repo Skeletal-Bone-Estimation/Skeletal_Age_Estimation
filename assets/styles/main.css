@@ -844,6 +844,47 @@ input[type="text"] {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
+  animation: slide-down 0.3s ease-out;
+  text-align: center;
+}
+
+/* Slide-down animation */
+@keyframes slide-down {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#errorHeader {
+  margin-top: 0;
+  color: #c0392b;
+  font-size: 24px;
+}
+
+#errorModalMsg {
+  color: #333;
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+#closeErrorModal {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#closeErrorModal:hover {
+  background-color: #a93226;
 }
 
 #reportModalButtons {

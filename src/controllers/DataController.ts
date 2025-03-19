@@ -17,7 +17,6 @@ import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 import { NullReportModel } from '../models/NullReportModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
-import { ReportModel } from '../models/ReportModel';
 import { PageController } from './PageController';
 import { Autonumberer } from '../utils/Autonumberer';
 
@@ -128,14 +127,14 @@ export class DataController {
      * Delegates to the XML controller to handle loading a file from XML and stores a reference to the loaded object.
      * @param event The event triggering the file load.
      */
-    public loadCaseFromFile(event: Event): void {
-        this.xmlController.loadFile(event, () => {
+    public async loadCaseFromFile(event: Event): Promise<void> {
+        this.xmlController.loadFile(event, async () => {
             //callback function executed within the implementation of XML_Controller.loadFile(...)
             const loadedCase: AbstractCaseModel =
-                this.xmlController.parseSingleFile();
+                await this.xmlController.parseSingleFile();
 
-            console.log(loadedCase);
-            console.log(this._loadedCases);
+            //console.log(loadedCase);
+            //console.log(this._loadedCases);
 
             if (!(loadedCase instanceof NullCaseModel)) {
                 this._openCaseID = loadedCase.caseID;
