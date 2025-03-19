@@ -61,7 +61,7 @@ export class ReportModal extends AbstractModal {
 
                     if (report instanceof NullReportModel) {
                         console.error('Null report selected.');
-                        pc.navigateTo(Pages.DataEntry, SideBar.createBar);
+                        pc.navigateTo(Pages.DataEntry, SideBar.dataBar);
                         return;
                     }
 

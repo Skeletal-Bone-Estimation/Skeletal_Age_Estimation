@@ -4,7 +4,7 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Side, Pages } from '../utils/enums';
+import { Side, Pages, SideBar } from '../utils/enums';
 
 //TODO: this is supposed to extend ReportPageView to take advantage of exisitng methods
 export class ComparePageView extends AbstractView {
@@ -34,7 +34,10 @@ export class ComparePageView extends AbstractView {
             .addEventListener(
                 'click',
                 async () =>
-                    await PageController.getInstance().navigateTo(Pages.Report),
+                    await PageController.getInstance().navigateTo(
+                        Pages.Report,
+                        SideBar.dataBar,
+                    ),
             );
     }
 

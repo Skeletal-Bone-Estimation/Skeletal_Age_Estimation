@@ -521,7 +521,7 @@ export class DataEntryView extends AbstractView {
                 );
                 PageController.getInstance().navigateTo(
                     Pages.Report,
-                    SideBar.createBar,
+                    SideBar.dataBar,
                 );
 
                 // var report =

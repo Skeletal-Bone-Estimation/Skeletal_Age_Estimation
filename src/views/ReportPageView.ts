@@ -153,6 +153,7 @@ export class ReportPageView extends AbstractView {
                 async () =>
                     await PageController.getInstance().navigateTo(
                         Pages.Compare,
+                        SideBar.dataBar,
                     ),
             );
     }

@@ -33,7 +33,7 @@ export class HomePageView extends AbstractView {
                 async () =>
                     await PageController.getInstance().navigateTo(
                         Pages.Create,
-                        SideBar.createBar,
+                        SideBar.dataBar,
                     ),
             );
 

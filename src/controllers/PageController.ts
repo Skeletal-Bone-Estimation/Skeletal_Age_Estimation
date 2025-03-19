@@ -33,14 +33,12 @@ import { AbstractModal } from '../views/AbstractModal';
 
 export class PageController {
     private static instance: PageController;
-    private contentDiv: HTMLElement;
     private rootBarDiv: HTMLElement;
     private views: { [key: string]: AbstractView };
     private sidebarCaseItems: CaseItem[];
     private currentView: AbstractView;
 
     private constructor() {
-        this.contentDiv = document.getElementById('rootDiv')!; //document can only be retreived if called from the renderer.ts file
         this.rootBarDiv = document.getElementById('rootBar')!;
         this.views = {
             home: new HomePageView(document),
@@ -101,7 +99,7 @@ export class PageController {
             .getElementById('createBtn')!
             .addEventListener('click', async () => {
                 await this.navigateTo(Pages.Create);
-                await this.loadSideBarContent(SideBar.homeBar);
+                await this.loadSideBarContent(SideBar.dataBar);
             });
 
         //save case button
@@ -531,7 +529,7 @@ export class PageController {
         dc.openReport = (
             dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
         ).generatedReports[reportIDX].id;
-        this.navigateTo(Pages.Report, SideBar.createBar);
+        this.navigateTo(Pages.Report, SideBar.dataBar);
     }
 
     public createCaseItem(caseID: string): void {
@@ -554,8 +552,8 @@ export class PageController {
                 this.sidebarCaseItems.splice(i, 1);
 
                 if (dc.loadedCases.length > 0)
-                    this.navigateTo(Pages.DataEntry, SideBar.createBar);
-                else this.navigateTo(Pages.Home, SideBar.createBar);
+                    this.navigateTo(Pages.DataEntry, SideBar.dataBar);
+                else this.navigateTo(Pages.Home, SideBar.homeBar);
 
                 return;
             }
