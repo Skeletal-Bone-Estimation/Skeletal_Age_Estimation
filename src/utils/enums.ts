@@ -90,6 +90,15 @@ export enum Pages {
     Report = 'report',
     ReportModal = 'reportArchiveModal',
     Compare = 'compare',
+    Error = 'errorModal',
+    SavePath = 'savePathModal',
+}
+
+export enum Modals {
+    Error = 'errorModal',
+    Report = 'reportArchiveModal',
+    SavePath = 'savePathModal',
+    UpdatedSave = 'updatedSavePathModal',
 }
 
 /**
@@ -140,6 +149,7 @@ export enum UI_Elements {
     changeGraphButton90 = 'changeGraphBtn90',
     changeGraphButton95 = 'changeGraphBtn95',
     printButton = 'printBtn',
+    closeErrorModal = 'closeErrorModal',
 }
 
 /**
@@ -164,6 +174,7 @@ export enum CaseElement {
     auricularSurfaceImages = 15,
     fourthRibImages = 16,
     thirdMolarImages = 17,
+    savePath = 18,
 }
 
 /**

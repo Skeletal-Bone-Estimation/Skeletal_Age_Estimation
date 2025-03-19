@@ -3,7 +3,7 @@ import { DataController } from '../controllers/DataController';
 import { AbstractView } from './AbstractView';
 import { CaseModel } from '../models/CaseModel';
 import { ReportModel } from '../models/ReportModel';
-import { Pages, Side, SideBar, UI_Elements } from '../utils/enums';
+import { Modals, Pages, Side, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { updateRangeBar } from '../utils/charts/ageRangeChart';
 import { NullReportModel } from '../models/NullReportModel';
@@ -23,6 +23,9 @@ export class ReportPageView extends AbstractView {
      * @param htmlContent The HTML content to render.
      */
     public override render(htmlContent: string): void {
+        (
+            document.getElementById('topBarButtons') as HTMLElement
+        ).style.display = 'flex';
         this.contentDiv.innerHTML = htmlContent;
         this.loadElements();
         this.initEventListeners();
@@ -67,7 +70,7 @@ export class ReportPageView extends AbstractView {
         this.elements[0].addEventListener('click', async () => {
             //open modal window and fill with content
             const pageController = PageController.getInstance();
-            await pageController.loadModal();
+            await pageController.loadModal(Modals.Report);
         });
 
         //back to data entry button
@@ -150,6 +153,7 @@ export class ReportPageView extends AbstractView {
                 async () =>
                     await PageController.getInstance().navigateTo(
                         Pages.Compare,
+                        SideBar.dataBar,
                     ),
             );
     }

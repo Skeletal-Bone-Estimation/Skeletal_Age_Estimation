@@ -1,12 +1,14 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { CaseModel } from '../models/CaseModel';
 import { BuildDirector } from '../utils/builder/BuildDirector';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync } from 'fs';
 import { Builder } from 'xml2js';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
 import { DataController } from './DataController';
+import { PageController } from './PageController';
+import { Modals } from '../utils/enums';
 
 export class XML_Controller {
     private static instance: XML_Controller;
@@ -39,7 +41,7 @@ export class XML_Controller {
      * Loads a single XML file into a CaseModel object.
      * @returns The parsed AbstractCaseModel.
      */
-    public parseSingleFile(): AbstractCaseModel {
+    public async parseSingleFile(): Promise<AbstractCaseModel> {
         if (!this.currentDoc) {
             console.error('Current doc error');
             return new BuildDirector().makeNullCase(); //error model
@@ -48,16 +50,27 @@ export class XML_Controller {
         const caseID =
             this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
 
+        const test = async () => {
+            await PageController.getInstance().loadModal(
+                Modals.Error,
+                'This case has already been loaded.',
+            );
+        };
+
         if (
             DataController.getInstance().loadedCases.some(
                 (_case: CaseModel) => _case.caseID === caseID,
             )
         ) {
-            console.error('Case ID already exists:', caseID); //replace with modal popup
+            await test();
             return new BuildDirector().makeNullCase(); // error model
         }
 
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
+
+        const savePath =
+            this.currentDoc?.getElementsByTagName('_savePath')[0]?.textContent;
+        this.director.caseBuilder.setSavePath(savePath ? savePath : '');
 
         const populationAffinity = this.currentDoc?.getElementsByTagName(
             '_populationAffinity',
@@ -292,15 +305,6 @@ export class XML_Controller {
         return list;
     }
 
-    //TODO
-    /**
-     * Parses a collection of files (as a folder).
-     * @returns An array of CaseModel objects.
-     */
-    public parseCollection(): CaseModel[] {
-        throw new Error('Parse collection not yet implemented');
-    }
-
     /**
      * Loads a single case from a file.
      * @param event The event triggering the file load.
@@ -331,12 +335,16 @@ export class XML_Controller {
         } else throw new Error('No file selected');
     }
 
+    public validateSavePath(path: string): boolean {
+        return existsSync(path);
+    }
+
     /**
      * Saves a single case to a file.
      * @param _case The CaseModel to save.
      * @param filename The filename to save the case as.
      */
-    public saveAsFile(_case: CaseModel, filename: string): void {
+    public saveAsFile(_case: CaseModel, path: string, filename: string): void {
         const builder: Builder = new Builder();
         const xmlString: string = builder.buildObject({
             object: {
@@ -352,8 +360,17 @@ export class XML_Controller {
                 _thirdMolarImages: { image: _case.thirdMolarImages },
             },
         });
-        writeFileSync(filename, xmlString, 'utf-8');
+        writeFileSync(`${path}/${filename}.xml`, xmlString, 'utf-8');
         //console.log(`File saved to ${filename}`);
+    }
+
+    //TODO
+    /**
+     * Parses a collection of files (as a folder).
+     * @returns An array of CaseModel objects.
+     */
+    public parseCollection(): CaseModel[] {
+        throw new Error('Parse collection not yet implemented');
     }
 
     //TODO

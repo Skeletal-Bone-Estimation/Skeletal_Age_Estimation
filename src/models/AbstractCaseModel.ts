@@ -8,15 +8,30 @@ export abstract class AbstractCaseModel implements ObservableIF {
     protected _caseID: string;
     protected _populationAffinity: Affinity;
     protected _sex: Sex;
+    protected _savePath: string;
 
-    constructor(caseID: string, affinity: Affinity, sex: Sex) {
+    constructor(
+        caseID: string,
+        affinity: Affinity,
+        sex: Sex,
+        savePath: string,
+    ) {
         this._caseID = caseID;
         this._populationAffinity = affinity;
         this._sex = sex;
+        this._savePath = savePath;
     }
 
     public get caseID(): string {
         return this._caseID;
+    }
+
+    public set savePath(path: string) {
+        this._savePath = path;
+    }
+
+    public get savePath(): string {
+        return this._savePath;
     }
 
     /**

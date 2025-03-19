@@ -61,12 +61,11 @@ export class ReportModal extends AbstractModal {
 
                     if (report instanceof NullReportModel) {
                         console.error('Null report selected.');
-                        pc.navigateTo(Pages.DataEntry, SideBar.createBar);
+                        pc.navigateTo(Pages.DataEntry, SideBar.dataBar);
                         return;
                     }
 
                     openCase.notify(Observers.setSelectedReport, report.id);
-                    pc.unloadModal();
                     pc.loadReport(this.selectedIdx);
 
                     this.closeModal();
@@ -109,6 +108,9 @@ export class ReportModal extends AbstractModal {
                 const selected = document.querySelector('.selected');
                 if (selected) selected.classList.remove('selected');
                 element.classList.add('selected');
+                (document.getElementById(
+                    UI_Elements.viewReportButton,
+                ) as HTMLButtonElement)!.disabled = false;
 
                 //save attribute for later
                 this.selectedIdx = dataController.findReportIndex(reportID);

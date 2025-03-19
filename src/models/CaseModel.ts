@@ -38,6 +38,7 @@ export class CaseModel extends AbstractCaseModel {
         caseID: string,
         populationAffinity: Affinity,
         sex: Sex,
+        savePath: string,
         thirdMolarTL: ThirdMolar,
         thirdMolarTR: ThirdMolar,
         thirdMolarBL: ThirdMolar,
@@ -56,7 +57,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibImages: string[] = [],
         thirdMolarImages: string[] = [],
     ) {
-        super(caseID, populationAffinity, sex);
+        super(caseID, populationAffinity, sex, savePath);
         this._caseID = caseID;
         this._populationAffinity = populationAffinity;
         this._sex = sex;

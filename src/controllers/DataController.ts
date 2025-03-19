@@ -12,12 +12,12 @@ import {
     SternalEnd,
     AuricularArea,
     Observers,
+    Modals,
 } from '../utils/enums';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { XML_Controller } from './XML_Controller';
 import { NullReportModel } from '../models/NullReportModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
-import { ReportModel } from '../models/ReportModel';
 import { PageController } from './PageController';
 import { Autonumberer } from '../utils/Autonumberer';
 
@@ -120,7 +120,6 @@ export class DataController {
                 this._loadedCases.length > 0
                     ? this._loadedCases[0].caseID
                     : this.buildDirector.makeNullCase().caseID;
-            PageController.getInstance().renderCases();
         }
     }
 
@@ -128,18 +127,21 @@ export class DataController {
      * Delegates to the XML controller to handle loading a file from XML and stores a reference to the loaded object.
      * @param event The event triggering the file load.
      */
-    public loadCaseFromFile(event: Event): void {
-        this.xmlController.loadFile(event, () => {
+    public async loadCaseFromFile(event: Event): Promise<void> {
+        this.xmlController.loadFile(event, async () => {
             //callback function executed within the implementation of XML_Controller.loadFile(...)
             const loadedCase: AbstractCaseModel =
-                this.xmlController.parseSingleFile();
+                await this.xmlController.parseSingleFile();
 
-            console.log(loadedCase);
-            console.log(this._loadedCases);
+            //console.log(loadedCase);
+            //console.log(this._loadedCases);
 
             if (!(loadedCase instanceof NullCaseModel)) {
                 this._openCaseID = loadedCase.caseID;
                 this.addCase(loadedCase as CaseModel);
+                if (!this.xmlController.validateSavePath(loadedCase.savePath)) {
+                    PageController.getInstance().loadModal(Modals.SavePath);
+                }
             }
 
             const inputElement = event.target as HTMLInputElement;
@@ -174,22 +176,31 @@ export class DataController {
             | AuricularArea
             | { [key: string]: number },
     ): void {
+        console.log(this._openCaseID);
         if (this._openCaseID === 'null') return;
 
         var obj: CaseModel = this.loadedCases[
             this.findCaseIndex(this._openCaseID)
         ] as CaseModel;
+        console.log(
+            'before switch:',
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel,
+        );
         var oldName = obj.caseID;
 
         switch (element) {
             case CaseElement.caseID:
                 obj.caseID = content as string;
+                if (this.openCaseID === oldName) this._openCaseID = obj.caseID;
                 break;
             case CaseElement.sex:
                 obj.sex = content as Sex;
                 break;
             case CaseElement.affinity:
                 obj.populationAffinity = content as Affinity;
+                break;
+            case CaseElement.savePath:
+                obj.savePath = content as string;
                 break;
             case CaseElement.thirdMolarTL:
                 obj.thirdMolarTL = content as ThirdMolar;
@@ -230,10 +241,16 @@ export class DataController {
                 );
         }
 
+        console.log(
+            'after switch:',
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel,
+        );
+
         this.loadedCases[this.findCaseIndex(this._openCaseID)].notify(
             Observers.autosave,
         ); //autosave
-        if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
+        if (element === CaseElement.caseID)
+            rmSync(`${obj.savePath}/${oldName}.xml`); //deletes the file under the old case id
     }
 
     /**
@@ -241,6 +258,7 @@ export class DataController {
      * @param caseID The ID of the new case.
      * @param sex The sex of the individual in the case.
      * @param affinity The population affinity of the individual in the case.
+     * @param path The path to the save location of the file.
      * @param thirdMolarTL The third molar status for the top left.
      * @param thirdMolarTR The third molar status for the top right.
      * @param thirdMolarBL The third molar status for the bottom left.
@@ -257,6 +275,7 @@ export class DataController {
         caseID: string,
         sex: Sex,
         affinity: Affinity,
+        path: string,
         thirdMolarTL: ThirdMolar = ThirdMolar.Unknown,
         thirdMolarTR: ThirdMolar = ThirdMolar.Unknown,
         thirdMolarBL: ThirdMolar = ThirdMolar.Unknown,
@@ -274,6 +293,7 @@ export class DataController {
         director.caseBuilder.setCaseID(caseID);
         director.caseBuilder.setSex(sex);
         director.caseBuilder.setPopulationAffinity(affinity);
+        director.caseBuilder.setSavePath(path);
         director.caseBuilder.setThirdMolarTL(thirdMolarTL);
         director.caseBuilder.setThirdMolarTR(thirdMolarTR);
         director.caseBuilder.setThirdMolarBL(thirdMolarBL);
