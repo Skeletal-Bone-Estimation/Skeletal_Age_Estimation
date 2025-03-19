@@ -96,11 +96,11 @@ export class PageController {
      * Initializes event listeners for the document.
      */
     private initEventListeners(): void {
-        //home button
+        //create new case button
         document
-            .getElementById('homeBtn')!
+            .getElementById('createBtn')!
             .addEventListener('click', async () => {
-                await this.navigateTo(Pages.Home);
+                await this.navigateTo(Pages.Create);
                 await this.loadSideBarContent(SideBar.homeBar);
             });
 
@@ -552,7 +552,11 @@ export class PageController {
                 const dc = DataController.getInstance();
                 dc.deleteCase(dc.findCaseIndex(caseID));
                 this.sidebarCaseItems.splice(i, 1);
-                this.renderCases();
+
+                if (dc.loadedCases.length > 0)
+                    this.navigateTo(Pages.DataEntry, SideBar.createBar);
+                else this.navigateTo(Pages.Home, SideBar.createBar);
+
                 return;
             }
         }

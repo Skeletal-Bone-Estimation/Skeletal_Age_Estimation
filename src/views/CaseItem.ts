@@ -56,10 +56,6 @@ export class CaseItem {
         deleteBtn.addEventListener('click', async () => {
             PageController.getInstance().deleteCaseItem(this.caseID);
             PageController.getInstance().renderCases();
-            await PageController.getInstance().navigateTo(
-                Pages.Home,
-                SideBar.homeBar,
-            );
         });
 
         buttonDiv.appendChild(makeActiveBtn);

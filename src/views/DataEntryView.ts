@@ -29,6 +29,9 @@ export class DataEntryView extends AbstractView {
      * @param htmlContent The HTML content to render.
      */
     public override render(htmlContent: string): void {
+        (
+            document.getElementById('topBarButtons') as HTMLElement
+        ).style.display = 'flex';
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();

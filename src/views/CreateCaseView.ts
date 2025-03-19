@@ -18,6 +18,9 @@ export class CreateCaseView extends AbstractView {
     public override render(htmlContent: string): void {
         //console.log('loaded from CaseCreationView);
         //console.log('Rendering CreateCaseView'); // Debugging line
+        (
+            document.getElementById('topBarButtons') as HTMLElement
+        ).style.display = 'flex';
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();

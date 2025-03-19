@@ -119,7 +119,6 @@ export class DataController {
                 this._loadedCases.length > 0
                     ? this._loadedCases[0].caseID
                     : this.buildDirector.makeNullCase().caseID;
-            PageController.getInstance().renderCases();
         }
     }
 
