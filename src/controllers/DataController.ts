@@ -56,7 +56,7 @@ export class DataController {
      * Mutator for the _openReport attribute.
      * @param report The new AbstractReportModel being assigned.
      */
-    public set openReport(report: string) {
+    public set openReport(report: string | NullReportModel) {
         this._openReport = report;
     }
 
