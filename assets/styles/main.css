@@ -42,12 +42,14 @@ body {
 .homeButtons {
   padding-bottom: 5vh;
   display: flex;
-  gap: 150px;
+  gap: 10vw;
   row-gap: 7vh;
 }
 
 .homeTitle {
   overflow: clip;
+  transform: translate(.5vw);
+  font-size: 4vw;
   justify-content: center;
 }
 
@@ -255,11 +257,11 @@ body {
   background-color: var(--div-color-2);
   color: var(--on-dark); /* text color: always inverse of backgroud-color*/
   border: 2px solid var(--div-color-2);
-  padding: 25px 60px;
+  padding: 5vh 5vw;
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 16px;
+  font-size: 2vh;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -289,8 +291,9 @@ body {
 }
 
 .mercyImg {
-  height: 15vh;
-  transform: translate(255px);
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
 }
 
 .pbImg {
@@ -298,8 +301,11 @@ body {
 }
 
 .psuBehrImg {
-  height: 25vh;
-  transform: translate(200px);
+  width: 140%;
+  height: 140%;
+  object-fit: contain;
+  transform: translate(1px);
+  margin-top: 15px;
 }
 
 #createDiv {
@@ -389,37 +395,21 @@ body {
   gap: 20px;
 }
 
-
-.mercyImg {
-  width: 75%;
-  height: 75%;
-  object-fit: contain;
-  transform: translate(-2px);
-}
-
 .pbImg {
   overflow:hidden;
-}
-
-.psuBehrImg {
-  width: 150%;
-  height: 150%;
-  object-fit: contain;
-  transform: translate(1px);
-  margin-top: 15px;
 }
 
 .ellipse-container {
   display: flex;
   justify-content: center; 
-  gap: 100px;
+  gap: 5vw;
   padding-bottom: 50px;
 }
 
 .psuCircle {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  width: 20vw;
+  height: auto;
   border: 10px solid;
   border-color: var(--penn-state-blue);
   background-color: white;
@@ -430,8 +420,8 @@ body {
 
 .ellipse {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  width: 20vw;
+  height: auto;
   border: 10px solid;
   border-color: var(--border-color-on-light);
   background-color: black;
@@ -550,6 +540,15 @@ body {
   position: relative; /* This is needed for absolute positioning of the vertical lines */
 }
 
+.graphPlacement h3 {
+  position:absolute;
+  top: -10%;
+}
+
+.graphTitle {
+  position:absolute;
+  top: -10%;
+}
 
 /* Style for vertical lines */
 .vertical-line {

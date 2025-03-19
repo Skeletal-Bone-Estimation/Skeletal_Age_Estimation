@@ -89,19 +89,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             Side.C,
             results,
         );
-        /*
-        this.combinedAll(
-            _case.pubicSymphysisL,
-            _case.pubicSymphysisR,
-            _case.fourthRibL,
-            _case.fourthRibR,
-            _case.auricularAreaL,
-            _case.auricularAreaR,
-            Side.CA,
-            isMale,
-            isUnknown,
-        );
-        */
 
         return results;
     }
@@ -924,13 +911,6 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                     C_min: -1,
                     C_max: -1,
                 },
-                /*
-              combinedAll: {
-                  CA: -1,
-                  CA_min: -1,
-                  CA_max: -1,
-              },
-              */
                 thirdMolar: {
                     TL: -1,
                     TR: -1,

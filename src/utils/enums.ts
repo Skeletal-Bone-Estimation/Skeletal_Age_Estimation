@@ -137,6 +137,10 @@ export enum UI_Elements {
     uploadPubicImages = 'uploadImageButtonPS',
     uploadSternalImages = 'uploadImageButtonSR',
     uploadMolarImages = 'uploadImageButtonTM',
+    changeGraphButton90 = 'changeGraphBtn90',
+    changeGraphButton95 = 'changeGraphBtn95',
+    printButton = 'printBtn',
+
 }
 
 /**
