@@ -98,6 +98,7 @@ export enum Modals {
     Error = 'errorModal',
     Report = 'reportArchiveModal',
     SavePath = 'savePathModal',
+    UpdatedSave = 'updatedSavePathModal',
 }
 
 /**

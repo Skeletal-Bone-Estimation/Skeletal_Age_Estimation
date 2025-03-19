@@ -110,8 +110,10 @@ export class PageController {
                 const dc = DataController.getInstance();
                 const newPath: string | null =
                     await window.electronAPI.selectFolder();
-                if (newPath) dc.editCase(CaseElement.savePath, newPath);
-                else
+                if (newPath) {
+                    dc.editCase(CaseElement.savePath, newPath);
+                    this.loadModal(Modals.UpdatedSave);
+                } else
                     PageController.getInstance().loadModal(
                         Modals.Error,
                         'Invalid save path selection.',
@@ -526,6 +528,17 @@ export class PageController {
                 (modal as SavePathModal).openModal();
                 await (modal as SavePathModal).render(
                     await this.loadPageContent(Pages.SavePath),
+                );
+                break;
+            case Modals.UpdatedSave:
+                const dc = DataController.getInstance();
+                modal = this.views.savePathModal as AbstractModal;
+                (modal as SavePathModal).openModal();
+                await (modal as SavePathModal).render(
+                    await this.loadPageContent(Pages.SavePath),
+                );
+                (modal as SavePathModal).displayPath(
+                    dc.loadedCases[dc.findCaseIndex(dc.openCaseID)].savePath,
                 );
                 break;
             default:

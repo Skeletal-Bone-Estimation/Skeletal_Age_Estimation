@@ -11,7 +11,19 @@ export class SavePathModal extends AbstractModal {
 
     public override async render(htmlContent: string): Promise<void> {
         this.modalContent.innerHTML = htmlContent;
+        document.getElementById('savePathHeader')!.style.color = '#c0392b';
         this.initEventListeners();
+    }
+
+    public displayPath(currentPath: string) {
+        this.savePath = currentPath;
+        document.getElementById('savePathModalMsg')!.innerHTML =
+            `New Path: ${currentPath}`;
+        document.getElementById('savePathHeader')!.style.color =
+            'var(--div-color-2)';
+        document.getElementById('savePathHeader')!.innerHTML = 'New Save Path';
+        document.getElementById('acceptNewSavePath')!.style.display = 'flex';
+        document.getElementById('acceptNewSavePath')!.innerHTML = 'Accept';
     }
 
     protected override initEventListeners(): void {

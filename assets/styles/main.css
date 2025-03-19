@@ -900,7 +900,7 @@ input[type="text"] {
   color: #c0392b;
 }
 
-#archiveHeader {
+#archiveHeader, #savePathHeader {
   color: var(--div-color-2);
 }
 
