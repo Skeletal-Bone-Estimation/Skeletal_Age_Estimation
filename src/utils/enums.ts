@@ -171,6 +171,7 @@ export enum CaseElement {
     auricularSurfaceImages = 15,
     fourthRibImages = 16,
     thirdMolarImages = 17,
+    savePath = 18,
 }
 
 /**

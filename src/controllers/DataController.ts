@@ -189,6 +189,9 @@ export class DataController {
             case CaseElement.affinity:
                 obj.populationAffinity = content as Affinity;
                 break;
+            case CaseElement.savePath:
+                obj.savePath = content as string;
+                break;
             case CaseElement.thirdMolarTL:
                 obj.thirdMolarTL = content as ThirdMolar;
                 break;
@@ -239,6 +242,7 @@ export class DataController {
      * @param caseID The ID of the new case.
      * @param sex The sex of the individual in the case.
      * @param affinity The population affinity of the individual in the case.
+     * @param path The path to the save location of the file.
      * @param thirdMolarTL The third molar status for the top left.
      * @param thirdMolarTR The third molar status for the top right.
      * @param thirdMolarBL The third molar status for the bottom left.
@@ -255,6 +259,7 @@ export class DataController {
         caseID: string,
         sex: Sex,
         affinity: Affinity,
+        path: string,
         thirdMolarTL: ThirdMolar = ThirdMolar.Unknown,
         thirdMolarTR: ThirdMolar = ThirdMolar.Unknown,
         thirdMolarBL: ThirdMolar = ThirdMolar.Unknown,
@@ -272,6 +277,7 @@ export class DataController {
         director.caseBuilder.setCaseID(caseID);
         director.caseBuilder.setSex(sex);
         director.caseBuilder.setPopulationAffinity(affinity);
+        director.caseBuilder.setSavePath(path);
         director.caseBuilder.setThirdMolarTL(thirdMolarTL);
         director.caseBuilder.setThirdMolarTR(thirdMolarTR);
         director.caseBuilder.setThirdMolarBL(thirdMolarBL);

@@ -11,6 +11,7 @@ export class CaseBuilder implements CaseBuilderIF {
     private _caseID: string;
     private _populationAffinity: number;
     private _sex: number;
+    private _savePath: string;
     private _thirdMolarTL: number;
     private _thirdMolarTR: number;
     private _thirdMolarBL: number;
@@ -33,6 +34,7 @@ export class CaseBuilder implements CaseBuilderIF {
         this._caseID = 'null';
         this._populationAffinity = Affinity.Unknown;
         this._sex = Sex.Unknown;
+        this._savePath = '';
         this._thirdMolarTL = 0;
         this._thirdMolarTR = 0;
         this._thirdMolarBL = 0;
@@ -87,6 +89,11 @@ export class CaseBuilder implements CaseBuilderIF {
      */
     public setSex(sex: number): CaseBuilderIF {
         this._sex = sex;
+        return this;
+    }
+
+    public setSavePath(path: string): CaseBuilderIF {
+        this._savePath = path;
         return this;
     }
 
@@ -270,6 +277,7 @@ export class CaseBuilder implements CaseBuilderIF {
             this._caseID,
             this._populationAffinity,
             this._sex,
+            this._savePath,
             this._thirdMolarTL,
             this._thirdMolarTR,
             this._thirdMolarBL,

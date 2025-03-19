@@ -1,12 +1,15 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { PageController } from '../controllers/PageController';
-import { Pages, SideBar, UI_Elements } from '../utils/enums';
+import { Modals, Pages, SideBar, UI_Elements } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 import { XML_Controller } from '../controllers/XML_Controller';
 import { CaseModel } from '../models/CaseModel';
 import { DataController } from '../controllers/DataController';
+import { dialog, Dialog, ipcMain, ipcRenderer } from 'electron';
 
 export class CreateCaseView extends AbstractView {
+    private savePath: string = '';
+
     constructor(document: Document) {
         super(document);
     }
@@ -55,19 +58,37 @@ export class CreateCaseView extends AbstractView {
                     caseID,
                     sex,
                     populationAffinity,
+                    this.savePath,
                 );
                 const dc = DataController.getInstance();
                 XML_Controller.getInstance().saveAsFile(
                     dc.loadedCases[
                         dc.findCaseIndex(dc.openCaseID)
                     ] as CaseModel,
-                    `save_data/${DataController.getInstance().openCaseID}.xml`,
+                    `${this.savePath}/${DataController.getInstance().openCaseID}.xml`,
                 );
 
                 PageController.getInstance().navigateTo(
                     Pages.DataEntry,
                     SideBar.dataBar,
                 );
+            });
+
+        document
+            .getElementById('selectFolderBtn')!
+            .addEventListener('click', async () => {
+                const path: string | null =
+                    await window.electronAPI.selectFolder();
+                if (path) {
+                    document.getElementById('selectedPath')!.innerHTML = path;
+                    document.getElementById('selectFolderBtn')!.innerHTML =
+                        'Select New Folder';
+                    this.savePath = path;
+                } else
+                    PageController.getInstance().loadModal(
+                        Modals.Error,
+                        'A save location must be selected.',
+                    );
             });
     }
 }

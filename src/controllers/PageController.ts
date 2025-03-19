@@ -75,8 +75,8 @@ export class PageController {
      * @param sex The sex of the individual.
      * @param pop The population affinity.
      */
-    public createCase(id: string, sex: number, pop: number) {
-        DataController.getInstance().createCase(id, sex, pop); //pass parameters to this function
+    public createCase(id: string, sex: number, pop: number, path: string) {
+        DataController.getInstance().createCase(id, sex, pop, path); //pass parameters to this function
     }
 
     /**
@@ -102,14 +102,20 @@ export class PageController {
                 await this.loadSideBarContent(SideBar.dataBar);
             });
 
-        //save case button
-        document.getElementById('saveBtn')!.addEventListener('click', () => {
-            const dc = DataController.getInstance();
-            XML_Controller.getInstance().saveAsFile(
-                dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel,
-                `save_data/${dc.openCaseID}.xml`,
-            );
-        });
+        //select new save path button
+        document
+            .getElementById('saveBtn')!
+            .addEventListener('click', async () => {
+                const dc = DataController.getInstance();
+                const newPath: string | null =
+                    await window.electronAPI.selectFolder();
+                if (newPath) dc.editCase(CaseElement.savePath, newPath);
+                else
+                    PageController.getInstance().loadModal(
+                        Modals.Error,
+                        'Invalid save path selection.',
+                    );
+            });
 
         //hidden file load element
         document
@@ -117,6 +123,7 @@ export class PageController {
             .addEventListener('change', async (event) => {
                 await DataController.getInstance().loadCaseFromFile(event);
                 await this.navigateTo(Pages.DataEntry, SideBar.dataBar);
+                console.log(DataController.getInstance().loadedCases);
             });
 
         //load case button

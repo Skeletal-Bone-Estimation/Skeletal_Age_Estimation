@@ -68,6 +68,10 @@ export class XML_Controller {
 
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
 
+        const savePath =
+            this.currentDoc?.getElementsByTagName('_savePath')[0]?.textContent;
+        this.director.caseBuilder.setSavePath(savePath ? savePath : '');
+
         const populationAffinity = this.currentDoc?.getElementsByTagName(
             '_populationAffinity',
         )[0]?.textContent;
