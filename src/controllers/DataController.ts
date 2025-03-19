@@ -176,16 +176,22 @@ export class DataController {
             | AuricularArea
             | { [key: string]: number },
     ): void {
+        console.log(this._openCaseID);
         if (this._openCaseID === 'null') return;
 
         var obj: CaseModel = this.loadedCases[
             this.findCaseIndex(this._openCaseID)
         ] as CaseModel;
+        console.log(
+            'before switch:',
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel,
+        );
         var oldName = obj.caseID;
 
         switch (element) {
             case CaseElement.caseID:
                 obj.caseID = content as string;
+                if (this.openCaseID === oldName) this._openCaseID = obj.caseID;
                 break;
             case CaseElement.sex:
                 obj.sex = content as Sex;
@@ -235,10 +241,16 @@ export class DataController {
                 );
         }
 
+        console.log(
+            'after switch:',
+            this.loadedCases[this.findCaseIndex(this._openCaseID)] as CaseModel,
+        );
+
         this.loadedCases[this.findCaseIndex(this._openCaseID)].notify(
             Observers.autosave,
         ); //autosave
-        if (element === CaseElement.caseID) rmSync(`save_data/${oldName}.xml`); //deletes the file under the old case id
+        if (element === CaseElement.caseID)
+            rmSync(`${obj.savePath}/${oldName}.xml`); //deletes the file under the old case id
     }
 
     /**
