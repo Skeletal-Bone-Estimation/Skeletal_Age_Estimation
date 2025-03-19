@@ -133,6 +133,14 @@ export enum UI_Elements {
     viewReportButton = 'submitReportBtn',
     analysisSelector = 'analysisSelector',
     mostRecentReportButton = 'viewMostRecentReport',
+    uploadAuricularImages = 'uploadImageButtonAA',
+    uploadPubicImages = 'uploadImageButtonPS',
+    uploadSternalImages = 'uploadImageButtonSR',
+    uploadMolarImages = 'uploadImageButtonTM',
+    changeGraphButton90 = 'changeGraphBtn90',
+    changeGraphButton95 = 'changeGraphBtn95',
+    printButton = 'printBtn',
+
 }
 
 /**
@@ -153,6 +161,10 @@ export enum CaseElement {
     fourthRibL = 11,
     fourthRibR = 12,
     notes = 13,
+    pubicSymphysisImages = 14,
+    auricularSurfaceImages = 15,
+    fourthRibImages = 16,
+    thirdMolarImages = 17,
 }
 
 /**

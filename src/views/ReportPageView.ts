@@ -10,10 +10,12 @@ import { NullReportModel } from '../models/NullReportModel';
 
 export class ReportPageView extends AbstractView {
     private elements: HTMLElement[];
+    private ninetyConfidenceInfo: number[];
 
     constructor(document: Document) {
         super(document);
         this.elements = [];
+        this.ninetyConfidenceInfo = [];
     }
 
     /**
@@ -76,14 +78,20 @@ export class ReportPageView extends AbstractView {
             );
         });
 
-        //download report as docx
-        this.elements[2].addEventListener(
-            'click',
-            async () =>
-                await PageController.getInstance().exportReport(
-                    DataController.getInstance().openReport as ReportModel,
-                ),
-        );
+        // Button for changing graph to a 90% confidence interval
+        this.elements[3].addEventListener('click', () => {
+            //console.log(this.ninetyConfidenceInfo);
+            this.updateGraphNinety();
+            const graphTitle = document.getElementById('graphTitle');
+            if (graphTitle) {
+                this.updateGraphTitle(
+                    graphTitle as HTMLElement,
+                    `<strong><i>90% Confidence Interval</i></strong>`,
+                );
+            } else {
+                console.error('Element graphTitle not found!');
+            }
+        });
 
         const _case: CaseModel = DataController.getInstance().loadedCases[
             DataController.getInstance().findCaseIndex(
@@ -95,6 +103,36 @@ export class ReportPageView extends AbstractView {
                 DataController.getInstance().getMostRecentReportIdx()
             ];
         if (report) {
+            //download report as docx
+            this.elements[2].addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().exportReport(
+                        report as ReportModel,
+                    ),
+            );
+            // Button for changing graph to a 95% confidence interval
+            this.elements[4].addEventListener('click', () => {
+                this.updateGraphNinetyFive(report);
+                const graphTitle = document.getElementById('graphTitle');
+                if (graphTitle) {
+                    this.updateGraphTitle(
+                        graphTitle as HTMLElement,
+                        `<strong><i>95% Confidence Interval</i></strong>`,
+                    );
+                } else {
+                    console.error('Element graphTitle not found!');
+                }
+            });
+
+            this.elements[5].addEventListener(
+                'click',
+                async () =>
+                    await PageController.getInstance().printReport(
+                        report as ReportModel,
+                    ),
+            );
+
             document
                 .getElementById('downloadBtn')!
                 .addEventListener(
@@ -128,6 +166,13 @@ export class ReportPageView extends AbstractView {
                 UI_Elements.backtoDataEntryButton,
             ) as HTMLElement,
             document.getElementById(UI_Elements.downloadButton) as HTMLElement,
+            document.getElementById(
+                UI_Elements.changeGraphButton90,
+            ) as HTMLElement,
+            document.getElementById(
+                UI_Elements.changeGraphButton95,
+            ) as HTMLElement,
+            document.getElementById(UI_Elements.printButton) as HTMLElement,
         ];
     }
 
@@ -136,6 +181,7 @@ export class ReportPageView extends AbstractView {
      * @param report The ReportModel to load.
      */
     public loadReport(report: ReportModel): void {
+        this.calculateConfidenceIntervals(report);
         const dc = DataController.getInstance();
         // get the current case just so we can get the caseID
         const caseModel = dc.loadedCases[
@@ -169,6 +215,7 @@ export class ReportPageView extends AbstractView {
             report.getPubicSymphysisRange(Side.R),
             report.getPubicSymphysisRange(Side.C),
             'pubicSymphysisBar',
+            false,
         );
 
         // Display the auricular surface range
@@ -182,6 +229,7 @@ export class ReportPageView extends AbstractView {
             report.getAuricularSurfaceRange(Side.R),
             report.getAuricularSurfaceRange(Side.C),
             'auricularSurfaceBar',
+            false,
         );
 
         // Display the sternal end range
@@ -195,6 +243,7 @@ export class ReportPageView extends AbstractView {
             report.getSternalEndRange(Side.R),
             report.getSternalEndRange(Side.C),
             'sternalEndBar',
+            false,
         );
 
         // Display the third molar data
@@ -210,6 +259,16 @@ export class ReportPageView extends AbstractView {
             `;
         } else {
             console.error('Element molarData not found!');
+        }
+
+        const graphTitle = document.getElementById('graphTitle');
+        if (graphTitle) {
+            this.updateGraphTitle(
+                graphTitle as HTMLElement,
+                `<strong><i>95% Confidence Interval</i></strong>`,
+            );
+        } else {
+            console.error('Element graphTitle not found!');
         }
     }
 
@@ -234,22 +293,34 @@ export class ReportPageView extends AbstractView {
         rightRange: { min: number; max: number },
         combinedRange: { min: number; max: number },
         graphId: string,
+        ninetyPercentConfidenceInterval: boolean,
     ): void {
         const element = document.getElementById(elementId);
         if (!element) {
             console.error(`Element ${elementId} not found!`);
             return;
         }
-
-        element.innerHTML = `
-            <strong>${sectionTitle}:</strong>
-            <p>Left: ${leftValue.toFixed(2)}</p>
-            <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
-            <p>Right: ${rightValue.toFixed(2)}</p>
-            <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
-            <p>Combined: ${combinedValue.toFixed(2)}</p>
-            <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
-        `;
+        if (ninetyPercentConfidenceInterval) {
+            element.innerHTML = `
+                <strong>${sectionTitle}:</strong>
+                <p>Left: ${leftValue.toFixed(2)}</p>
+                <p>90% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
+                <p>Right: ${rightValue.toFixed(2)}</p>
+                <p>90% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
+                <p>Combined: ${combinedValue.toFixed(2)}</p>
+                <p>90% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
+            `;
+        } else {
+            element.innerHTML = `
+                <strong>${sectionTitle}:</strong>
+                <p>Left: ${leftValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
+                <p>Right: ${rightValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
+                <p>Combined: ${combinedValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
+            `;
+        }
 
         updateRangeBar(combinedRange.min, combinedRange.max, graphId);
     }
@@ -290,7 +361,21 @@ export class ReportPageView extends AbstractView {
                 report.getSternalEndRange(Side.C).min,
             ).toFixed(2);
         } else {
-            var minAge = '18.00';
+            if (
+                Math.min(
+                    report.getPubicSymphysisRange(Side.C).min,
+                    report.getAuricularSurfaceRange(Side.C).min,
+                    report.getSternalEndRange(Side.C).min,
+                ) > 18.0
+            ) {
+                var minAge = Math.min(
+                    report.getPubicSymphysisRange(Side.C).min,
+                    report.getAuricularSurfaceRange(Side.C).min,
+                    report.getSternalEndRange(Side.C).min,
+                ).toFixed(2);
+            } else {
+                var minAge = '18.00';
+            }
         }
         const maxAge = Math.max(
             report.getPubicSymphysisRange(Side.C).max,
@@ -306,5 +391,312 @@ export class ReportPageView extends AbstractView {
         updateRangeBar(minAgeNum, maxAgeNum, 'ageBar');
 
         return `${minAge} - ${maxAge}`;
+    }
+
+    /**
+     * The 90% confidence interval calcutions.
+     * @param report The report to calculate the range for.
+     * @returns A number array containing the calculated confidence intervals.
+     */
+    private calculateConfidenceIntervals(report: AbstractReportModel) {
+        var standardErrorPubL = this.standardError(
+            report.getPubicSymphysisRange(Side.L).max,
+            report.getPubicSymphysisRange(Side.L).min,
+        );
+        var standardErrorPubR = this.standardError(
+            report.getPubicSymphysisRange(Side.R).max,
+            report.getPubicSymphysisRange(Side.R).min,
+        );
+        var standardErrorPubC = this.standardError(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getPubicSymphysisRange(Side.C).min,
+        );
+        var standardErrorAurL = this.standardError(
+            report.getAuricularSurfaceRange(Side.L).max,
+            report.getAuricularSurfaceRange(Side.L).min,
+        );
+        var standardErrorAurR = this.standardError(
+            report.getAuricularSurfaceRange(Side.R).max,
+            report.getAuricularSurfaceRange(Side.R).min,
+        );
+        var standardErrorAurC = this.standardError(
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).min,
+        );
+        var standardErrorRibL = this.standardError(
+            report.getSternalEndRange(Side.L).max,
+            report.getSternalEndRange(Side.L).min,
+        );
+        var standardErrorRibR = this.standardError(
+            report.getSternalEndRange(Side.R).max,
+            report.getSternalEndRange(Side.R).min,
+        );
+        var standardErrorRibC = this.standardError(
+            report.getSternalEndRange(Side.C).max,
+            report.getSternalEndRange(Side.C).min,
+        );
+
+        var ninetyMarginErrorPubL = 1.645 * standardErrorPubL;
+        var ninetyMarginErrorPubR = 1.645 * standardErrorPubR;
+        var ninetyMarginErrorPubC = 1.645 * standardErrorPubC;
+        var ninetyMarginErrorAurL = 1.645 * standardErrorAurL;
+        var ninetyMarginErrorAurR = 1.645 * standardErrorAurR;
+        var ninetyMarginErrorAurC = 1.645 * standardErrorAurC;
+        var ninetyMarginErrorRibL = 1.645 * standardErrorRibL;
+        var ninetyMarginErrorRibR = 1.645 * standardErrorRibR;
+        var ninetyMarginErrorRibC = 1.645 * standardErrorRibC;
+
+        var meanPubL = this.mean(
+            report.getPubicSymphysisRange(Side.L).max,
+            report.getPubicSymphysisRange(Side.L).min,
+        );
+        var meanPubR = this.mean(
+            report.getPubicSymphysisRange(Side.R).max,
+            report.getPubicSymphysisRange(Side.R).min,
+        );
+        var meanPubC = this.mean(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getPubicSymphysisRange(Side.C).min,
+        );
+        var meanAurL = this.mean(
+            report.getAuricularSurfaceRange(Side.L).max,
+            report.getAuricularSurfaceRange(Side.L).min,
+        );
+        var meanAurR = this.mean(
+            report.getAuricularSurfaceRange(Side.R).max,
+            report.getAuricularSurfaceRange(Side.R).min,
+        );
+        var meanAurC = this.mean(
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).min,
+        );
+        var meanRibL = this.mean(
+            report.getSternalEndRange(Side.L).max,
+            report.getSternalEndRange(Side.L).min,
+        );
+        var meanRibR = this.mean(
+            report.getSternalEndRange(Side.R).max,
+            report.getSternalEndRange(Side.R).min,
+        );
+        var meanRibC = this.mean(
+            report.getSternalEndRange(Side.C).max,
+            report.getSternalEndRange(Side.C).min,
+        );
+
+        var minPubL = meanPubL - ninetyMarginErrorPubL;
+        var maxPubL = meanPubL + ninetyMarginErrorPubL;
+        var minPubR = meanPubR - ninetyMarginErrorPubR;
+        var maxPubR = meanPubR + ninetyMarginErrorPubR;
+        var minPubC = meanPubC - ninetyMarginErrorPubC;
+        var maxPubC = meanPubC + ninetyMarginErrorPubC;
+        var minAurL = meanAurL - ninetyMarginErrorAurL;
+        var maxAurL = meanAurL + ninetyMarginErrorAurL;
+        var minAurR = meanAurR - ninetyMarginErrorAurR;
+        var maxAurR = meanAurR + ninetyMarginErrorAurR;
+        var minAurC = meanAurC - ninetyMarginErrorAurC;
+        var maxAurC = meanAurC + ninetyMarginErrorAurC;
+        var minRibL = meanRibL - ninetyMarginErrorRibL;
+        var maxRibL = meanRibL + ninetyMarginErrorRibL;
+        var minRibR = meanRibR - ninetyMarginErrorRibR;
+        var maxRibR = meanRibR + ninetyMarginErrorRibR;
+        var minRibC = meanRibC - ninetyMarginErrorRibC;
+        var maxRibC = meanRibC + ninetyMarginErrorRibC;
+
+        if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
+            var minAgeOverall = Math.min(minPubC, minAurC, minRibC);
+        } else {
+            if (Math.min(minPubC, minAurC, minRibC) > 18.0) {
+                var minAgeOverall = Math.min(minPubC, minAurC, minRibC);
+            } else {
+                var minAgeOverall = 18.0;
+            }
+        }
+
+        var maxAgeOverall = Math.max(maxPubC, maxAurC, maxRibC);
+
+        this.ninetyConfidenceInfo = [
+            minAgeOverall,
+            maxAgeOverall,
+            minPubC,
+            maxPubC,
+            minAurC,
+            maxAurC,
+            minRibC,
+            maxRibC,
+            minPubL,
+            maxPubL,
+            minAurL,
+            maxAurL,
+            minRibL,
+            maxRibL,
+            minPubR,
+            maxPubR,
+            minAurR,
+            maxAurR,
+            minRibR,
+            maxRibR,
+            meanPubC,
+            meanAurC,
+            meanRibC,
+            meanPubL,
+            meanAurL,
+            meanRibL,
+            meanPubR,
+            meanAurR,
+            meanRibR,
+        ];
+    }
+
+    private standardError(U: number, L: number) {
+        var SE = (U - L) / (2 * 1.96);
+        return SE;
+    }
+
+    private mean(U: number, L: number) {
+        var M = (U + L) / 2;
+        return M;
+    }
+
+    private updateGraphNinety() {
+        const summarizedRange = document.getElementById('summarizedRange');
+        if (summarizedRange) {
+            summarizedRange.textContent = `Summarized Range: ${this.ninetyConfidenceInfo[0].toFixed(2)} - ${this.ninetyConfidenceInfo[1].toFixed(2)}`;
+        } else {
+            console.error('SummarizedRange not found');
+        }
+        updateRangeBar(
+            this.ninetyConfidenceInfo[0],
+            this.ninetyConfidenceInfo[1],
+            'ageBar',
+        );
+
+        // Display estimated pubic symphysis range
+        this.displayDataSection(
+            'pubicData',
+            'Pubic Symphysis',
+            this.ninetyConfidenceInfo[23],
+            this.ninetyConfidenceInfo[26],
+            this.ninetyConfidenceInfo[20],
+            {
+                min: this.ninetyConfidenceInfo[8],
+                max: this.ninetyConfidenceInfo[9],
+            },
+            {
+                min: this.ninetyConfidenceInfo[14],
+                max: this.ninetyConfidenceInfo[15],
+            },
+            {
+                min: this.ninetyConfidenceInfo[2],
+                max: this.ninetyConfidenceInfo[3],
+            },
+            'pubicSymphysisBar',
+            true,
+        );
+
+        // Display the auricular surface range
+        this.displayDataSection(
+            'auricularData',
+            'Auricular Surface',
+            this.ninetyConfidenceInfo[24],
+            this.ninetyConfidenceInfo[27],
+            this.ninetyConfidenceInfo[21],
+            {
+                min: this.ninetyConfidenceInfo[10],
+                max: this.ninetyConfidenceInfo[11],
+            },
+            {
+                min: this.ninetyConfidenceInfo[16],
+                max: this.ninetyConfidenceInfo[17],
+            },
+            {
+                min: this.ninetyConfidenceInfo[4],
+                max: this.ninetyConfidenceInfo[5],
+            },
+            'auricularSurfaceBar',
+            true,
+        );
+
+        // Display the sternal end range
+        this.displayDataSection(
+            'sternalData',
+            'Sternal End',
+            this.ninetyConfidenceInfo[25],
+            this.ninetyConfidenceInfo[28],
+            this.ninetyConfidenceInfo[22],
+            {
+                min: this.ninetyConfidenceInfo[12],
+                max: this.ninetyConfidenceInfo[13],
+            },
+            {
+                min: this.ninetyConfidenceInfo[18],
+                max: this.ninetyConfidenceInfo[19],
+            },
+            {
+                min: this.ninetyConfidenceInfo[6],
+                max: this.ninetyConfidenceInfo[7],
+            },
+            'sternalEndBar',
+            true,
+        );
+    }
+
+    private updateGraphNinetyFive(report: AbstractReportModel) {
+        // Summarized range placeholder
+        const summarizedRange = document.getElementById('summarizedRange');
+        if (summarizedRange) {
+            summarizedRange.textContent = `Summarized Range: ${this.calculateSummarizedRange(report)}`;
+        } else {
+            console.error('SummarizedRange not found');
+        }
+
+        // Display estimated pubic symphysis range
+        this.displayDataSection(
+            'pubicData',
+            'Pubic Symphysis',
+            report.getPubicSymphysis(Side.L),
+            report.getPubicSymphysis(Side.R),
+            report.getPubicSymphysis(Side.C),
+            report.getPubicSymphysisRange(Side.L),
+            report.getPubicSymphysisRange(Side.R),
+            report.getPubicSymphysisRange(Side.C),
+            'pubicSymphysisBar',
+            false,
+        );
+
+        // Display the auricular surface range
+        this.displayDataSection(
+            'auricularData',
+            'Auricular Surface',
+            report.getAuricularSurface(Side.L),
+            report.getAuricularSurface(Side.R),
+            report.getAuricularSurface(Side.C),
+            report.getAuricularSurfaceRange(Side.L),
+            report.getAuricularSurfaceRange(Side.R),
+            report.getAuricularSurfaceRange(Side.C),
+            'auricularSurfaceBar',
+            false,
+        );
+
+        // Display the sternal end range
+        this.displayDataSection(
+            'sternalData',
+            'Sternal End',
+            report.getSternalEnd(Side.L),
+            report.getSternalEnd(Side.R),
+            report.getSternalEnd(Side.C),
+            report.getSternalEndRange(Side.L),
+            report.getSternalEndRange(Side.R),
+            report.getSternalEndRange(Side.C),
+            'sternalEndBar',
+            false,
+        );
+    }
+
+    private updateGraphTitle(graphTitle: HTMLElement, title: string) {
+        if (graphTitle) {
+            graphTitle.innerHTML = title;
+        } else {
+            console.error('Element graphTitle not found!');
+        }
     }
 }
