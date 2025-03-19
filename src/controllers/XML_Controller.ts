@@ -3,7 +3,6 @@ import { CaseModel } from '../models/CaseModel';
 import { BuildDirector } from '../utils/builder/BuildDirector';
 import { writeFileSync } from 'fs';
 import { Builder } from 'xml2js';
-import { NullCaseModel } from '../models/NullCaseModel';
 import { AbstractCaseModel } from '../models/AbstractCaseModel';
 import { AbstractReportModel } from '../models/AbstractReportModel';
 import { ReportModel } from '../models/ReportModel';
@@ -43,11 +42,21 @@ export class XML_Controller {
     public parseSingleFile(): AbstractCaseModel {
         if (!this.currentDoc) {
             console.error('Current doc error');
-            return new NullCaseModel(); //error model
+            return new BuildDirector().makeNullCase(); //error model
         }
 
         const caseID =
             this.currentDoc?.getElementsByTagName('_caseID')[0]?.textContent;
+
+        if (
+            DataController.getInstance().loadedCases.some(
+                (_case: CaseModel) => _case.caseID === caseID,
+            )
+        ) {
+            console.error('Case ID already exists:', caseID); //replace with modal popup
+            return new BuildDirector().makeNullCase(); // error model
+        }
+
         this.director.caseBuilder.setCaseID(caseID ? caseID : 'Case ID ERROR');
 
         const populationAffinity = this.currentDoc?.getElementsByTagName(
@@ -76,14 +85,14 @@ export class XML_Controller {
         );
 
         const thirdMolarBR =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
+            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBL(
             thirdMolarBR ? Number(thirdMolarBR) : -1,
         );
 
         const thirdMolarBL =
-            this.currentDoc?.getElementsByTagName('_thirdMolarBR')[0]
+            this.currentDoc?.getElementsByTagName('_thirdMolarBL')[0]
                 ?.textContent;
         this.director.caseBuilder.setThirdMolarBR(
             thirdMolarBL ? Number(thirdMolarBL) : -1,
@@ -133,7 +142,7 @@ export class XML_Controller {
 
         const notes =
             this.currentDoc?.getElementsByTagName('_notes')[0]?.textContent;
-        this.director.caseBuilder.setNotes(notes ? notes : 'NOTES ERROR');
+        this.director.caseBuilder.setNotes(notes ? notes : '');
 
         const generatedReports = this.extractReports('_generatedReports');
         this.director.caseBuilder.setReportsGenerated(generatedReports);
@@ -240,6 +249,8 @@ export class XML_Controller {
             );
             return null;
         }
+
+        //('Results element:', resultsElement.innerHTML);
 
         const id = idElement.textContent || '-1';
         const report: AbstractReportModel = this.director.makeReportFrom(

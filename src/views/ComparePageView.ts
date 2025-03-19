@@ -41,7 +41,10 @@ export class ComparePageView extends AbstractView {
      */
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
-        const caseModel = DataController.getInstance().openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const caseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
 
         // Populate the case title
         const caseTitle = document.getElementById('reportCaseTitleCompare');

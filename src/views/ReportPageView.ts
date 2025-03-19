@@ -26,9 +26,11 @@ export class ReportPageView extends AbstractView {
         this.contentDiv.innerHTML = htmlContent;
         this.loadElements();
         this.initEventListeners();
-        const report = DataController.getInstance().openReport;
-        const _case: CaseModel = DataController.getInstance()
-            .openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const report = dc.openReport;
+        const _case: CaseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
 
         //debugging
         // console.log(
@@ -45,11 +47,12 @@ export class ReportPageView extends AbstractView {
 
         // call load report method with the most recent report
         if (!(report instanceof NullReportModel)) {
-            this.loadReport(
-                _case.generatedReports[
-                    DataController.getInstance().findReportIndex(report)
-                ] as ReportModel,
-            );
+            const idx = DataController.getInstance().findReportIndex(report);
+            if (idx === -1) {
+                console.error('Report not found.');
+                return;
+            }
+            this.loadReport(_case.generatedReports[idx] as ReportModel);
             //console.log('Report data loaded');
         } else {
             console.error('No report found.');
@@ -90,8 +93,11 @@ export class ReportPageView extends AbstractView {
             }
         });
 
-        const _case: CaseModel = DataController.getInstance()
-            .openCase as CaseModel;
+        const _case: CaseModel = DataController.getInstance().loadedCases[
+            DataController.getInstance().findCaseIndex(
+                DataController.getInstance().openCaseID,
+            )
+        ] as CaseModel;
         const report =
             _case.generatedReports[
                 DataController.getInstance().getMostRecentReportIdx()
@@ -176,8 +182,11 @@ export class ReportPageView extends AbstractView {
      */
     public loadReport(report: ReportModel): void {
         this.calculateConfidenceIntervals(report);
+        const dc = DataController.getInstance();
         // get the current case just so we can get the caseID
-        const caseModel = DataController.getInstance().openCase as CaseModel;
+        const caseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
 
         // Populate the case title
         const caseTitle = document.getElementById('reportCaseTitle');

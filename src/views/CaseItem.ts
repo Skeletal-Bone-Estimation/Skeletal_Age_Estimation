@@ -1,3 +1,4 @@
+import { DataController } from '../controllers/DataController';
 import { PageController } from '../controllers/PageController';
 import { Pages, SideBar } from '../utils/enums';
 
@@ -27,9 +28,23 @@ export class CaseItem {
         buttonDiv.classList.add('caseButtons');
 
         const makeActiveBtn = document.createElement('button');
-        makeActiveBtn.textContent = 'Select';
+
+        const activeCaseID = DataController.getInstance().openCaseID;
+        //console.log('Active Case:', activeCaseID);
+
+        if (this.caseID === activeCaseID) {
+            makeActiveBtn.textContent = 'Active';
+            makeActiveBtn.disabled = true;
+        } else {
+            makeActiveBtn.textContent = 'Select';
+            makeActiveBtn.disabled = false;
+        }
+
         makeActiveBtn.addEventListener('click', async () => {
             PageController.getInstance().makeActiveCase(this.caseID);
+            makeActiveBtn.textContent = 'Active';
+            makeActiveBtn.disabled = true;
+            PageController.getInstance().renderCases();
             await PageController.getInstance().navigateTo(
                 Pages.DataEntry,
                 SideBar.dataBar,
@@ -40,6 +55,7 @@ export class CaseItem {
         deleteBtn.textContent = 'Delete';
         deleteBtn.addEventListener('click', async () => {
             PageController.getInstance().deleteCaseItem(this.caseID);
+            PageController.getInstance().renderCases();
             await PageController.getInstance().navigateTo(
                 Pages.Home,
                 SideBar.homeBar,

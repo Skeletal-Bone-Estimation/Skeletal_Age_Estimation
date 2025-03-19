@@ -103,9 +103,10 @@ export class PageController {
 
         //save case button
         document.getElementById('saveBtn')!.addEventListener('click', () => {
+            const dc = DataController.getInstance();
             XML_Controller.getInstance().saveAsFile(
-                DataController.getInstance().openCase as CaseModel,
-                `save_data/${(DataController.getInstance().openCase as CaseModel).caseID}.xml`,
+                dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel,
+                `save_data/${dc.openCaseID}.xml`,
             );
         });
 
@@ -289,8 +290,8 @@ export class PageController {
      * Gets the currently open case.
      * @returns The currently open CaseModel.
      */
-    public getOpenCase(): CaseModel {
-        return DataController.getInstance().openCase as CaseModel;
+    public getOpenCaseID(): string {
+        return DataController.getInstance().openCaseID;
     }
 
     /**
@@ -515,16 +516,16 @@ export class PageController {
      */
     public loadReport(reportIDX: number) {
         const dc = DataController.getInstance();
-        dc.openReport = (dc.openCase as CaseModel).generatedReports[
-            reportIDX
-        ].id;
+        dc.openReport = (
+            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
+        ).generatedReports[reportIDX].id;
         this.navigateTo(Pages.Report, SideBar.createBar);
     }
 
     public createCaseItem(caseID: string): void {
         const caseItem = new CaseItem(caseID);
-        caseItem.renderCase();
         this.sidebarCaseItems.push(caseItem);
+        this.renderCases();
     }
 
     public makeActiveCase(id: string): void {
@@ -545,15 +546,12 @@ export class PageController {
         }
     }
 
-    private renderCases(): void {
+    public renderCases(): void {
         const list = document.getElementById('caseList') as HTMLElement;
         list.innerHTML = '';
 
-        if (this.sidebarCaseItems.length == 0)
-            list.innerHTML = 'No cases loaded'; //TODO: update to look better
-        else
-            this.sidebarCaseItems.forEach((item) => {
-                item.renderCase();
-            });
+        this.sidebarCaseItems.forEach((item) => {
+            item.renderCase();
+        });
     }
 }

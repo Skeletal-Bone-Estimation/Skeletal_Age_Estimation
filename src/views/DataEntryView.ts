@@ -39,7 +39,10 @@ export class DataEntryView extends AbstractView {
      * Automatically load case data into the form fields.
      */
     public autoLoadCaseData() {
-        var _case: CaseModel = PageController.getInstance().getOpenCase();
+        const dc = DataController.getInstance();
+        var _case: CaseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
         const caseID = document.getElementById(
             UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
@@ -500,8 +503,10 @@ export class DataEntryView extends AbstractView {
             });
 
             analyzeButton.addEventListener('click', (event) => {
-                var _case: CaseModel =
-                    PageController.getInstance().getOpenCase();
+                const dc = DataController.getInstance();
+                var _case: CaseModel = dc.loadedCases[
+                    dc.findCaseIndex(dc.openCaseID)
+                ] as CaseModel;
                 const target = event.target as HTMLButtonElement;
                 const sex = this.parseSex(target.value);
                 const affinity = this.parseAffinity(target.value);
@@ -528,11 +533,15 @@ export class DataEntryView extends AbstractView {
 
             mostRecentReportButton.addEventListener('click', () => {
                 const dc = DataController.getInstance();
-                dc.openCase.notify(
+                (
+                    dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
+                ).notify(
                     Observers.setSelectedReport,
-                    (dc.openCase as CaseModel).generatedReports[
-                        dc.getMostRecentReportIdx()
-                    ].id,
+                    (
+                        dc.loadedCases[
+                            dc.findCaseIndex(dc.openCaseID)
+                        ] as CaseModel
+                    ).generatedReports[dc.getMostRecentReportIdx()].id,
                 );
                 PageController.getInstance().navigateTo(
                     Pages.Report,
@@ -541,8 +550,10 @@ export class DataEntryView extends AbstractView {
             });
 
             analysisSelector.addEventListener('change', () => {
-                const _case = DataController.getInstance()
-                    .openCase as CaseModel;
+                const dc = DataController.getInstance();
+                const _case = dc.loadedCases[
+                    dc.findCaseIndex(dc.openCaseID)
+                ] as CaseModel;
                 switch (analysisSelector.value) {
                     case 'default':
                         AnalysisContext.getInstance(

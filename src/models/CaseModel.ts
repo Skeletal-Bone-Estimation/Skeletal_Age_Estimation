@@ -16,9 +16,6 @@ import { NullReportModel } from './NullReportModel';
 import { ReportModel } from './ReportModel';
 
 export class CaseModel extends AbstractCaseModel {
-    protected _caseID: string;
-    protected _populationAffinity: Affinity;
-    protected _sex: Sex;
     protected _thirdMolarTL: ThirdMolar;
     protected _thirdMolarTR: ThirdMolar;
     protected _thirdMolarBL: ThirdMolar;
@@ -59,7 +56,7 @@ export class CaseModel extends AbstractCaseModel {
         fourthRibImages: string[] = [],
         thirdMolarImages: string[] = [],
     ) {
-        super();
+        super(caseID, populationAffinity, sex);
         this._caseID = caseID;
         this._populationAffinity = populationAffinity;
         this._sex = sex;

@@ -1,6 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
+import { NullCaseModel } from '../../models/NullCaseModel';
 import { CaseBuilder } from './CaseBuilder';
 import { ReportBuilder } from './ReportBuilder';
 
@@ -26,6 +27,10 @@ export class BuildDirector {
      */
     public makeCase(): CaseModel {
         return this.caseBuilder.build();
+    }
+
+    public makeNullCase(): NullCaseModel {
+        return this.caseBuilder.buildNull();
     }
 
     /**

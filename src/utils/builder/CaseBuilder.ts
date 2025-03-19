@@ -1,7 +1,9 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
+import { NullCaseModel } from '../../models/NullCaseModel';
 import { NullReportModel } from '../../models/NullReportModel';
+import { Affinity, Sex } from '../enums';
 import { CaseBuilderIF } from './CaseBuilderIF';
 
 // Concrete builder for CaseModel
@@ -28,9 +30,9 @@ export class CaseBuilder implements CaseBuilderIF {
     private _thirdMolarImages: string[];
 
     constructor() {
-        this._caseID = '';
-        this._populationAffinity = 0;
-        this._sex = 0;
+        this._caseID = 'null';
+        this._populationAffinity = Affinity.Unknown;
+        this._sex = Sex.Unknown;
         this._thirdMolarTL = 0;
         this._thirdMolarTR = 0;
         this._thirdMolarBL = 0;
@@ -48,6 +50,14 @@ export class CaseBuilder implements CaseBuilderIF {
         this._auricularSurfaceImages = [];
         this._fourthRibImages = [];
         this._thirdMolarImages = [];
+    }
+
+    public buildNull(): NullCaseModel {
+        return new NullCaseModel(
+            this._caseID,
+            this._populationAffinity,
+            this._sex,
+        );
     }
 
     /**
