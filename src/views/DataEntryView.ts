@@ -171,9 +171,11 @@ export class DataEntryView extends AbstractView {
 
     //renders all of the saved images in the case to their respective galleries
     private renderSavedImages(): void {
-        const currentCase = DataController.getInstance().openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const currentCase = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
         const galleryModal = new GalleryModal(document);
-
 
         //auricular images renders button to trigger modal
         const galleryAuricularContainer =
@@ -583,6 +585,7 @@ export class DataEntryView extends AbstractView {
 
             uploadAuricularImages.addEventListener('click', () => {
                 const fileInput = document.createElement('input');
+                const dc = DataController.getInstance();
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*';
                 fileInput.style.display = 'none';
@@ -597,9 +600,10 @@ export class DataEntryView extends AbstractView {
                         reader.onload = (evt) => {
                             const base64String = evt.target?.result as string;
                             //console.log('Auricular image base64:', base64String,);
-                            //update casse model
-                            const currentCase = DataController.getInstance()
-                                .openCase as CaseModel;
+                            //update case model
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
                             //push the string
                             currentCase.auricularSurfaceImages.push(
                                 base64String,
@@ -618,6 +622,7 @@ export class DataEntryView extends AbstractView {
             });
 
             uploadPubicImages.addEventListener('click', () => {
+                const dc = DataController.getInstance();
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*';
@@ -632,8 +637,9 @@ export class DataEntryView extends AbstractView {
                         reader.onload = (evt) => {
                             const base64String = evt.target?.result as string;
                             //console.log('Pubic image base64:', base64String);
-                            const currentCase = DataController.getInstance()
-                                .openCase as CaseModel;
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
 
                             currentCase.pubicSymphysisImages.push(base64String);
 
@@ -649,6 +655,7 @@ export class DataEntryView extends AbstractView {
 
             uploadSternalImages.addEventListener('click', () => {
                 const fileInput = document.createElement('input');
+                const dc = DataController.getInstance();
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*';
                 fileInput.style.display = 'none';
@@ -662,8 +669,9 @@ export class DataEntryView extends AbstractView {
                         reader.onload = (evt) => {
                             const base64String = evt.target?.result as string;
                             //console.log('Sternal image base64:', base64String);
-                            const currentCase = DataController.getInstance()
-                                .openCase as CaseModel;
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
                             currentCase.fourthRibImages.push(base64String);
                             currentCase.notify(Observers.autosave);
                         };
@@ -677,6 +685,7 @@ export class DataEntryView extends AbstractView {
 
             uploadMolarImages.addEventListener('click', () => {
                 const fileInput = document.createElement('input');
+                const dc = DataController.getInstance();
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*';
                 fileInput.style.display = 'none';
@@ -690,8 +699,9 @@ export class DataEntryView extends AbstractView {
                         reader.onload = (evt) => {
                             const base64String = evt.target?.result as string;
                             //console.log('Molar image base64:', base64String);
-                            const currentCase = DataController.getInstance()
-                                .openCase as CaseModel;
+                            const currentCase = dc.loadedCases[
+                                dc.findCaseIndex(dc.openCaseID)
+                            ] as CaseModel;
 
                             currentCase.thirdMolarImages.push(base64String);
                             currentCase.notify(Observers.autosave);
