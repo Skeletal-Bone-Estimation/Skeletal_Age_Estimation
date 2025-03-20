@@ -1,29 +1,38 @@
 <!-- Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis -->
 
 <div id = "createDiv">
-    <label for="case">Skeletal ID:</label>
-    <input type="text" id="case" name="case" maxlength="20">
+    <div id="idDiv">
+        <label for="case">Skeletal ID:</label>
+        <input type="text" id="case" name="case" maxlength="20">
+    </div>
 
-    <label for="sex">Sex:</label>
-    <select name="sex" id="sex">
-        <option value="2">Unknown</option>
-        <option value="0">Male</option>
-        <option value="1">Female</option>
-    </select>
+    <div id="sexDiv">
+        <label for="sex">Sex:</label>
+        <select name="sex" id="sex">
+            <option value="2">Unknown</option>
+            <option value="0">Male</option>
+            <option value="1">Female</option>
+        </select>
+    </div>
 
-    <label for="race">Population Affinity:</label>
-    <select name="race" id="race">
-        <option value="2">Unknown</option>
-        <option value="1">Black</option>
-        <option value="0">White</option>
-    </select>
-
-    <span>Save Location</span>
-    <div id="folderControl">
-        <span id="selectedPath"></span>
-        <button id="selectFolderBtn">Select Folder</button>
-        <input webkitdirectory directory id="selectPath" type="file" style="display: none;"/>
-
+    <div id="affinityDiv">
+        <label for="race">Population Affinity:</label>
+        <select name="race" id="race">
+            <option value="2">Unknown</option>
+            <option value="1">Black</option>
+            <option value="0">White</option>
+        </select>
+    </div>
+    
+    <div id="saveDiv">
+        <span>Save Location:</span>
+        <div id="folderControl">
+            <div id="selectedPath">
+                <span id="pathText"></span>
+            </div>
+            <button id="selectFolderBtn">Select Folder</button>
+            <input webkitdirectory directory id="selectPath" type="file" style="display: none;"/>
+        </div>
     </div>
 
     <button id="createStart" class="button-dark">Create</button>

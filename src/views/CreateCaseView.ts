@@ -81,7 +81,7 @@ export class CreateCaseView extends AbstractView {
                 const path: string | null =
                     await window.electronAPI.selectFolder();
                 if (path) {
-                    document.getElementById('selectedPath')!.innerHTML = path;
+                    document.getElementById('pathText')!.innerHTML = path;
                     document.getElementById('selectFolderBtn')!.innerHTML =
                         'Select New Folder';
                     this.savePath = path;

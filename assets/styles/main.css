@@ -130,6 +130,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
   border-bottom-style: solid;
   border-bottom-color: var(--resizer-color);
 }
@@ -321,15 +322,67 @@ body {
 }
 
 #createDiv {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
   justify-content: center;
   align-items: center; 
-  gap: 4px;
+  gap: 50px;
   min-height: 75vh;
-  margin: 0;          
-  padding: 0;        
+  margin: 0 auto;
+  padding: 50px;                 
   box-sizing: border-box; 
+  text-align: center;
+  font-size: large;
+}
+
+#idDiv { grid-column: 1; grid-row: 1; }
+#saveDiv { grid-column: 1; grid-row: 2; }
+#sexDiv { grid-column: 2; grid-row: 1; }
+#affinityDiv { grid-column: 2; grid-row: 2; }
+
+#createStart {
+  grid-column: 1 / 3;
+  grid-row: 3;
+  justify-self: center;
+  width: 100%;
+  margin-top: 100px;
+  font-size: large;
+}
+
+#folderControl {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+#selectedPath {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  padding-right: 5px;
+}
+
+.pathText {
+  display: inline-block;
+  direction: ltr;
+}
+
+#createDiv label, span {
+  margin-bottom: 10px;
+  padding-right: 10px;
+}
+
+#createDiv > div {
+  display: flex;
+  flex-direction: column;
 }
 
 .mercyImgSide {
@@ -352,8 +405,6 @@ body {
 .homeSide{
   opacity: 0;
 }
-
-
 
 .sideBarData {
   display: flex;
