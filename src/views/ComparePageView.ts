@@ -1,4 +1,3 @@
-
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 import { PageController } from '../controllers/PageController';
 import { DataController } from '../controllers/DataController';
@@ -21,7 +20,12 @@ export class ComparePageView extends AbstractView {
     constructor(document: Document) {
         super(document);
         this.storedReport = new NullReportModel();
-        this.storedCase = DataController.getInstance().openCase as CaseModel;
+        this.storedCase =
+            DataController.getInstance().loadedCases[
+                DataController.getInstance().findCaseIndex(
+                    DataController.getInstance().openCaseID,
+                )
+            ];
     }
 
     /**
@@ -34,13 +38,14 @@ export class ComparePageView extends AbstractView {
         this.setSidebarListeners();
 
         const reportCompare = DataController.getInstance().openReport;
-        const _caseCompare: CaseModel = DataController.getInstance()
-            .openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const _caseCompare: CaseModel =
+            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
 
         if (this.isInitialReportLoaded == false) {
             const report = DataController.getInstance().openReport;
-            const _case: CaseModel = DataController.getInstance()
-                .openCase as CaseModel;
+            const _case: CaseModel =
+                dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
 
             // call load report method with the most recent report
             if (!(report instanceof NullReportModel)) {
@@ -117,7 +122,10 @@ export class ComparePageView extends AbstractView {
      */
     public loadReport(report: ReportModel): void {
         // get the current case just so we can get the caseID
-        const caseModel = DataController.getInstance().openCase as CaseModel;
+        const dc = DataController.getInstance();
+        const caseModel = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
 
         // Populate the case title
         const caseTitle = document.getElementById('reportCaseTitleCompare');
@@ -371,4 +379,3 @@ export class ComparePageView extends AbstractView {
         return `${minAge} - ${maxAge}`;
     }
 }
-

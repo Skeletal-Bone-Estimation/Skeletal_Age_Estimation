@@ -584,9 +584,10 @@ export class PageController {
      */
     public loadReportCompare(reportIDX: number) {
         const dc = DataController.getInstance();
-        dc.openReport = (dc.openCase as CaseModel).generatedReports[
-            reportIDX
-        ].id;
+        dc.openReport =
+            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)].generatedReports[
+                reportIDX
+            ].id;
         this.navigateTo(Pages.Compare);
     }
 
