@@ -1,37 +1,91 @@
 <div id="compareDiv" class="compareDiv">
 
     <div class="compareHeader">
-        <div class="button-dark" id="right">Change Left Report</div>
         <div id="reportCaseTitleCompare"></div>
-        <div class="button-dark" id="right">Change Right Report</div>
+        <div class="button-dark" id="compareReportChange">Change Compared Report</div>
     </div>
 
     <div class="compareData">
         <div class="compareDataLeft">
 
             <!--This is where the graph goes-->
-            <div id="graphPlacementLeft"></div>
+            <div class="graphPlacement">
+                <!-- Add vertical lines here -->
+                <div class="vertical-line line-10"> 10 </div>
+                <div class="vertical-line line-20"> 20 </div>
+                <div class="vertical-line line-30"> 30 </div>
+                <div class="vertical-line line-40"> 40 </div>
+                <div class="vertical-line line-50"> 50 </div>
+                <div class="vertical-line line-60"> 60 </div>
+                <div class="vertical-line line-70"> 70 </div>
+                <div class="vertical-line line-80"> 80 </div>
+                <div class="vertical-line line-90"> 90 </div>
+                
+                <div class="range-container">
+                    <div class="range-bar" id="ageBarLeft"> Age Range </div>
+                </div>
+            
+                <div class="range-container">
+                    <div class="range-bar" id="pubicSymphysisBarLeft"> Pubic Symphysis </div>
+                </div>
+
+                <div class="range-container">
+                    <div class="range-bar" id="auricularSurfaceBarLeft"> Auricular Surface </div>
+                </div>
+            
+                <div class="range-container">
+                    <div class="range-bar" id="sternalEndBarLeft"> Sternal End </div>
+                </div> 
+            </div>
             <div id="summarizedRangeLeft"></div>
 
             <!--different ranges for indiviudal methods-->
-            <div class="dataChartDivLeft">
-                <div id="pubicData"></div>
-                <div id="auricularData"></div>
-                <div id="sternalData"></div>
-                <div id="molarData"></div>
+            <div class="dataChartDiv">
+                <div id="pubicDataLeft"></div>
+                <div id="auricularDataLeft"></div>
+                <div id="sternalDataLeft"></div>
+                <div id="molarDataLeft"></div>
             </div>
         </div>
+
         <div class="compareDataRight">
             <!--This is where the graph goes-->
-            <div id="graphPlacementRight"></div>
+            <div class="graphPlacement">
+                <!-- Add vertical lines here -->
+                <div class="vertical-line line-10"> 10 </div>
+                <div class="vertical-line line-20"> 20 </div>
+                <div class="vertical-line line-30"> 30 </div>
+                <div class="vertical-line line-40"> 40 </div>
+                <div class="vertical-line line-50"> 50 </div>
+                <div class="vertical-line line-60"> 60 </div>
+                <div class="vertical-line line-70"> 70 </div>
+                <div class="vertical-line line-80"> 80 </div>
+                <div class="vertical-line line-90"> 90 </div>
+                
+                <div class="range-container">
+                    <div class="range-bar" id="ageBarRight"> Age Range </div>
+                </div>
+            
+                <div class="range-container">
+                    <div class="range-bar" id="pubicSymphysisBarRight"> Pubic Symphysis </div>
+                </div>
+
+                <div class="range-container">
+                    <div class="range-bar" id="auricularSurfaceBarRight"> Auricular Surface </div>
+                </div>
+            
+                <div class="range-container">
+                    <div class="range-bar" id="sternalEndBarRight"> Sternal End </div>
+                </div>
+            </div>
             <div id="summarizedRangeRight"></div>
 
             <!--different ranges for indiviudal methods-->
-            <div class="dataChartDivRight">
-                <div id="pubicData"></div>
-                <div id="auricularData"></div>
-                <div id="sternalData"></div>
-                <div id="molarData"></div>
+            <div class="dataChartDiv">
+                <div id="pubicDataRight"></div>
+                <div id="auricularDataRight"></div>
+                <div id="sternalDataRight"></div>
+                <div id="molarDataRight"></div>
             </div>
         </div>
     </div>

@@ -27,9 +27,11 @@ import {
 } from '../utils/enums';
 import { ReportModal } from '../views/ReportModal';
 import { CaseItem } from '../views/CaseItem';
+
 import { ErrorModal } from '../views/ErrorModal';
 import { AbstractModal } from '../views/AbstractModal';
 import { SavePathModal } from '../views/SavePathModal';
+import { CompareModal } from '../views/CompareModal';
 
 export class PageController {
     private static instance: PageController;
@@ -46,6 +48,9 @@ export class PageController {
             dataEntry: new DataEntryView(document),
             report: new ReportPageView(document),
             reportModal: new ReportModal(document),
+
+            compareModal: new CompareModal(document),
+
             compare: new ComparePageView(document),
             errorModal: new ErrorModal(document),
             savePathModal: new SavePathModal(document),
@@ -504,7 +509,20 @@ export class PageController {
     }
 
     /**
+
      * Loads a modal.
+     * Loads the report modal.
+     */
+    public async loadModalCompare(): Promise<void> {
+        this.currentView = this.views.compareModal;
+        (this.currentView as CompareModal).openModal();
+        (this.currentView as CompareModal).render(
+            await this.loadPageContent(Pages.CompareModal),
+        );
+    }
+
+    /**
+     * Unloads the report modal.
      */
     public async loadModal(type: Modals, errorMsg = ''): Promise<void> {
         var modal: AbstractModal;
@@ -558,6 +576,18 @@ export class PageController {
             dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
         ).generatedReports[reportIDX].id;
         this.navigateTo(Pages.Report, SideBar.dataBar);
+    }
+
+    /**
+     * Loads the report by its index.
+     * @param reportIDX The index of the report to load.
+     */
+    public loadReportCompare(reportIDX: number) {
+        const dc = DataController.getInstance();
+        dc.openReport = (dc.openCase as CaseModel).generatedReports[
+            reportIDX
+        ].id;
+        this.navigateTo(Pages.Compare);
     }
 
     public createCaseItem(caseID: string): void {
