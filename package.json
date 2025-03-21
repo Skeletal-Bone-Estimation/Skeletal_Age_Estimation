@@ -1,5 +1,5 @@
 {
-    "name": "sbaes",
+    "name": "saes",
     "version": "0.0.1",
     "description": "Team 3 2024-2025 Senior Design project",
     "main": "./dist-electron/app.js",
