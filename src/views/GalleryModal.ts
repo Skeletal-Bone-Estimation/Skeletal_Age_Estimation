@@ -26,7 +26,7 @@ export class GalleryModal extends AbstractModal {
         //container div
         const container = document.createElement('div');
         container.id = 'modalContainer';
-        container.className = 'gallery-modal'; 
+        container.className = 'gallery-modal';
         container.style.display = 'none';
         //content div
         const content = document.createElement('div');

@@ -171,7 +171,6 @@ export class DataEntryView extends AbstractView {
         const currentCase = DataController.getInstance().openCase as CaseModel;
         const galleryModal = new GalleryModal(document);
 
-
         //auricular images renders button to trigger modal
         const galleryAuricularContainer =
             document.getElementById('galleryAuricular');

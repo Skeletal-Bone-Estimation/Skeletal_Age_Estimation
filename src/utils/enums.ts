@@ -140,7 +140,6 @@ export enum UI_Elements {
     changeGraphButton90 = 'changeGraphBtn90',
     changeGraphButton95 = 'changeGraphBtn95',
     printButton = 'printBtn',
-
 }
 
 /**
