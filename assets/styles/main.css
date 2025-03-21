@@ -879,6 +879,9 @@ input[type="text"] {
   border-radius: 10px;
   animation: slide-down 0.3s ease-out;
   text-align: center;
+  max-height: 70vh;
+  overflow-y: auto;
+
 }
 
 /* Slide-down animation */
