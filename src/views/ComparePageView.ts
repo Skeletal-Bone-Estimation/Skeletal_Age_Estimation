@@ -290,11 +290,11 @@ export class ComparePageView extends AbstractView {
 
         element.innerHTML = `
             <strong>${sectionTitle}:</strong>
-            <p>Left: ${leftValue.toFixed(2)}</p>
+            <p>Left Mean Estimate: ${leftValue.toFixed(2)}</p>
             <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
-            <p>Right: ${rightValue.toFixed(2)}</p>
+            <p>Right Mean Estimate: ${rightValue.toFixed(2)}</p>
             <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
-            <p>Combined: ${combinedValue.toFixed(2)}</p>
+            <p>Combined Mean Estimate: ${combinedValue.toFixed(2)}</p>
             <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
         `;
 
