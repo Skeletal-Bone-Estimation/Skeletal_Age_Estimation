@@ -377,6 +377,11 @@ body {
   opacity: 0;
 }
 
+.dataEntryWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .sideBarData {
   display: flex;
   flex-direction: center;
@@ -385,7 +390,7 @@ body {
   gap: 10px;
   font-size: 140%;
   height: 10%;
-  padding: 0px;
+  padding: 1vw;
   overflow: hidden;
 }
 
