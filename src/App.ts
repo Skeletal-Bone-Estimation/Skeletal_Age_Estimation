@@ -1,7 +1,7 @@
 // Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
 
 //App.ts
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, screen } from 'electron';
 import * as path from 'path';
 
 const DEV: boolean = true;
@@ -10,9 +10,17 @@ const DEFAULT_WIDTH: number = 1200;
 const DEFAULT_HEIGHT: number = 760;
 
 function createWindow(): void {
-    const mainWindow = new BrowserWindow({
+    const { width, height } = screen.getPrimaryDisplay()?.workAreaSize || {
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
+    };
+
+    const windowWidth = Math.floor(width * 0.7);
+    const windowHeight = Math.floor(height * 0.7);
+
+    const mainWindow = new BrowserWindow({
+        width: windowWidth,
+        height: windowHeight,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,

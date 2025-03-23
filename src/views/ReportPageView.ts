@@ -85,14 +85,14 @@ export class ReportPageView extends AbstractView {
         this.elements[3].addEventListener('click', () => {
             //console.log(this.ninetyConfidenceInfo);
             this.updateGraphNinety();
-            const graphTitle = document.getElementById('graphTitle');
-            if (graphTitle) {
-                this.updateGraphTitle(
-                    graphTitle as HTMLElement,
+            const activeCI = document.getElementById('activeCI');
+            if (activeCI) {
+                this.updateActiveCI(
+                    activeCI as HTMLElement,
                     `<strong><i>90% Confidence Interval</i></strong>`,
                 );
             } else {
-                console.error('Element graphTitle not found!');
+                console.error('Element activeCI not found!');
             }
         });
 
@@ -117,14 +117,14 @@ export class ReportPageView extends AbstractView {
             // Button for changing graph to a 95% confidence interval
             this.elements[4].addEventListener('click', () => {
                 this.updateGraphNinetyFive(report);
-                const graphTitle = document.getElementById('graphTitle');
-                if (graphTitle) {
-                    this.updateGraphTitle(
-                        graphTitle as HTMLElement,
+                const activeCI = document.getElementById('activeCI');
+                if (activeCI) {
+                    this.updateActiveCI(
+                        activeCI as HTMLElement,
                         `<strong><i>95% Confidence Interval</i></strong>`,
                     );
                 } else {
-                    console.error('Element graphTitle not found!');
+                    console.error('Element activeCI not found!');
                 }
             });
 
@@ -265,14 +265,14 @@ export class ReportPageView extends AbstractView {
             console.error('Element molarData not found!');
         }
 
-        const graphTitle = document.getElementById('graphTitle');
-        if (graphTitle) {
-            this.updateGraphTitle(
-                graphTitle as HTMLElement,
+        const activeCI = document.getElementById('activeCI');
+        if (activeCI) {
+            this.updateActiveCI(
+                activeCI as HTMLElement,
                 `<strong><i>95% Confidence Interval</i></strong>`,
             );
         } else {
-            console.error('Element graphTitle not found!');
+            console.error('Element activeCI not found!');
         }
     }
 
@@ -696,11 +696,11 @@ export class ReportPageView extends AbstractView {
         );
     }
 
-    private updateGraphTitle(graphTitle: HTMLElement, title: string) {
-        if (graphTitle) {
-            graphTitle.innerHTML = title;
+    private updateActiveCI(activeCI: HTMLElement, title: string) {
+        if (activeCI) {
+            activeCI.innerHTML = title;
         } else {
-            console.error('Element graphTitle not found!');
+            console.error('Element activeCI not found!');
         }
     }
 }

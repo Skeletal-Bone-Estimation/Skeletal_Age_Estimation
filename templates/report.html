@@ -1,15 +1,31 @@
 <div id="reportDiv" class="reportDiv">
-    <!--left side elements / Column 1-->
-    <div id="graphDiv" class="graphDiv">
+    <!-- Top elements -->
+    <div class="reportRightSide">
+        <!-- title of case -->
+        <div id="reportCaseTitle"></div>
+        <!-- overall range summarized from all methods -->
+        <div id="summarizedRange"></div>
+        <!-- current convidence interval and the buttons to change it -->
+        <div class="activeCI" id="activeCI"></div>
         <div class="reportButtonsContainer">
             <button class="reportButtons" id="changeGraphBtn90">90% Confidence</button>
             <button class="reportButtons" id="changeGraphBtn95">95% Confidence</button>
         </div>
+        <!-- different ranges for individual methods -->
+        <div class="dataChartDiv">
+            <div id="pubicData"></div>
+            <div id="auricularData"></div>
+            <div id="sternalData"></div>
+            <div id="molarData"></div>
+        </div>
+    </div>
+    
+    <!-- Bottom elements -->
+    <div id="graphDiv" class="graphDiv">
         <!--This is where the graph goes-->
+        <!-- Confidence Interval Indicator -->
+        <div id="axisLabelHorizontal">Age</div>
         <div class="graphPlacement">
-            <!-- Confidence Interval Indicator -->
-            <div class="graphTitle" id="graphTitle"></div>
-            <h3>Age</h3>
             <!-- Add vertical lines here -->
             <div class="vertical-line line-10"> 10 </div>
             <div class="vertical-line line-20"> 20 </div>
@@ -46,21 +62,4 @@
         </div>
         <button class="reportButtons" id="backBtn">Back to Data Entry</button>
     </div>
-
-    <!--right side elements / column 2-->
-    <div class="reportRightSide">
-        <!--title of case-->
-        <div id="reportCaseTitle"></div>
-        <!--overall range summarized from all methods-->
-        <div id="summarizedRange"></div>
-
-        <!--different ranges for individual methods-->
-        <div class="dataChartDiv">
-            <div id="pubicData"></div>
-            <div id="auricularData"></div>
-            <div id="sternalData"></div>
-            <div id="molarData"></div>
-        </div>
-    </div>
-    
 </div>
