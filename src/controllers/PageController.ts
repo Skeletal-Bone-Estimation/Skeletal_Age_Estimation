@@ -32,6 +32,8 @@ import { ErrorModal } from '../views/ErrorModal';
 import { AbstractModal } from '../views/AbstractModal';
 import { SavePathModal } from '../views/SavePathModal';
 import { CompareModal } from '../views/CompareModal';
+import { GalleryModal } from '../views/GalleryModal';
+import { PhotoModal } from '../views/PhotoModal';
 
 export class PageController {
     private static instance: PageController;
@@ -54,6 +56,8 @@ export class PageController {
             compare: new ComparePageView(document),
             errorModal: new ErrorModal(document),
             savePathModal: new SavePathModal(document),
+            galleryModal: new GalleryModal(document),
+            photoModal: new PhotoModal(document),
 
             //add additional views here
         };
@@ -524,7 +528,11 @@ export class PageController {
     /**
      * Unloads the report modal.
      */
-    public async loadModal(type: Modals, errorMsg = ''): Promise<void> {
+    public async loadModal(
+        type: Modals,
+        errorMsg = '',
+        data?: any,
+    ): Promise<void> {
         var modal: AbstractModal;
         switch (type) {
             case Modals.Report:
@@ -558,6 +566,14 @@ export class PageController {
                 (modal as SavePathModal).displayPath(
                     dc.loadedCases[dc.findCaseIndex(dc.openCaseID)].savePath,
                 );
+                break;
+            case Modals.Gallery:
+                modal = this.views.galleryModal as AbstractModal;
+                (modal as GalleryModal).openGallery(data.title, data.images);
+                break;
+            case Modals.Photo:
+                modal = this.views.photoModal as AbstractModal;
+                (modal as PhotoModal).openPhoto(data.image);
                 break;
             default:
                 throw new Error(
