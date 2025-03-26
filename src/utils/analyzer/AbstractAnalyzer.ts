@@ -1,5 +1,5 @@
 import { CaseModel } from '../../models/CaseModel';
-import { Affinity, Sex } from '../enums';
+import { Affinity, Analyzers, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
 
 export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
@@ -34,4 +34,6 @@ export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
     public modifyAffinity(affinity: Affinity): void {
         this.affinity = affinity;
     }
+
+    public abstract getStrategy(): Analyzers;
 }

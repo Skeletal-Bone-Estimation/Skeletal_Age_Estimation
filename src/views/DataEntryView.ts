@@ -507,7 +507,7 @@ export class DataEntryView extends AbstractView {
                     );
             });
 
-            analyzeButton.addEventListener('click', (event) => {
+            analyzeButton.addEventListener('click', async (event) => {
                 const dc = DataController.getInstance();
                 var _case: CaseModel = dc.loadedCases[
                     dc.findCaseIndex(dc.openCaseID)
@@ -515,10 +515,7 @@ export class DataEntryView extends AbstractView {
                 const target = event.target as HTMLButtonElement;
                 const sex = this.parseSex(target.value);
                 const affinity = this.parseAffinity(target.value);
-                AnalysisContext.getInstance(sex, affinity).analyze(
-                    _case,
-                    Analyzers.Default,
-                );
+                await AnalysisContext.getInstance(sex, affinity).analyze(_case);
                 PageController.getInstance().navigateTo(
                     Pages.Report,
                     SideBar.dataBar,
@@ -565,25 +562,23 @@ export class DataEntryView extends AbstractView {
                             _case.sex,
                             _case.populationAffinity,
                         ).setStrategy(Analyzers.Default);
-                        //console.log('Default analysis selected');
                         break;
-                    case 'image':
+                    case 'linreg':
                         AnalysisContext.getInstance(
                             _case.sex,
                             _case.populationAffinity,
-                        ).setStrategy(Analyzers.Image);
-                        //console.log('Image analysis selected');
+                        ).setStrategy(Analyzers.LinReg);
                         break;
-                    case 'prediction':
+                    case 'classification':
                         AnalysisContext.getInstance(
                             _case.sex,
                             _case.populationAffinity,
-                        ).setStrategy(Analyzers.Prediction);
-                        //console.log('Regression analysis selected');
+                        ).setStrategy(Analyzers.Class);
                         break;
                     default:
                         console.error('invalid analyzer selected');
                 }
+                //console.log('Selected strategy:', analysisSelector.value);
             });
 
             uploadAuricularImages.addEventListener('click', () => {

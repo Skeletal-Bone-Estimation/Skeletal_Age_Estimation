@@ -1,12 +1,11 @@
 import { DataController } from '../../controllers/DataController';
-import { PageController } from '../../controllers/PageController';
 import { CaseModel } from '../../models/CaseModel';
 import { Autonumberer } from '../Autonumberer';
-import { Affinity, Analyzers, Observers, Pages, Sex } from '../enums';
+import { Affinity, Analyzers, Observers, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
+import { ClassificationStrategy } from './ClassificationStrategy';
 import { DefaultAnalyzerStrategy } from './DefaultAnalyzerStrategy';
-import { ImageAnalyzerStrategy } from './ImageAnalyzerStrategy';
-import { PredictionAnalyzerStrategy } from './PredictionAnalyzerStrategy';
+import { LinearRegressionStrategy } from './LinearRegressionStrategy';
 
 // singleton context object to manage different analysis strategies
 export class AnalysisContext {
@@ -18,8 +17,8 @@ export class AnalysisContext {
         //initialize new strategies within this dictionary
         this.analyzers = {
             default: new DefaultAnalyzerStrategy(sex, affinity),
-            imageAnalysis: new ImageAnalyzerStrategy(sex, affinity),
-            predictionAnalysis: new PredictionAnalyzerStrategy(sex, affinity),
+            linreg: new LinearRegressionStrategy(sex, affinity),
+            classification: new ClassificationStrategy(sex, affinity),
         };
 
         this.currentStrategy = this.analyzers[Analyzers.Default]; // Default strategy
@@ -66,12 +65,31 @@ export class AnalysisContext {
      * @param _case The case to analyze.
      * @param strategy The strategy to use for analysis.
      */
-    public analyze(_case: CaseModel, strategy: Analyzers): void {
+    public async analyze(_case: CaseModel): Promise<void> {
         this.setSex(_case.sex);
         this.setAffinity(_case.populationAffinity);
-        this.setStrategy(strategy);
 
-        var results: {} = this.currentStrategy.executeAnalysis(_case);
+        switch (this.currentStrategy.getStrategy()) {
+            case Analyzers.LinReg:
+                console.log('Using linear regression strategy');
+                var results: {} = await (
+                    this.currentStrategy as LinearRegressionStrategy
+                ).executeAnalysis(_case);
+                break;
+            case Analyzers.Class:
+                console.log('Using classification strategy');
+                var results: {} = await (
+                    this.currentStrategy as LinearRegressionStrategy
+                ).executeAnalysis(_case);
+                break;
+            case Analyzers.Default:
+            default:
+                console.log('Using default strategy');
+                var results: {} =
+                    await this.currentStrategy.executeAnalysis(_case);
+                break;
+        }
+
         var report = DataController.getInstance().createReport(results);
         _case.addReport(report);
         _case.notify(Observers.setMostRecentReport, report.id); // set most recent report

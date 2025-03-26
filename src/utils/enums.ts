@@ -184,8 +184,8 @@ export enum CaseElement {
  */
 export enum Analyzers {
     Default = 'default',
-    Image = 'imageAnalysis',
-    Prediction = 'predictionAnalysis',
+    LinReg = 'linreg',
+    Class = 'classification',
 }
 
 /**

@@ -6,8 +6,10 @@
 2) Install Node.js v20 [here](https://nodejs.org/en/download/package-manager).
     1) Check that the correct node version is installed by executing the following command.
         > node -v
-3) Open a terminal and navigate to the root of the project.
-4) Execute the following command to install node dependencies
+3) Install pipenv.
+    1) Instructions for installation [here](https://pipenv.pypa.io/en/latest/installation.html#installing-pipenv)
+4) Open a terminal and navigate to the root of the project.
+5) Execute the following command to install node dependencies
     > npm install
 
 ## How to compile, test, and run

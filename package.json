@@ -1,6 +1,6 @@
 {
     "name": "saes",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Team 3 2024-2025 Senior Design project",
     "main": "./dist-electron/app.js",
     "scripts": {
@@ -8,7 +8,9 @@
         "build:ts": "tsc --build tsconfig.build.json",
         "build": "npm-run-all prettier:write build:ts",
         "watch": "tsc --watch",
-        "dev": "npm run build && vite",
+        "install-python": "pipenv install",
+        "frontend": "npm run build && vite",
+        "dev": "npm run install-python && npm run frontend",
         "prod": "echo \"Production command not yet created\" && exit 1",
         "test": "jest"
     },
