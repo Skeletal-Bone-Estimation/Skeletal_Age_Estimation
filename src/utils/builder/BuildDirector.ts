@@ -1,6 +1,7 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+import { AbstractReportModel } from '../../models/AbstractReportModel';
 import { CaseModel } from '../../models/CaseModel';
 import { NullCaseModel } from '../../models/NullCaseModel';
-import { ReportModel } from '../../models/ReportModel';
 import { CaseBuilder } from './CaseBuilder';
 import { ReportBuilder } from './ReportBuilder';
 
@@ -19,11 +20,35 @@ export class BuildDirector {
         this.reportBuilder = new ReportBuilder();
     }
 
+    //TODO: return an abstract CaseModel
+    /**
+     * Builds a CaseModel object.
+     * @returns The built CaseModel.
+     */
     public makeCase(): CaseModel {
         return this.caseBuilder.build();
     }
 
-    public makeReportFrom(content: string): ReportModel {
-        return this.reportBuilder.buildFrom(content);
+    public makeNullCase(): NullCaseModel {
+        return this.caseBuilder.buildNull();
+    }
+
+    /**
+     * Builds a ReportModel object.
+     * @param results The results to be included in the report.
+     * @returns The built AbstractReportModel.
+     */
+    public makeReport(results: {}): AbstractReportModel {
+        return this.reportBuilder.build(results);
+    }
+
+    /**
+     * Builds a ReportModel object from a given ID and content.
+     * @param id The ID of the report.
+     * @param content The XML elements containing the report data.
+     * @returns The built AbstractReportModel.
+     */
+    public makeReportFrom(id: string, content: Element): AbstractReportModel {
+        return this.reportBuilder.buildFrom(id, content);
     }
 }

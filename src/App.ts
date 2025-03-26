@@ -1,5 +1,8 @@
+// Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+
 //App.ts
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import * as path from 'path';
 
 const DEV: boolean = true;
 
@@ -11,7 +14,7 @@ function createWindow(): void {
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
         webPreferences: {
-            preload: __dirname + '\\preload.js',
+            preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
         },
@@ -24,6 +27,17 @@ function createWindow(): void {
 
     mainWindow.on('ready-to-show', () => mainWindow.show());
 }
+
+ipcMain.handle('dialog:openFolder', (): string | null => {
+    const result: string[] | undefined = dialog.showOpenDialogSync({
+        properties: ['openDirectory'],
+    });
+
+    if (!result || result.length === 0) {
+        return null;
+    }
+    return result[0]; // Return the selected folder path
+});
 
 app.on('ready', createWindow);
 

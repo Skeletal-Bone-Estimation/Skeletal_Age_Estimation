@@ -1,4 +1,25 @@
-<div id = "dataDiv">
+<!-- Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis -->
+
+<div class = "sideBarData">
+    <label for="dataEntrySideText">Skeletal ID:</label>
+    <input type="text" id="dataEntrySideCaseID" name="dataEntrySideText" maxlength="20">
+
+    <label for="sex">Sex:</label>
+    <select name="sex" id="dataEntrySideSex">
+        <option value="unknown">Unknown</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+
+    <label for="race">Population Affinity:</label>
+    <select name="race" id="dataEntrySideAffinity">
+        <option value="unknown">Unknown</option>
+        <option value="black">Black</option>
+        <option value="white">White</option>
+    </select>
+</div>
+
+<div id = "dataDiv">        
     <div class = "dataEntry">
         <label class="dataEntryLabel" for="dataEntry">Auricular Area</label>
         <div class = "tmWrapper">
@@ -23,6 +44,10 @@
             <option value="six">6</option>
         </select>
     </div>
+    <button class="uploadImageButton" id="uploadImageButtonAA">
+        <img src="assets/images/uploadImageIcon.png" alt="Upload Auricular Area Image">
+    </button>
+    <div id="galleryAuricular" class="image-gallery"></div>
     </div>
     <div class = "dataEntry">
         <label class="dataEntryLabel" for="dataEntry">Pubic Symphysis</label>
@@ -50,6 +75,10 @@
             <option value="seven">7</option>
         </select>
     </div>
+    <button class="uploadImageButton" id="uploadImageButtonPS">
+        <img src="assets/images/uploadImageIcon.png">
+    </button>
+    <div id="galleryPubic" class="image-gallery"></div>
     </div>
     <div class = "dataEntry">
         <label class="dataEntryLabel" for="dataEntry">Sternal Rib End</label>
@@ -77,6 +106,10 @@
             <option value="seven">7</option>
         </select>
     </div>
+    <button class="uploadImageButton" id="uploadImageButtonSR">
+        <img src="assets/images/uploadImageIcon.png" alt="Upload Sternal Ribs Image">
+    </button>
+    <div id="gallerySternal" class="image-gallery"></div>
     </div>
     <div class = "dataEntry">
         <label class="dataEntryLabel" for="dataEntry">Third Molars</label>
@@ -91,7 +124,7 @@
             <option value="F">F</option>
             <option value="G">G</option>
             <option value="H">H</option>
-            <option value="unknown">Unknown</option>
+            <option value="Unknown">Unknown</option>
         </select>
         <label for="Top Right">Top Right:</label>
         <select id="thirdMolarTR" name="Top Right">
@@ -103,7 +136,7 @@
             <option value="F">F</option>
             <option value="G">G</option>
             <option value="H">H</option>
-            <option value="unknown">Unknown</option>
+            <option value="Unknown">Unknown</option>
         </select>
         <label for="Bottom Left">Bottom Left:</label>
         <select id="thirdMolarBL" name="Bottom Left">
@@ -115,7 +148,7 @@
             <option value="F">F</option>
             <option value="G">G</option>
             <option value="H">H</option>
-            <option value="unknown">Unknown</option>
+            <option value="Unknown">Unknown</option>
         </select>
         <label for="Bottom Right">Bottom Right:</label>
         <select id="thirdMolarBR" name="Bottom Right">
@@ -127,14 +160,48 @@
             <option value="F">F</option>
             <option value="G">G</option>
             <option value="H">H</option>
-            <option value="unknown">Unknown</option>
+            <option value="Unknown">Unknown</option>
         </select>
     </div>
+    <button class="uploadImageButton" id="uploadImageButtonTM">
+        <img src="assets/images/uploadImageIcon.png" alt="Upload Third Molar Image">
+    </button>
+    <div id="galleryMolar" class="image-gallery"></div>
     </div>
 </div>
-<div id = "notesDiv">
-    <div class = "notesEntry">
-        <label class="notesEntryLabel" for="notesEntry">Notes</label>
-        <textarea id="notes" name="notes"></textarea>
+
+<div id = "notesAndReports">
+    <div id = "notesDiv">
+        <div class = "notesEntry">
+            <label class="notesEntryLabel" for="notesEntry">Notes</label>
+            <textarea id="notes" name="notes"></textarea>
+        </div>
+    </div>
+    <div id="reportAndGuideDiv">
+        <div id = "scoringGuideDiv">
+            <div class="guideBtn">
+                <button class="button-dark" id="scoringGuide">Scoring Guidelines</button>
+            </div>
+        </div>
+        <div id = "reportBtnDiv">
+            <div class="reportButton">
+                <select id="analysisSelector">
+                    <option value="default">Default Analysis</option>
+                    <option value="image">Image Analysis</option>
+                    <option value="prediction">Regression Analysis</option>
+                </select>
+                <br>
+                <button class="button-dark" id="dataEntryReport">Generate Report</button>
+                <br>
+                <button class="button-dark" id="viewMostRecentReport">View Most Recent Report</button>
+            </div>
+        </div>
     </div>
 </div>
+
+<div id="modalContainer" class="gallery-modal">
+    <div id="gallery-modalContent" class="gallery-modalContent">
+    </div>
+</div>
+  
+  

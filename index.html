@@ -1,3 +1,4 @@
+<!-- Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis -->
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
@@ -13,22 +14,8 @@
             <div class="sideBarHeader">
                 <h2>Cases</h2>
             </div>
-            <div class = "cases">
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
-                <h2>test</h2>
+            <div id="caseList" class = "cases">
+                <!-- Cases dynamically added here -->
             </div>
             <div id="rootBar">
                 <!-- Content goes here -->
@@ -36,16 +23,27 @@
         </div>
         <div class="mainScreen">
             <div class="topBar">
-                <button class="button-dark" id="homeBtn">Home</button>
-                <button class="button-dark" id="saveBtn">Save Case</button>
-                <button class="button-dark" id="loadBtn">Open Case</button>
-                <input type="file" id="loadCase" accept=".xml" style="display: none;"/>
+                <div id="topBarButtons">
+                    <!-- <button class="button-dark-top" id="homeBtn">Home</button> -->
+                    <button class="button-dark-top" id="createBtn">Create New Case</button>
+                    <button class="button-dark-top" id="loadBtn">Load Case From File</button>
+                    <button class="button-dark-top" id="saveBtn">Change Current Case Save Location</button>
+                    <input type="file" id="loadCase" accept=".xml" style="display: none;"/>
+                </div>
             </div>
+
             <div id="rootDiv">
                 <!-- Content goes here -->
             </div>
+            <div class="modal" id="modalContainer" style="display:none;">
+                <div id="modalContent">
+                  <!-- Content from modal will be injected here -->
+                </div>
+            </div>
+              
         </div>
     </div>
+
     <script>var exports = {};</script>
     <script src="./dist-electron/renderer.js" defer></script>
 </body>

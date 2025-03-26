@@ -1,0 +1,66 @@
+<div id="reportDiv" class="reportDiv">
+    <!--left side elements / Column 1-->
+    <div id="graphDiv" class="graphDiv">
+        <div class="reportButtonsContainer">
+            <button class="reportButtons" id="changeGraphBtn90">90% Confidence</button>
+            <button class="reportButtons" id="changeGraphBtn95">95% Confidence</button>
+        </div>
+        <!--This is where the graph goes-->
+        <div class="graphPlacement">
+            <!-- Confidence Interval Indicator -->
+            <div class="graphTitle" id="graphTitle"></div>
+            <h3>Age</h3>
+            <!-- Add vertical lines here -->
+            <div class="vertical-line line-10"> 10 </div>
+            <div class="vertical-line line-20"> 20 </div>
+            <div class="vertical-line line-30"> 30 </div>
+            <div class="vertical-line line-40"> 40 </div>
+            <div class="vertical-line line-50"> 50 </div>
+            <div class="vertical-line line-60"> 60 </div>
+            <div class="vertical-line line-70"> 70 </div>
+            <div class="vertical-line line-80"> 80 </div>
+            <div class="vertical-line line-90"> 90 </div>
+            
+            <div class="range-container">
+                <div class="range-bar" id="ageBar"> Age Range </div>
+            </div>
+        
+            <div class="range-container">
+                <div class="range-bar" id="pubicSymphysisBar"> Pubic Symphysis </div>
+            </div>
+
+            <div class="range-container">
+                <div class="range-bar" id="auricularSurfaceBar"> Auricular Surface </div>
+            </div>
+        
+            <div class="range-container">
+                <div class="range-bar" id="sternalEndBar"> Sternal End </div>
+            </div>         
+        </div>
+        
+        <div class="reportButtonsContainer">
+            <button class="reportButtons" id="downloadBtn">Download Report</button>
+            <button class="reportButtons" id="printBtn">Print Report</button>
+            <button class="reportButtons" id="archiveBtn">Report Archive</button>
+            <button class="reportButtons" id="compareBtn">Compare Report</button>
+        </div>
+        <button class="reportButtons" id="backBtn">Back to Data Entry</button>
+    </div>
+
+    <!--right side elements / column 2-->
+    <div class="reportRightSide">
+        <!--title of case-->
+        <div id="reportCaseTitle"></div>
+        <!--overall range summarized from all methods-->
+        <div id="summarizedRange"></div>
+
+        <!--different ranges for individual methods-->
+        <div class="dataChartDiv">
+            <div id="pubicData"></div>
+            <div id="auricularData"></div>
+            <div id="sternalData"></div>
+            <div id="molarData"></div>
+        </div>
+    </div>
+    
+</div>

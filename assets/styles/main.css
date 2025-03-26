@@ -1,4 +1,6 @@
-/* Main.css */
+/* Main.css 
+   Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+*/
 :root{
   --on-dark: rgb(255,255,255);
   --on-light: rgb(11, 65, 56);
@@ -39,12 +41,16 @@ body {
 
 .homeButtons {
   padding-bottom: 5vh;
-  display: grid;
+  display: flex;
+  gap: 10vw;
   row-gap: 7vh;
 }
 
 .homeTitle {
   overflow: clip;
+  transform: translate(.5vw);
+  font-size: 4vw;
+  justify-content: center;
 }
 
 #dataDiv {
@@ -64,11 +70,37 @@ body {
   padding: 10px;
 }
 
+/*report button on data entry screen*/
+.reportButton {
+  display: relative;
+}
+
 .dataEntryLabel{
   position: absolute;
   top: -12px;
   left: 2px;
   background-color: var(--background-color);
+}
+
+/*upload images buttons*/
+.dataEntry .uploadImageButton {
+  margin-top: 15px;   
+  display: block;       
+  margin-left: 20px;
+  border: none;
+  margin-bottom: 5px;
+  background: none;
+  padding: 0;
+
+}
+
+.uploadImageButton:hover img {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.uploadImageButton:active {
+  transform: scale(0.95);  
 }
 
 .wrapper {
@@ -77,18 +109,24 @@ body {
 
 .sideBar {
   background-color: var(--div-color-2);
-  width: 12vw;
+  width: 20%;
   height: 98vh;
-  min-width: 125px;
-  max-width: 20vw;
+  min-width: 200px;
+  max-width: 20%;
   position: sticky;
   top: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  resize: horizontal;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .sideBarHeader {
   padding: 0px 25px;
   height: 76px;
-  background-color: var(--div-color-3);
+  background-color: var(--div-color-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -101,23 +139,101 @@ body {
   font-size: 175%;
 }
 
-#cases {
+#caseList {
+  padding-right: 10px;
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
   border-bottom-style: solid;
   border-bottom-color: var(--resizer-color);
+}
+
+.caseItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: lightseagreen;
+  width: calc(100% - 10px);
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.caseItem span {
+  flex-grow: 1;
+  font-size: large;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  align-self: center;
+  padding-right: 20px;
+}
+
+.caseButtons {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  min-width: 120px;
+}
+
+@media (width: 289px) {
+  .caseButtons {
+    padding-top: 10px; /* Adds top padding when wrapping occurs */
+  }
+}
+
+.caseButtons button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  transition: var(--background-color) 0.3s ease;
+  white-space: nowrap;
+}
+
+.caseButtons button:hover {
+  background-color: darkgreen;
+}
+
+.caseButtons button:disabled {
+  background-color: darkgreen;
+}
+
+.caseButtons button:nth-child(2) {
+  background-color: red;
+}
+
+.caseButtons button:nth-child(2):hover {
+  background-color: darkred;
 }
 
 .topBar {
   position: sticky;
   top: 0;
   display: flex;
-  justify-content: center;
   align-items: center; 
+  justify-content: center;
   border-bottom-style: solid;
   border-bottom-color: var(--resizer-color);
   width: 100;
   height: 76px;
   z-index: 1;
-  background-color: var(--div-color-3);
+  background-color: var(--div-color-2);
+}
+
+#topBarButtons {
+  display: none;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
 }
 
 .resizer {
@@ -150,17 +266,16 @@ body {
 }
 
 .button-dark {
-  background-color: var(--on-light);
-  border: 3mm ridge var(--border-color-on-dark);
+  background-color: var(--div-color-2);
   color: var(--on-dark); /* text color: always inverse of backgroud-color*/
-  padding: 15px 32px;
+  border: 2px solid var(--div-color-2);
+  padding: 5vh 5vw;
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 16px;
-  height: 76px;
-  width: auto;
+  font-size: 2vh;
   overflow: hidden;
+  border-radius: 8px;
 }
 
 .button-dark:hover {
@@ -168,9 +283,29 @@ body {
   transition: 0.2s;
 }
 
+.button-dark-top {
+  background-color: var(--div-color-2);
+  color: var(--on-dark); /* text color: always inverse of backgroud-color*/
+  border: 2px solid var(--div-color-2);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  height: 76px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.button-dark-top:hover {
+  background-color: var(--hover-on-light);
+  transition: 0.2s;
+}
+
 .mercyImg {
-  height: 15vh;
-  transform: translate(255px);
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
 }
 
 .pbImg {
@@ -178,8 +313,11 @@ body {
 }
 
 .psuBehrImg {
-  height: 25vh;
-  transform: translate(200px);
+  width: 140%;
+  height: 140%;
+  object-fit: contain;
+  transform: translate(1px);
+  margin-top: 15px;
 }
 
 #createDiv {
@@ -215,24 +353,24 @@ body {
   opacity: 0;
 }
 
+
+
 .sideBarData {
   display: flex;
-  flex-direction: column;
+  flex-direction: center;
   justify-content: center;
   align-items: center; 
-  gap: 4px;
+  gap: 10px;
   min-height: 10vh;
   margin: 0;          
-  padding: 0;        
-  box-sizing: border-box; 
+  padding: -10px;        
   overflow: scroll;
   scrollbar-width: thin;
-  scrollbar-color: white var(--div-color-2);
-  color: white;
+  color: black;
 }
 
 #dataEntrySideText {
-  width: 70%;
+  width: 50%;
 }
 
 #notes {
@@ -248,8 +386,8 @@ body {
   margin: 5px;
   position: relative;
   padding: 10px;
-  height: 50vh;
-  width: 25vw;
+  height: 40vh;
+  width: 40vw;
   display: flex;
   justify-content:center;
   align-items: center; 
@@ -269,36 +407,21 @@ body {
   gap: 20px;
 }
 
-
-.mercyImg {
-  width: 75%;
-  height: 75%;
-  object-fit: contain;
-  transform: translate(-2px);
-}
-
 .pbImg {
   overflow:hidden;
-}
-
-.psuBehrImg {
-  width: 150%;
-  height: 150%;
-  object-fit: contain;
-  transform: translate(1px);
-  margin-top: 15px;
 }
 
 .ellipse-container {
   display: flex;
   justify-content: center; 
-  gap: 150px;
+  gap: 5vw;
+  padding-bottom: 50px;
 }
 
 .psuCircle {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  width: 20vw;
+  height: auto;
   border: 10px solid;
   border-color: var(--penn-state-blue);
   background-color: white;
@@ -309,12 +432,637 @@ body {
 
 .ellipse {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  width: 20vw;
+  height: auto;
   border: 10px solid;
   border-color: var(--border-color-on-light);
   background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.ellipse-container-side {
+  display: grid;
+  justify-content: center; 
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.psuCircle-side {
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  border: 10px solid;
+  border-color: var(--penn-state-blue);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ellipse-side {
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  border: 10px solid;
+  border-color: var(--div-color-3);
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#notesAndReports {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+#notesDiv {
+  flex: 1;
+  margin-right: 20px;
+}
+
+#reportAndGuideDiv {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#reportBtnDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+#scoringGuideDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 20px;
+  margin-bottom: 130px;
+  margin-top: 5px;
+}
+
+#scoringGuide, #dataEntryReport {
+  width: 100%;
+}
+
+/*report html */
+.reportDiv {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+  gap: 20px; /*space between right and left sides */
+  width: 100%;
+  max-width: 1400px; 
+  margin: 0 auto; 
+  padding: 10px; 
+  box-sizing: border-box;
+}
+
+/* graph section */
+#graphDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 50px; 
+  align-items: center;
+  justify-content: center; 
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+/* Temp graph placement */
+.graphPlacement {
+  width: clamp(300px, 80%, 800px); 
+  aspect-ratio: 1; 
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* This is needed for absolute positioning of the vertical lines */
+}
+
+.graphPlacement h3 {
+  position:absolute;
+  top: -10%;
+}
+
+.graphTitle {
+  position:absolute;
+  top: -10%;
+}
+
+/* Style for vertical lines */
+.vertical-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: rgba(0,0,0,0.2);
+  font-weight: bold;
+}
+
+/* Positioning the lines at 10% through 90% */
+.line-10 { left: 10%; }
+.line-20 { left: 20%; }
+.line-30 { left: 30%; }
+.line-40 { left: 40%; }
+.line-50 { left: 50%; }
+.line-60 { left: 60%; }
+.line-70 { left: 70%; }
+.line-80 { left: 80%; }
+.line-90 { left: 90%; }
+
+
+/* report buttons container*/
+.reportButtonsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; 
+  width: 100%;
+  max-width: 300px; 
+  min-width: 150px; 
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+}
+
+/* individual button formatting */
+.reportButtons {
+  background-color: var(--div-color-2);
+  border: 2px solid var(--div-color-2);
+  color: var(--on-dark);
+  text-align: center;
+  text-decoration: none;
+  font-size: clamp(12px, 2vw, 16px); /* have font size scale */
+  padding: 10px 15px;
+  width: 48%; 
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.reportButtons:hover {
+  background-color: var(--hover-on-light);
+  transition: 0.2s;
+}
+
+/* right side */
+.reportRightSide {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center; 
+  justify-content: center; 
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+/* casee title */
+#reportCaseTitle {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 150px; 
+  text-align: center;
+  padding: 10px;
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  font-size: clamp(14px, 2vw, 18px); 
+  box-sizing: border-box;
+}
+
+/* summarized/overall range */
+#summarizedRange {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 150px; 
+  text-align: center;
+  padding: 10px;
+  background-color: var(--div-color-2);
+  color: var(--div-color-1);
+  font-size: clamp(14px, 2vw, 18px); 
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* container for 2x2 grid of method summaries */
+.dataChartDiv {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px; 
+  width: 75%; 
+  max-width: 600px; 
+  padding: 10px;
+  box-sizing: border-box; 
+}
+
+/* different method datas */
+#pubicData,
+#auricularData,
+#sternalData,
+#molarData {
+  width: 100%;
+  aspect-ratio: 1; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: center;
+  background: var(--div-color-1);
+  border: 2px solid var(--border-color-on-light);
+  border-radius: 5px;
+  box-sizing: border-box; 
+  gap: 10px; 
+}
+
+/* different method datas */
+#pubicDataLeft,
+#auricularDataLeft,
+#sternalDataLeft,
+#molarDataLeft,
+#pubicDataRight,
+#auricularDataRight,
+#sternalDataRight,
+#molarDataRight {
+  width: 100%;
+  aspect-ratio: 0.7; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: center;
+  background: var(--div-color-1);
+  border: 2px solid var(--border-color-on-light);
+  border-radius: 0px;
+  box-sizing: border-box; 
+}
+
+.compareDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.compareHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 50px;
+}
+
+/* case title in compare*/
+#reportCaseTitleCompare {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 150px; 
+  text-align: center;
+  padding: 15px;
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  font-size: clamp(14px, 2vw, 18px); 
+  box-sizing: border-box;
+}
+
+.compareBack {
+  margin-left: auto;
+}
+
+.compareData {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; 
+  align-items: center;
+  gap: 40px; 
+}
+
+.compareDataLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  gap: 10px; 
+}
+
+#graphPlacementLeft {
+  width: clamp(400px, 50%, 400px); 
+  aspect-ratio: 1; 
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dataChartDivLeft {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px; 
+  width: 150%; 
+  max-width: 2000px; 
+  padding: 10px;
+  box-sizing: border-box; 
+}
+
+#summarizedRangeLeft {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 250px; 
+  text-align: center;
+  padding: 15px;
+  background-color: var(--div-color-2);
+  color: var(--div-color-1);
+  font-size: clamp(14px, 2vw, 18px); 
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.compareDataRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  gap: 10px; 
+}
+
+#graphPlacementRight {
+  width: clamp(400px, 50%, 400px); 
+  aspect-ratio: 1; 
+  background: white;
+  border: 2px solid var(--div-color-2);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dataChartDivRight {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px; 
+  width: 150%; 
+  max-width: 2000px; 
+  padding: 10px;
+  box-sizing: border-box; 
+}
+
+#summarizedRangeRight {
+  width: 90%;
+  max-width: 400px; 
+  min-width: 250px; 
+  text-align: center;
+  padding: 15px;
+  background-color: var(--div-color-2);
+  color: var(--div-color-1);
+  font-size: clamp(14px, 2vw, 18px); 
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/*method labels*/
+.methodLabel {
+  font-weight: bold;
+  font-size: clamp(14px, 2vw, 18px);
+  text-transform: uppercase;
+}
+
+/* formatting for the range values under the methods */
+.rangeValues {
+  font-size: clamp(12px, 1.5vw, 16px);
+  text-align: center;
+  line-height: 1.5;
+}
+
+select {
+  border-radius: 8px;
+  padding: 5px;
+  border: 1px solid var(--border-color-on-light);
+  background-color: white;
+  font-size: 16px;
+}
+
+input[type="text"] {
+  border-radius: 12px;
+  padding: 8px;
+  border: 1px solid var(--border-color-on-light);
+  background-color: white;
+}
+
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Ensure it overlays other content */
+}
+
+#modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  animation: slide-down 0.3s ease-out;
+  text-align: center;
+  max-height: 70vh;
+  overflow-y: auto;
+
+}
+
+/* Slide-down animation */
+@keyframes slide-down {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Style for the unordered list */
+#reportList {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 0;       /* Remove default padding */
+  margin: 20px 0;        /* Add some margin above and below the list */
+  font-size: 16px;       /* Set font size */
+}
+
+/* Style for each list item */
+#reportList li {
+  background-color: #f5f5f5;  /* Light gray background for items */
+  padding: 10px 15px;         /* Add some padding */
+  margin-bottom: 10px;        /* Add space between items */
+  border-radius: 5px;         /* Round corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Add a hover effect for interactivity */
+#reportList li:hover {
+  background-color: #eaeaea; /* Slightly darker on hover */
+  cursor: pointer;           /* Change cursor on hover */
+}
+
+.modalHeader {
+  margin-top: 0;
+  color: #c0392b;
+}
+
+#archiveHeader, #savePathHeader {
+  color: var(--div-color-2);
+}
+
+#errorModalMsg, #savePathModalMsg {
+  color: #333;
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+#closeErrorModal, #selectSavePathBtn, #acceptNewSavePath, #submitReportBtn, #closeModal {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+#savePathButtons, #reportModalButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.modal-hr {
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin-bottom: 20px;
+}
+
+#selectSavePathBtn, #acceptNewSavePath, #submitReportBtn, #closeModal {
+  background-color: var(--on-light);
+}
+
+#submitReportBtn:hover, #selectSavePathBtn:hover, #acceptNewSavePath:hover, #closeModal:hover {
+  background-color: var(--hover-on-light);
+}
+
+#submitReportBtn:disabled {
+  background-color: #a93226;
+  color: white;
+}
+
+#closeErrorModal:hover {
+  background-color: #a93226;
+}
+
+#reportModalButtons {
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  width: auto;
+}
+
+#reportList ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#reportList li {
+  padding: 8px;
+  background-color: var(--div-color-1);
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#reportList li:hover {
+  background-color: var(--hover-on-dark); /* Light gray background on hover */
+  color: #333; /* Change text color on hover */
+}
+
+#reportList li.selected {
+  background-color: var(--hover-on-dark);
+  color: black; /* White text for selected item */
+}
+
+.range-container {
+  position: relative;
+  flex-direction: row;
+  width: 100%;
+  height: 80px;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  margin: 20px auto;
+
+}
+
+.range-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  height: 100%;
+  width: 100%; 
+  background-color: rgba(15, 89, 78, 0.9);
+  font-weight: bold;
+}
+
+/*for gallery modal/viewing*/
+.gallery-modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; 
+}
+
+/*modal content container */
+#gallery-modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+}
+
+/*close button for modal */
+.gallery-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: #333;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
 }
