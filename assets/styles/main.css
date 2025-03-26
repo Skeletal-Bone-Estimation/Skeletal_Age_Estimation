@@ -1078,6 +1078,25 @@ input[type="text"] {
   width: 100%; 
   background-color: rgba(15, 89, 78, 0.9);
   font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid black; /* Adds a black border */
+}
+
+.range-bar-age {
+  background-color: rgba(255, 200, 0, 0.9);
+  color: black;
+}
+
+.range-bar-pubicSymphysis {
+  background-color: rgba(255, 0, 0 , 0.9);
+}
+
+.range-bar-auricularSurface {
+  background-color: rgba(128, 0, 128, 0.9);
+}
+
+.range-bar-sternalEnd {
+  background-color: rgba(0, 0, 255, 0.9);
 }
 
 /*for gallery modal/viewing*/
@@ -1115,3 +1134,4 @@ input[type="text"] {
   font-weight: bold;
   cursor: pointer;
 }
+
