@@ -397,7 +397,7 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         };
 
         // Get values for both datasets
-        if (data1 > data2) {
+        if (getSymphysisValues(data1) > getSymphysisValues(data2)) {
             var [S1, S2, S3] = getSymphysisValues(data1);
         } else {
             var [S1, S2, S3] = getSymphysisValues(data2);
@@ -715,8 +715,12 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S1, S2, S3] = getSternalEndValues(data1);
         const [S4, S5, S6] = getSternalEndValues(data2);
 
-        results[Report.sternalEnd][`${side}`] = this.average(S1, S4);
-        results[Report.sternalEnd][`${side}_min`] = Math.min(S2, S5);
+        results[Report.sternalEnd][`${side}`] =
+            S1 === 0 || S4 === 0 ? Math.max(S1, S4) : this.average(S1, S4);
+        results[Report.sternalEnd][`${side}_min`] =
+            S2 === 0 && S5 === 0
+                ? 0
+                : Math.min(S2 === 0 ? Infinity : S2, S5 === 0 ? Infinity : S5);
         results[Report.sternalEnd][`${side}_max`] = Math.max(S3, S6);
     }
 
@@ -816,8 +820,12 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const [S1, S2, S3] = getAuricularSurfaceValues(data1);
         const [S4, S5, S6] = getAuricularSurfaceValues(data2);
 
-        results[Report.auricularSurface][`${side}`] = this.average(S1, S4);
-        results[Report.auricularSurface][`${side}_min`] = Math.min(S2, S5);
+        results[Report.auricularSurface][`${side}`] =
+            S1 === 0 || S4 === 0 ? Math.max(S1, S4) : this.average(S1, S4);
+        results[Report.auricularSurface][`${side}_min`] =
+            S2 === 0 && S5 === 0
+                ? 0
+                : Math.min(S2 === 0 ? Infinity : S2, S5 === 0 ? Infinity : S5);
         results[Report.auricularSurface][`${side}_max`] = Math.max(S3, S6);
     }
 
@@ -941,11 +949,10 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case ThirdMolar.E:
                 case ThirdMolar.F:
                 case ThirdMolar.G:
+                case ThirdMolar.Unknown:
                     return 0;
                 case ThirdMolar.H:
                     return 1;
-                case ThirdMolar.Unknown:
-                    return -1;
                 case ThirdMolar.Error:
                 default:
                     throw new Error('Invalid third molar phase');
