@@ -53,11 +53,42 @@ export class PhotoModal extends AbstractModal {
         }
         imgElem.src = image;
         imgElem.alt = 'Photo';
-        // max size
-        imgElem.style.maxWidth = '80vw';
-        imgElem.style.maxHeight = '80vh';
+
+        //max size
+        imgElem.style.maxWidth = '90vw';
+        imgElem.style.maxHeight = '90vh';
         imgElem.style.display = 'block';
         imgElem.style.margin = '0 auto';
+
+        imgElem.onload = () => {
+            //if images are below this threshold we resize them to be larger
+            const thresholdWidth = 400;
+            const thresholdHeight = 400;
+            let scaleFactor = 1;
+
+            if (
+                imgElem.naturalWidth < thresholdWidth ||
+                imgElem.naturalHeight < thresholdHeight
+            ) {
+                scaleFactor = 2.5;
+            }
+
+            //get the new dims for the image
+            const scaledWidth = imgElem.naturalWidth * scaleFactor;
+            const scaledHeight = imgElem.naturalHeight * scaleFactor;
+
+            //canvas for scaling to try and keep quality
+            const canvas = document.createElement('canvas');
+            canvas.width = scaledWidth;
+            canvas.height = scaledHeight;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(imgElem, 0, 0, scaledWidth, scaledHeight);
+            }
+            this.modalContent.replaceChild(canvas, imgElem);
+        };
+
         this.modalContent.appendChild(imgElem);
 
         //close btn
