@@ -1089,14 +1089,17 @@ input[type="text"] {
 
 .range-bar-pubicSymphysis {
   background-color: rgba(255, 0, 0 , 0.9);
+  color: black;
 }
 
 .range-bar-auricularSurface {
-  background-color: rgba(128, 0, 128, 0.9);
+  background-color: rgba(218, 0, 218, 0.9);
+  color: black;
 }
 
 .range-bar-sternalEnd {
-  background-color: rgba(0, 0, 255, 0.9);
+  background-color: rgba(95, 95, 255, 0.9);
+  color: black;
 }
 
 /*for gallery modal/viewing*/
