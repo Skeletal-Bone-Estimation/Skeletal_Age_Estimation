@@ -327,6 +327,24 @@ export class PageController {
 
         this.isExporting = true;
 
+        const minValue = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
+
+        const maxValue = Math.max(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).max,
+        );
+
         if (report.getThirdMolar(Side.C) === 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
@@ -337,14 +355,13 @@ export class PageController {
                     <br />
             <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
                     <br />
-            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
-                const minValue = Math.min(
-                    report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
-                    report.getAuricularSurfaceRange(Side.C)?.min ?? Infinity,
-                    report.getSternalEndRange(Side.C)?.min ?? Infinity,
-                );
-                return (minValue < 18 ? 18 : minValue).toFixed(2);
-            })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+            <p>Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <
+                18 || minValue === Infinity
+                ? 18
+                : minValue
+            ).toFixed(2)} - ${
+                maxValue === 0 && minValue === Infinity ? '18.00' : maxValue
+            } years at the time of death.</p>`;
         }
 
         if (!content.trim()) {
@@ -393,6 +410,24 @@ export class PageController {
 
         let content = '';
 
+        const minValue = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
+
+        const maxValue = Math.max(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).max,
+        );
+
         if (report.getThirdMolar(Side.C) === 0) {
             content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
@@ -407,15 +442,13 @@ export class PageController {
                         <br />
                         <br />
                         <br />
-                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
-                    const minValue = Math.min(
-                        report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
-                        report.getAuricularSurfaceRange(Side.C)?.min ??
-                            Infinity,
-                        report.getSternalEndRange(Side.C)?.min ?? Infinity,
-                    );
-                    return (minValue < 18 ? 18 : minValue).toFixed(2);
-                })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.`;
+                Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <
+                    18 || minValue === Infinity
+                    ? 18
+                    : minValue
+                ).toFixed(2)} - ${
+                    maxValue === 0 && minValue === Infinity ? '18.00' : maxValue
+                } years at the time of death.`;
         }
 
         if (!content.trim()) {

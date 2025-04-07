@@ -396,6 +396,7 @@ body {
 
 #dataEntrySideCaseID {
   margin-right: 3vw;
+  font-size: clamp(16px, 2vh, 20px)
 }
 
 #dataEntrySideSex {
@@ -537,12 +538,15 @@ body {
 }
 
 #analysisSelector {
-  margin-bottom: 5px;
+  margin-bottom: 15%;
+  width: 100%;
+  font-size: clamp(16px, 2vh, 28px);
+  text-align: center;
 }
 
 #dataEntryReport{
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 15%;
 }
 
 #scoringGuideDiv {

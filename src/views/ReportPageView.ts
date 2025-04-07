@@ -307,20 +307,20 @@ export class ReportPageView extends AbstractView {
         if (ninetyPercentConfidenceInterval) {
             element.innerHTML = `
                 <strong>${sectionTitle}:</strong>
-                <p>Left Mean Estimate: ${leftValue.toFixed(2)}</p>
-                <p>90% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
-                <p>Right Mean Estimate: ${rightValue.toFixed(2)}</p>
-                <p>90% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
+                <p>Left Mean Estimate: ${leftValue === -1 ? '0.00' : leftValue.toFixed(2)}</p>
+                <p>90% Confidence Range: ${leftRange.min === -1 ? '0.00' : leftRange.min.toFixed(2)} - ${leftRange.max === -1 ? '0.00' : leftRange.max.toFixed(2)}</p>
+                <p>Right Mean Estimate: ${rightValue === -1 ? '0.00' : rightValue.toFixed(2)}</p>
+                <p>90% Confidence Range: ${rightRange.min === -1 ? '0.00' : rightRange.min.toFixed(2)} - ${rightRange.max === -1 ? '0.00' : rightRange.max.toFixed(2)}</p>
                 <p>Combined Mean Estimate: ${combinedValue.toFixed(2)}</p>
                 <p>90% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
             `;
         } else {
             element.innerHTML = `
                 <strong>${sectionTitle}:</strong>
-                <p>Left Mean Estimate: ${leftValue.toFixed(2)}</p>
-                <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
-                <p>Right Mean Estimate: ${rightValue.toFixed(2)}</p>
-                <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
+                <p>Left Mean Estimate: ${leftValue === -1 ? '0.00' : leftValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${leftRange.min === -1 ? '0.00' : leftRange.min.toFixed(2)} - ${leftRange.max === -1 ? '0.00' : leftRange.max.toFixed(2)}</p>
+                <p>Right Mean Estimate: ${rightValue === -1 ? '0.00' : rightValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${rightRange.min === -1 ? '0.00' : rightRange.min.toFixed(2)} - ${rightRange.max === -1 ? '0.00' : rightRange.max.toFixed(2)}</p>
                 <p>Combined Mean Estimate: ${combinedValue.toFixed(2)}</p>
                 <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
             `;
@@ -358,34 +358,43 @@ export class ReportPageView extends AbstractView {
      */
     private calculateSummarizedRange(report: AbstractReportModel): string {
         // Get the minimum and maximum age across all ranges
+        var minAgeCompare = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
         if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
-            var minAge = Math.min(
-                report.getPubicSymphysisRange(Side.C).min,
-                report.getAuricularSurfaceRange(Side.C).min,
-                report.getSternalEndRange(Side.C).min,
-            ).toFixed(2);
+            var minAge =
+                minAgeCompare === Infinity ? '0.00' : minAgeCompare.toFixed(2);
         } else {
-            if (
-                Math.min(
-                    report.getPubicSymphysisRange(Side.C).min,
-                    report.getAuricularSurfaceRange(Side.C).min,
-                    report.getSternalEndRange(Side.C).min,
-                ) > 18.0
-            ) {
-                var minAge = Math.min(
-                    report.getPubicSymphysisRange(Side.C).min,
-                    report.getAuricularSurfaceRange(Side.C).min,
-                    report.getSternalEndRange(Side.C).min,
-                ).toFixed(2);
+            if (minAgeCompare > 18.0 && minAgeCompare != Infinity) {
+                var minAge =
+                    minAgeCompare === Infinity
+                        ? '0.00'
+                        : minAgeCompare.toFixed(2);
             } else {
                 var minAge = '18.00';
             }
         }
-        const maxAge = Math.max(
-            report.getPubicSymphysisRange(Side.C).max,
-            report.getAuricularSurfaceRange(Side.C).max,
-            report.getSternalEndRange(Side.C).max,
-        ).toFixed(2);
+
+        const maxAge =
+            Math.max(
+                report.getPubicSymphysisRange(Side.C).max,
+                report.getAuricularSurfaceRange(Side.C).max,
+                report.getSternalEndRange(Side.C).max,
+            ) === 0 && minAge === '18.00'
+                ? '18.00'
+                : Math.max(
+                      report.getPubicSymphysisRange(Side.C).max,
+                      report.getAuricularSurfaceRange(Side.C).max,
+                      report.getSternalEndRange(Side.C).max,
+                  ).toFixed(2);
 
         // Convert min/max to numbers for updateRangeBar
         const minAgeNum = parseFloat(minAge);
@@ -506,17 +515,27 @@ export class ReportPageView extends AbstractView {
         var minRibC = meanRibC - ninetyMarginErrorRibC;
         var maxRibC = meanRibC + ninetyMarginErrorRibC;
 
+        var minAgeCompare = Math.min(
+            minPubC === 0 ? Infinity : minPubC,
+            minAurC === 0 ? Infinity : minAurC,
+            minRibC === 0 ? Infinity : minRibC,
+        );
+
         if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
-            var minAgeOverall = Math.min(minPubC, minAurC, minRibC);
+            var minAgeOverall = minAgeCompare === Infinity ? 0 : minAgeCompare;
         } else {
-            if (Math.min(minPubC, minAurC, minRibC) > 18.0) {
-                var minAgeOverall = Math.min(minPubC, minAurC, minRibC);
+            if (minAgeCompare > 18.0 && minAgeCompare != Infinity) {
+                var minAgeOverall =
+                    minAgeCompare === Infinity ? 0 : minAgeCompare;
             } else {
-                var minAgeOverall = 18.0;
+                var minAgeOverall = 18;
             }
         }
 
-        var maxAgeOverall = Math.max(maxPubC, maxAurC, maxRibC);
+        var maxAgeOverall =
+            Math.max(maxPubC, maxAurC, maxRibC) === 0 && minAgeOverall === 18.0
+                ? 18.0
+                : Math.max(maxPubC, maxAurC, maxRibC);
 
         this.ninetyConfidenceInfo = [
             minAgeOverall,
