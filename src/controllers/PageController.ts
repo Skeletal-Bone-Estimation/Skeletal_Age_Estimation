@@ -121,7 +121,7 @@ export class PageController {
                 } else
                     PageController.getInstance().loadModal(
                         Modals.Error,
-                        'Invalid save path selection.',
+                        'Invalid <strong>save path</strong> selection.',
                     );
             });
 
