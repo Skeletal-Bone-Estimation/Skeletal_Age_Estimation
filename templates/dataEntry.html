@@ -1,25 +1,25 @@
 <!-- Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis -->
+<div class = "dataEntryWrapper">
+    <div class = "sideBarData">
+    <label class="dataEntryTopLabel" for="dataEntrySideText">Skeletal ID:</label>
+    <input type="text" id="dataEntrySideCaseID" name="dataEntrySideText" maxlength="100">
 
-<div class = "sideBarData">
-    <label for="dataEntrySideText">Skeletal ID:</label>
-    <input type="text" id="dataEntrySideCaseID" name="dataEntrySideText" maxlength="20">
-
-    <label for="sex">Sex:</label>
+    <label class="dataEntryTopLabel" for="sex">Sex:</label>
     <select name="sex" id="dataEntrySideSex">
         <option value="unknown">Unknown</option>
         <option value="male">Male</option>
         <option value="female">Female</option>
     </select>
 
-    <label for="race">Population Affinity:</label>
+    <label class="dataEntryTopLabel" for="race">Population Affinity:</label>
     <select name="race" id="dataEntrySideAffinity">
         <option value="unknown">Unknown</option>
-        <option value="black">Black</option>
+        <option value="black">African American</option>
         <option value="white">White</option>
     </select>
-</div>
+    </div>
 
-<div id = "dataDiv">        
+    <div id = "dataDiv">        
     <div class = "dataEntry">
         <label class="dataEntryLabel" for="dataEntry">Auricular Area</label>
         <div class = "tmWrapper">
@@ -168,9 +168,9 @@
     </button>
     <div id="galleryMolar" class="image-gallery"></div>
     </div>
-</div>
+    </div>
 
-<div id = "notesAndReports">
+    <div id = "notesAndReports">
     <div id = "notesDiv">
         <div class = "notesEntry">
             <label class="notesEntryLabel" for="notesEntry">Notes</label>
@@ -190,18 +190,15 @@
                     <option value="image">Image Analysis</option>
                     <option value="prediction">Regression Analysis</option>
                 </select>
-                <br>
                 <button class="button-dark" id="dataEntryReport">Generate Report</button>
-                <br>
                 <button class="button-dark" id="viewMostRecentReport">View Most Recent Report</button>
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-<div id="modalContainer" class="gallery-modal">
+    <div id="modalContainer" class="gallery-modal">
     <div id="gallery-modalContent" class="gallery-modalContent">
     </div>
+    </div>
 </div>
-  
-  
