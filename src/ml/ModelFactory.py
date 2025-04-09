@@ -1,6 +1,6 @@
 import os
-from src.ml.LinearRegression import LinearRegression
-from src.ml.Classification import Classification
+from LinearRegression import LinearRegression
+from Classification import Classification
 
 class ModelFactory:
     """
@@ -21,6 +21,8 @@ class ModelFactory:
         """
         path = f'models/{model_name}.joblib'
         if os.path.exists(path):
+            print(f"Loading model: type={model_type}, name={model_name}")
+
             if model_type == 'linreg':
                 return LinearRegression(path)
             elif model_type == 'class':

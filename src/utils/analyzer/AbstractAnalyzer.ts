@@ -1,6 +1,7 @@
 import { CaseModel } from '../../models/CaseModel';
 import { Affinity, Analyzers, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
+import fs from 'fs';
 
 export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
     // store values for analysis modifications
@@ -33,6 +34,21 @@ export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
      */
     public modifyAffinity(affinity: Affinity): void {
         this.affinity = affinity;
+    }
+
+    protected getPort(): number {
+        var portFile = './src/ml/flask_port.json';
+
+        if (!fs.existsSync(portFile)) return -1;
+
+        try {
+            const data = fs.readFileSync(portFile, 'utf-8');
+            const { port } = JSON.parse(data);
+            return port;
+        } catch (err) {
+            console.error('Error reading port file:', err);
+            return -1;
+        }
     }
 
     public abstract getStrategy(): Analyzers;

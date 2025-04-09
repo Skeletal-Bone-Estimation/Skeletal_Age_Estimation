@@ -1,6 +1,6 @@
 import os
 import joblib
-from src.ml.BaseModel import BaseModel
+from BaseModel import BaseModel
 
 class Classification(BaseModel):
     """

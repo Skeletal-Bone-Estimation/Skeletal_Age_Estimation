@@ -1,6 +1,8 @@
 import os
 import joblib
-from src.ml.BaseModel import BaseModel
+import json
+import pandas as pd
+from BaseModel import BaseModel
 
 class LinearRegression(BaseModel):
     """
@@ -14,10 +16,17 @@ class LinearRegression(BaseModel):
             raise FileNotFoundError(f"Model file not found: {model_path}")
 
 
-    def preprocess(self, input_data):
-        return input_data
-
+    def preprocess(self, input_data):   
+        df_temp = pd.DataFrame([input_data])
+        df = pd.DataFrame()
+        
+        df['sex'] = df_temp['sex']
+        df['ps_phase'] = float((df_temp['psL'] + df_temp['psR']) / 2)
+        df['se_phase'] = float((df_temp['frL'] + df_temp['frR']) / 2)
+        df['as_phase'] = float((df_temp['aaL'] + df_temp['aaR']) / 2)
+        
+        return df
 
     def predict(self, input_data):
         preprocessed_data = self.preprocess(input_data)
-        return self.model.predict([preprocessed_data])
+        return self.model.predict(preprocessed_data).tolist()

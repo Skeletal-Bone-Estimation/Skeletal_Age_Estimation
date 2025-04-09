@@ -11,17 +11,17 @@ export class LinearRegressionStrategy extends AbstractAnalyzer {
     async executeAnalysis(_case: CaseModel): Promise<{}> {
         // TODO: Prediction analysis logic
 
-        var inputData: number[] = this.prepareData(_case);
+        var inputData: {} = this.prepareData(_case);
         var results: {} = {};
 
-        await fetch('http://localhost:6195/predict', {
+        await fetch(`http://localhost:${this.getPort()}/predict`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 model_type: 'linreg',
-                model_name: 'linreg',
+                model_name: 'svr_model',
                 input_data: inputData,
             }),
         })
@@ -37,9 +37,17 @@ export class LinearRegressionStrategy extends AbstractAnalyzer {
         return results;
     }
 
-    private prepareData(_case: CaseModel): number[] {
+    private prepareData(_case: CaseModel): {} {
         // Prepare the input data for the prediction model
-        return [];
+        return {
+            sex: _case.sex.valueOf(),
+            psL: _case.pubicSymphysisL.valueOf(),
+            psR: _case.pubicSymphysisR.valueOf(),
+            aaL: _case.auricularAreaL.valueOf(),
+            aaR: _case.auricularAreaR.valueOf(),
+            frL: _case.fourthRibL.valueOf(),
+            frR: _case.fourthRibR.valueOf(),
+        };
     }
 
     private formatResults(results: any): {} {
