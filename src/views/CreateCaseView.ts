@@ -9,7 +9,6 @@ import { dialog, Dialog, ipcMain, ipcRenderer } from 'electron';
 
 export class CreateCaseView extends AbstractView {
     private savePath: string = '';
-
     constructor(document: Document) {
         super(document);
     }
@@ -36,43 +35,56 @@ export class CreateCaseView extends AbstractView {
         document
             .getElementById(UI_Elements.createStartCase)!
             .addEventListener('click', () => {
+                // CaseID has higher importance compared to other enterable data on this screen and must be checked for a non-empty ID
                 var caseIDinput = document.getElementById(
                     'case',
                 ) as HTMLInputElement;
-                var sexSelect = document.getElementById(
-                    'sex',
-                ) as HTMLSelectElement;
-                var populationAffinitySelect = document.getElementById(
-                    'race',
-                ) as HTMLSelectElement;
-
                 var caseID = caseIDinput.value.trim();
-                var sex = parseInt(sexSelect.value);
-                var populationAffinity = parseInt(
-                    populationAffinitySelect.value,
-                );
+                if (caseID === '') {
+                    PageController.getInstance().loadModal(
+                        Modals.Error,
+                        '<strong>Skeletal ID</strong> cannot be empty.',
+                    );
+                } else if (this.savePath === '') {
+                    PageController.getInstance().loadModal(
+                        Modals.Error,
+                        'A <strong>save location</strong> must be selected.',
+                    );
+                } else {
+                    var sexSelect = document.getElementById(
+                        'sex',
+                    ) as HTMLSelectElement;
+                    var populationAffinitySelect = document.getElementById(
+                        'race',
+                    ) as HTMLSelectElement;
 
-                //console.log({ caseID, sex, populationAffinity }); // Debugging line
+                    var sex = parseInt(sexSelect.value);
+                    var populationAffinity = parseInt(
+                        populationAffinitySelect.value,
+                    );
 
-                PageController.getInstance().createCase(
-                    caseID,
-                    sex,
-                    populationAffinity,
-                    this.savePath,
-                );
-                const dc = DataController.getInstance();
-                XML_Controller.getInstance().saveAsFile(
-                    dc.loadedCases[
-                        dc.findCaseIndex(dc.openCaseID)
-                    ] as CaseModel,
-                    this.savePath,
-                    DataController.getInstance().openCaseID,
-                );
+                    //console.log({ caseID, sex, populationAffinity }); // Debugging line
 
-                PageController.getInstance().navigateTo(
-                    Pages.DataEntry,
-                    SideBar.dataBar,
-                );
+                    PageController.getInstance().createCase(
+                        caseID,
+                        sex,
+                        populationAffinity,
+                        this.savePath,
+                    );
+                    const dc = DataController.getInstance();
+                    XML_Controller.getInstance().saveAsFile(
+                        dc.loadedCases[
+                            dc.findCaseIndex(dc.openCaseID)
+                        ] as CaseModel,
+                        this.savePath,
+                        DataController.getInstance().openCaseID,
+                    );
+
+                    PageController.getInstance().navigateTo(
+                        Pages.DataEntry,
+                        SideBar.dataBar,
+                    );
+                }
             });
 
         document
@@ -88,7 +100,7 @@ export class CreateCaseView extends AbstractView {
                 } else
                     PageController.getInstance().loadModal(
                         Modals.Error,
-                        'A save location must be selected.',
+                        'A <strong>save location</strong> must be selected.',
                     );
             });
     }

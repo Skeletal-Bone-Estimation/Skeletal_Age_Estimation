@@ -18,14 +18,10 @@ export class ComparePageView extends AbstractView {
     private isInitialReportLoaded: boolean = false;
 
     constructor(document: Document) {
+        const dc = DataController.getInstance();
         super(document);
         this.storedReport = new NullReportModel();
-        this.storedCase =
-            DataController.getInstance().loadedCases[
-                DataController.getInstance().findCaseIndex(
-                    DataController.getInstance().openCaseID,
-                )
-            ];
+        this.storedCase = dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
     }
 
     /**
@@ -36,6 +32,7 @@ export class ComparePageView extends AbstractView {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
+        const dc = DataController.getInstance();
 
         const reportCompare = DataController.getInstance().openReport;
         const dc = DataController.getInstance();
@@ -191,6 +188,7 @@ export class ComparePageView extends AbstractView {
                 <p>Top Right: ${this.formatThirdMolar(report.getThirdMolar(Side.TR))}</p>
                 <p>Bottom Left: ${this.formatThirdMolar(report.getThirdMolar(Side.BL))}</p>
                 <p>Bottom Right: ${this.formatThirdMolar(report.getThirdMolar(Side.BR))}</p>
+                <p>Actual: ${this.formatThirdMolar(report.getThirdMolar(Side.C))}</p>
             `;
         } else {
             console.error('Element molarData not found!');
@@ -258,6 +256,7 @@ export class ComparePageView extends AbstractView {
                 <p>Top Right: ${this.formatThirdMolar(report.getThirdMolar(Side.TR))}</p>
                 <p>Bottom Left: ${this.formatThirdMolar(report.getThirdMolar(Side.BL))}</p>
                 <p>Bottom Right: ${this.formatThirdMolar(report.getThirdMolar(Side.BR))}</p>
+                <p>Actual: ${this.formatThirdMolar(report.getThirdMolar(Side.C))}</p>
             `;
         } else {
             console.error('Element molarData not found!');
@@ -293,13 +292,13 @@ export class ComparePageView extends AbstractView {
         }
 
         element.innerHTML = `
-            <strong>${sectionTitle}:</strong>
-            <p>Left: ${leftValue.toFixed(2)}</p>
-            <p>95% Confidence Range: ${leftRange.min.toFixed(2)} - ${leftRange.max.toFixed(2)}</p>
-            <p>Right: ${rightValue.toFixed(2)}</p>
-            <p>95% Confidence Range: ${rightRange.min.toFixed(2)} - ${rightRange.max.toFixed(2)}</p>
-            <p>Combined: ${combinedValue.toFixed(2)}</p>
-            <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
+                <strong>${sectionTitle}:</strong>
+                <p>Left Mean Estimate: ${leftValue === -1 ? '0.00' : leftValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${leftRange.min === -1 ? '0.00' : leftRange.min.toFixed(2)} - ${leftRange.max === -1 ? '0.00' : leftRange.max.toFixed(2)}</p>
+                <p>Right Mean Estimate: ${rightValue === -1 ? '0.00' : rightValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${rightRange.min === -1 ? '0.00' : rightRange.min.toFixed(2)} - ${rightRange.max === -1 ? '0.00' : rightRange.max.toFixed(2)}</p>
+                <p>Combined Mean Estimate: ${combinedValue.toFixed(2)}</p>
+                <p>95% Confidence Range: ${combinedRange.min.toFixed(2)} - ${combinedRange.max.toFixed(2)}</p>
         `;
 
         updateRangeBar(combinedRange.min, combinedRange.max, graphId);
@@ -325,20 +324,43 @@ export class ComparePageView extends AbstractView {
      */
     private calculateSummarizedRange(report: AbstractReportModel): string {
         // Get the minimum and maximum age across all ranges
+        var minAgeCompare = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
         if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
-            var minAge = Math.min(
-                report.getPubicSymphysisRange(Side.C).min,
-                report.getAuricularSurfaceRange(Side.C).min,
-                report.getSternalEndRange(Side.C).min,
-            ).toFixed(2);
+            var minAge =
+                minAgeCompare === Infinity ? '0.00' : minAgeCompare.toFixed(2);
         } else {
-            var minAge = '18.00';
+            if (minAgeCompare > 18.0 && minAgeCompare != Infinity) {
+                var minAge =
+                    minAgeCompare === Infinity
+                        ? '0.00'
+                        : minAgeCompare.toFixed(2);
+            } else {
+                var minAge = '18.00';
+            }
         }
-        const maxAge = Math.max(
-            report.getPubicSymphysisRange(Side.C).max,
-            report.getAuricularSurfaceRange(Side.C).max,
-            report.getSternalEndRange(Side.C).max,
-        ).toFixed(2);
+
+        const maxAge =
+            Math.max(
+                report.getPubicSymphysisRange(Side.C).max,
+                report.getAuricularSurfaceRange(Side.C).max,
+                report.getSternalEndRange(Side.C).max,
+            ) === 0 && minAge === '18.00'
+                ? '18.00'
+                : Math.max(
+                      report.getPubicSymphysisRange(Side.C).max,
+                      report.getAuricularSurfaceRange(Side.C).max,
+                      report.getSternalEndRange(Side.C).max,
+                  ).toFixed(2);
 
         // Convert min/max to numbers for updateRangeBar
         const minAgeNum = parseFloat(minAge);
@@ -354,20 +376,43 @@ export class ComparePageView extends AbstractView {
         report: AbstractReportModel,
     ): string {
         // Get the minimum and maximum age across all ranges
+        var minAgeCompare = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
         if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
-            var minAge = Math.min(
-                report.getPubicSymphysisRange(Side.C).min,
-                report.getAuricularSurfaceRange(Side.C).min,
-                report.getSternalEndRange(Side.C).min,
-            ).toFixed(2);
+            var minAge =
+                minAgeCompare === Infinity ? '0.00' : minAgeCompare.toFixed(2);
         } else {
-            var minAge = '18.00';
+            if (minAgeCompare > 18.0 && minAgeCompare != Infinity) {
+                var minAge =
+                    minAgeCompare === Infinity
+                        ? '0.00'
+                        : minAgeCompare.toFixed(2);
+            } else {
+                var minAge = '18.00';
+            }
         }
-        const maxAge = Math.max(
-            report.getPubicSymphysisRange(Side.C).max,
-            report.getAuricularSurfaceRange(Side.C).max,
-            report.getSternalEndRange(Side.C).max,
-        ).toFixed(2);
+
+        const maxAge =
+            Math.max(
+                report.getPubicSymphysisRange(Side.C).max,
+                report.getAuricularSurfaceRange(Side.C).max,
+                report.getSternalEndRange(Side.C).max,
+            ) === 0 && minAge === '18.00'
+                ? '18.00'
+                : Math.max(
+                      report.getPubicSymphysisRange(Side.C).max,
+                      report.getAuricularSurfaceRange(Side.C).max,
+                      report.getSternalEndRange(Side.C).max,
+                  ).toFixed(2);
 
         // Convert min/max to numbers for updateRangeBar
         const minAgeNum = parseFloat(minAge);

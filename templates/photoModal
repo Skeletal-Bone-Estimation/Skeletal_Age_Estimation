@@ -1,0 +1,6 @@
+
+<div id="modalContainer" class="modal">
+  <div id="modalContent">
+    <!-- The photo will be inserted here dynamically -->
+  </div>
+</div>

@@ -93,6 +93,7 @@ export enum Pages {
     Compare = 'compare',
     Error = 'errorModal',
     SavePath = 'savePathModal',
+    GalleryModal = 'galleryModal',
 }
 
 export enum Modals {
@@ -100,6 +101,8 @@ export enum Modals {
     Report = 'reportArchiveModal',
     SavePath = 'savePathModal',
     UpdatedSave = 'updatedSavePathModal',
+    Gallery = 'galleryModal',
+    Photo = 'photoModal',
 }
 
 /**

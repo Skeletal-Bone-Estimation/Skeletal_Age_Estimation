@@ -32,6 +32,8 @@ import { ErrorModal } from '../views/ErrorModal';
 import { AbstractModal } from '../views/AbstractModal';
 import { SavePathModal } from '../views/SavePathModal';
 import { CompareModal } from '../views/CompareModal';
+import { GalleryModal } from '../views/GalleryModal';
+import { PhotoModal } from '../views/PhotoModal';
 
 export class PageController {
     private static instance: PageController;
@@ -54,6 +56,8 @@ export class PageController {
             compare: new ComparePageView(document),
             errorModal: new ErrorModal(document),
             savePathModal: new SavePathModal(document),
+            galleryModal: new GalleryModal(document),
+            photoModal: new PhotoModal(document),
 
             //add additional views here
         };
@@ -121,7 +125,7 @@ export class PageController {
                 } else
                     PageController.getInstance().loadModal(
                         Modals.Error,
-                        'Invalid save path selection.',
+                        'Invalid <strong>save path</strong> selection.',
                     );
             });
 
@@ -327,6 +331,24 @@ export class PageController {
 
         this.isExporting = true;
 
+        const minValue = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
+
+        const maxValue = Math.max(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).max,
+        );
+
         if (report.getThirdMolar(Side.C) === 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
@@ -337,14 +359,13 @@ export class PageController {
                     <br />
             <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
                     <br />
-            <p>Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
-                const minValue = Math.min(
-                    report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
-                    report.getAuricularSurfaceRange(Side.C)?.min ?? Infinity,
-                    report.getSternalEndRange(Side.C)?.min ?? Infinity,
-                );
-                return (minValue < 18 ? 18 : minValue).toFixed(2);
-            })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.</p>`;
+            <p>Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <
+                18 || minValue === Infinity
+                ? 18
+                : minValue
+            ).toFixed(2)} - ${
+                maxValue === 0 && minValue === Infinity ? '18.00' : maxValue
+            } years at the time of death.</p>`;
         }
 
         if (!content.trim()) {
@@ -393,6 +414,24 @@ export class PageController {
 
         let content = '';
 
+        const minValue = Math.min(
+            report.getPubicSymphysisRange(Side.C).min === 0
+                ? Infinity
+                : report.getPubicSymphysisRange(Side.C).min,
+            report.getAuricularSurfaceRange(Side.C).min === 0
+                ? Infinity
+                : report.getAuricularSurfaceRange(Side.C).min,
+            report.getSternalEndRange(Side.C).min === 0
+                ? Infinity
+                : report.getSternalEndRange(Side.C).min,
+        );
+
+        const maxValue = Math.max(
+            report.getPubicSymphysisRange(Side.C).max,
+            report.getAuricularSurfaceRange(Side.C).max,
+            report.getSternalEndRange(Side.C).max,
+        );
+
         if (report.getThirdMolar(Side.C) === 0) {
             content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
@@ -403,19 +442,17 @@ export class PageController {
                 The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
                         <br />
                         <br />
-                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}
+                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}.
                         <br />
                         <br />
                         <br />
-                Taking into consideration all the age analysis performed, the age range for this individual is estimated at ${(() => {
-                    const minValue = Math.min(
-                        report.getPubicSymphysisRange(Side.C)?.min ?? Infinity,
-                        report.getAuricularSurfaceRange(Side.C)?.min ??
-                            Infinity,
-                        report.getSternalEndRange(Side.C)?.min ?? Infinity,
-                    );
-                    return (minValue < 18 ? 18 : minValue).toFixed(2);
-                })()} - ${Math.max(report.getPubicSymphysisRange(Side.C).max, report.getAuricularSurfaceRange(Side.C).max, report.getSternalEndRange(Side.C).max).toFixed(2)} years at the time of death.`;
+                Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <
+                    18 || minValue === Infinity
+                    ? 18
+                    : minValue
+                ).toFixed(2)} - ${
+                    maxValue === 0 && minValue === Infinity ? '18.00' : maxValue
+                } years at the time of death.`;
         }
 
         if (!content.trim()) {
@@ -525,7 +562,11 @@ export class PageController {
     /**
      * Unloads the report modal.
      */
-    public async loadModal(type: Modals, errorMsg = ''): Promise<void> {
+    public async loadModal(
+        type: Modals,
+        errorMsg = '',
+        data?: any,
+    ): Promise<void> {
         var modal: AbstractModal;
         switch (type) {
             case Modals.Report:
@@ -560,6 +601,14 @@ export class PageController {
                     dc.loadedCases[dc.findCaseIndex(dc.openCaseID)].savePath,
                 );
                 break;
+            case Modals.Gallery:
+                modal = this.views.galleryModal as AbstractModal;
+                (modal as GalleryModal).openGallery(data.title, data.images);
+                break;
+            case Modals.Photo:
+                modal = this.views.photoModal as AbstractModal;
+                (modal as PhotoModal).openPhoto(data.image);
+                break;
             default:
                 throw new Error(
                     'Invalid modal type passed to PageController.loadModal()',
@@ -585,10 +634,9 @@ export class PageController {
      */
     public loadReportCompare(reportIDX: number) {
         const dc = DataController.getInstance();
-        dc.openReport =
-            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)].generatedReports[
-                reportIDX
-            ].id;
+        dc.openReport = (
+            dc.loadedCases[dc.findCaseIndex(dc.openCaseID)] as CaseModel
+        ).generatedReports[reportIDX].id;
         this.navigateTo(Pages.Compare);
     }
 

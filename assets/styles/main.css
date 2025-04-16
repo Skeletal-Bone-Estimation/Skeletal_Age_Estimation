@@ -16,6 +16,10 @@
   --penn-state-blue: rgb(30, 64, 124);
 }
 
+* {
+  font-family: system-ui;
+}
+
 body {
   background-color: var(--background-color);
 }
@@ -49,16 +53,18 @@ body {
 .homeTitle {
   overflow: clip;
   transform: translate(.5vw);
-  font-size: 4vw;
+  font-size: 5vw;
+  font-weight: bold;
   justify-content: center;
 }
 
 #dataDiv {
   padding-top: 1vh;
   display: grid;
+  font-size: 125%;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto;
-  gap: 20px;
+  gap: 10px;
 }
 
 .dataEntry { 
@@ -77,9 +83,15 @@ body {
 
 .dataEntryLabel{
   position: absolute;
-  top: -12px;
+  top: -20px;
   left: 2px;
+  font-size: 20px;
+  font-weight: bold;
   background-color: var(--background-color);
+}
+
+.dataEntryTopLabel{
+  font-weight: bold;
 }
 
 /*upload images buttons*/
@@ -125,7 +137,7 @@ body {
 
 .sideBarHeader {
   padding: 0px 25px;
-  height: 76px;
+  min-height: 76px;
   background-color: var(--div-color-2);
   white-space: nowrap;
   overflow: hidden;
@@ -240,7 +252,7 @@ body {
 .resizer {
   width: 2px;
   right: 0;
-  height:100%;
+  height: 100%;
   cursor: col-resize;
   position: absolute;
   background-color: var(--resizer-color);
@@ -249,6 +261,7 @@ body {
 
 /* button for dark backgrounds */
 .button-light {
+  font-family: Verdana;
   background-color: var(--on-dark);
   border: 3mm ridge var(--border-color-on-light);
   color: var(--on-light); /* text color: always inverse of backgroud-color*/
@@ -267,14 +280,15 @@ body {
 }
 
 .button-dark {
+  font-family: Verdana;
   background-color: var(--div-color-2);
   color: var(--on-dark); /* text color: always inverse of backgroud-color*/
   border: 2px solid var(--div-color-2);
-  padding: 5vh 5vw;
+  padding: 2vh 5vw;
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 2vh;
+  font-size: clamp(16px, 2vh, 28px);
   overflow: hidden;
   border-radius: 8px;
 }
@@ -285,6 +299,7 @@ body {
 }
 
 .button-dark-top {
+  font-family: Verdana;
   background-color: var(--div-color-2);
   color: var(--on-dark); /* text color: always inverse of backgroud-color*/
   border: 2px solid var(--div-color-2);
@@ -293,6 +308,7 @@ body {
   text-decoration: none;
   display: block;
   font-size: 16px;
+  font-weight: bold;
   height: 76px;
   overflow: hidden;
   border-radius: 8px;
@@ -304,8 +320,14 @@ body {
 }
 
 .mercyImg {
-  width: 60%;
-  height: 60%;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.mercyImgSide {
+  width: 80%;
+  height: 80%;
   object-fit: contain;
 }
 
@@ -314,6 +336,14 @@ body {
 }
 
 .psuBehrImg {
+  width: 140%;
+  height: 140%;
+  object-fit: contain;
+  transform: translate(1px);
+  margin-top: 15px;
+}
+
+.psuBehrImgSide {
   width: 140%;
   height: 140%;
   object-fit: contain;
@@ -385,17 +415,11 @@ body {
   flex-direction: column;
 }
 
-.mercyImgSide {
-  top: 20px;
-  right: 0.5vw;
-  position: relative;
-  width: 10vw;
-}
-
 .cases{
   border-bottom-style: solid;
   border-bottom-color: var(--resizer-color);
   max-height: 50vh;
+  min-height: 110px;
   overflow: scroll;
   scrollbar-width: thin;
   scrollbar-color: white var(--div-color-2);
@@ -406,28 +430,37 @@ body {
   opacity: 0;
 }
 
+.dataEntryWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .sideBarData {
   display: flex;
   flex-direction: center;
   justify-content: center;
   align-items: center; 
   gap: 10px;
-  min-height: 10vh;
-  margin: 0;          
-  padding: -10px;        
-  overflow: scroll;
-  scrollbar-width: thin;
-  color: black;
+  font-size: 140%;
+  height: 10%;
+  padding: 1vw;
+  overflow: hidden;
 }
 
-#dataEntrySideText {
-  width: 50%;
+#dataEntrySideCaseID {
+  margin-right: 3vw;
+  font-size: clamp(16px, 2vh, 20px)
+}
+
+#dataEntrySideSex {
+  margin-right: 3vw;
 }
 
 #notes {
   width: 100%;
   height: 100%;
   resize: none;
+  font-size: 24px;
 }
 
 .notesEntry {
@@ -435,19 +468,22 @@ body {
   border-radius: 5px;
   background-color: var(--background-color);
   margin: 5px;
+  margin-top: 15px;
   position: relative;
-  padding: 10px;
-  height: 40vh;
-  width: 40vw;
+  padding: 20px;
+  height: 27vh;
+  width: 30vw;
   display: flex;
   justify-content:center;
   align-items: center; 
+  font-size: 20px;
 }
 
 .notesEntryLabel{
   position: absolute;
-  top: -12px;
-  left: 11.5vw;
+  top: -20px;
+  left: 2px;
+  font-weight: bold;
   background-color: var(--background-color);
 }
 
@@ -488,7 +524,7 @@ body {
 .ellipse-container {
   display: flex;
   justify-content: center; 
-  gap: 5vw;
+  gap: 6vw;
   padding-bottom: 50px;
 }
 
@@ -519,14 +555,16 @@ body {
 .ellipse-container-side {
   display: grid;
   justify-content: center; 
-  gap: 20px;
-  padding-top: 20px;
+  gap: 5vh;
+  overflow: hidden;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
 }
 
 .psuCircle-side {
   border-radius: 50%;
-  width: 75px;
-  height: 75px;
+  width: 150px;
+  height: 150px;
   border: 10px solid;
   border-color: var(--penn-state-blue);
   background-color: white;
@@ -537,10 +575,10 @@ body {
 
 .ellipse-side {
   border-radius: 50%;
-  width: 75px;
-  height: 75px;
+  width: 150px;
+  height: 150px;
   border: 10px solid;
-  border-color: var(--div-color-3);
+  border-color: var(--border-color-on-light);
   background-color: black;
   display: flex;
   justify-content: center;
@@ -555,14 +593,13 @@ body {
 
 #notesDiv {
   flex: 1;
-  margin-right: 20px;
 }
 
 #reportAndGuideDiv {
   display: flex;
-  flex-direction: column; 
+  flex-direction: row; 
   align-items: flex;
-  margin-left: 20px;
+  margin-left: 10px;
   margin-right: 20px;
 }
 
@@ -572,7 +609,20 @@ body {
   justify-content: flex-end;
   align-items: flex-start;
   margin-left: 20px;
-  margin-top: 20px;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+#analysisSelector {
+  margin-bottom: 15%;
+  width: 100%;
+  font-size: clamp(16px, 2vh, 28px);
+  text-align: center;
+}
+
+#dataEntryReport{
+  width: 100%;
+  margin-bottom: 15%;
 }
 
 #scoringGuideDiv {
@@ -580,23 +630,22 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 20px;
-  margin-bottom: 130px;
+  margin-left: 10px;
   margin-top: 5px;
+  margin-right: 3vw;
 }
 
-#scoringGuide, #dataEntryReport {
+#scoringGuide  {
   width: 100%;
 }
 
 /*report html */
 .reportDiv {
-  display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 20px; /*space between right and left sides */
   width: 100%;
-  max-width: 1400px; 
-  margin: 0 auto; 
+  margin: 5px; 
   padding: 10px; 
   box-sizing: border-box;
 }
@@ -605,10 +654,11 @@ body {
 #graphDiv {
   display: flex;
   flex-direction: column;
-  gap: 50px; 
+  gap: 10px; 
   align-items: center;
   justify-content: center; 
-  width: 100%;
+  min-width: 100%;
+  width: 30vw;
   box-sizing: border-box; 
 }
 
@@ -626,14 +676,15 @@ body {
   position: relative; /* This is needed for absolute positioning of the vertical lines */
 }
 
-.graphPlacement h3 {
-  position:absolute;
-  top: -10%;
+#axisLabelHorizontal {
+  position:relative;
+  font-weight: bold;
+  font-size: clamp(18px, 2vw, 28px);
 }
 
-.graphTitle {
-  position:absolute;
-  top: -10%;
+.activeCI {
+  position:relative;
+  font-size: clamp(18px, 2vw, 28px);
 }
 
 /* Style for vertical lines */
@@ -678,9 +729,10 @@ body {
   color: var(--on-dark);
   text-align: center;
   text-decoration: none;
-  font-size: clamp(12px, 2vw, 16px); /* have font size scale */
+  font-family: Verdana;
+  font-size: clamp(18px, 2vw, 20px); /* have font size scale */
   padding: 10px 15px;
-  width: 48%; 
+  width: 50%; 
   box-sizing: border-box;
   border-radius: 8px;
 }
@@ -698,35 +750,36 @@ body {
   align-items: center; 
   justify-content: center; 
   width: 100%;
-  box-sizing: border-box; 
 }
 
 /* casee title */
 #reportCaseTitle {
   width: 90%;
-  max-width: 400px; 
+  max-width: 500px; 
   min-width: 150px; 
   text-align: center;
   padding: 10px;
   background: white;
   border: 2px solid var(--div-color-2);
   border-radius: 5px;
-  font-size: clamp(14px, 2vw, 18px); 
+  font-size: clamp(18px, 2vw, 28px); 
   box-sizing: border-box;
+  justify-content: center;
 }
 
 /* summarized/overall range */
 #summarizedRange {
-  width: 90%;
-  max-width: 400px; 
+  width: 100%;
+  max-width: 500px; 
   min-width: 150px; 
   text-align: center;
   padding: 10px;
   background-color: var(--div-color-2);
   color: var(--div-color-1);
-  font-size: clamp(14px, 2vw, 18px); 
+  font-size: clamp(18px, 2vw, 28px); 
   border-radius: 5px;
   box-sizing: border-box;
+  justify-content: center;
 }
 
 /* container for 2x2 grid of method summaries */
@@ -734,8 +787,9 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 15px; 
-  width: 75%; 
+  width: 100%; 
   max-width: 600px; 
+  justify-content: center;
   padding: 10px;
   box-sizing: border-box; 
 }
@@ -748,14 +802,14 @@ body {
   width: 100%;
   aspect-ratio: 1; 
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: flex-start; 
   align-items: center;
   background: var(--div-color-1);
   border: 2px solid var(--border-color-on-light);
   border-radius: 5px;
-  box-sizing: border-box; 
-  gap: 10px; 
+  box-sizing: border-box;
+  gap: 10px;
 }
 
 /* different method datas */
@@ -923,7 +977,7 @@ select {
   padding: 5px;
   border: 1px solid var(--border-color-on-light);
   background-color: white;
-  font-size: 16px;
+  font-size: 100%;
 }
 
 input[type="text"] {
@@ -931,6 +985,7 @@ input[type="text"] {
   padding: 8px;
   border: 1px solid var(--border-color-on-light);
   background-color: white;
+  font-size: 63%;
 }
 
 
@@ -953,6 +1008,9 @@ input[type="text"] {
   border-radius: 10px;
   animation: slide-down 0.3s ease-out;
   text-align: center;
+  max-height: 70vh;
+  overflow-y: auto;
+
 }
 
 /* Slide-down animation */
@@ -1100,6 +1158,28 @@ input[type="text"] {
   width: 100%; 
   background-color: rgba(15, 89, 78, 0.9);
   font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid black; /* Adds a black border */
+}
+
+.range-bar-age {
+  background-color: rgba(255, 200, 0, 0.9);
+  color: black;
+}
+
+.range-bar-pubicSymphysis {
+  background-color: rgba(255, 0, 0 , 0.9);
+  color: black;
+}
+
+.range-bar-auricularSurface {
+  background-color: rgba(218, 0, 218, 0.9);
+  color: black;
+}
+
+.range-bar-sternalEnd {
+  background-color: rgba(95, 95, 255, 0.9);
+  color: black;
 }
 
 /*for gallery modal/viewing*/
@@ -1137,3 +1217,4 @@ input[type="text"] {
   font-weight: bold;
   cursor: pointer;
 }
+

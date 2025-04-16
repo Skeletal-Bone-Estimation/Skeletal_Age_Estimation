@@ -52,8 +52,9 @@ export class CompareModal extends AbstractModal {
                     list.innerHTML != 'No reports loaded in any case.' &&
                     list.innerHTML != ''
                 ) {
-                    const openCase =
-                        dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
+                    const openCase = dc.loadedCases[
+                        dc.findCaseIndex(dc.openCaseID)
+                    ] as CaseModel;
 
                     //TODO: check if idx == -1 for errors
                     const report = openCase.generatedReports[this.selectedIdx];
@@ -92,8 +93,10 @@ export class CompareModal extends AbstractModal {
             return;
         }
 
-        const dc = dataController;
-        const _case = dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
+        const dc = DataController.getInstance();
+        const _case = dc.loadedCases[
+            dc.findCaseIndex(dc.openCaseID)
+        ] as CaseModel;
         //console.log('Loaded reports:', _case.generatedReports);
 
         _case.generatedReports.forEach((report: AbstractReportModel) => {
