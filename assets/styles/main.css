@@ -365,6 +365,10 @@ body {
   font-size: large;
 }
 
+#case {
+  font-size: large;
+}
+
 #idDiv { grid-column: 1; grid-row: 1; }
 #saveDiv { grid-column: 1; grid-row: 2; }
 #sexDiv { grid-column: 2; grid-row: 1; }
@@ -645,6 +649,11 @@ body {
   grid-column: 2;
   width: 100%;
   margin-bottom: 15%;
+}
+
+#viewMostRecentReport:disabled {
+  background-color: var(--hover-on-light);
+  cursor: not-allowed;
 }
 
 #scoringGuideDiv {

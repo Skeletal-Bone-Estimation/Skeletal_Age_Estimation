@@ -19,6 +19,7 @@ import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
 import { DataController } from '../controllers/DataController';
 import { ReportModel } from '../models/ReportModel';
 import { GalleryModal } from '../views/GalleryModal';
+import { NullReportModel } from '../models/NullReportModel';
 
 export class DataEntryView extends AbstractView {
     constructor(document: Document) {
@@ -539,6 +540,14 @@ export class DataEntryView extends AbstractView {
                     '_blank',
                 );
             });
+
+            const dc = DataController.getInstance();
+            const _case = dc.loadedCases[
+                dc.findCaseIndex(dc.openCaseID)
+            ] as CaseModel;
+            if (_case.mostRecentReport instanceof NullReportModel) {
+                mostRecentReportButton.disabled = true;
+            }
 
             mostRecentReportButton.addEventListener('click', () => {
                 const dc = DataController.getInstance();

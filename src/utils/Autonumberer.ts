@@ -1,10 +1,9 @@
 import { DataController } from '../controllers/DataController';
 
 export class Autonumberer {
-   
     private REPEATS = 3; // number of repeats for each letter
     private limit = this.REPEATS * 26;
-   
+
     private existingValues: string[] = [];
     private static instance: Autonumberer; // singleton instance of this class
 
