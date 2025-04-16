@@ -52,7 +52,7 @@ export class CaseItem {
         });
 
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete';
+        deleteBtn.textContent = 'Unload';
         deleteBtn.addEventListener('click', async () => {
             PageController.getInstance().deleteCaseItem(this.caseID);
             PageController.getInstance().renderCases();

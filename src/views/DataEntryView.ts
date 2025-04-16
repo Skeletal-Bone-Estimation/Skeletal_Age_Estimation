@@ -386,6 +386,11 @@ export class DataEntryView extends AbstractView {
         if (!uploadMolarImages)
             console.error('upload molar images button not found');
 
+        const mlCheckbox = document.getElementById(
+            'ML_Checkbox',
+        ) as HTMLInputElement;
+        if (!mlCheckbox) console.error('ML checkbox not found!');
+
         if (
             auricularAreaL &&
             auricularAreaR &&
@@ -405,7 +410,8 @@ export class DataEntryView extends AbstractView {
             uploadAuricularImages &&
             uploadPubicImages &&
             uploadSternalImages &&
-            uploadMolarImages
+            uploadMolarImages &&
+            mlCheckbox
         ) {
             //console.log('elements present');
 
@@ -508,7 +514,7 @@ export class DataEntryView extends AbstractView {
                     );
             });
 
-            analyzeButton.addEventListener('click', (event) => {
+            analyzeButton.addEventListener('click', async (event) => {
                 const dc = DataController.getInstance();
                 var _case: CaseModel = dc.loadedCases[
                     dc.findCaseIndex(dc.openCaseID)
@@ -516,10 +522,7 @@ export class DataEntryView extends AbstractView {
                 const target = event.target as HTMLButtonElement;
                 const sex = this.parseSex(target.value);
                 const affinity = this.parseAffinity(target.value);
-                AnalysisContext.getInstance(sex, affinity).analyze(
-                    _case,
-                    Analyzers.Default,
-                );
+                await AnalysisContext.getInstance(sex, affinity).analyze(_case);
                 PageController.getInstance().navigateTo(
                     Pages.Report,
                     SideBar.dataBar,
@@ -555,36 +558,45 @@ export class DataEntryView extends AbstractView {
                 );
             });
 
+            mlCheckbox.addEventListener('change', () => {
+                analysisSelector.disabled = !mlCheckbox.checked;
+            });
+
             analysisSelector.addEventListener('change', () => {
                 const dc = DataController.getInstance();
                 const _case = dc.loadedCases[
                     dc.findCaseIndex(dc.openCaseID)
                 ] as CaseModel;
                 switch (analysisSelector.value) {
-                    case 'default':
+                    case 'linreg':
                         AnalysisContext.getInstance(
                             _case.sex,
                             _case.populationAffinity,
-                        ).setStrategy(Analyzers.Default);
-                        //console.log('Default analysis selected');
-                        break;
-                    case 'image':
-                        AnalysisContext.getInstance(
-                            _case.sex,
-                            _case.populationAffinity,
-                        ).setStrategy(Analyzers.Image);
-                        //console.log('Image analysis selected');
-                        break;
-                    case 'prediction':
-                        AnalysisContext.getInstance(
-                            _case.sex,
-                            _case.populationAffinity,
-                        ).setStrategy(Analyzers.Prediction);
-                        //console.log('Regression analysis selected');
+                        ).setStrategy(Analyzers.LinReg);
                         break;
                     default:
                         console.error('invalid analyzer selected');
                 }
+                //console.log('Selected strategy:', analysisSelector.value);
+            });
+
+            //watches the selector for when it is disabled/enabled
+            const observer = new MutationObserver(() => {
+                const dc = DataController.getInstance();
+                const _case = dc.loadedCases[
+                    dc.findCaseIndex(dc.openCaseID)
+                ] as CaseModel;
+                const ac = AnalysisContext.getInstance(
+                    _case.sex,
+                    _case.populationAffinity,
+                );
+                if (!analysisSelector.disabled)
+                    ac.setStrategy(analysisSelector.value as Analyzers);
+                else ac.setStrategy(null);
+            });
+            observer.observe(analysisSelector, {
+                attributes: true,
+                attributeFilter: ['disabled'],
             });
 
             uploadAuricularImages.addEventListener('click', () => {

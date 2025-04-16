@@ -35,6 +35,7 @@ export class ComparePageView extends AbstractView {
         const dc = DataController.getInstance();
 
         const reportCompare = DataController.getInstance().openReport;
+        const dc = DataController.getInstance();
         const _caseCompare: CaseModel =
             dc.loadedCases[dc.findCaseIndex(dc.openCaseID)];
 

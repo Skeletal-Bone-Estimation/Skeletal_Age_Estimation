@@ -482,6 +482,7 @@ export class PageController {
                 printWindow.document.write(`
                     <html>
                         <head>
+                            <title>Report ${DataController.getInstance().openReport} — Print Preview</title>
                             <style>
                                 body {
                                     font-family: Arial, sans-serif;

@@ -1,5 +1,5 @@
 import { CaseModel } from '../../models/CaseModel';
-import { Affinity, Sex } from '../enums';
+import { Affinity, Analyzers, Sex } from '../enums';
 
 export interface AnalyzerStrategyIF {
     /**
@@ -20,4 +20,10 @@ export interface AnalyzerStrategyIF {
      * @param value The new population affinity value.
      */
     modifyAffinity(value: Affinity): void;
+
+    /**
+     * Retrieves the strategy name.
+     * @returns The strategy name.
+     */
+    getStrategy(): Analyzers;
 }

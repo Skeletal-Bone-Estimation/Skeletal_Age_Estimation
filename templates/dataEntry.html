@@ -185,11 +185,14 @@
         </div>
         <div id = "reportBtnDiv">
             <div class="reportButton">
-                <select id="analysisSelector">
-                    <option value="default">Default Analysis</option>
-                    <option value="image">Image Analysis</option>
-                    <option value="prediction">Regression Analysis</option>
-                </select>
+                <div id="ML_Row">
+                    <input type="checkbox" id="ML_Checkbox">
+                    <label for="ML_Checkbox">Use Machine Learning</label>
+                    <select id="analysisSelector" disabled="true">
+                        <option value="linreg">Linear Regression Model</option>
+                    </select>
+                </div>
+                <br>
                 <button class="button-dark" id="dataEntryReport">Generate Report</button>
                 <button class="button-dark" id="viewMostRecentReport">View Most Recent Report</button>
             </div>
@@ -201,4 +204,3 @@
     </div>
     </div>
 </div>
-

@@ -2,13 +2,16 @@ import { Side } from '../utils/enums';
 
 export abstract class AbstractReportModel {
     protected _id: string;
+    protected _ML_Result: number | null = null; // Machine Learning result, if applicable
     protected results: { [key: string]: { [key: string]: number } };
 
     constructor(
         id: string,
         results: { [key: string]: { [key: string]: number } },
+        ML_Result: number | null = null,
     ) {
         this._id = id;
+        this._ML_Result = ML_Result;
         this.results = results;
     }
 
@@ -18,6 +21,10 @@ export abstract class AbstractReportModel {
      */
     public get id() {
         return this._id;
+    }
+
+    public get ML_Result() {
+        return this._ML_Result;
     }
 
     /**

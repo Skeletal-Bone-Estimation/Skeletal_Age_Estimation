@@ -42,6 +42,10 @@ export class BuildDirector {
         return this.reportBuilder.build(results);
     }
 
+    public makeReportML(results: {}, ML_Result: number) {
+        return this.reportBuilder.build(results, ML_Result);
+    }
+
     /**
      * Builds a ReportModel object from a given ID and content.
      * @param id The ID of the report.

@@ -5,8 +5,9 @@ export class ReportModel extends AbstractReportModel {
     constructor(
         id: string,
         results: { [key: string]: { [key: string]: number } },
+        ML_Result: number | null = null,
     ) {
-        super(id, results);
+        super(id, results, ML_Result);
     }
 
     /**

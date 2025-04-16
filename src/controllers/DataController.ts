@@ -317,9 +317,14 @@ export class DataController {
      * @param results The results to be included in the report.
      * @returns The newly created AbstractReportModel.
      */
-    public createReport(results: {}): AbstractReportModel {
+    public createReport(
+        results: {},
+        ML_Result: number | null = null,
+    ): AbstractReportModel {
         var director = new BuildDirector();
-        return director.makeReport(results);
+        return ML_Result != null
+            ? director.makeReportML(results, ML_Result)
+            : director.makeReport(results);
     }
 
     /**
