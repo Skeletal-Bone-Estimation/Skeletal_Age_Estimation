@@ -150,16 +150,6 @@ export class DataController {
     }
 
     /**
-     * Delegates to XML_Controller to handle parsing the collection and stores a reference to the resulting list.
-     * @param event The event triggering the collection load.
-     */
-    public loadCollectionFromFile(event: Event): void {
-        this.xmlController.loadCollection(event);
-        const loadedCases: CaseModel[] = this.xmlController.parseCollection();
-        this._loadedCases = loadedCases;
-    }
-
-    /**
      * Edits an attribute of the currently opened CaseModel object based on the enumeration parameter.
      * @param element The CaseElement to be edited.
      * @param content The new content for the specified element.

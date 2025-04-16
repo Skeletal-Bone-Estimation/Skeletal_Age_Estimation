@@ -32,7 +32,6 @@ export class ComparePageView extends AbstractView {
         this.contentDiv.innerHTML = htmlContent;
         this.initEventListeners();
         this.setSidebarListeners();
-        const dc = DataController.getInstance();
 
         const reportCompare = DataController.getInstance().openReport;
         const dc = DataController.getInstance();

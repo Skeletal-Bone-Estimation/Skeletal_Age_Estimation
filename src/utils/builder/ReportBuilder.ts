@@ -43,10 +43,16 @@ export class ReportBuilder {
      * @param results The XML elements containing the report data.
      * @returns The built AbstractReportModel.
      */
-    public buildFrom(id: string, results: Element): AbstractReportModel {
+    public buildFrom(
+        id: string,
+        results: Element,
+        ml: number | null = null,
+    ): AbstractReportModel {
         const loadedResults: { [key: string]: { [key: string]: number } } =
             this.buildResultDictionary(results);
-        return new ReportModel(id, loadedResults);
+        return ml
+            ? new ReportModel(id, loadedResults, ml)
+            : new ReportModel(id, loadedResults);
     }
 
     /**

@@ -254,10 +254,11 @@ export class XML_Controller {
     private extractReport(reportElement: Element): AbstractReportModel | null {
         const idElement = reportElement.getElementsByTagName('_id')[0];
         const resultsElement = reportElement.getElementsByTagName('results')[0];
+        const ML_Result = reportElement.getElementsByTagName('_ML_Result')[0];
 
-        if (!idElement || !resultsElement) {
+        if (!idElement || !resultsElement || !ML_Result) {
             console.error(
-                'Missing <_id> or <results> tag in <report>',
+                'Missing <_ML_Results> or <_id> or <results> tag in <report>',
                 reportElement,
             );
             return null;
@@ -266,10 +267,11 @@ export class XML_Controller {
         //('Results element:', resultsElement.innerHTML);
 
         const id = idElement.textContent || '-1';
-        const report: AbstractReportModel = this.director.makeReportFrom(
-            id,
-            resultsElement,
-        );
+        const ml: number | null = Number(ML_Result.textContent);
+        const report: AbstractReportModel =
+            ML_Result != null
+                ? this.director.makeReportFrom(id, resultsElement, ml)
+                : this.director.makeReportFrom(id, resultsElement);
         return report;
     }
 
@@ -362,35 +364,5 @@ export class XML_Controller {
         });
         writeFileSync(`${path}/${filename}.xml`, xmlString, 'utf-8');
         //console.log(`File saved to ${filename}`);
-    }
-
-    //TODO
-    /**
-     * Parses a collection of files (as a folder).
-     * @returns An array of CaseModel objects.
-     */
-    public parseCollection(): CaseModel[] {
-        throw new Error('Parse collection not yet implemented');
-    }
-
-    //TODO
-    /**
-     * Loads a collection of cases as a folder selected by the user.
-     * @param event The event triggering the collection load.
-     */
-    public loadCollection(event: Event): void {
-        // for loop to execute parseSingleFile for each case in collection
-        throw new Error('Load collection not implemented yet');
-    }
-
-    //TODO
-    /**
-     * Saves a collection of cases into a new folder named by the user.
-     * @param _case The CaseModel to save.
-     * @param filename The filename to save the collection as.
-     */
-    public saveAsCollection(_case: CaseModel, filename: string): void {
-        // for loop to execute saveAsFile for each case in collection
-        throw new Error('Save as collection not yet implemented');
     }
 }
