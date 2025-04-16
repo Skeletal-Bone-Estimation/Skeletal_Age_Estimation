@@ -8,11 +8,11 @@ export class LinearRegressionStrategy extends AbstractAnalyzer {
      * @param _case The case to analyze.
      * @returns The analysis results as an object.
      */
-    async executeAnalysis(_case: CaseModel): Promise<{}> {
+    async executeAnalysis(_case: CaseModel): Promise<number> {
         // TODO: Prediction analysis logic
 
         var inputData: {} = this.prepareData(_case);
-        var results: {} = {};
+        var results: number = 0.0;
 
         await fetch(`http://localhost:${this.getPort()}/predict`, {
             method: 'POST',
@@ -50,9 +50,9 @@ export class LinearRegressionStrategy extends AbstractAnalyzer {
         };
     }
 
-    private formatResults(results: any): {} {
+    private formatResults(results: any): number {
         // Format the results of the prediction model
-        return {};
+        return results[0];
     }
 
     public getStrategy(): Analyzers {

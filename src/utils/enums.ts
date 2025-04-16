@@ -185,7 +185,6 @@ export enum CaseElement {
 export enum Analyzers {
     Default = 'default',
     LinReg = 'linreg',
-    Class = 'classification',
 }
 
 /**

@@ -185,11 +185,13 @@
         </div>
         <div id = "reportBtnDiv">
             <div class="reportButton">
-                <select id="analysisSelector">
-                    <option value="default">Default Analysis</option>
-                    <option value="linreg">Linear Regression Model</option>
-                    <option value="classification">Classification Model</option>
-                </select>
+                <div id="ML_Row">
+                    <input type="checkbox" id="ML_Checkbox">
+                    <label for="ML_Checkbox">Use Machine Learning</label>
+                    <select id="analysisSelector" disabled="true">
+                        <option value="linreg">Linear Regression Model</option>
+                    </select>
+                </div>
                 <br>
                 <button class="button-dark" id="dataEntryReport">Generate Report</button>
                 <br>
@@ -203,5 +205,15 @@
     <div id="gallery-modalContent" class="gallery-modalContent">
     </div>
 </div>
-  
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const mlCheckbox = document.getElementById('useMLCheckbox');
+        const analysisSelector = document.getElementById('analysisSelector');
+    
+        mlCheckbox.addEventListener('change', () => {
+            analysisSelector.disabled = !mlCheckbox.checked;
+        });
+    });
+</script>  
   

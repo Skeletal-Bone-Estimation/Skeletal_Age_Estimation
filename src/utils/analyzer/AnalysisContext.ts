@@ -3,7 +3,6 @@ import { CaseModel } from '../../models/CaseModel';
 import { Autonumberer } from '../Autonumberer';
 import { Affinity, Analyzers, Observers, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
-import { ClassificationStrategy } from './ClassificationStrategy';
 import { DefaultAnalyzerStrategy } from './DefaultAnalyzerStrategy';
 import { LinearRegressionStrategy } from './LinearRegressionStrategy';
 
@@ -11,17 +10,15 @@ import { LinearRegressionStrategy } from './LinearRegressionStrategy';
 export class AnalysisContext {
     private static instance: AnalysisContext;
     private analyzers: { [key: string]: AnalyzerStrategyIF };
-    private currentStrategy: AnalyzerStrategyIF;
+    private currentStrategy: AnalyzerStrategyIF | null;
 
     private constructor(sex: Sex, affinity: Affinity) {
         //initialize new strategies within this dictionary
         this.analyzers = {
-            default: new DefaultAnalyzerStrategy(sex, affinity),
             linreg: new LinearRegressionStrategy(sex, affinity),
-            classification: new ClassificationStrategy(sex, affinity),
         };
 
-        this.currentStrategy = this.analyzers[Analyzers.Default]; // Default strategy
+        this.currentStrategy = null; // Default strategy
     }
 
     /**
@@ -40,8 +37,9 @@ export class AnalysisContext {
      * Sets the current analysis strategy.
      * @param strategy The strategy to set.
      */
-    public setStrategy(strategy: Analyzers): void {
-        this.currentStrategy = this.analyzers[strategy];
+    public setStrategy(strategy: Analyzers | null): void {
+        if (strategy) this.currentStrategy = this.analyzers[strategy];
+        else this.currentStrategy = strategy;
     }
 
     /**
@@ -49,7 +47,7 @@ export class AnalysisContext {
      * @param sex The sex value to set.
      */
     public setSex(sex: Sex): void {
-        this.currentStrategy.modifySex(sex);
+        if (this.currentStrategy) this.currentStrategy.modifySex(sex);
     }
 
     /**
@@ -57,7 +55,11 @@ export class AnalysisContext {
      * @param affinity The population affinity value to set.
      */
     public setAffinity(affinity: Affinity): void {
-        this.currentStrategy.modifyAffinity(affinity);
+        if (this.currentStrategy) this.currentStrategy.modifyAffinity(affinity);
+    }
+
+    public getStrategy(): Analyzers | null {
+        return this.currentStrategy ? this.currentStrategy.getStrategy() : null;
     }
 
     /**
@@ -66,35 +68,36 @@ export class AnalysisContext {
      * @param strategy The strategy to use for analysis.
      */
     public async analyze(_case: CaseModel): Promise<void> {
+        const dc = DataController.getInstance();
         this.setSex(_case.sex);
         this.setAffinity(_case.populationAffinity);
 
-        switch (this.currentStrategy.getStrategy()) {
-            case Analyzers.LinReg:
-                console.log('Using linear regression strategy');
-                var results: {} = await (
-                    this.currentStrategy as LinearRegressionStrategy
-                ).executeAnalysis(_case);
-                break;
-            case Analyzers.Class:
-                console.log('Using classification strategy');
-                var results: {} = await (
-                    this.currentStrategy as LinearRegressionStrategy
-                ).executeAnalysis(_case);
-                break;
-            case Analyzers.Default:
-            default:
-                console.log('Using default strategy');
-                var results: {} =
-                    await this.currentStrategy.executeAnalysis(_case);
-                break;
-        }
+        var defaultAnalysis = new DefaultAnalyzerStrategy(
+            _case.sex,
+            _case.populationAffinity,
+        );
+        var results: {} = await defaultAnalysis.executeAnalysis(_case); // execute analysis
 
-        // var report = DataController.getInstance().createReport(results);
-        // _case.addReport(report);
-        // _case.notify(Observers.setMostRecentReport, report.id); // set most recent report
-        // _case.notify(Observers.setSelectedReport, report.id); // set selected report
-        // _case.notify(Observers.autosave); // autosave
-        // Autonumberer.getInstance().updateExistingValues();
+        var ML_Result: number | null = null;
+
+        if (this.currentStrategy != null) {
+            switch (this.currentStrategy.getStrategy()) {
+                case Analyzers.LinReg:
+                    console.log('Using linear regression strategy');
+                    ML_Result = await (
+                        this.currentStrategy as LinearRegressionStrategy
+                    ).executeAnalysis(_case);
+                    break;
+            }
+        }
+        console.log('ML Result:', ML_Result);
+        var report = dc.createReport(results, ML_Result);
+
+        _case.addReport(report);
+        _case.notify(Observers.setMostRecentReport, report.id); // set most recent report
+        _case.notify(Observers.setSelectedReport, report.id); // set selected report
+        _case.notify(Observers.autosave); // autosave
+        Autonumberer.getInstance().updateExistingValues();
+        console.log('Report created:', report);
     }
 }

@@ -451,6 +451,29 @@ body {
   background-color: var(--background-color);
 }
 
+#ML_Row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* space between checkbox, label, and select */
+  flex-wrap: wrap; /* wrap to next line on smaller screens */
+}
+
+#ML_Row label {
+  margin: 0 0.5rem 0 0.25rem; /* small spacing around the label */;
+}
+
+#ML_Row select {
+  flex: 1; /* allow select to grow to use available space if needed */
+  min-width: 200px; /* prevent it from getting too small */
+  max-width: 100%;
+}
+
+#analysisSelector:disabled {
+  opacity: 0.5;
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
 .tmWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
