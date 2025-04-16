@@ -208,6 +208,16 @@ export class ReportPageView extends AbstractView {
             console.error('SummarizedRange not found');
         }
 
+        console.log(report);
+        const ML_Result = document.getElementById('ML_Result');
+        if (ML_Result && report.ML_Result != null) {
+            //can add a call to analysis context to retreive name of ML model used in the future
+            ML_Result.textContent = `Machine Learning Estimation: ${report.ML_Result.toFixed(2)}`;
+            ML_Result.style.display = 'block';
+        } else {
+            console.error('ML_Result not found');
+        }
+
         // Display estimated pubic symphysis range
         this.displayDataSection(
             'pubicData',

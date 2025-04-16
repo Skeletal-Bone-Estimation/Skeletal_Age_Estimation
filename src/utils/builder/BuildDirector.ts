@@ -52,7 +52,11 @@ export class BuildDirector {
      * @param content The XML elements containing the report data.
      * @returns The built AbstractReportModel.
      */
-    public makeReportFrom(id: string, content: Element): AbstractReportModel {
-        return this.reportBuilder.buildFrom(id, content);
+    public makeReportFrom(
+        id: string,
+        content: Element,
+        ml: number | null = null,
+    ): AbstractReportModel {
+        return this.reportBuilder.buildFrom(id, content, ml);
     }
 }

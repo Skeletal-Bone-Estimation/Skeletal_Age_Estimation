@@ -78,7 +78,6 @@ body {
 
 /*report button on data entry screen*/
 .reportButton {
-  display: relative;
 }
 
 .dataEntryLabel{
@@ -472,7 +471,7 @@ body {
   position: relative;
   padding: 20px;
   height: 27vh;
-  width: 30vw;
+  width: 38vw;
   display: flex;
   justify-content:center;
   align-items: center; 
@@ -489,9 +488,19 @@ body {
 
 #ML_Row {
   display: flex;
+  grid-row: 1;
+  grid-column: 2;
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem; /* space between checkbox, label, and select */
   flex-wrap: wrap; /* wrap to next line on smaller screens */
+}
+
+#ML_Input {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem; /* space between checkbox and label */
+  white-space: nowrap; /* prevent wrapping of checkbox and label */
 }
 
 #ML_Row label {
@@ -502,6 +511,10 @@ body {
   flex: 1; /* allow select to grow to use available space if needed */
   min-width: 200px; /* prevent it from getting too small */
   max-width: 100%;
+}
+
+#ML_Result {
+  display: none;
 }
 
 #analysisSelector:disabled {
@@ -587,7 +600,7 @@ body {
 
 #notesAndReports {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
 }
 
@@ -596,11 +609,12 @@ body {
 }
 
 #reportAndGuideDiv {
-  display: flex;
-  flex-direction: row; 
-  align-items: flex;
-  margin-left: 10px;
-  margin-right: 20px;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  margin-left: 20px;
+  margin-right: 10px;
+  gap: 40px;
 }
 
 #reportBtnDiv {
@@ -609,7 +623,6 @@ body {
   justify-content: flex-end;
   align-items: flex-start;
   margin-left: 20px;
-  margin-top: 5px;
   gap: 5px;
 }
 
@@ -621,18 +634,22 @@ body {
 }
 
 #dataEntryReport{
+  grid-row: 2;
+  grid-column: 1;
+  width: 100%;
+  margin-bottom: 15%;
+}
+
+#viewMostRecentReport {
+  grid-row: 2;  
+  grid-column: 2;
   width: 100%;
   margin-bottom: 15%;
 }
 
 #scoringGuideDiv {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-left: 10px;
-  margin-top: 5px;
-  margin-right: 3vw;
+  grid-row: 1;
+  grid-column: 1;
 }
 
 #scoringGuide  {
@@ -769,6 +786,20 @@ body {
 
 /* summarized/overall range */
 #summarizedRange {
+  width: 100%;
+  max-width: 500px; 
+  min-width: 150px; 
+  text-align: center;
+  padding: 10px;
+  background-color: var(--div-color-2);
+  color: var(--div-color-1);
+  font-size: clamp(18px, 2vw, 28px); 
+  border-radius: 5px;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+#ML_Result {
   width: 100%;
   max-width: 500px; 
   min-width: 150px; 

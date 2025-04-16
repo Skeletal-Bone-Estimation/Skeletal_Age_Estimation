@@ -1,6 +1,10 @@
 import { DataController } from '../controllers/DataController';
 
 export class Autonumberer {
+   
+    private REPEATS = 3; // number of repeats for each letter
+    private limit = this.REPEATS * 26;
+   
     private existingValues: string[] = [];
     private static instance: Autonumberer; // singleton instance of this class
 
@@ -25,8 +29,14 @@ export class Autonumberer {
      * @param number The number to use.
      * @returns The generated string.
      */
-    private generateString(letter: string, number: number): string {
-        return `${letter}${number}`;
+    private numToAlphabet(num: number): string {
+        var result = '';
+        while (num > 0) {
+            var remainder = (num - 1) % 26;
+            result = String.fromCharCode(65 + remainder) + result;
+            num = Math.floor((num - remainder) / 26);
+        }
+        return result;
     }
 
     /**
@@ -60,16 +70,11 @@ export class Autonumberer {
      * @returns The next available report ID, or null if all IDs are taken.
      */
     public generateNext(): string | null {
-        for (var charCode = 65; charCode <= 90; charCode++) {
-            const letter = String.fromCharCode(charCode);
-
-            for (var num = 1; num <= 99; num++) {
-                const newValue = this.generateString(letter, num);
-
-                if (!this.isValueTaken(newValue)) {
-                    this.existingValues.push(newValue);
-                    return newValue;
-                }
+        for (let i = 1; i <= this.limit; i++) {
+            const candidate = this.numToAlphabet(i);
+            if (!this.isValueTaken(candidate)) {
+                this.existingValues.push(candidate);
+                return candidate;
             }
         }
         return null; // fails at report # 2575
