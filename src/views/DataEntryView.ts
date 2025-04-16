@@ -11,6 +11,7 @@ import {
     SternalEnd,
     Analyzers,
     Observers,
+    Modals,
 } from '../utils/enums';
 import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
@@ -46,6 +47,7 @@ export class DataEntryView extends AbstractView {
         var _case: CaseModel = dc.loadedCases[
             dc.findCaseIndex(dc.openCaseID)
         ] as CaseModel;
+
         const caseID = document.getElementById(
             UI_Elements.dataSideCaseID,
         ) as HTMLInputElement;
@@ -178,9 +180,8 @@ export class DataEntryView extends AbstractView {
         const currentCase = dc.loadedCases[
             dc.findCaseIndex(dc.openCaseID)
         ] as CaseModel;
-        const galleryModal = new GalleryModal(document);
 
-        //auricular images renders button to trigger modal
+        //auricularimages
         const galleryAuricularContainer =
             document.getElementById('galleryAuricular');
         if (galleryAuricularContainer) {
@@ -188,30 +189,30 @@ export class DataEntryView extends AbstractView {
             const button = document.createElement('button');
             button.innerText = 'View Auricular Images';
             button.addEventListener('click', () => {
-                galleryModal.openGallery(
-                    'Auricular Images',
-                    currentCase.auricularSurfaceImages,
-                );
+                PageController.getInstance().loadModal(Modals.Gallery, '', {
+                    title: 'Auricular Images',
+                    images: currentCase.auricularSurfaceImages,
+                });
             });
             galleryAuricularContainer.appendChild(button);
         }
 
-        //pubic image renders button to trigger modal
+        //pubic images
         const galleryPubicContainer = document.getElementById('galleryPubic');
         if (galleryPubicContainer) {
             galleryPubicContainer.innerHTML = '';
             const button = document.createElement('button');
             button.innerText = 'View Pubic Images';
             button.addEventListener('click', () => {
-                galleryModal.openGallery(
-                    'Pubic Images',
-                    currentCase.pubicSymphysisImages,
-                );
+                PageController.getInstance().loadModal(Modals.Gallery, '', {
+                    title: 'Pubic Images',
+                    images: currentCase.pubicSymphysisImages,
+                });
             });
             galleryPubicContainer.appendChild(button);
         }
 
-        //sternal images renders button for triggerin g modal
+        //sternal images
         const gallerySternalContainer =
             document.getElementById('gallerySternal');
         if (gallerySternalContainer) {
@@ -219,25 +220,25 @@ export class DataEntryView extends AbstractView {
             const button = document.createElement('button');
             button.innerText = 'View Sternal Images';
             button.addEventListener('click', () => {
-                galleryModal.openGallery(
-                    'Sternal Images',
-                    currentCase.fourthRibImages,
-                );
+                PageController.getInstance().loadModal(Modals.Gallery, '', {
+                    title: 'Sternal Images',
+                    images: currentCase.fourthRibImages,
+                });
             });
             gallerySternalContainer.appendChild(button);
         }
 
-        //molar images renders button for trigger
+        //molar images
         const galleryMolarContainer = document.getElementById('galleryMolar');
         if (galleryMolarContainer) {
             galleryMolarContainer.innerHTML = '';
             const button = document.createElement('button');
             button.innerText = 'View Molar Images';
             button.addEventListener('click', () => {
-                galleryModal.openGallery(
-                    'Molar Images',
-                    currentCase.thirdMolarImages,
-                );
+                PageController.getInstance().loadModal(Modals.Gallery, '', {
+                    title: 'Molar Images',
+                    images: currentCase.thirdMolarImages,
+                });
             });
             galleryMolarContainer.appendChild(button);
         }
