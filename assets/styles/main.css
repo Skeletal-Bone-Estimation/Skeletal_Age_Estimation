@@ -647,6 +647,11 @@ body {
   margin-bottom: 15%;
 }
 
+#viewMostRecentReport:disabled {
+  background-color: var(--hover-on-light);
+  cursor: not-allowed;
+}
+
 #scoringGuideDiv {
   grid-row: 1;
   grid-column: 1;
