@@ -1,34 +1,93 @@
+//started updating : 2/17
+//finished updating : 2/20
+//updated test for sidebarlisteners
+//and added tests for the guide button and analyze button
+// DataEntryView.test.ts
+
+// DataEntryView.test.ts
+jest.mock('../../../src/controllers/PageController');
+jest.mock('../../../src/views/ReportPageView', () => {
+    return {
+        ReportPageView: jest.fn().mockImplementation(() => ({
+            render: jest.fn(),
+        })),
+    };
+});
+jest.mock('../../../src/controllers/DataController', () => {
+    return {
+        DataController: {
+            getInstance: jest.fn(() => ({
+                getReports: jest.fn(() => [{ id: 'report1' }]), 
+                createReport: jest.fn(),
+            })),
+        },
+    };
+});
+jest.mock('../../../src/utils/analyzer/AnalysisContext', () => {
+    return {
+        AnalysisContext: {
+            getInstance: jest.fn(() => ({
+                analyze: jest.fn()
+            }))
+        }
+    };
+});
+
 import { DataEntryView } from '../../../src/views/DataEntryView';
 import { PageController } from '../../../src/controllers/PageController';
-import { UI_Elements } from '../../../src/utils/enums';
+import { UI_Elements, Pages, SideBar, Affinity, Sex, ThirdMolar, AuricularArea, PubicSymphysis, SternalEnd } from '../../../src/utils/enums';
 
-// Mock the PageController class
-jest.mock('../../../src/controllers/PageController', () => ({
-    PageController: {
-        getInstance: jest.fn(),
-    },
-}));
+const mockPageControllerInstance = {
+    getOpenCase: jest.fn().mockReturnValue({
+        caseID: 'test123',
+        sex: 0,
+        populationAffinity: 1,
+        auricularAreaL: 2,
+        auricularAreaR: 3,
+        pubicSymphysisL: 4,
+        pubicSymphysisR: 5,
+        fourthRibL: 6,
+        fourthRibR: 7,
+        thirdMolarTL: 8,
+        thirdMolarTR: 1,
+        thirdMolarBL: 2,
+        thirdMolarBR: 3,
+        notes: 'test notes',
+        addReport: jest.fn()
+    }),
+    editCase: jest.fn(),
+    navigateTo: jest.fn(),
+    loadSideBarContent: jest.fn(),
+};
+
+const PageControllerModule = require('../../../src/controllers/PageController');
+PageControllerModule.PageController.getInstance = jest.fn(() => mockPageControllerInstance);
 
 describe('DataEntryView', () => {
     let dataEntryView: DataEntryView;
-    let pageControllerMock: jest.Mocked<PageController>;
+    let pageControllerMock: typeof mockPageControllerInstance;
 
     beforeEach(() => {
-        // Mock the DOM structure
+        // Reset modules and mocks to ensure a clean slate
+        jest.resetModules();
+        jest.clearAllMocks();
+    
+        pageControllerMock = PageControllerModule.PageController.getInstance();
+
         document.body.innerHTML = `
             <div id="rootDiv"></div>
-            <input id="${UI_Elements.auricularAreaL}" />
-            <input id="${UI_Elements.auricularAreaR}" />
-            <input id="${UI_Elements.pubicSymphysisL}" />
-            <input id="${UI_Elements.pubicSymphysisR}" />
-            <input id="${UI_Elements.fourthRibL}" />
-            <input id="${UI_Elements.fourthRibR}" />
-            <input id="${UI_Elements.thirdMolarTL}" />
-            <input id="${UI_Elements.thirdMolarTR}" />
-            <input id="${UI_Elements.thirdMolarBL}" />
-            <input id="${UI_Elements.thirdMolarBR}" />
-            <input id="${UI_Elements.notes}" />
-            <input id="${UI_Elements.dataSideCaseID}" />
+            <input id="${UI_Elements.auricularAreaL}" type="text" />
+            <input id="${UI_Elements.auricularAreaR}" type="text" />
+            <input id="${UI_Elements.pubicSymphysisL}" type="text" />
+            <input id="${UI_Elements.pubicSymphysisR}" type="text" />
+            <input id="${UI_Elements.fourthRibL}" type="text" />
+            <input id="${UI_Elements.fourthRibR}" type="text" />
+            <input id="${UI_Elements.thirdMolarTL}" type="text" />
+            <input id="${UI_Elements.thirdMolarTR}" type="text" />
+            <input id="${UI_Elements.thirdMolarBL}" type="text" />
+            <input id="${UI_Elements.thirdMolarBR}" type="text" />
+            <input id="${UI_Elements.notes}" type="text" />
+            <input id="${UI_Elements.dataSideCaseID}" type="text" />
             <select id="${UI_Elements.dataSideSex}">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -37,19 +96,10 @@ describe('DataEntryView', () => {
                 <option value="white">White</option>
                 <option value="black">Black</option>
             </select>
+            <button id="${UI_Elements.analyzeButton}"></button>
+            <button id="${UI_Elements.guideButton}"></button>
         `;
 
-        // Mock PageController methods
-        pageControllerMock = {
-            createCase: jest.fn(),
-            navigateTo: jest.fn(),
-            loadSideBarContent: jest.fn(),
-            editCase: jest.fn(),
-        } as unknown as jest.Mocked<PageController>;
-
-        (PageController.getInstance as jest.Mock).mockReturnValue(pageControllerMock);
-
-        // Initialize DataEntryView
         dataEntryView = new DataEntryView(document);
     });
 
@@ -61,7 +111,6 @@ describe('DataEntryView', () => {
         it('should inject HTML content into the rootDiv', () => {
             const testHTML = '<p>Test Content</p>';
             dataEntryView.render(testHTML);
-
             const rootDiv = document.getElementById('rootDiv');
             expect(rootDiv!.innerHTML).toBe(testHTML);
         });
@@ -71,11 +120,9 @@ describe('DataEntryView', () => {
                 <input id="${UI_Elements.auricularAreaL}" type="text" />
             `;
             dataEntryView.render(htmlContent);
-
             const auricularAreaL = document.getElementById(UI_Elements.auricularAreaL) as HTMLInputElement;
             auricularAreaL.value = 'one';
             auricularAreaL.dispatchEvent(new Event('input'));
-
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.auricularAreaL, 1);
         });
     });
@@ -106,7 +153,7 @@ describe('DataEntryView', () => {
             expect(dataEntryView['parseThirdMolar']('H')).toBe(7);
             expect(dataEntryView['parseThirdMolar']('Unknown')).toBe(8);
             expect(dataEntryView['parseThirdMolar']('Error')).toBe(-1);
-        })
+        });
 
         it('should correctly parse auricular area values', () => {
             expect(dataEntryView['parseAuricularArea']('one')).toBe(1);
@@ -144,26 +191,51 @@ describe('DataEntryView', () => {
         });
     });
 
-    describe('setSidebarListeners method', () => {
-        it('should add event listeners to sidebar elements', () => {
-            dataEntryView.setSidebarListeners();
-
+    describe('Sidebar event listeners (via render autoLoadCaseData)', () => {
+        it('should update case data when sidebar inputs change', () => {
+            // Call render so that setSidebarListeners and autoLoadCaseData are attached.
+            dataEntryView.render('<div></div>');
+        
             const caseInput = document.getElementById(UI_Elements.dataSideCaseID) as HTMLInputElement;
             const sexSelector = document.getElementById(UI_Elements.dataSideSex) as HTMLSelectElement;
             const affinitySelector = document.getElementById(UI_Elements.dataSideAffinity) as HTMLSelectElement;
-
+        
             caseInput.value = 'caseXYZ';
             caseInput.dispatchEvent(new Event('input'));
-
+        
             sexSelector.value = 'female';
             sexSelector.dispatchEvent(new Event('input'));
-
+        
             affinitySelector.value = 'black';
             affinitySelector.dispatchEvent(new Event('input'));
-
+        
+            expect(pageControllerMock.editCase).toHaveBeenCalledTimes(3);
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideCaseID, 'caseXYZ');
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideSex, 1);
             expect(pageControllerMock.editCase).toHaveBeenCalledWith(UI_Elements.dataSideAffinity, 1);
+        });
+    });
+    
+    describe('Button Clicks', () => {
+        it('should navigate to Report page when analyze button is clicked', () => {
+            // For analyze button, the click triggers analysis then navigation.
+            // Our dummy case (returned by getOpenCase) now has an addReport method.
+            dataEntryView.render('<div></div>'); // Attach event listeners.
+        
+            const analyzeButton = document.getElementById(UI_Elements.analyzeButton) as HTMLButtonElement;
+            analyzeButton.click();
+            expect(mockPageControllerInstance.navigateTo).toHaveBeenCalledWith(Pages.Report, SideBar.createBar);
+        });
+        
+        it('should open guidelines PDF when guide button is clicked', () => {
+            global.open = jest.fn();
+            dataEntryView.render('<div></div>');
+            const guideButton = document.getElementById(UI_Elements.guideButton) as HTMLButtonElement;
+            guideButton.click();
+            expect(global.open).toHaveBeenCalledWith(
+                './assets/guidelines/Scoring Guidelines for Skeletal Bone Age Estimation.pdf',
+                '_blank'
+            );
         });
     });
 });
