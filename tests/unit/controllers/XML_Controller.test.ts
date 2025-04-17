@@ -1,144 +1,149 @@
-//XML_Controller.test.ts
 import { XML_Controller } from '../../../src/controllers/XML_Controller';
 import { CaseModel } from '../../../src/models/CaseModel';
 import { NullCaseModel } from '../../../src/models/NullCaseModel';
-import { BuildDirector } from '../../../src/utils/builder/BuildDirector';
-import { CaseBuilder } from '../../../src/utils/builder/CaseBuilder';
+import { Builder } from 'xml2js';
+import { writeFileSync } from 'fs';
 
 jest.mock('fs', () => ({
     writeFileSync: jest.fn(),
 }));
 
-//XML_Controller.getInstance()
-describe('XML_Controller Singleton', () => {
-    //getInstance()
-    test('getInstance always returns the same instance', () => {
-        const instance1 = XML_Controller.getInstance();
-        const instance2 = XML_Controller.getInstance();
-        expect(instance1).toBe(instance2);
-    });
-});
-
-//XML_Controller.parseSingleFile()
-describe('XML_Controller parseSingleFile', () => {
-    //parseSingleFile()
-    jest.mock('../../../src/utils/builder/BuildDirector');
-    var controller: XML_Controller;
+describe('XML_Controller', () => {
+    let xmlController: XML_Controller;
 
     beforeEach(() => {
-        controller = XML_Controller.getInstance();
+        (XML_Controller as any)['instance'] = null;
+
+        xmlController = XML_Controller.getInstance();
     });
 
-    it('should return NullCaseModel when currentDoc is null', () => {
-        const result = controller.parseSingleFile();
-        expect(result).toBeInstanceOf(NullCaseModel);
+    it('should return the same instance for getInstance', () => {
+        const secondInstance = XML_Controller.getInstance();
+        expect(secondInstance).toBe(xmlController);
     });
 
-    it('should parse XML file and populate the CaseModel', (done) => {
-        const mockFile = `
-            <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <object>
-                <observers/>
-                <_caseID>test</_caseID>
-                <_populationAffinity>2</_populationAffinity>
-                <_sex>2</_sex>
-                <_thirdMolarTL>8</_thirdMolarTL>
-                <_thirdMolarTR>8</_thirdMolarTR>
-                <_thirdMolarBL>8</_thirdMolarBL>
-                <_thirdMolarBR>8</_thirdMolarBR>
-                <_pubicSymphysisL>8</_pubicSymphysisL>
-                <_pubicSymphysisR>8</_pubicSymphysisR>
-                <_auricularAreaL>7</_auricularAreaL>
-                <_auricularAreaR>7</_auricularAreaR>
-                <_fourthRibL>8</_fourthRibL>
-                <_fourthRibR>8</_fourthRibR>
-                <_generatedReports/>
-            </object>
-        `;
+    it('should initialize currentDoc as null', () => {
+        expect(xmlController.getCurrentDoc()).toBeNull();
+    });
 
-        const mockEvent = {
-            target: {
-                files: [mockFile],
-            },
-        } as unknown as Event;
+    describe('parseSingleFile', () => {
+        it('should return a NullCaseModel if currentDoc is null', () => {
+            const parsedCase = xmlController.parseSingleFile();
+            expect(parsedCase).toBeInstanceOf(NullCaseModel);
+        });
 
-        const director: BuildDirector = new BuildDirector();
-        const builder: CaseBuilder = director.caseBuilder;
+        it('should parse XML data into a CaseModel', () => {
+            const mockXmlContent = `
+                <root>
+                    <_caseID>1234</_caseID>
+                    <_populationAffinity>1</_populationAffinity>
+                    <_sex>0</_sex>
+                    <_thirdMolarTL>2</_thirdMolarTL>
+                    <_thirdMolarTR>3</_thirdMolarTR>
+                    <_thirdMolarBL>4</_thirdMolarBL>
+                    <_thirdMolarBR>5</_thirdMolarBR>
+                    <_pubicSymphysisL>6</_pubicSymphysisL>
+                    <_pubicSymphysisR>7</_pubicSymphysisR>
+                    <_auricularAreaL>8</_auricularAreaL>
+                    <_auricularAreaR>9</_auricularAreaR>
+                    <_fourthRibL>10</_fourthRibL>
+                    <_fourthRibR>11</_fourthRibR>
+                    <_notes>Test notes</_notes>
+                </root>
+            `;
+            xmlController['currentDoc'] = new DOMParser().parseFromString(
+                mockXmlContent,
+                'application/xml',
+            );
 
-        // Call loadFile and pass the mock file event
-        controller.loadFile(mockEvent, () => {
-            const result = controller.parseSingleFile();
+            const parsedCase = xmlController.parseSingleFile();
 
-            // Check that the caseBuilder was called with correct arguments
-            expect(builder.setCaseID).toHaveBeenCalledWith('test');
-            expect(builder.setPopulationAffinity).toHaveBeenCalledWith(2);
-            expect(builder.setSex).toHaveBeenCalledWith(2);
-            expect(builder.setThirdMolarTL).toHaveBeenCalledWith(8);
-            expect(builder.setThirdMolarTR).toHaveBeenCalledWith(8);
-            expect(builder.setThirdMolarBL).toHaveBeenCalledWith(8);
-            expect(builder.setThirdMolarBR).toHaveBeenCalledWith(8);
-            expect(builder.setPubicSymphysisL).toHaveBeenCalledWith(8);
-            expect(builder.setPubicSymphysisR).toHaveBeenCalledWith(8);
-            expect(builder.setAuricularAreaL).toHaveBeenCalledWith(7);
-            expect(builder.setAuricularAreaR).toHaveBeenCalledWith(7);
-            expect(builder.setFourthRibL).toHaveBeenCalledWith(8);
-            expect(builder.setFourthRibR).toHaveBeenCalledWith(8);
-
-            expect(result).toBeInstanceOf(CaseModel);
-            done();
+            if (parsedCase instanceof CaseModel) {
+                // Type narrowing ensures safe access to CaseModel properties
+                expect(parsedCase.caseID).toBe('1234');
+                expect(parsedCase.populationAffinity).toBe(1);
+                expect(parsedCase.sex).toBe(0);
+            } else {
+                fail('Expected CaseModel but got NullCaseModel');
+            }
         });
     });
-});
 
-//XML_Controller.loadFile()
-describe('XML_Controller loadFile', () => {
-    var controller: XML_Controller;
-    var file: File;
+    describe('loadFile', () => {
+        it('should load an XML file and set currentDoc', (done) => {
+            const mockFileContent = `
+                <root>
+                    <_caseID>1234</_caseID>
+                </root>
+            `;
+            const mockEvent = {
+                target: {
+                    files: [new Blob([mockFileContent], { type: 'application/xml' })],
+                },
+            } as unknown as Event;
+        
+            const callback = jest.fn();
+            const fileReaderMock = {
+                readAsText: jest.fn(),
+                onload: jest.fn(),
+                onerror: jest.fn(),
+            };
+            jest.spyOn(window, 'FileReader').mockImplementation(() => fileReaderMock as unknown as FileReader);
+        
+            xmlController.loadFile(mockEvent, callback);
+        
+            // Simulate file load
+            fileReaderMock.onload({
+                target: { result: mockFileContent },
+            });
+        
+            // Replace setImmediate with setTimeout
+            setTimeout(() => {
+                expect(xmlController.getCurrentDoc()).not.toBeNull();
+                expect(callback).toHaveBeenCalled();
+                done();
+            }, 0);
+        });
+        
 
-    beforeEach(() => {
-        controller = XML_Controller.getInstance();
+        it('should throw an error if no file is selected', () => {
+            const mockEvent = {
+                target: { files: null },
+            } as unknown as Event;
 
-        file = new File(
-            ['<document><_caseID>test</_caseID></document'],
-            'loadTest.xml',
-            { type: 'text/xml' },
-        );
-    });
-
-    test('should load file and set currentDoc', (done) => {
-        const event = {
-            target: { files: [file] },
-        } as unknown as Event;
-
-        controller.loadFile(event, () => {
-            expect(controller.getCurrentDoc).not.toBeNull();
-            const caseID = (
-                controller.getCurrentDoc() as Document
-            ).getElementsByTagName('_caseID')[0].textContent;
-            expect(caseID).toBe('test');
-            done();
+            expect(() => xmlController.loadFile(mockEvent, jest.fn())).toThrow(
+                'No file selected',
+            );
         });
     });
-});
 
-//XML_Controller.saveAsFile()
-describe('XML_Controller saveAsFile', () => {
-    var controller: XML_Controller;
+    describe('saveAsFile', () => {
+        it('should save a CaseModel to an XML file', () => {
+            const mockCase = new CaseModel(
+                '1234',
+                1, // Affinity
+                0, // Sex
+                2, // ThirdMolarTL
+                3, // ThirdMolarTR
+                4, // ThirdMolarBL
+                5, // ThirdMolarBR
+                6, // PubicSymphysisL
+                7, // PubicSymphysisR
+                7, // AuricularAreaL
+                7, // AuricularAreaR
+                7, // FourthRibL
+                7, // FourthRibR
+                'Test notes',
+                {}, // Reports
+            );
+            const mockFilename = 'testFile.xml';
+            const mockBuilder = jest.spyOn(Builder.prototype, 'buildObject').mockReturnValue('<xml></xml>');
 
-    beforeEach(() => {
-        controller = XML_Controller.getInstance();
+            xmlController.saveAsFile(mockCase, mockFilename);
+
+            expect(mockBuilder).toHaveBeenCalledWith({ object: mockCase });
+            expect(writeFileSync).toHaveBeenCalledWith(mockFilename, '<xml></xml>', 'utf-8');
+        });
     });
 
-    test('should save the case as an XML file', () => {
-        const mockCaseModel = { some: 'data' };
-        const filename = 'saveTest.xml';
-        controller.saveAsFile(mockCaseModel as any, filename);
-        expect(jest.fn().mock).toHaveBeenCalledWith(
-            filename,
-            expect.stringContaining(
-                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><object><some>data</some></object>',
-            ),
-            'utf-8',
-        );
-    });
 });

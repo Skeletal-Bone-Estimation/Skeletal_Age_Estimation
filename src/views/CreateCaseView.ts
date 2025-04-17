@@ -6,12 +6,12 @@ import { XML_Controller } from '../controllers/XML_Controller';
 import { CaseModel } from '../models/CaseModel';
 import { DataController } from '../controllers/DataController';
 import { dialog, Dialog, ipcMain, ipcRenderer } from 'electron';
-
 export class CreateCaseView extends AbstractView {
     private savePath: string = '';
     constructor(document: Document) {
         super(document);
     }
+
 
     /**
      * Specialized method to load content with specific case creation page requirements.
@@ -27,10 +27,10 @@ export class CreateCaseView extends AbstractView {
         this.initEventListeners();
         this.setSidebarListeners();
     }
-
     /**
      * Initialize event listeners for the case creation page.
      */
+
     protected override initEventListeners(): void {
         document
             .getElementById(UI_Elements.createStartCase)!
