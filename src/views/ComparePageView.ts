@@ -139,6 +139,15 @@ export class ComparePageView extends AbstractView {
             console.error('SummarizedRange not found');
         }
 
+        const ML_Result = document.getElementById('ML_ResultLeft');
+        if (ML_Result && report.ML_Result != null) {
+            //can add a call to analysis context to retreive name of ML model used in the future
+            ML_Result.textContent = `Machine Learning Estimation: ${report.ML_Result.toFixed(2)}`;
+            ML_Result.style.display = 'block';
+        } else {
+            console.error('ML_Result not found');
+        }
+
         // Display estimated pubic symphysis range
         this.displayDataSection(
             'pubicDataLeft',
@@ -205,6 +214,15 @@ export class ComparePageView extends AbstractView {
             summarizedRange.textContent = `Summarized Range: ${this.calculateSummarizedRangeCompare(report)}`;
         } else {
             console.error('SummarizedRange not found');
+        }
+
+        const ML_Result = document.getElementById('ML_ResultRight');
+        if (ML_Result && report.ML_Result != null) {
+            //can add a call to analysis context to retreive name of ML model used in the future
+            ML_Result.textContent = `Machine Learning Estimation: ${report.ML_Result.toFixed(2)}`;
+            ML_Result.style.display = 'block';
+        } else {
+            console.error('ML_Result not found');
         }
 
         // Display estimated pubic symphysis range

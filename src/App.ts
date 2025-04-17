@@ -36,6 +36,8 @@ function createWindow(): void {
         mainWindow.webContents.openDevTools();
     } else mainWindow.loadFile('./templates/index.html');
 
+    mainWindow.setMenu(null); //uncomment to remove menu bar
+
     mainWindow.on('ready-to-show', () => mainWindow.show());
 }
 
