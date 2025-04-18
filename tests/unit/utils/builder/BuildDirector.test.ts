@@ -12,6 +12,7 @@ import {
     AuricularArea,
     SternalEnd,
 } from '../../../../src/utils/enums';
+import { AbstractReportModel } from '../../../../src/models/AbstractReportModel';
 
 jest.mock('../../../../src/utils/builder/CaseBuilder');
 jest.mock('../../../../src/utils/builder/ReportBuilder');
@@ -49,6 +50,7 @@ describe('BuildDirector', () => {
             SternalEnd.Unknown,
             'Test notes',
             {},
+            AbstractReportModel
         );
         mockCaseBuilder.build.mockReturnValue(mockCase);
 
