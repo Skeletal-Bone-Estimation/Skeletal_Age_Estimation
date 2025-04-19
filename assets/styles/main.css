@@ -897,7 +897,7 @@ body {
   background: white;
   border: 2px solid var(--div-color-2);
   border-radius: 5px;
-  font-size: clamp(14px, 2vw, 40px); 
+  font-size: clamp(14px, 2vw, 28px); 
   box-sizing: border-box;
 }
 
