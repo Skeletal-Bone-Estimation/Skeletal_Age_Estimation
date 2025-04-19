@@ -890,12 +890,14 @@ body {
   width: 90%;
   max-width: 400px; 
   min-width: 150px; 
+  max-height: 100px;
   text-align: center;
+  justify-content: center;
   padding: 15px;
   background: white;
   border: 2px solid var(--div-color-2);
   border-radius: 5px;
-  font-size: clamp(14px, 2vw, 18px); 
+  font-size: clamp(14px, 2vw, 40px); 
   box-sizing: border-box;
 }
 
