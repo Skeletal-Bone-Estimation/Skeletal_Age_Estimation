@@ -25,9 +25,9 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
      * @param _case The case to analyze.
      * @returns The analysis results as a dictionary.
      */
-    public async executeAnalysis(_case: CaseModel): Promise<{
-        [key: string]: { [key: string]: number };
-    }> {
+    public async executeAnalysis(
+        _case: CaseModel,
+    ): Promise<{ [key: string]: { [key: string]: number } }> {
         var isMale: boolean = false;
         var isUnknown: boolean = false;
         var results: { [key: string]: { [key: string]: number } } =
