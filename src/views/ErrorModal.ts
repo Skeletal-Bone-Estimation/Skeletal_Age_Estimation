@@ -1,4 +1,3 @@
-import { PageController } from '../controllers/PageController';
 import { UI_Elements } from '../utils/enums';
 import { AbstractModal } from './AbstractModal';
 

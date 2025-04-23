@@ -17,8 +17,6 @@ import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
 import { DataController } from '../controllers/DataController';
-import { ReportModel } from '../models/ReportModel';
-import { GalleryModal } from '../views/GalleryModal';
 import { NullReportModel } from '../models/NullReportModel';
 
 export class DataEntryView extends AbstractView {

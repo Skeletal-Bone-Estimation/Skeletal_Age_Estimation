@@ -8,8 +8,6 @@ import { AbstractReportModel } from '../models/AbstractReportModel';
 import { Side, Pages } from '../utils/enums';
 import { updateRangeBar } from '../utils/charts/ageRangeChart';
 import { NullReportModel } from '../models/NullReportModel';
-import { NullCaseModel } from '../models/NullCaseModel';
-import { AbstractCaseModel } from '../models/AbstractCaseModel';
 
 //TODO: this is supposed to extend ReportPageView to take advantage of exisitng methods
 export class ComparePageView extends AbstractView {

@@ -5,7 +5,6 @@ import { AbstractView } from './AbstractView';
 import { XML_Controller } from '../controllers/XML_Controller';
 import { CaseModel } from '../models/CaseModel';
 import { DataController } from '../controllers/DataController';
-import { dialog, Dialog, ipcMain, ipcRenderer } from 'electron';
 
 export class CreateCaseView extends AbstractView {
     private savePath: string = '';
