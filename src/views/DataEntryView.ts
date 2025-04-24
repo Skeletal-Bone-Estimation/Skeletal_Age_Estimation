@@ -17,11 +17,18 @@ import { Pages, SideBar } from '../utils/enums';
 import { AbstractView } from './AbstractView';
 import { AnalysisContext } from '../utils/analyzer/AnalysisContext';
 import { DataController } from '../controllers/DataController';
-import { ReportModel } from '../models/ReportModel';
-import { GalleryModal } from '../views/GalleryModal';
 import { NullReportModel } from '../models/NullReportModel';
 
 export class DataEntryView extends AbstractView {
+    private unknowns: boolean[] = [
+        true, // auricularAreaL
+        true, // auricularAreaR
+        true, // pubicSymphysisL
+        true, // pubicSymphysisR
+        true, // fourthRibL
+        true, // fourthRibR
+    ];
+
     constructor(document: Document) {
         super(document);
     }
@@ -38,6 +45,63 @@ export class DataEntryView extends AbstractView {
         this.initEventListeners();
         this.setSidebarListeners();
         this.autoLoadCaseData();
+        this.validateAnalyzeButton();
+    }
+
+    private validateAnalyzeButton() {
+        if (
+            !(document.getElementById('ML_Checkbox') as HTMLInputElement)
+                .checked
+        )
+            return;
+
+        const elements: HTMLInputElement[] = [
+            document.getElementById(
+                UI_Elements.auricularAreaL,
+            ) as HTMLInputElement,
+
+            document.getElementById(
+                UI_Elements.auricularAreaR,
+            ) as HTMLInputElement,
+
+            document.getElementById(
+                UI_Elements.pubicSymphysisL,
+            ) as HTMLInputElement,
+
+            document.getElementById(
+                UI_Elements.pubicSymphysisR,
+            ) as HTMLInputElement,
+
+            document.getElementById(UI_Elements.fourthRibL) as HTMLInputElement,
+
+            document.getElementById(UI_Elements.fourthRibR) as HTMLInputElement,
+        ];
+
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+            if (element.value === 'unknown') {
+                this.unknowns[i] = true;
+                (
+                    document.getElementById(
+                        UI_Elements.analyzeButton,
+                    ) as HTMLButtonElement
+                ).disabled = true;
+            } else this.unknowns[i] = false;
+        }
+
+        if (this.unknowns.every((val) => val === false)) {
+            (
+                document.getElementById(
+                    UI_Elements.analyzeButton,
+                ) as HTMLButtonElement
+            ).disabled = false;
+        } else {
+            (
+                document.getElementById(
+                    UI_Elements.analyzeButton,
+                ) as HTMLButtonElement
+            ).disabled = true;
+        }
     }
 
     /**
@@ -244,6 +308,36 @@ export class DataEntryView extends AbstractView {
             galleryMolarContainer.appendChild(button);
         }
     }
+
+    // private validateAnalyzeButton(
+    //     selector: HTMLSelectElement,
+    //     idx: number,
+    //     type: string,
+    // ): void {
+    //     const analyzeButton = document.getElementById(
+    //         UI_Elements.analyzeButton,
+    //     ) as HTMLButtonElement;
+
+    //     if (
+    //         (selector.value === 'unknown' && type === 'aa') ||
+    //         ((selector.value === 'unknown' || selector.value === 'unknown') &&
+    //             (type === 'ps' || type === 'sr'))
+    //     ) {
+    //         this.unknowns[idx] = true;
+    //         // alert(
+    //         //     'Please select a valid value for the selected type before analyzing.',
+    //         // );
+    //     } else {
+    //         this.unknowns[idx] = false;
+    //     }
+
+    //     if (this.unknowns.every((val) => val === false)) {
+    //         analyzeButton.disabled = false;
+    //     } else {
+    //         analyzeButton.disabled = true;
+    //     }
+    // }
+
     /**
      * Initialize event listeners for the data entry page.
      */
@@ -423,6 +517,7 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.auricularAreaL,
                     value,
                 );
+                this.validateAnalyzeButton();
             });
 
             auricularAreaR.addEventListener('input', (event) => {
@@ -432,6 +527,7 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.auricularAreaR,
                     value,
                 );
+                this.validateAnalyzeButton();
             });
 
             pubicSymphysisL.addEventListener('input', (event) => {
@@ -441,6 +537,7 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.pubicSymphysisL,
                     value,
                 );
+                this.validateAnalyzeButton();
             });
 
             pubicSymphysisR.addEventListener('input', (event) => {
@@ -450,6 +547,7 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.pubicSymphysisR,
                     value,
                 );
+                this.validateAnalyzeButton();
             });
 
             fourthRibL.addEventListener('input', (event) => {
@@ -459,6 +557,7 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.fourthRibL,
                     value,
                 );
+                this.validateAnalyzeButton();
             });
 
             fourthRibR.addEventListener('input', (event) => {
@@ -468,6 +567,7 @@ export class DataEntryView extends AbstractView {
                     UI_Elements.fourthRibR,
                     value,
                 );
+                this.validateAnalyzeButton();
             });
 
             thirdMolarTL.addEventListener('input', (event) => {
@@ -569,6 +669,7 @@ export class DataEntryView extends AbstractView {
 
             mlCheckbox.addEventListener('change', () => {
                 analysisSelector.disabled = !mlCheckbox.checked;
+                this.validateAnalyzeButton();
             });
 
             analysisSelector.addEventListener('change', () => {

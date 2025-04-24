@@ -1,6 +1,5 @@
 import os
 import joblib
-import json
 import pandas as pd
 from BaseModel import BaseModel
 

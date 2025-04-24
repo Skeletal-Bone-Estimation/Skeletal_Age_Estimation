@@ -76,6 +76,6 @@ export class Autonumberer {
                 return candidate;
             }
         }
-        return null; // fails at report # 2575
+        return null;
     }
 }

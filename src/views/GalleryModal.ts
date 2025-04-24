@@ -1,6 +1,6 @@
 import { AbstractModal } from './AbstractModal';
 import { PageController } from '../controllers/PageController';
-import { Modals, Observers } from '../utils/enums';
+import { Modals } from '../utils/enums';
 import { DataController } from '../controllers/DataController';
 import { CaseModel } from '../models/CaseModel';
 
