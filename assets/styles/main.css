@@ -647,6 +647,11 @@ body {
   margin-bottom: 15%;
 }
 
+#dataEntryReport:disabled {
+  background-color: var(--hover-on-light);
+  cursor: not-allowed;
+}
+
 #viewMostRecentReport:disabled {
   background-color: var(--hover-on-light);
   cursor: not-allowed;
