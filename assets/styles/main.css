@@ -76,10 +76,6 @@ body {
   padding: 10px;
 }
 
-/*report button on data entry screen*/
-.reportButton {
-}
-
 .dataEntryLabel{
   position: absolute;
   top: -20px;
