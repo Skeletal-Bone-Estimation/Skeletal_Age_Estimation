@@ -349,7 +349,9 @@ export class PageController {
             report.getSternalEndRange(Side.C).max,
         );
 
-        if (report.getThirdMolar(Side.C) === 0) {
+        let below18Count = Number(report.getThirdMolar(Side.C).toString()[3]);
+
+        if (below18Count > 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
             var content = `
@@ -432,7 +434,9 @@ export class PageController {
             report.getSternalEndRange(Side.C).max,
         );
 
-        if (report.getThirdMolar(Side.C) === 0) {
+        let below18Count = Number(report.getThirdMolar(Side.C).toString()[3]);
+
+        if (below18Count > 0) {
             content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
         } else {
             content = `
