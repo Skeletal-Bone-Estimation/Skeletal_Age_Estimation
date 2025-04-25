@@ -350,6 +350,7 @@ export class PageController {
         );
 
         let below18Count = Number(report.getThirdMolar(Side.C).toString()[3]);
+        let above18Count = Number(report.getThirdMolar(Side.C).toString()[2]);
 
         if (below18Count > 0) {
             var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
@@ -359,7 +360,7 @@ export class PageController {
                     <br />
             <p>The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. </p>
                     <br />
-            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
+            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual that is ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. These results are based off on the analysis of ${below18Count + above18Count} present 3rd molars. </p>
                     <br />
             <p>Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <
                 18 || minValue === Infinity
@@ -435,6 +436,7 @@ export class PageController {
         );
 
         let below18Count = Number(report.getThirdMolar(Side.C).toString()[3]);
+        let above18Count = Number(report.getThirdMolar(Side.C).toString()[2]);
 
         if (below18Count > 0) {
             content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
@@ -446,8 +448,7 @@ export class PageController {
                 The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
                         <br />
                         <br />
-                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}.
-                        <br />
+                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual that is ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. These results are based off on the analysis of ${below18Count + above18Count} present 3rd molars.
                         <br />
                         <br />
                 Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <

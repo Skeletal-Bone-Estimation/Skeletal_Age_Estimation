@@ -351,27 +351,27 @@ export class ReportPageView extends AbstractView {
         switch (unknownCount) {
             case 0:
                 if (above18Count === 4) {
-                    return '18 or Older.';
+                    return '18 or Older';
                 } else {
-                    return 'Under 18.';
+                    return 'Under 18';
                 }
             case 1:
                 if (above18Count >= 3) {
-                    return '18 or Older.';
+                    return '18 or Older';
                 } else {
-                    return 'Under 18.';
+                    return 'Under 18';
                 }
             case 2:
                 if (above18Count >= 2) {
-                    return '18 or Older.';
+                    return '18 or Older';
                 } else {
-                    return 'Under 18.';
+                    return 'Under 18';
                 }
             case 3:
                 if (above18Count >= 1) {
-                    return '18 or Older.';
+                    return '18 or Older';
                 } else {
-                    return 'Under 18.';
+                    return 'Under 18';
                 }
             default:
                 return 'Unknown';
