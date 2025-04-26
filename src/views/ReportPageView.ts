@@ -405,7 +405,14 @@ export class ReportPageView extends AbstractView {
                 ? Infinity
                 : report.getSternalEndRange(Side.C).min,
         );
-        if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
+        if (
+            Number(
+                (report as ReportModel).getThirdMolar(Side.C).toString()[3],
+            ) >= 1 ||
+            Number(
+                (report as ReportModel).getThirdMolar(Side.C).toString()[4],
+            ) === 4
+        ) {
             var minAge =
                 minAgeCompare === Infinity ? '0.00' : minAgeCompare.toFixed(2);
         } else {
