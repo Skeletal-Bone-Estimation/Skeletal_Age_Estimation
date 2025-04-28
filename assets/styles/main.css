@@ -348,6 +348,7 @@ body {
   object-fit: contain;
   transform: translate(1px);
   margin-top: 15px;
+  margin-left: -30px;
 }
 
 #createDiv {
@@ -572,6 +573,11 @@ body {
   overflow: hidden;
   padding-top: 4vh;
   padding-bottom: 4vh;
+}
+
+a {
+  display: inline-block;
+  text-align: center;
 }
 
 .psuCircle-side {
