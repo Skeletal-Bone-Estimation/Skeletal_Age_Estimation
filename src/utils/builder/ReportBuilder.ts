@@ -116,6 +116,7 @@ export class ReportBuilder {
                 TR: extractValue(thirdMolarEl, 'TR'),
                 BL: extractValue(thirdMolarEl, 'BL'),
                 BR: extractValue(thirdMolarEl, 'BR'),
+                C: extractValue(thirdMolarEl, 'C'),
             },
         };
     }

@@ -349,15 +349,18 @@ export class PageController {
             report.getSternalEndRange(Side.C).max,
         );
 
-        if (report.getThirdMolar(Side.C) === 0) {
-            var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
+        let below18Count = Number(report.getThirdMolar(Side.C).toString()[3]);
+        let above18Count = Number(report.getThirdMolar(Side.C).toString()[2]);
+
+        if (below18Count > 0) {
+            var content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}.`;
         } else {
             var content = `
             <p>Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. </p>
                     <br />
             <p>The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. </p>
                     <br />
-            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. </p>
+            <p>Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual that is ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. These results are based off on the analysis of ${below18Count + above18Count} present 3rd molars. </p>
                     <br />
             <p>Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <
                 18 || minValue === Infinity
@@ -432,8 +435,11 @@ export class PageController {
             report.getSternalEndRange(Side.C).max,
         );
 
-        if (report.getThirdMolar(Side.C) === 0) {
-            content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}`;
+        let below18Count = Number(report.getThirdMolar(Side.C).toString()[3]);
+        let above18Count = Number(report.getThirdMolar(Side.C).toString()[2]);
+
+        if (below18Count > 0) {
+            content = `Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}.`;
         } else {
             content = `
                 Chronological age at death estimates were obtained from the evaluation of the fourth sternal rib end, pubic symphysis morphology, auricular surface morphology, and the stage of development of the 3rd molar. The Hartnett (2010) method was used to estimate age from the pubic symphysis and suggests an age range of ${report.getPubicSymphysisRange(Side.C).min.toFixed(2)}-${report.getPubicSymphysisRange(Side.C).max.toFixed(2)} years. According to Hartnett (2010), the left fourth sternal rib end is consistent with an individual between ${report.getSternalEndRange(Side.C).min.toFixed(2)}-${report.getSternalEndRange(Side.C).max.toFixed(2)} years of age. 
@@ -442,8 +448,7 @@ export class PageController {
                 The Osborne et al. (2004) method for analyzing auricular surface morphology suggested an age range of ${report.getAuricularSurfaceRange(Side.C).min.toFixed(2)}-${report.getAuricularSurfaceRange(Side.C).max.toFixed(2)} years. 
                         <br />
                         <br />
-                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}.
-                        <br />
+                Analyzing the stage of development of the 3rd molar using Mincer et al. (1993) indicated an individual that is ${(this.currentView as ReportPageView).accessFormatThirdMolar(report.getThirdMolar(Side.C)).toLowerCase()}. These results are based off on the analysis of ${below18Count + above18Count} present 3rd molars.
                         <br />
                         <br />
                 Taking into consideration all the age analyses performed, the age range for this individual is estimated at ${(minValue <

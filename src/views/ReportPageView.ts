@@ -345,11 +345,37 @@ export class ReportPageView extends AbstractView {
      * @returns The formatted string.
      */
     private formatThirdMolar(value: number): string {
-        if (value === 0) return 'Under 18.';
-        if (value === 1) return 'Possibly 18';
-        if (value === 2) return 'Likely 18 or Older';
-        if (value === 3) return '18 or Older';
-        return 'Unknown';
+        let unknownCount = Number(value.toString()[4]);
+        let above18Count = Number(value.toString()[2]);
+
+        switch (unknownCount) {
+            case 0:
+                if (above18Count === 4) {
+                    return '18 or Older';
+                } else {
+                    return 'Under 18';
+                }
+            case 1:
+                if (above18Count >= 3) {
+                    return '18 or Older';
+                } else {
+                    return 'Under 18';
+                }
+            case 2:
+                if (above18Count >= 2) {
+                    return '18 or Older';
+                } else {
+                    return 'Under 18';
+                }
+            case 3:
+                if (above18Count >= 1) {
+                    return '18 or Older';
+                } else {
+                    return 'Under 18';
+                }
+            default:
+                return 'Unknown';
+        }
     }
 
     /**
@@ -379,7 +405,14 @@ export class ReportPageView extends AbstractView {
                 ? Infinity
                 : report.getSternalEndRange(Side.C).min,
         );
-        if ((report as ReportModel).getThirdMolar(Side.C) === 0) {
+        if (
+            Number(
+                (report as ReportModel).getThirdMolar(Side.C).toString()[3],
+            ) >= 1 ||
+            Number(
+                (report as ReportModel).getThirdMolar(Side.C).toString()[4],
+            ) === 4
+        ) {
             var minAge =
                 minAgeCompare === Infinity ? '0.00' : minAgeCompare.toFixed(2);
         } else {

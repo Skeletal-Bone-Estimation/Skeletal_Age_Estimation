@@ -1,5 +1,5 @@
 /* Main.css 
-   Edited by: Nicholas Novak, Matthew Szarmach. Matthew Hardenburg, Cassidy Marquis
+   Edited by: Nicholas Novak, Matthew Szarmach, Matthew Hardenburg, Cassidy Marquis
 */
 :root{
   --on-dark: rgb(255,255,255);
@@ -74,10 +74,6 @@ body {
   margin: 5px;
   position: relative;
   padding: 10px;
-}
-
-/*report button on data entry screen*/
-.reportButton {
 }
 
 .dataEntryLabel{

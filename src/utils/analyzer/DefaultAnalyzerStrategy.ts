@@ -857,10 +857,10 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
             case ThirdMolar.E:
             case ThirdMolar.F:
             case ThirdMolar.G:
-                results[Report.thirdMolar][`${side}`] = 0;
+                results[Report.thirdMolar][`${side}`] = 0.0401;
                 break;
             case ThirdMolar.H:
-                results[Report.thirdMolar][`${side}`] = 3;
+                results[Report.thirdMolar][`${side}`] = 0.4001;
                 break;
             case ThirdMolar.Unknown:
                 break;
@@ -950,10 +950,11 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
                 case ThirdMolar.E:
                 case ThirdMolar.F:
                 case ThirdMolar.G:
+                    return 0.01;
                 case ThirdMolar.Unknown:
-                    return 0;
+                    return 0.001;
                 case ThirdMolar.H:
-                    return 1;
+                    return 0.1;
                 case ThirdMolar.Error:
                 default:
                     throw new Error('Invalid third molar phase');
@@ -963,16 +964,9 @@ export class DefaultAnalyzerStrategy extends AbstractAnalyzer {
         const S2 = getMolarValues(data2);
         const S3 = getMolarValues(data3);
         const S4 = getMolarValues(data4);
-        let C1 = S1 + S2 + S3 + S4;
-        if (C1 === 4) {
-            results[Report.thirdMolar][`${side}`] = 3;
-        } else if (C1 === 3) {
-            results[Report.thirdMolar][`${side}`] = 2;
-        } else if (C1 >= 1) {
-            results[Report.thirdMolar][`${side}`] = 1;
-        } else {
-            results[Report.thirdMolar][`${side}`] = 0;
-        }
+        let C1 = S1 + S2 + S3 + S4 + 0.0001; // value that represents the combined molars
+
+        results[Report.thirdMolar][`${side}`] = C1;
     }
 
     public getStrategy(): Analyzers {
