@@ -194,8 +194,14 @@
                         <option value="linreg">SVR Model</option>
                     </select>
                 </div>
-                <button class="button-dark" id="dataEntryReport">Generate Report</button>
-                <button class="button-dark" id="viewMostRecentReport">View Most Recent Report</button>
+                <div class="tooltip-wrapper">
+                    <button class="button-dark" id="dataEntryReport">Generate Report</button>
+                    <div class="tooltip">Unable to generate a report with machine learning if Unknowns are present.</div>
+                </div>
+                <div class="tooltip-wrapper">
+                    <button class="button-dark" id="viewMostRecentReport">View Most Recent Report</button>
+                    <div class="tooltip">No reports available to view.</div>
+                </div>
             <!-- </div> -->
         <!-- </div> -->
     </div>

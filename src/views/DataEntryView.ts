@@ -52,8 +52,14 @@ export class DataEntryView extends AbstractView {
         if (
             !(document.getElementById('ML_Checkbox') as HTMLInputElement)
                 .checked
-        )
+        ) {
+            (
+                document.getElementById(
+                    UI_Elements.analyzeButton,
+                ) as HTMLButtonElement
+            ).disabled = false;
             return;
+        }
 
         const elements: HTMLInputElement[] = [
             document.getElementById(
@@ -650,7 +656,10 @@ export class DataEntryView extends AbstractView {
             const _case = dc.loadedCases[
                 dc.findCaseIndex(dc.openCaseID)
             ] as CaseModel;
-            if (_case.mostRecentReport instanceof NullReportModel) {
+            if (
+                _case.mostRecentReport instanceof NullReportModel ||
+                _case.generatedReports.length === 0
+            ) {
                 mostRecentReportButton.disabled = true;
             }
 
