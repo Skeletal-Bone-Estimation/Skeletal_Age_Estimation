@@ -5,7 +5,7 @@ import { app, BrowserWindow, ipcMain, dialog, screen } from 'electron';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import * as path from 'path';
 
-const DEV: boolean = true;
+const DEV: boolean = false;
 
 const DEFAULT_WIDTH: number = 1200;
 const DEFAULT_HEIGHT: number = 760;
@@ -32,20 +32,29 @@ function createWindow(): void {
     });
 
     if (DEV) {
-        mainWindow.loadURL('http://localhost:5173');
         mainWindow.webContents.openDevTools();
-    } else mainWindow.loadFile('./templates/index.html');
+    }
 
+    mainWindow.loadFile('./index.html');
     mainWindow.setMenu(null); //uncomment to remove menu bar
-
     mainWindow.on('ready-to-show', () => mainWindow.show());
 }
 
 function startServer(): void {
-    pythonServer = spawn('pipenv', ['run', 'python', 'server.py'], {
-        cwd: './src/ml',
-        shell: true,
-    });
+    const exePath = path.join(__dirname, '..', 'python', 'server.exe');
+
+    if (DEV) {
+        pythonServer = spawn('pipenv', ['run', 'python', 'server.py'], {
+            cwd: './src/ml',
+            shell: true,
+        });
+    } else {
+        pythonServer = spawn(exePath, [], {
+            cwd: path.dirname(exePath),
+            windowsHide: true,
+            shell: true,
+        });
+    }
 
     pythonServer.stdout.on('data', (data) => {
         console.log(`Python server: ${data}`);
@@ -54,6 +63,10 @@ function startServer(): void {
     // pythonServer.stderr.on('data', (data) => {
     //     console.error(`Python server error: ${data}`);
     // });
+
+    pythonServer.on('exit', (code) => {
+        console.log(`Python server exited with code ${code}`);
+    });
 }
 
 function startup(): void {

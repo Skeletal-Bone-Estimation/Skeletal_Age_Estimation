@@ -3,3 +3,6 @@ dist/
 dist-electron/
 save_data/*
 saveTest.xml
+out/
+src/ml/build/
+src/ml/server.spec

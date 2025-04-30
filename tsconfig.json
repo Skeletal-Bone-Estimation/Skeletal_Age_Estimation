@@ -110,7 +110,5 @@
     "include": ["src/**/*", "tests/**/*", "electron.d.ts"],
     "exclude": [
         "node_modules",
-        "src/app.ts",
-        "src/renderer.ts"
     ]
 }

@@ -10,6 +10,7 @@ scikit-learn = "*"
 numpy = "*"
 pandas = "*"
 joblib = "*"
+pyinstaller = "*"
 
 [dev-packages]
 
