@@ -236,6 +236,11 @@ export class DataEntryView extends AbstractView {
         thirdMolarBR.value = this.parseThirdMolarToString(_case.thirdMolarBR);
         notes.value = _case.notes;
 
+        AnalysisContext.getInstance(
+            _case.sex,
+            _case.populationAffinity,
+        ).setStrategy(null);
+
         this.renderSavedImages();
     }
 
