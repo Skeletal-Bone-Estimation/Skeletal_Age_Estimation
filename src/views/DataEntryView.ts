@@ -636,7 +636,7 @@ export class DataEntryView extends AbstractView {
 
             guideButton.addEventListener('click', (event) => {
                 window.open(
-                    '../../assets/guidelines/Scoring%20Guidelines%20for%20Bone%20Age%20Estimation.pdf',
+                    'assets/guidelines/Scoring%20Guidelines%20for%20Skeletal%20Bone%20Age%20Estimation.pdf',
                     '_blank',
                 );
             });
