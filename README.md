@@ -24,4 +24,7 @@
     > npm run dev
 
 - To build the application for production, execute the following command from the root of the project directory.
-    > npm run prod
+  - If Mac:
+    > npm run prod-mac
+  - If Windows:
+    > npm run prod-win

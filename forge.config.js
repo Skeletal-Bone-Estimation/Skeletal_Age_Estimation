@@ -7,30 +7,27 @@ const isMac = process.platform === 'darwin';
 
 module.exports = {
   buildDirectory: 'out',
-
+  name: 'Skeletage',
+  icon: path.resolve(__dirname, 'static', 'icons', 'icon'),
   packagerConfig: {
-    // 2) Pack into an asar, but UNPACK python exe & static so they're real folders on disk
     asar: {
       unpack: '{static/**,server.exe,models/**}',
     },
-
-    // 3) Copy your python exe into resources/python
     extraResource: [
       path.resolve(__dirname, 'src', 'ml', 'models'),
       path.resolve(__dirname, 'src', 'ml', 'dist', isMac ? 'server' : 'server.exe'), 
       path.resolve(__dirname, 'static')
     ],
   },
-
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: { name: 'skeletal_age_app' }
+      config: { name: 'Skeletage' },
     },
     {
       name: '@electron-forge/maker-dmg',
       config: {
-        name: 'SkeletalAgeApp',
+        name: 'Skeletage',
         format: 'ULFO',
       }
     },
@@ -39,7 +36,6 @@ module.exports = {
       platforms: ['darwin'],
     }
   ],
-
   plugins: [
     { name: '@electron-forge/plugin-auto-unpack-natives', config: {} },
     new FusesPlugin({
