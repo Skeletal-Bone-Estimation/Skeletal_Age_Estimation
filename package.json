@@ -11,7 +11,7 @@
     "install-python": "pipenv install",
     "frontend": "npm run build && electron .",
     "dev": "npm run install-python && npm run frontend",
-    "prod": "echo \"Production command not yet created\" && exit 1",
+    "prod": "npm run build && npm run make",
     "test": "jest",
     "start": "electron-forge start",
     "package": "electron-forge package",

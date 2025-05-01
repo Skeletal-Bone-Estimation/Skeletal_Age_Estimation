@@ -1,5 +1,5 @@
+// forge.config.js
 const path = require('path');
-const { execSync } = require('child_process');
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
@@ -7,17 +7,24 @@ module.exports = {
   buildDirectory: 'out',
 
   packagerConfig: {
-    asar: { unpack: 'python/**' },
-    extraResources: [
-      {
-        from: path.resolve(__dirname, 'src', 'ml', 'dist', 'server.exe'),
-        to: 'python',
-      },
-    ]
+    // 2) Pack into an asar, but UNPACK python exe & static so they're real folders on disk
+    asar: {
+      unpack: '{static/**,server.exe}'
+    },
+
+    // 3) Copy your python exe into resources/python
+    extraResource: [
+      path.resolve(__dirname, 'src', 'ml', 'dist', 'server.exe'), 
+      path.resolve(__dirname, 'static')
+    ],
   },
+
   makers: [
-    { name: '@electron-forge/maker-squirrel', config: { name: 'skeletal_age_app' } },
-    /* … other makers … */
+    {
+      name: '@electron-forge/maker-squirrel',
+      config: { name: 'skeletal_age_app' }
+    },
+    // … your other makers
   ],
 
   plugins: [

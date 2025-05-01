@@ -2,6 +2,8 @@ import { CaseModel } from '../../models/CaseModel';
 import { Affinity, Analyzers, Sex } from '../enums';
 import { AnalyzerStrategyIF } from './AnalyzerStrategyIF';
 import fs from 'fs';
+import path from 'path';
+import { app } from 'electron';
 
 export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
     // store values for analysis modifications
@@ -37,7 +39,9 @@ export abstract class AbstractAnalyzer implements AnalyzerStrategyIF {
     }
 
     protected getPort(): number {
-        var portFile = './src/ml/flask_port.json';
+        console.log(process.resourcesPath);
+        const staticDir = path.join(process.resourcesPath, 'static');
+        const portFile = path.join(staticDir, 'flask_port.json');
 
         if (!fs.existsSync(portFile)) return -1;
 

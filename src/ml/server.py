@@ -3,6 +3,8 @@ from flask_cors import CORS
 from ModelFactory import ModelFactory
 import socket
 import traceback
+import os
+import sys
 
 def find_free_port():
     """
@@ -17,7 +19,7 @@ def find_free_port():
 hostname = 'localhost'
 port = find_free_port()
 
-with open('./flask_port.json', 'w') as f:
+with open(os.path.join(os.path.dirname(sys.executable), 'static', 'flask_port.json'), 'w') as f:
         json.dump({'port': port}, f)
 
 app = Flask(__name__)

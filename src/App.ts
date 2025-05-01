@@ -4,6 +4,7 @@
 import { app, BrowserWindow, ipcMain, dialog, screen } from 'electron';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import * as path from 'path';
+import * as fs from 'fs';
 
 const DEV: boolean = false;
 
@@ -31,17 +32,23 @@ function createWindow(): void {
         },
     });
 
-    if (DEV) {
-        mainWindow.webContents.openDevTools();
-    }
-
+    mainWindow.webContents.openDevTools();
     mainWindow.loadFile('./index.html');
     mainWindow.setMenu(null); //uncomment to remove menu bar
     mainWindow.on('ready-to-show', () => mainWindow.show());
 }
 
 function startServer(): void {
-    const exePath = path.join(__dirname, '..', 'python', 'server.exe');
+    const exe = 'server.exe';
+    const exePath = app.isPackaged
+        ? path.join(process.resourcesPath, exe)
+        : path.resolve(__dirname, 'src', 'ml', 'dist', exe);
+
+    console.log('🔍 Looking for server.exe at:', exe);
+    if (!fs.existsSync(exe)) {
+        console.error('Cannot find server.exe at', exe);
+        return;
+    }
 
     if (DEV) {
         pythonServer = spawn('pipenv', ['run', 'python', 'server.py'], {
@@ -49,24 +56,39 @@ function startServer(): void {
             shell: true,
         });
     } else {
-        pythonServer = spawn(exePath, [], {
-            cwd: path.dirname(exePath),
-            windowsHide: true,
-            shell: true,
+        pythonServer = spawn(exe, [], {
+            cwd: path.dirname(exe),
+            windowsHide: false,
+            env: {
+                ...process.env,
+            },
         });
     }
 
-    pythonServer.stdout.on('data', (data) => {
-        console.log(`Python server: ${data}`);
+    pythonServer.on('spawn', () => {
+        console.log('server.exe spawned, PID=', pythonServer!.pid);
     });
 
-    // pythonServer.stderr.on('data', (data) => {
-    //     console.error(`Python server error: ${data}`);
-    // });
-
-    pythonServer.on('exit', (code) => {
-        console.log(`Python server exited with code ${code}`);
+    pythonServer.on('error', (err) => {
+        console.error('Failed to launch server.exe:', err);
+        dialog.showErrorBox('Server Launch Error', err.message);
     });
+
+    pythonServer.on('exit', (code, signal) => {
+        if (code !== 0) {
+            const msg = `server.exe exited early with code=${code} signal=${signal}`;
+            console.error(msg);
+            dialog.showErrorBox('Server Crashed', msg);
+        }
+    });
+
+    pythonServer.stdout.on('data', (data) =>
+        console.log(`PY ▶ ${data.toString().trim()}`),
+    );
+
+    pythonServer.stderr.on('data', (data) =>
+        console.error(`PY ✖ ${data.toString().trim()}`),
+    );
 }
 
 function startup(): void {
