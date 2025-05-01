@@ -39,15 +39,26 @@ function createWindow(): void {
 }
 
 function startServer(): void {
+    const isWin = process.platform === 'win32';
+    const isMac = process.platform === 'darwin';
     const exe = 'server.exe';
+    const appExec = 'server_app.app';
     const exePath = app.isPackaged
         ? path.join(process.resourcesPath, exe)
         : path.resolve(__dirname, 'src', 'ml', 'dist', exe); // dev path
+    const appExecPath = app.isPackaged
+        ? path.join(
+              process.resourcesPath,
+              'server_app.app',
+              'Contents',
+              'MacOS',
+              'server_app', // Correct executable name
+          )
+        : path.resolve(__dirname, 'src', 'ml', 'dist', 'server_app.app');
 
     console.log('Looking for server.exe at:', exePath);
     if (!fs.existsSync(exePath)) {
         console.error('Cannot find server.exe at', exePath);
-        return;
     }
 
     if (DEV) {
@@ -56,14 +67,25 @@ function startServer(): void {
             shell: true,
         });
     } else {
-        pythonServer = spawn(exePath, [], {
-            cwd: path.dirname(exePath),
-            detached: false,
-            windowsHide: true,
-            env: {
-                ...process.env,
-            },
-        });
+        if (isWin) {
+            pythonServer = spawn(exePath, [], {
+                cwd: path.dirname(exePath),
+                detached: false,
+                windowsHide: false,
+                env: {
+                    ...process.env,
+                },
+            });
+        } else {
+            pythonServer = spawn(appExecPath, [], {
+                cwd: path.dirname(appExecPath),
+                detached: false,
+                windowsHide: true,
+                env: {
+                    ...process.env,
+                },
+            });
+        }
     }
 
     const logPath = path.join(app.getPath('userData'), 'server.log');

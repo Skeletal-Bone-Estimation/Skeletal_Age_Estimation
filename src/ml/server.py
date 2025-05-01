@@ -6,6 +6,7 @@ import traceback
 import os
 import sys
 
+
 try:
     base = os.path.dirname(os.path.abspath(sys.executable))
     with open(os.path.join(base, 'static', 'startup_log.txt'), 'w') as f:
@@ -24,11 +25,23 @@ def find_free_port():
     s.close()
     return port
 
+
 hostname = 'localhost'
 port = find_free_port()
 
-with open(os.path.join(os.path.dirname(sys.executable), 'static', 'flask_port.json'), 'w') as f:
-        json.dump({'port': port}, f)
+if getattr(sys, 'frozen', False):
+    base_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), '..', '..'))
+else:
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+
+static_dir = os.path.join(base_path, 'static')
+os.makedirs(static_dir, exist_ok=True)
+
+with open(os.path.join(static_dir, 'flask_port.json'), 'w') as f:
+    json.dump({"port": port}, f)
+
+
+
 
 app = Flask(__name__)
 CORS(app)

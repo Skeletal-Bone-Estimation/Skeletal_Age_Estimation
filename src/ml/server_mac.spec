@@ -20,6 +20,8 @@ a = Analysis(
         *collect_submodules('flask_cors'),
         *collect_submodules('sklearn'),
         *collect_submodules('statsmodels'),
+        *collect_submodules('joblib'),
+        *collect_submodules('pandas'),
     ],
     hookspath=[],
     runtime_hooks=[],
@@ -38,11 +40,11 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='server',
+    name='server_app',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=False,
+    upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,  # Set to False for GUI mode (no console window)
@@ -59,6 +61,6 @@ coll = COLLECT(
     a.zipfiles,
     a.datas,
     strip=False,
-    upx=False,
+    upx=True,
     name='server'
 )

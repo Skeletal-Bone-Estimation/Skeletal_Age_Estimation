@@ -57,6 +57,7 @@
     "docx": "^8.6.0",
     "electron-squirrel-startup": "^1.0.1",
     "html-to-docx": "^1.8.0",
+    "pip": "^0.0.1",
     "typescript": "^5.6.3",
     "xml2js": "^0.6.2"
   }
