@@ -8,6 +8,8 @@ import os
 # Add your source path (where your modules like LinearRegression.py exist)
 #source_dir = os.path.abspath('src/ml')
 
+block_cipher = None
+
 a = Analysis(
     ['server.py'],  # Entry point
     pathex=['src/ml'],
@@ -23,9 +25,12 @@ a = Analysis(
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
 )
 
-pyz = PYZ(a.pure)
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
     pyz,
@@ -37,10 +42,10 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,  # Set to False for GUI mode (no console window)
+    console=False,  # Set to False for GUI mode (no console window)
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
@@ -54,6 +59,6 @@ coll = COLLECT(
     a.zipfiles,
     a.datas,
     strip=False,
-    upx=True,
+    upx=False,
     name='server'
 )

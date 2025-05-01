@@ -3,6 +3,8 @@ const path = require('path');
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
+const isMac = process.platform === 'darwin';
+
 module.exports = {
   buildDirectory: 'out',
 
@@ -15,7 +17,7 @@ module.exports = {
     // 3) Copy your python exe into resources/python
     extraResource: [
       path.resolve(__dirname, 'src', 'ml', 'models'),
-      path.resolve(__dirname, 'src', 'ml', 'dist', 'server.exe'), 
+      path.resolve(__dirname, 'src', 'ml', 'dist', isMac ? 'server' : 'server.exe'), 
       path.resolve(__dirname, 'static')
     ],
   },
@@ -25,7 +27,17 @@ module.exports = {
       name: '@electron-forge/maker-squirrel',
       config: { name: 'skeletal_age_app' }
     },
-    // … your other makers
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        name: 'SkeletalAgeApp',
+        format: 'ULFO',
+      }
+    },
+    {
+      name: '@electron-forge/maker-zip', // fallback for unsigned builds
+      platforms: ['darwin'],
+    }
   ],
 
   plugins: [
