@@ -9,11 +9,12 @@ module.exports = {
   packagerConfig: {
     // 2) Pack into an asar, but UNPACK python exe & static so they're real folders on disk
     asar: {
-      unpack: '{static/**,server.exe}'
+      unpack: '{static/**,server.exe,models/**}',
     },
 
     // 3) Copy your python exe into resources/python
     extraResource: [
+      path.resolve(__dirname, 'src', 'ml', 'models'),
       path.resolve(__dirname, 'src', 'ml', 'dist', 'server.exe'), 
       path.resolve(__dirname, 'static')
     ],

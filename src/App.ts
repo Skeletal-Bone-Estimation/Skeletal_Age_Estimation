@@ -42,11 +42,11 @@ function startServer(): void {
     const exe = 'server.exe';
     const exePath = app.isPackaged
         ? path.join(process.resourcesPath, exe)
-        : path.resolve(__dirname, 'src', 'ml', 'dist', exe);
+        : path.resolve(__dirname, 'src', 'ml', 'dist', exe); // dev path
 
-    console.log('🔍 Looking for server.exe at:', exe);
-    if (!fs.existsSync(exe)) {
-        console.error('Cannot find server.exe at', exe);
+    console.log('Looking for server.exe at:', exePath);
+    if (!fs.existsSync(exePath)) {
+        console.error('Cannot find server.exe at', exePath);
         return;
     }
 
@@ -56,8 +56,9 @@ function startServer(): void {
             shell: true,
         });
     } else {
-        pythonServer = spawn(exe, [], {
-            cwd: path.dirname(exe),
+        pythonServer = spawn(exePath, [], {
+            cwd: path.dirname(exePath),
+            detached: true,
             windowsHide: false,
             env: {
                 ...process.env,
@@ -65,30 +66,24 @@ function startServer(): void {
         });
     }
 
+    const logPath = path.join(app.getPath('userData'), 'server.log');
+    const logStream = fs.createWriteStream(logPath, { flags: 'a' });
+    pythonServer.stdout.pipe(logStream);
+    pythonServer.stderr.pipe(logStream);
+
     pythonServer.on('spawn', () => {
         console.log('server.exe spawned, PID=', pythonServer!.pid);
     });
 
     pythonServer.on('error', (err) => {
         console.error('Failed to launch server.exe:', err);
-        dialog.showErrorBox('Server Launch Error', err.message);
     });
 
     pythonServer.on('exit', (code, signal) => {
-        if (code !== 0) {
-            const msg = `server.exe exited early with code=${code} signal=${signal}`;
-            console.error(msg);
-            dialog.showErrorBox('Server Crashed', msg);
-        }
+        console.error(
+            `server.exe exited early: code=${code}, signal=${signal}`,
+        );
     });
-
-    pythonServer.stdout.on('data', (data) =>
-        console.log(`PY ▶ ${data.toString().trim()}`),
-    );
-
-    pythonServer.stderr.on('data', (data) =>
-        console.error(`PY ✖ ${data.toString().trim()}`),
-    );
 }
 
 function startup(): void {

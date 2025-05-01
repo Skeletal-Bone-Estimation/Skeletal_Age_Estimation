@@ -6,6 +6,14 @@ import traceback
 import os
 import sys
 
+try:
+    base = os.path.dirname(os.path.abspath(sys.executable))
+    with open(os.path.join(base, 'static', 'startup_log.txt'), 'w') as f:
+        f.write('Server started\n')
+except Exception as e:
+    with open('error_log.txt', 'w') as f:
+        f.write(str(e))
+
 def find_free_port():
     """
     Find a free port on the localhost.
