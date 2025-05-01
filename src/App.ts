@@ -32,7 +32,7 @@ function createWindow(): void {
         },
     });
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     mainWindow.loadFile('./index.html');
     mainWindow.setMenu(null); //uncomment to remove menu bar
     mainWindow.on('ready-to-show', () => mainWindow.show());
@@ -58,8 +58,8 @@ function startServer(): void {
     } else {
         pythonServer = spawn(exePath, [], {
             cwd: path.dirname(exePath),
-            detached: true,
-            windowsHide: false,
+            detached: false,
+            windowsHide: true,
             env: {
                 ...process.env,
             },
