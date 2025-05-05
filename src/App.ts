@@ -32,37 +32,34 @@ function createWindow(): void {
         },
     });
 
-    //mainWindow.webContents.openDevTools();
     mainWindow.loadFile('./index.html');
-    mainWindow.setMenu(null); //uncomment to remove menu bar
+    mainWindow.setMenu(null);
     mainWindow.on('ready-to-show', () => mainWindow.show());
 }
 
 function startServer(): void {
-    const exe = 'server.exe';
-    const exePath = app.isPackaged
-        ? path.join(process.resourcesPath, exe)
-        : path.resolve(__dirname, 'src', 'ml', 'dist', exe); // dev path
-
-    console.log('Looking for server.exe at:', exePath);
-    if (!fs.existsSync(exePath)) {
-        console.error('Cannot find server.exe at', exePath);
-        return;
-    }
-
     if (DEV) {
         pythonServer = spawn('pipenv', ['run', 'python', 'server.py'], {
-            cwd: './src/ml',
+            cwd: path.join(__dirname, 'src', 'ml'),
             shell: true,
         });
     } else {
+        const exe = process.platform === 'win32' ? 'server.exe' : 'server';
+        const exePath = app.isPackaged
+            ? path.join(process.resourcesPath, exe)
+            : path.resolve(__dirname, 'src', 'ml', 'dist', exe);
+
+        console.log('Looking for server at:', exePath);
+        if (!fs.existsSync(exePath)) {
+            console.error('Cannot find server at', exePath);
+            return;
+        }
+
         pythonServer = spawn(exePath, [], {
             cwd: path.dirname(exePath),
-            detached: false,
+            detached: process.platform !== 'win32',
             windowsHide: true,
-            env: {
-                ...process.env,
-            },
+            env: { ...process.env },
         });
     }
 
@@ -72,23 +69,22 @@ function startServer(): void {
     pythonServer.stderr.pipe(logStream);
 
     pythonServer.on('spawn', () => {
-        console.log('server.exe spawned, PID=', pythonServer!.pid);
+        if (pythonServer && pythonServer.pid)
+            console.log('Server process started with PID:', pythonServer.pid);
     });
 
     pythonServer.on('error', (err) => {
-        console.error('Failed to launch server.exe:', err);
+        console.error('Failed to start server process:', err);
     });
 
     pythonServer.on('exit', (code, signal) => {
-        console.error(
-            `server.exe exited early: code=${code}, signal=${signal}`,
-        );
+        console.error(`Server process exited: code=${code}, signal=${signal}`);
     });
 }
 
 function startup(): void {
-    startServer(); //run server as a child process
-    createWindow(); //show frontend
+    startServer();
+    createWindow();
 }
 
 ipcMain.handle('dialog:openFolder', (): string | null => {
@@ -99,22 +95,30 @@ ipcMain.handle('dialog:openFolder', (): string | null => {
     if (!result || result.length === 0) {
         return null;
     }
-    return result[0]; //return the selected folder path
+    return result[0];
 });
 
 app.on('ready', startup);
 
 app.on('window-all-closed', () => {
-    //kills process when all windows are closed on windows/linux
     if (process.platform !== 'darwin') app.quit();
     if (pythonServer) pythonServer.kill();
 });
 
 app.on('activate', () => {
-    //opens a window on Mac if process is running but no windows are open
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
 app.on('before-quit', () => {
     if (pythonServer) pythonServer.kill();
+});
+
+process.on('SIGINT', () => {
+    if (pythonServer) pythonServer.kill();
+    process.exit();
+});
+
+process.on('SIGTERM', () => {
+    if (pythonServer) pythonServer.kill();
+    process.exit();
 });
