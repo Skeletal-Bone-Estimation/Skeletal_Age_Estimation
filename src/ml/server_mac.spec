@@ -1,15 +1,8 @@
-# server.spec
-
 # -*- mode: python ; coding: utf-8 -*-
-
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 import os
 
-# Add your source path (where your modules like LinearRegression.py exist)
-#source_dir = os.path.abspath('src/ml')
-
 block_cipher = None
-
 a = Analysis(
     ['server.py'],  # Entry point
     pathex=['src/ml'],
@@ -20,6 +13,11 @@ a = Analysis(
         *collect_submodules('flask_cors'),
         *collect_submodules('sklearn'),
         *collect_submodules('statsmodels'),
+        *collect_submodules('matplotlib'),
+        *collect_submodules('numpy'),
+        *collect_submodules('pandas'),
+        *collect_submodules('scipy'),
+        'ModelFactory',  
     ],
     hookspath=[],
     runtime_hooks=[],
@@ -29,15 +27,13 @@ a = Analysis(
     win_private_assemblies=False,
     cipher=block_cipher,
 )
-
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
-    [],
+    [],  # Remove a.binaries and a.datas from here
+    exclude_binaries=True,  # This is the key change
     name='server',
     debug=False,
     bootloader_ignore_signals=False,
@@ -45,13 +41,14 @@ exe = EXE(
     upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,  # Set to False for GUI mode (no console window)
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
 )
+
 
 coll = COLLECT(
     exe,
@@ -60,5 +57,6 @@ coll = COLLECT(
     a.datas,
     strip=False,
     upx=False,
-    name='server'
+    upx_exclude=[],
+    name='server',
 )
